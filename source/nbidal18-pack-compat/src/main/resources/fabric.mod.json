@@ -3,7 +3,7 @@
   "id": "nbidal18_pack_compat",
   "version": "${version}",
   "name": "nbidal18 Pack Compatibility Enforcer",
-  "description": "Rejects clients whose nbidal18 pack identity does not match the server.",
+  "description": "Rejects clients whose nbidal18 pack identity or managed-content integrity does not match the server.",
   "authors": [
     "nbidal18 contributors"
   ],

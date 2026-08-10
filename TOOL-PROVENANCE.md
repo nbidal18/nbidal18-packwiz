@@ -13,6 +13,15 @@ Recorded on 2026-08-10. The binaries live under the git-ignored `tools/` directo
 
 This JAR is copied into the final Prism migration ZIP and invokes the Packwiz installer before Minecraft starts.
 
+## nbidal18 launch guard
+
+- License: first-party MIT
+- Source: `source/nbidal18-launch-guard/`
+- Local path: `tools/nbidal18-launch-guard.jar`
+- SHA-256: `BB807039B27C1148A2A915282B512B879894AAD61EF2357D4D3100CC5B047230`
+
+The reproducible Java 21 build compiles twice with fixed archive timestamps and requires byte-identical output. The final Prism migration ZIP runs this guard, which invokes Packwiz, exact-cleans strict content, verifies SHA-256 values, applies the narrow settings policy, purges generated loadable Fabric/Moonlight caches, and writes the runtime attestation before Minecraft starts.
+
 ## Packwiz CLI
 
 - Upstream: <https://github.com/packwiz/packwiz>

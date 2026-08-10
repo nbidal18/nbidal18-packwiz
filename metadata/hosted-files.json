@@ -6,8 +6,8 @@
       "reason": "Configurable MIT rebuild; the embedded NOTICE and LICENSE_BandagePlus-Xanthian retain the original Copyright (c) 2023 Xanthian MIT attribution for reused art assets and recipe data."
     },
     {
-      "path": "mods/nbidal18-pack-compat-1.0.0+1.21.1.jar",
-      "reason": "First-party clean-room MIT compatibility enforcer; complete reproducible source is published under source/nbidal18-pack-compat and the JAR contains no Better Compatibility Checker classes or assets."
+      "path": "mods/nbidal18-pack-compat-1.1.0+1.21.1.jar",
+      "reason": "First-party clean-room MIT protocol-2 compatibility and runtime-integrity companion; complete reproducible source and tests are published under source/nbidal18-pack-compat, and the JAR contains no Better Compatibility Checker classes or assets."
     },
     {
       "path": "mods/carryon-slowness-fix-1.0.0+1.21.1.jar",

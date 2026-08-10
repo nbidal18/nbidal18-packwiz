@@ -11,6 +11,8 @@ $ErrorActionPreference = 'Stop'
 $releaseRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
 $updaterRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $clientRoot = Join-Path $releaseRoot '3. modpack\client'
+$serverRoot = Join-Path $releaseRoot '3. modpack\server'
+$onlineHostingRoot = Join-Path $releaseRoot '4. server\2. online-hosting'
 $appearanceRoot = Join-Path $releaseRoot '2. appearance'
 $metadataRoot = Join-Path $updaterRoot 'metadata'
 $catalogPath = Join-Path $metadataRoot 'modrinth-catalog.json'
@@ -24,6 +26,10 @@ elseif (-not [IO.Path]::IsPathRooted($SitePath)) {
     $SitePath = Join-Path $updaterRoot $SitePath
 }
 $SitePath = [IO.Path]::GetFullPath($SitePath)
+$canonicalSitePath = [IO.Path]::GetFullPath((Join-Path $updaterRoot 'site'))
+if (-not $SitePath.Equals($canonicalSitePath, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "SitePath must resolve to the dedicated updater site directory: $canonicalSitePath"
+}
 
 if ([string]::IsNullOrWhiteSpace($PackwizPath)) {
     $PackwizPath = Join-Path $updaterRoot 'tools\packwiz-current\packwiz.exe'
@@ -86,7 +92,7 @@ function Copy-FilteredTree(
 }
 
 function Invoke-ModrinthBatch([string[]] $Hashes) {
-    $headers = @{ 'User-Agent' = 'nbidal18-packwiz-builder/3.1.0 (maintainer tooling)' }
+    $headers = @{ 'User-Agent' = 'nbidal18-packwiz-builder/3.1.1 (maintainer tooling)' }
     $body = @{ hashes = @($Hashes); algorithm = 'sha1' } | ConvertTo-Json -Compress
     $delay = 1
     for ($attempt = 1; $attempt -le 5; $attempt++) {
@@ -110,7 +116,7 @@ function Invoke-ModrinthBatch([string[]] $Hashes) {
     }
 }
 
-foreach ($required in @($clientRoot, $appearanceRoot, $metadataRoot, $allowlistPath, $PackwizPath)) {
+foreach ($required in @($clientRoot, $serverRoot, $onlineHostingRoot, $appearanceRoot, $metadataRoot, $allowlistPath, $PackwizPath)) {
     if (-not (Test-Path -LiteralPath $required)) { throw "Required path is missing: $required" }
 }
 
@@ -295,18 +301,69 @@ foreach ($entry in @($catalogJson.entries)) {
     $catalogByHash[$key] = $entry
 }
 
-$configExclusions = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
-foreach ($path in @(
+$seedSettings = New-Object Collections.Generic.List[object]
+foreach ($setting in @(
+    @{ Source = (Join-Path $appearanceRoot 'support\client-options.txt'); Target = 'options.txt' },
+    @{ Source = (Join-Path $appearanceRoot 'support\client-options.amecsapi.txt'); Target = 'options.amecsapi.txt' },
+    @{ Source = (Join-Path $clientRoot 'servers.dat'); Target = 'servers.dat' }
+)) {
+    if (-not (Test-Path -LiteralPath $setting.Source -PathType Leaf)) {
+        throw "Required first-run setting template is missing: $($setting.Source)"
+    }
+    $seedSettings.Add([pscustomobject]@{
+        SourcePath = [string] $setting.Source
+        TemplatePath = ('.nbidal18/defaults/' + ([string] $setting.Target).Replace('\', '/'))
+        TargetPath = ([string] $setting.Target).Replace('\', '/')
+    })
+}
+
+# These files are player preferences or player/runtime state. When a reviewed
+# canonical default exists it is installed below as a seed-only template: the
+# launch guard copies it only when the player's target does not yet exist.
+$seedConfigPaths = @(
     'iris.properties',
     'iris-excluded.json',
     'chat_heads.json5',
-    'sodium-fingerprint.json',
-    'presencefootsteps/updater.json',
+    'fzzy_config/keybinds.toml',
+    'minecraft-cursor.json',
+    'modmenu.json',
+    'playeremotes.json',
+    'playeremotes-wheel-fix.json',
+    'sodium-options.json',
+    'sodium-extra-options.json',
+    'sodium-extra.properties',
     'presencefootsteps/userconfig.json',
-    'etf_warnings.json',
+    'smoothgui.json',
+    'smoothscroll.json',
+    'yacl.json5',
     'voicechat/voicechat-client.properties',
     'voicechat/player-volumes.properties',
-    'voicechat/category-volumes.properties',
+    'voicechat/category-volumes.properties'
+)
+foreach ($relativePath in $seedConfigPaths) {
+    $sourcePath = Join-Path (Join-Path $clientRoot 'config') $relativePath.Replace('/', '\')
+    if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
+        throw "Required first-run config template is missing: $sourcePath"
+    }
+    $seedSettings.Add([pscustomobject]@{
+        SourcePath = $sourcePath
+        TemplatePath = ('.nbidal18/defaults/config/' + $relativePath)
+        TargetPath = ('config/' + $relativePath)
+    })
+}
+
+$configExclusions = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach ($path in @(
+    $seedConfigPaths
+    'controlify.json',
+    'crash_assistant',
+    'euphoria_patcher/.data.json',
+    'sodium-fingerprint.json',
+    'jade/usernamecache.json',
+    'resourceful-config-web.json',
+    'spark/tmp',
+    'presencefootsteps/updater.json',
+    'etf_warnings.json',
     'voicechat/username-cache.json',
     'jei/world'
 )) { [void] $configExclusions.Add($path) }
@@ -326,12 +383,14 @@ try {
     Copy-FilteredTree $datapackRoot (Join-Path $stagePath 'datapacks') $datapackExclusions
     Copy-FilteredTree (Join-Path $clientRoot 'defaultconfigs') (Join-Path $stagePath 'defaultconfigs') ([Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase))
 
-    Copy-Item -LiteralPath (Join-Path $clientRoot 'servers.dat') -Destination (Join-Path $stagePath 'servers.dat') -Force
     Copy-Item -LiteralPath (Join-Path $clientRoot 'credits.txt') -Destination (Join-Path $stagePath 'credits.txt') -Force
     Copy-Item -LiteralPath (Join-Path $clientRoot 'THIRD-PARTY-NOTICES.md') -Destination (Join-Path $stagePath 'THIRD-PARTY-NOTICES.md') -Force
     Copy-FilteredTree (Join-Path $clientRoot 'licenses') (Join-Path $stagePath 'licenses') ([Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase))
-    Copy-Item -LiteralPath (Join-Path $appearanceRoot 'support\client-options.txt') -Destination (Join-Path $stagePath 'options.txt') -Force
-    Copy-Item -LiteralPath (Join-Path $appearanceRoot 'support\client-options.amecsapi.txt') -Destination (Join-Path $stagePath 'options.amecsapi.txt') -Force
+    foreach ($seedSetting in $seedSettings) {
+        $templateTarget = Join-Path $stagePath $seedSetting.TemplatePath.Replace('/', '\')
+        New-Item -ItemType Directory -Path (Split-Path -Parent $templateTarget) -Force | Out-Null
+        Copy-Item -LiteralPath $seedSetting.SourcePath -Destination $templateTarget -Force
+    }
 
     foreach ($record in $records) {
         if ($catalogByHash.ContainsKey($record.Sha1)) {
@@ -437,11 +496,137 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
         throw "Unapproved non-Modrinth archives block the update site: $($blocking -join ', ')"
     }
 
+    # The Java launch guard consumes this Packwiz-managed policy after Packwiz
+    # has validated it. Strict directories are closed sets: anything not listed
+    # is quarantined before Minecraft starts. Player settings are seed-once and
+    # deliberately live outside this managed set.
+    $strictDirectories = @(
+        'mods',
+        'resourcepacks',
+        'shaderpacks',
+        'datapacks',
+        'config',
+        'defaultconfigs',
+        # Moonlight automatically loads datapacks placed here into every world.
+        # Keep it as an intentionally empty closed set, never a player/runtime
+        # exception, so the launch guard quarantines any injected content.
+        'moonlight-global-datapacks',
+        # Villager API scans this root for ZIP/directory resource packs and
+        # datapacks even though it sits outside Minecraft's standard folders.
+        'villagerpacks',
+        # This release's server does not serve a resource pack. Keep the cache
+        # closed as well so no locally substituted server pack can be mounted.
+        'server-resource-packs'
+    )
+    $strictManaged = @{}
+    foreach ($record in $records) {
+        $relativePath = $record.RelativePath.Replace('\', '/')
+        $sha256 = (Get-FileHash -LiteralPath $record.SourcePath -Algorithm SHA256).Hash.ToLowerInvariant()
+        if ($strictManaged.ContainsKey($relativePath) -and $strictManaged[$relativePath] -ne $sha256) {
+            throw "Conflicting strict integrity hashes for $relativePath"
+        }
+        $strictManaged[$relativePath] = $sha256
+    }
+    foreach ($directory in @('datapacks', 'config', 'defaultconfigs', '.nbidal18/defaults')) {
+        $directoryRoot = Join-Path $stagePath $directory
+        if (-not (Test-Path -LiteralPath $directoryRoot -PathType Container)) { continue }
+        foreach ($file in Get-ChildItem -LiteralPath $directoryRoot -Recurse -File -Force) {
+            if ($file.Name.EndsWith('.pw.toml', [StringComparison]::OrdinalIgnoreCase)) { continue }
+            $relativePath = $file.FullName.Substring($stagePath.Length).TrimStart('\').Replace('\', '/')
+            $sha256 = (Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            if ($strictManaged.ContainsKey($relativePath) -and $strictManaged[$relativePath] -ne $sha256) {
+                throw "Conflicting strict integrity hashes for $relativePath"
+            }
+            $strictManaged[$relativePath] = $sha256
+        }
+    }
+
+    $strictManifestLines = New-Object Collections.Generic.List[string]
+    $strictManifestLines.Add("nbidal18-strict-manifest`t1")
+    foreach ($directory in $strictDirectories) {
+        $strictManifestLines.Add("strict-dir`t$directory")
+    }
+    foreach ($relativePath in @($strictManaged.Keys | Sort-Object)) {
+        if ($relativePath.Contains("`t") -or $relativePath.Contains("`n") -or $relativePath.Contains("`r")) {
+            throw "Unsafe strict manifest path: $relativePath"
+        }
+        $strictManifestLines.Add("managed`t$($strictManaged[$relativePath])`t$relativePath")
+    }
+
+    $privateStillLifePath = Join-Path $datapackRoot 'Still_Life-1.0-beta1.zip'
+    if (-not (Test-Path -LiteralPath $privateStillLifePath -PathType Leaf)) {
+        throw "Authorized optional Still Life archive is missing: $privateStillLifePath"
+    }
+    $privateStillLifeSha256 = (Get-FileHash -LiteralPath $privateStillLifePath -Algorithm SHA256).Hash.ToLowerInvariant()
+    $expectedPrivateStillLifeSha256 = '6d6cf7c67d0faa16b37c8a00a7fd39131ad1a9c43e4a3356b88e2ea9c39159bc'
+    if ($privateStillLifeSha256 -ne $expectedPrivateStillLifeSha256) {
+        throw "The private Still Life attestation source does not match the reviewed SHA-256: $privateStillLifeSha256"
+    }
+    $strictManifestLines.Add("optional`t$privateStillLifeSha256`tdatapacks/Still_Life-1.0-beta1.zip")
+    foreach ($shaderArchive in $shaderArchives) {
+        $strictManifestLines.Add("personal`tshaderpacks/$($shaderArchive.Name).txt")
+    }
+    $strictManifestLines.Add("personal`tconfig/controlify.json")
+    foreach ($runtimeFile in @(
+        'config/euphoria_patcher/.data.json',
+        'config/etf_warnings.json',
+        'config/jade/usernamecache.json',
+        'config/presencefootsteps/updater.json',
+        'config/resourceful-config-web.json',
+        'config/sodium-fingerprint.json',
+        'config/voicechat/username-cache.json'
+    )) {
+        $strictManifestLines.Add("runtime`t$runtimeFile")
+    }
+    foreach ($runtimePrefix in @(
+        'config/crash_assistant',
+        'config/jei/world',
+        'config/spark/tmp'
+    )) {
+        $strictManifestLines.Add("runtime-prefix`t$runtimePrefix")
+    }
+    $strictManifestLines.Add("regenerate-prefix`tshaderpacks/ComplementaryUnbound_r5.8.1 + EuphoriaPatches_1.9.3")
+    foreach ($seedSetting in @($seedSettings | Sort-Object TargetPath)) {
+        $strictManifestLines.Add("seed`t$($seedSetting.TemplatePath)`t$($seedSetting.TargetPath)")
+    }
+    $strictManifestPath = Join-Path $stagePath '.nbidal18\strict-manifest.tsv'
+    Write-Utf8NoBom $strictManifestPath (($strictManifestLines -join "`n") + "`n")
+    $strictManifestSha256 = (Get-FileHash -LiteralPath $strictManifestPath -Algorithm SHA256).Hash.ToLowerInvariant()
+    $compatibilityProperties = "expected-manifest-sha256=$strictManifestSha256`n"
+    foreach ($serverConfigRoot in @(
+        (Join-Path $serverRoot 'config'),
+        (Join-Path $onlineHostingRoot 'config')
+    )) {
+        Write-Utf8NoBom (Join-Path $serverConfigRoot 'nbidal18-pack-compat.properties') $compatibilityProperties
+    }
+
     Write-Utf8NoBom (Join-Path $stagePath '.packwizignore') @'
 /.nojekyll
 /.packwizignore
 /pack.toml
 /index.toml
+/options.txt
+/options.amecsapi.txt
+/servers.dat
+/servers.dat_old
+/saves/
+/screenshots/
+/logs/
+/crash-reports/
+/debug/
+/.fabric/
+/.mixin.out/
+/data/
+/downloads/
+/dynamic-resource-pack-cache/
+/server-resource-packs/
+/local/
+/moddata/
+/moonlight-global-datapacks/
+/villagerpacks/
+/usercache.json
+/command_history.txt
+/hotbar.nbt
 /shaderpacks/*.zip
 /shaderpacks/*.zip.txt
 /vinurl/
@@ -449,9 +634,26 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
 /config/iris.properties
 /config/iris-excluded.json
 /config/chat_heads.json5
+/config/fzzy_config/keybinds.toml
+/config/minecraft-cursor.json
+/config/modmenu.json
+/config/playeremotes.json
+/config/playeremotes-wheel-fix.json
+/config/sodium-options.json
+/config/sodium-extra-options.json
+/config/sodium-extra.properties
 /config/sodium-fingerprint.json
+/config/controlify.json
+/config/crash_assistant/
+/config/euphoria_patcher/.data.json
+/config/jade/usernamecache.json
+/config/resourceful-config-web.json
+/config/spark/tmp/
 /config/presencefootsteps/updater.json
 /config/presencefootsteps/userconfig.json
+/config/smoothgui.json
+/config/smoothscroll.json
+/config/yacl.json5
 /config/etf_warnings.json
 /config/voicechat/voicechat-client.properties
 /config/voicechat/player-volumes.properties
@@ -463,7 +665,7 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
     Write-Utf8NoBom (Join-Path $stagePath 'index.toml') ('hash-format = "sha256"' + "`n")
     Write-Utf8NoBom (Join-Path $stagePath 'pack.toml') @'
 name = "nbidal18"
-version = "3.1.0"
+version = "3.1.1"
 description = "Fabric 1.21.1 adventure modpack with incremental Prism updates"
 pack-format = "packwiz:1.1.0"
 
@@ -488,9 +690,33 @@ minecraft = "1.21.1"
 
     $packText = Get-Content -LiteralPath (Join-Path $stagePath 'pack.toml') -Raw
     if ($packText -match 'hash = "0{64}"') { throw 'packwiz did not refresh the index hash.' }
-    $privateIndexMatches = @(Select-String -LiteralPath (Join-Path $stagePath 'index.toml') -Pattern 'file = "datapacks/Still_Life-1\.0-beta1\.zip"|file = "shaderpacks/[^"]+\.zip(?:\.txt)?"|config/iris.properties|config/jei/world/|vinurl/')
+    $indexText = [IO.File]::ReadAllText((Join-Path $stagePath 'index.toml'))
+    $indexedPaths = @([regex]::Matches($indexText, '(?m)^file = "([^"]+)"\r?$') | ForEach-Object { $_.Groups[1].Value })
+    $forbiddenIndexRoots = New-Object Collections.Generic.List[string]
+    foreach ($seedSetting in $seedSettings) { $forbiddenIndexRoots.Add($seedSetting.TargetPath) }
+    foreach ($configExclusion in $configExclusions) { $forbiddenIndexRoots.Add('config/' + $configExclusion.TrimEnd('/')) }
+    foreach ($runtimeRoot in @(
+        'datapacks/Still_Life-1.0-beta1.zip', 'vinurl', 'saves', 'screenshots', 'logs',
+        'crash-reports', 'debug', '.fabric', '.mixin.out', 'data', 'downloads',
+        'dynamic-resource-pack-cache', 'server-resource-packs', 'local', 'moddata',
+        'moonlight-global-datapacks', 'villagerpacks', 'usercache.json',
+        'command_history.txt', 'hotbar.nbt', 'servers.dat_old'
+    )) { $forbiddenIndexRoots.Add($runtimeRoot) }
+    $privateIndexMatches = New-Object Collections.Generic.List[string]
+    foreach ($indexedPath in $indexedPaths) {
+        $isForbidden = $false
+        foreach ($forbiddenRoot in $forbiddenIndexRoots) {
+            if ($indexedPath.Equals($forbiddenRoot, [StringComparison]::OrdinalIgnoreCase) -or
+                $indexedPath.StartsWith($forbiddenRoot.TrimEnd('/') + '/', [StringComparison]::OrdinalIgnoreCase)) {
+                $isForbidden = $true
+                break
+            }
+        }
+        if ($indexedPath -match '^shaderpacks/.+\.zip(?:\.txt)?$') { $isForbidden = $true }
+        if ($isForbidden) { $privateIndexMatches.Add($indexedPath) }
+    }
     if ($privateIndexMatches.Count -gt 0) {
-        throw "Private or player-controlled content entered index.toml: $($privateIndexMatches.Line -join '; ')"
+        throw "Private or player-controlled content entered index.toml: $($privateIndexMatches -join '; ')"
     }
 
     if (Test-Path -LiteralPath $SitePath) {

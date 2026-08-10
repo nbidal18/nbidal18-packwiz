@@ -1,8 +1,96 @@
 hash-format = "sha256"
 
 [[files]]
+file = ".nbidal18/defaults/config/chat_heads.json5"
+hash = "e12b19df5220b5dbefc3d28c7953d6dbe961eacbf8e2221ffa487738f71dc6aa"
+
+[[files]]
+file = ".nbidal18/defaults/config/fzzy_config/keybinds.toml"
+hash = "26ac5810c9b5dc5c1968827357f0a58c58ac2b6f7b082630960228e16585062f"
+
+[[files]]
+file = ".nbidal18/defaults/config/iris-excluded.json"
+hash = "4d3264b58c502afaeca3f44e8d2db0843c54b8ba957afd21a2d450fe10dafefb"
+
+[[files]]
+file = ".nbidal18/defaults/config/iris.properties"
+hash = "33e95d115f0aae648f40fa2e767e2af0d40b06fd3b001bfa4f4e07f4005f887d"
+
+[[files]]
+file = ".nbidal18/defaults/config/minecraft-cursor.json"
+hash = "c8258bef50291e61bb219351d4e55f0cbe96d5331bb66f788a488aa71252f241"
+
+[[files]]
+file = ".nbidal18/defaults/config/modmenu.json"
+hash = "a884ca28c66b90080b7470dc1a2efdddd47c325af5d699aa45d7974b4b254628"
+
+[[files]]
+file = ".nbidal18/defaults/config/playeremotes-wheel-fix.json"
+hash = "d2b57c51f95c3d0143346ab511aab72538d925d37dde65c4a532997aae858513"
+
+[[files]]
+file = ".nbidal18/defaults/config/playeremotes.json"
+hash = "8e5a95ad094b7515eb3e3be22514b738d7c58f2147a69057aad0cf4d05911acb"
+
+[[files]]
+file = ".nbidal18/defaults/config/presencefootsteps/userconfig.json"
+hash = "8cf6192eda81b3a27737440cfdedc05c40a8c1b552583114c1aa6fb2673ca907"
+
+[[files]]
+file = ".nbidal18/defaults/config/smoothgui.json"
+hash = "8a7a7774bd7e590beef25c25944044c769a45e5a110cb8975a54b2558e1d4534"
+
+[[files]]
+file = ".nbidal18/defaults/config/smoothscroll.json"
+hash = "12672919c7637eddf10cae6eb1a5ee8496e70520518168e96cdd36a0b8715193"
+
+[[files]]
+file = ".nbidal18/defaults/config/sodium-extra-options.json"
+hash = "ece12f36e24ea85b294b266a230a81d5fd2b9a5ab77b9814f61b329f9d9bc66c"
+
+[[files]]
+file = ".nbidal18/defaults/config/sodium-extra.properties"
+hash = "a2f1b47c1eaa119ab34727f1d43c2506cb3d7f17ba8fb4efb49e20c8e0b58e70"
+
+[[files]]
+file = ".nbidal18/defaults/config/sodium-options.json"
+hash = "2c5d8d00cf22f45cfb27a31641db46881b94d1b14c10e88e0ecf972b7277fc13"
+
+[[files]]
+file = ".nbidal18/defaults/config/voicechat/category-volumes.properties"
+hash = "94c1c4f70e5b995fbd71e86d4fa646030437fecae0685875b560a55fbd0d0e56"
+
+[[files]]
+file = ".nbidal18/defaults/config/voicechat/player-volumes.properties"
+hash = "0332261861a5ace96f503e85b0d48a8df74ea6c2f3545cd229543a6afb55ad96"
+
+[[files]]
+file = ".nbidal18/defaults/config/voicechat/voicechat-client.properties"
+hash = "d346362ecb097b892ce9ae5da0f0322fe0a7b0e2b85c38aca057d24260f115dc"
+
+[[files]]
+file = ".nbidal18/defaults/config/yacl.json5"
+hash = "121b93764159be6fb7dab523b29a844e2bb78400ce8c48f52135a097e9b0006e"
+
+[[files]]
+file = ".nbidal18/defaults/options.amecsapi.txt"
+hash = "712dafe084f03f3768cdd21e90a15d63538d3c21eacbdd8f89ff6e23538212a8"
+
+[[files]]
+file = ".nbidal18/defaults/options.txt"
+hash = "57677d1d947bf3b787848b6330c2a8988477336fa4d9010a42caca638395adce"
+
+[[files]]
+file = ".nbidal18/defaults/servers.dat"
+hash = "f4d2f7294da7d14fdce1a7a9989883f1bcfad1124ea47e8b488708a061455876"
+
+[[files]]
+file = ".nbidal18/strict-manifest.tsv"
+hash = "60d48de809f71f1abdfed7825c67b42619314100e22e203fdcb465aaf8ccd253"
+
+[[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "fc4f79da74832f0a37db325479a5c8582897eead887f54331da3e94e26ab18f7"
+hash = "6dd600fc89b525ebe2bcf844dde8d0dc7f5ba94724a6f0e588705a27c98aa071"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -70,7 +158,7 @@ hash = "5517ad3e06aa1bfeec0a41174677a9ee094b02ee8b58194e39584cc1191cb98b"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "7369753d17f482480a9099a67bacf0b0d6f28b1ec8d41b8444872ae9acc5ee77"
+hash = "896febf2604bb8d2f4106e0aa49e122a47ef9be3587c31fca00501a3e04bc44c"
 
 [[files]]
 file = "config/beautify.json"
@@ -425,6 +513,22 @@ file = "config/epicknights/weapons.json5"
 hash = "134eca5eafff0ffe0d52cf8774dd02fb247a6e2f6ca617f0acac396c9565ebd6"
 
 [[files]]
+file = "config/euphoria_patcher/settings.toml"
+hash = "fec26d01025e152ce4d897a86863b1125be7ff5d03266f19b000de4d9bdb617f"
+
+[[files]]
+file = "config/exposure-client.toml"
+hash = "0dc61228d59f64bc42e705ccfd3c9d633f805d836a9cacd669b39ade3be5a1e2"
+
+[[files]]
+file = "config/exposure-common.toml"
+hash = "f2f309a4876192ac4b04d8f8f745d680ab8f368b6802acbd42d05748b986971d"
+
+[[files]]
+file = "config/exposure_polaroid-client.toml"
+hash = "bba16753a1db0667cc77b3c44a3fdc0f83d60ca0d20afa2bd3a051fd01c1ad93"
+
+[[files]]
 file = "config/fabric/indigo-renderer.properties"
 hash = "cc80aab197106b0ee0dc041c8d71f0f9a2335ad510023a9f6a8cf384de14f739"
 
@@ -459,10 +563,6 @@ hash = "40dbe5b348f89b8ded62bcdfe32807ffc3e78fa8e0f81607a739580019fe5450"
 [[files]]
 file = "config/frostiful.json"
 hash = "91f3ccf23e7e550488ab408b179d63cc7927b1b0720997690b2ac2a4ce28b0fe"
-
-[[files]]
-file = "config/fzzy_config/keybinds.toml"
-hash = "26ac5810c9b5dc5c1968827357f0a58c58ac2b6f7b082630960228e16585062f"
 
 [[files]]
 file = "config/gravestones.json"
@@ -597,10 +697,6 @@ file = "config/midnightlib.json"
 hash = "9bcdd9f5ae6c9fecc3a0dfee7507bf17c56702f14e40db9cdde90148f1d3b387"
 
 [[files]]
-file = "config/minecraft-cursor.json"
-hash = "c8258bef50291e61bb219351d4e55f0cbe96d5331bb66f788a488aa71252f241"
-
-[[files]]
 file = "config/mmode.json"
 hash = "229520040294dd36eb5220f52b3f7a200d48bf73db2b2229ec3eab0351277b14"
 
@@ -609,16 +705,12 @@ file = "config/modernfix-mixins.properties"
 hash = "c03abaae9129778eea5bb05201ffb5ecd8aaeae8d1eb16255d97caba0b96ca87"
 
 [[files]]
-file = "config/modmenu.json"
-hash = "a884ca28c66b90080b7470dc1a2efdddd47c325af5d699aa45d7974b4b254628"
-
-[[files]]
 file = "config/moonlight-client.json"
 hash = "468730b66703fdbae23f71ee15a9d880f2a79ff8fe67abda746dcbf10f2f06ab"
 
 [[files]]
 file = "config/moonlight-common.json"
-hash = "4e3beb2cf4e3b298278883a7d804e0c1fa94424ef1501c4053d709408cd8a1ee"
+hash = "b25d2b9748f7bd7779be60d6e3cbaa3f95b13be9dfa241b120f2b2bb4b21816a"
 
 [[files]]
 file = "config/morevillagers.json"
@@ -627,6 +719,10 @@ hash = "832818b27a76df025a408d353f3aada9195a0a6f0eed5269ddb795d65501078a"
 [[files]]
 file = "config/mousewheelie.hjson"
 hash = "0669bd0936b4a5969373ff5ad0903484bd27fcfc6c3f898ec40152596e326a39"
+
+[[files]]
+file = "config/naturalist-server.properties"
+hash = "114416d381787fdc0cc2fb01c2a02cc01879ce1f54d47ffd6baf5216d71ecfa3"
 
 [[files]]
 file = "config/niftycarts-client.toml"
@@ -643,14 +739,6 @@ hash = "ab0149158835d79dbc65a32034dac8bfbf140a52a79c23cecf085e0c07a5aa16"
 [[files]]
 file = "config/numismatic-overhaul.json5"
 hash = "7c32904774776b87cb958be20ddde01182430c27bbc58dbb4fb92f7b97b5fa35"
-
-[[files]]
-file = "config/playeremotes-wheel-fix.json"
-hash = "d2b57c51f95c3d0143346ab511aab72538d925d37dde65c4a532997aae858513"
-
-[[files]]
-file = "config/playeremotes.json"
-hash = "8e5a95ad094b7515eb3e3be22514b738d7c58f2147a69057aad0cf4d05911acb"
 
 [[files]]
 file = "config/preferred-gamerules.properties"
@@ -685,32 +773,12 @@ file = "config/smallships-common.toml"
 hash = "3857836632c9ede52ba052171fc45874ffa15127af9958adb5b13b486c6ac6fe"
 
 [[files]]
-file = "config/smoothgui.json"
-hash = "8a7a7774bd7e590beef25c25944044c769a45e5a110cb8975a54b2558e1d4534"
-
-[[files]]
-file = "config/smoothscroll.json"
-hash = "12672919c7637eddf10cae6eb1a5ee8496e70520518168e96cdd36a0b8715193"
-
-[[files]]
 file = "config/smoothswapping.json"
 hash = "d15110f71646c8b1e18a78483990691bbda1e9e687d39ac62cff0423375a4076"
 
 [[files]]
-file = "config/sodium-extra-options.json"
-hash = "ece12f36e24ea85b294b266a230a81d5fd2b9a5ab77b9814f61b329f9d9bc66c"
-
-[[files]]
-file = "config/sodium-extra.properties"
-hash = "a2f1b47c1eaa119ab34727f1d43c2506cb3d7f17ba8fb4efb49e20c8e0b58e70"
-
-[[files]]
 file = "config/sodium-mixins.properties"
 hash = "b627c4456e6fa0bc4b5f85e2f1cd949faedae3cb9afdaf2a5f52e6f3b6ae1f01"
-
-[[files]]
-file = "config/sodium-options.json"
-hash = "2c5d8d00cf22f45cfb27a31641db46881b94d1b14c10e88e0ecf972b7277fc13"
 
 [[files]]
 file = "config/sound_physics_remastered/allowed_sounds.properties"
@@ -769,6 +837,10 @@ file = "config/surveyor.toml"
 hash = "15f888c4463ce93eac7a3b6de6f8e022b075c9031902d65e48e4eb3731cb10af"
 
 [[files]]
+file = "config/terrain_slabs.json"
+hash = "91683595865557b8abfae1d8d7f957f50d9af49a577ef9cb7cb691c505a3754c"
+
+[[files]]
 file = "config/thermoo-patches.json"
 hash = "07a2b3a588b96dc3164a7bf6af53e825032e42094a853aae546a02c1ca3fe4e2"
 
@@ -819,6 +891,14 @@ hash = "b60b9cd2a86d92274051a85918f736e65b9644922f4ea83f467f5c4e42242b7d"
 [[files]]
 file = "config/trender.json"
 hash = "0a282f3623f7f9443a1d10b5768865f69e58b74e000dcfb4f40399626b7a6124"
+
+[[files]]
+file = "config/trmt-client.json"
+hash = "fb1b6c6fea350c7489e0b559fc7747878eabb7b1c47cce8524129858d60901e3"
+
+[[files]]
+file = "config/trmt.json"
+hash = "ae8daed8c2e161a862751557dc79b87ae00e6e6c8b26b41ea212a18024aedfad"
 
 [[files]]
 file = "config/universalbonemeal-server.toml"
@@ -875,10 +955,6 @@ hash = "7bea6cc8cc83a66e1482764774661611c5c15bc276684a2eea660204a3bd86c9"
 [[files]]
 file = "config/worldplaytime/config.json"
 hash = "50057a63c98167f7b05727906f17ae6fb182a5eb40bcdb3314d1a8a325c4eec8"
-
-[[files]]
-file = "config/yacl.json5"
-hash = "121b93764159be6fb7dab523b29a844e2bb78400ce8c48f52135a097e9b0006e"
 
 [[files]]
 file = "credits.txt"
@@ -1744,8 +1820,8 @@ file = "mods/nbidal18-jei-hidden-default-1.0.0+1.21.1.jar"
 hash = "5aeffa5d9e70178c6c54991e4f769159d6c40fb0ce3455d9acdbd4c3b5e69ab5"
 
 [[files]]
-file = "mods/nbidal18-pack-compat-1.0.0+1.21.1.jar"
-hash = "55a8f1cfee57b99691c2ca982cb14ebf7de2a2f9ee6f32abdd1c3b88a1a41744"
+file = "mods/nbidal18-pack-compat-1.1.0+1.21.1.jar"
+hash = "228d1e98b644269390dc247af6969a9a190fb3f8823ce1b0fcfd7705f805d9bb"
 
 [[files]]
 file = "mods/nbidal18-playeremotes-fa-bridge-1.0.1+1.21.1.jar"
@@ -2084,14 +2160,6 @@ hash = "5e5abe77d3282764852db25598260000bcda051cbc540607e47ac028cfbeea95"
 metafile = true
 
 [[files]]
-file = "options.amecsapi.txt"
-hash = "712dafe084f03f3768cdd21e90a15d63538d3c21eacbdd8f89ff6e23538212a8"
-
-[[files]]
-file = "options.txt"
-hash = "57677d1d947bf3b787848b6330c2a8988477336fa4d9010a42caca638395adce"
-
-[[files]]
 file = "resourcepacks/3fresh-bflower-pots-rotated.pw.toml"
 hash = "81924fb049df89712699437b05e68e0e0c56928726c2256029261f106b7ad7f4"
 metafile = true
@@ -2158,10 +2226,6 @@ metafile = true
 file = "resourcepacks/overlay-s-7.pw.toml"
 hash = "91040cef1bf1f53eb1e3dc0a1674cb2266654d0d0bc71576a4ced9a624366462"
 metafile = true
-
-[[files]]
-file = "servers.dat"
-hash = "a3145b728c70ff8d9e729f8819a1ed8ece15c8d6d3f91b394cb30bb532b9ff43"
 
 [[files]]
 file = "shaderpacks/complementaryunbound-r5-8-1.pw.toml"

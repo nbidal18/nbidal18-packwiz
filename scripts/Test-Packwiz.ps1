@@ -13,6 +13,7 @@ $updaterRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $siteRoot = Join-Path $updaterRoot 'site'
 $builderPath = Join-Path $releaseRoot '1. setup\support\scripts\build-prism-instance.ps1'
 $bootstrapSource = Join-Path $updaterRoot 'tools\packwiz-installer-bootstrap.jar'
+$launchGuardSource = Join-Path $updaterRoot 'tools\nbidal18-launch-guard.jar'
 $shaderSourceRoot = Join-Path $releaseRoot '2. appearance\shaderpacks'
 $privateStillLifeSource = Join-Path $releaseRoot '3. modpack\client\datapacks\Still_Life-1.0-beta1.zip'
 $validationReport = Join-Path $updaterRoot 'VALIDATION-REPORT.md'
@@ -35,7 +36,17 @@ if ([string]::IsNullOrWhiteSpace($JavaPath)) {
 }
 $JavaPath = [IO.Path]::GetFullPath($JavaPath)
 
-foreach ($required in @($siteRoot, $builderPath, $bootstrapSource, $shaderSourceRoot, $privateStillLifeSource, $PackwizPath, $JavaPath)) {
+foreach ($required in @(
+    $siteRoot,
+    (Join-Path $siteRoot '.nbidal18\strict-manifest.tsv'),
+    $builderPath,
+    $bootstrapSource,
+    $launchGuardSource,
+    $shaderSourceRoot,
+    $privateStillLifeSource,
+    $PackwizPath,
+    $JavaPath
+)) {
     if (-not (Test-Path -LiteralPath $required)) { throw "Required path is missing: $required" }
 }
 $shaderArchives = @(Get-ChildItem -LiteralPath $shaderSourceRoot -File -Filter '*.zip' | Sort-Object Name)
@@ -62,26 +73,20 @@ function Invoke-PackwizRefresh([string] $WorkingDirectory) {
     }
 }
 
-function Invoke-Updater([string] $MinecraftDirectory, [string] $PackUrl, [switch] $NoBootstrapUpdate) {
+function Invoke-LaunchGuard([string] $MinecraftDirectory, [string] $PackUrl) {
     Push-Location $MinecraftDirectory
     try {
-        $arguments = New-Object Collections.Generic.List[string]
-        $arguments.Add('-jar')
-        $arguments.Add('.\packwiz-installer-bootstrap.jar')
-        if ($NoBootstrapUpdate) { $arguments.Add('--bootstrap-no-update') }
-        $arguments.Add('-g')
-        $arguments.Add($PackUrl)
         $previousErrorActionPreference = $ErrorActionPreference
         try {
             $ErrorActionPreference = 'Continue'
-            $output = @(& $JavaPath @($arguments.ToArray()) 2>&1 | ForEach-Object { "$_" })
+            $output = @(& $JavaPath -jar '.\nbidal18-launch-guard.jar' $PackUrl 2>&1 | ForEach-Object { "$_" })
             $exitCode = $LASTEXITCODE
         }
         finally {
             $ErrorActionPreference = $previousErrorActionPreference
         }
         if ($exitCode -ne 0) {
-            throw "Packwiz updater failed with exit code $exitCode`n$($output -join "`n")"
+            throw "nbidal18 launch guard failed with exit code $exitCode`n$($output -join "`n")"
         }
         return ,$output
     }
@@ -90,44 +95,159 @@ function Invoke-Updater([string] $MinecraftDirectory, [string] $PackUrl, [switch
     }
 }
 
-function Invoke-UpdaterWithRetry(
+function Invoke-LaunchGuardWithRetry(
     [string] $MinecraftDirectory,
     [string] $PackUrl,
     [ValidateRange(1, 5)] [int] $Attempts = 3
 ) {
     $failures = New-Object Collections.Generic.List[string]
     for ($attempt = 1; $attempt -le $Attempts; $attempt++) {
-        try { return (Invoke-Updater $MinecraftDirectory $PackUrl) }
+        try { return (Invoke-LaunchGuard $MinecraftDirectory $PackUrl) }
         catch {
             $failures.Add("Attempt ${attempt}: $($_.Exception.Message)")
             if ($attempt -eq $Attempts) {
-                throw "Packwiz cold install failed after $Attempts attempts.`n$($failures -join "`n")"
+                throw "Launch-guard cold install failed after $Attempts attempts.`n$($failures -join "`n")"
             }
             Start-Sleep -Seconds ([Math]::Pow(2, $attempt))
         }
     }
 }
 
-function Invoke-UpdaterExpectFailure([string] $MinecraftDirectory, [string] $PackUrl) {
+function Invoke-LaunchGuardExpectFailure([string] $MinecraftDirectory, [string] $PackUrl) {
     Push-Location $MinecraftDirectory
     try {
         $previousErrorActionPreference = $ErrorActionPreference
         try {
             $ErrorActionPreference = 'Continue'
-            $output = @(& $JavaPath -jar '.\packwiz-installer-bootstrap.jar' --bootstrap-no-update -g $PackUrl 2>&1 | ForEach-Object { "$_" })
+            $output = @(& $JavaPath -jar '.\nbidal18-launch-guard.jar' $PackUrl 2>&1 | ForEach-Object { "$_" })
             $exitCode = $LASTEXITCODE
         }
         finally {
             $ErrorActionPreference = $previousErrorActionPreference
         }
-        if ($exitCode -eq 0) { throw 'Packwiz updater unexpectedly succeeded during the failure test.' }
+        if ($exitCode -eq 0) { throw 'nbidal18 launch guard unexpectedly succeeded during the failure test.' }
         if ($output.Count -eq 0 -or (($output -join "`n") -notmatch '(?i)(failed|error|exception|404|not found|unable)')) {
-            throw "Packwiz updater failure was not clearly reported.`n$($output -join "`n")"
+            throw "Launch-guard failure was not clearly reported.`n$($output -join "`n")"
         }
         return ,$output
     }
     finally {
         Pop-Location
+    }
+}
+
+function Set-StrictManagedRecords(
+    [string] $PackRoot,
+    [hashtable] $ManagedFiles,
+    [string[]] $RemovePaths = @()
+) {
+    $manifestPath = Join-Path $PackRoot '.nbidal18\strict-manifest.tsv'
+    if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
+        throw "Synthetic Packwiz tree has no strict manifest: $manifestPath"
+    }
+
+    $replaceKeys = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach ($relativePath in @($RemovePaths) + @($ManagedFiles.Keys)) {
+        if ([string]::IsNullOrWhiteSpace($relativePath) -or
+                $relativePath.Contains('\') -or
+                $relativePath.StartsWith('/') -or
+                $relativePath.Contains("`t") -or
+                $relativePath.Contains("`r") -or
+                $relativePath.Contains("`n") -or
+                $relativePath -match '(^|/)\.\.(/|$)') {
+            throw "Unsafe synthetic strict-manifest path: $relativePath"
+        }
+        [void] $replaceKeys.Add($relativePath)
+    }
+
+    $sourceLines = @([IO.File]::ReadAllText($manifestPath) -split "\r?\n")
+    if ($sourceLines.Count -eq 0 -or $sourceLines[0] -ne "nbidal18-strict-manifest`t1") {
+        throw "Synthetic strict manifest has an unsupported header: $manifestPath"
+    }
+    $outputLines = New-Object Collections.Generic.List[string]
+    $existingManaged = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach ($line in $sourceLines) {
+        if ([string]::IsNullOrEmpty($line)) { continue }
+        $match = [regex]::Match($line, '^managed\t([0-9a-f]{64})\t(.+)$')
+        if ($match.Success) {
+            $relativePath = $match.Groups[2].Value
+            if (-not $existingManaged.Add($relativePath)) {
+                throw "Duplicate managed record in synthetic strict manifest: $relativePath"
+            }
+            if ($replaceKeys.Contains($relativePath)) { continue }
+        }
+        $outputLines.Add($line)
+    }
+
+    foreach ($relativePath in @($ManagedFiles.Keys | Sort-Object)) {
+        $payloadPath = [string] $ManagedFiles[$relativePath]
+        if (-not (Test-Path -LiteralPath $payloadPath -PathType Leaf)) {
+            throw "Synthetic managed canary is missing: $payloadPath"
+        }
+        $sha256 = (Get-FileHash -LiteralPath $payloadPath -Algorithm SHA256).Hash.ToLowerInvariant()
+        $outputLines.Add("managed`t$sha256`t$relativePath")
+    }
+    Write-Utf8NoBom $manifestPath (($outputLines -join "`n") + "`n")
+}
+
+function Get-StrictSeedRules([string] $PackRoot) {
+    $manifestPath = Join-Path $PackRoot '.nbidal18\strict-manifest.tsv'
+    foreach ($line in Get-Content -LiteralPath $manifestPath) {
+        $fields = @($line -split "`t")
+        if ($fields.Count -eq 3 -and $fields[0] -eq 'seed') {
+            [pscustomobject]@{ Template = $fields[1]; Target = $fields[2] }
+        }
+    }
+}
+
+function Assert-IntegrityAttestation([string] $MinecraftDirectory) {
+    $manifestPath = Join-Path $MinecraftDirectory '.nbidal18\strict-manifest.tsv'
+    $attestationPath = Join-Path $MinecraftDirectory '.nbidal18\integrity-attestation.tsv'
+    if (-not (Test-Path -LiteralPath $attestationPath -PathType Leaf)) {
+        throw "Successful launch guard did not write an integrity attestation: $attestationPath"
+    }
+    $lines = @(Get-Content -LiteralPath $attestationPath)
+    $manifestHash = (Get-FileHash -LiteralPath $manifestPath -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($lines.Count -ne 3 -or
+            $lines[0] -ne "nbidal18-integrity-attestation`t1" -or
+            $lines[1] -ne "manifest-sha256`t$manifestHash" -or
+            $lines[2] -notmatch '^verified-at-utc\t\d{4}-\d{2}-\d{2}T') {
+        throw 'Integrity attestation is absent, malformed, or does not match the installed strict manifest.'
+    }
+    return $manifestHash
+}
+
+function Assert-AttestationAbsent([string] $MinecraftDirectory) {
+    $attestationPath = Join-Path $MinecraftDirectory '.nbidal18\integrity-attestation.tsv'
+    if (Test-Path -LiteralPath $attestationPath) {
+        throw 'A failed launch guard left a stale integrity attestation.'
+    }
+}
+
+function Assert-QuarantinedFiles([string] $MinecraftDirectory, [hashtable] $ExpectedHashes) {
+    $quarantineRoot = Join-Path $MinecraftDirectory '.nbidal18\quarantine'
+    foreach ($relativePath in $ExpectedHashes.Keys) {
+        $livePath = Join-Path $MinecraftDirectory $relativePath.Replace('/', '\')
+        if (Test-Path -LiteralPath $livePath) {
+            throw "Unauthorized strict content survived outside quarantine: $relativePath"
+        }
+        $matches = @(
+            if (Test-Path -LiteralPath $quarantineRoot -PathType Container) {
+                foreach ($run in Get-ChildItem -LiteralPath $quarantineRoot -Directory -Force) {
+                    $candidate = Join-Path $run.FullName $relativePath.Replace('/', '\')
+                    if (Test-Path -LiteralPath $candidate -PathType Leaf) { Get-Item -LiteralPath $candidate -Force }
+                }
+            }
+        )
+        if ($matches.Count -eq 0) {
+            throw "Unauthorized strict content was not recoverably quarantined: $relativePath"
+        }
+        $matchingHashes = @($matches | Where-Object {
+            (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash -eq $ExpectedHashes[$relativePath]
+        })
+        if ($matchingHashes.Count -eq 0) {
+            throw "Quarantined content does not match its original bytes: $relativePath"
+        }
     }
 }
 
@@ -155,9 +275,9 @@ function Get-PreservationHashes([string[]] $Paths) {
 
 function Assert-PreservationHashes([hashtable] $Expected) {
     foreach ($path in $Expected.Keys) {
-        if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Updater removed preserved file: $path" }
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Launch guard removed preserved file: $path" }
         $actual = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash
-        if ($actual -ne $Expected[$path]) { throw "Updater changed preserved file: $path" }
+        if ($actual -ne $Expected[$path]) { throw "Launch guard changed preserved file: $path" }
     }
 }
 
@@ -233,9 +353,9 @@ function Get-FreeTcpPort {
     finally { $listener.Stop() }
 }
 
-$temporaryRoot = Join-Path ([IO.Path]::GetTempPath()) ('nbidal18-packwiz-validation-' + [guid]::NewGuid().ToString('N'))
+$temporaryRoot = Join-Path ([IO.Path]::GetTempPath()) ('n18v-' + [guid]::NewGuid().ToString('N'))
 $temporaryRoot = [IO.Path]::GetFullPath($temporaryRoot)
-$expectedTempPrefix = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd('\') + '\nbidal18-packwiz-validation-'
+$expectedTempPrefix = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd('\') + '\n18v-'
 if (-not $temporaryRoot.StartsWith($expectedTempPrefix, [StringComparison]::OrdinalIgnoreCase)) {
     throw "Unsafe validation directory: $temporaryRoot"
 }
@@ -260,23 +380,28 @@ try {
     }
 
     $indexText = [IO.File]::ReadAllText((Join-Path $siteRoot 'index.toml'))
+    $indexedSourcePaths = @([regex]::Matches($indexText, '(?m)^file = "([^"]+)"\r?$') | ForEach-Object { $_.Groups[1].Value })
+    $forbiddenIndexedFiles = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach ($seedRule in @(Get-StrictSeedRules $siteRoot)) { [void] $forbiddenIndexedFiles.Add($seedRule.Target) }
     foreach ($forbidden in @(
-        'file = "datapacks/Still_Life-1.0-beta1.zip"',
-        'config/iris.properties',
-        'config/iris-excluded.json',
-        'config/chat_heads.json5',
-        'config/sodium-fingerprint.json',
-        'config/presencefootsteps/updater.json',
-        'config/presencefootsteps/userconfig.json',
+        'datapacks/Still_Life-1.0-beta1.zip',
+        'config/controlify.json',
+        'config/euphoria_patcher/.data.json',
         'config/etf_warnings.json',
-        'config/jei/world/',
-        'vinurl/',
-        'voicechat/voicechat-client.properties',
-        'voicechat/player-volumes.properties',
-        'voicechat/category-volumes.properties',
-        'voicechat/username-cache.json'
-    )) {
-        if ($indexText.Contains($forbidden)) { throw "Forbidden player/private path is indexed: $forbidden" }
+        'config/jade/usernamecache.json',
+        'config/presencefootsteps/updater.json',
+        'config/resourceful-config-web.json',
+        'config/sodium-fingerprint.json',
+        'config/voicechat/username-cache.json'
+    )) { [void] $forbiddenIndexedFiles.Add($forbidden) }
+    $forbiddenIndexedPrefixes = @('config/crash_assistant/', 'config/jei/world/', 'config/spark/tmp/', 'vinurl/')
+    foreach ($indexedSourcePath in $indexedSourcePaths) {
+        if ($forbiddenIndexedFiles.Contains($indexedSourcePath) -or
+                @($forbiddenIndexedPrefixes | Where-Object {
+                    $indexedSourcePath.StartsWith($_, [StringComparison]::OrdinalIgnoreCase)
+                }).Count -gt 0) {
+            throw "Forbidden player/private path is indexed: $indexedSourcePath"
+        }
     }
     if ($indexText -match 'file = "shaderpacks/[^"]+\.zip(?:\.txt)?"') {
         throw 'A raw shader archive or sidecar entered the Packwiz index instead of official metadata.'
@@ -313,17 +438,29 @@ try {
     $siteFailure = Join-Path $temporaryRoot 'site-failure'
     $published = Join-Path $temporaryRoot 'published'
     Copy-Item -LiteralPath $siteRoot -Destination $siteA -Recurse
-    Write-Utf8NoBom (Join-Path $siteA 'config\__validation_overwrite.txt') "release-A`n"
-    Write-Utf8NoBom (Join-Path $siteA 'mods\__validation_remove.jar') "validation-mod-A`n"
+    $siteAConfigCanary = Join-Path $siteA 'config\__validation_overwrite.txt'
+    $siteARemoveCanary = Join-Path $siteA 'mods\__validation_remove.jar'
+    Write-Utf8NoBom $siteAConfigCanary "release-A`n"
+    Write-Utf8NoBom $siteARemoveCanary "validation-mod-A`n"
+    Set-StrictManagedRecords $siteA @{
+        'config/__validation_overwrite.txt' = $siteAConfigCanary
+        'mods/__validation_remove.jar' = $siteARemoveCanary
+    }
     Invoke-PackwizRefresh $siteA
     if (-not ([IO.File]::ReadAllText((Join-Path $siteA 'index.toml')).Contains('mods/__validation_remove.jar'))) {
         throw 'Release A canaries were not indexed.'
     }
 
     Copy-Item -LiteralPath $siteA -Destination $siteB -Recurse
-    Write-Utf8NoBom (Join-Path $siteB 'config\__validation_overwrite.txt') "release-B`n"
+    $siteBConfigCanary = Join-Path $siteB 'config\__validation_overwrite.txt'
+    $siteBAddedCanary = Join-Path $siteB 'mods\__validation_added.jar'
+    Write-Utf8NoBom $siteBConfigCanary "release-B`n"
     Remove-Item -LiteralPath (Join-Path $siteB 'mods\__validation_remove.jar') -Force
-    Write-Utf8NoBom (Join-Path $siteB 'mods\__validation_added.jar') "validation-mod-B`n"
+    Write-Utf8NoBom $siteBAddedCanary "validation-mod-B`n"
+    Set-StrictManagedRecords $siteB @{
+        'config/__validation_overwrite.txt' = $siteBConfigCanary
+        'mods/__validation_added.jar' = $siteBAddedCanary
+    } -RemovePaths @('mods/__validation_remove.jar')
     Invoke-PackwizRefresh $siteB
     $indexB = [IO.File]::ReadAllText((Join-Path $siteB 'index.toml'))
     if (-not $indexB.Contains('mods/__validation_added.jar') -or $indexB.Contains('mods/__validation_remove.jar')) {
@@ -331,16 +468,22 @@ try {
     }
 
     Copy-Item -LiteralPath $siteA -Destination $siteFailure -Recurse
-    Write-Utf8NoBom (Join-Path $siteFailure 'config\__validation_overwrite.txt') "failed-release-must-not-apply`n"
-    Write-Utf8NoBom (Join-Path $siteFailure 'mods\__validation_missing.jar') "unavailable-payload`n"
+    $siteFailureConfigCanary = Join-Path $siteFailure 'config\__validation_overwrite.txt'
+    $siteFailureMissingCanary = Join-Path $siteFailure 'mods\__validation_missing.jar'
+    Write-Utf8NoBom $siteFailureConfigCanary "failed-release-must-not-apply`n"
+    Write-Utf8NoBom $siteFailureMissingCanary "unavailable-payload`n"
+    Set-StrictManagedRecords $siteFailure @{
+        'config/__validation_overwrite.txt' = $siteFailureConfigCanary
+        'mods/__validation_missing.jar' = $siteFailureMissingCanary
+    }
     Invoke-PackwizRefresh $siteFailure
-    Remove-Item -LiteralPath (Join-Path $siteFailure 'mods\__validation_missing.jar') -Force
+    Remove-Item -LiteralPath $siteFailureMissingCanary -Force
     Copy-Item -LiteralPath $siteA -Destination $published -Recurse
 
     # Build a localhost-only migration ZIP for isolated testing.
     $port = Get-FreeTcpPort
     $packUrl = "http://127.0.0.1:$port/pack.toml"
-    $testZip = Join-Path $temporaryRoot 'nbidal18-3.1.0-local-validation.zip'
+    $testZip = Join-Path $temporaryRoot 'nbidal18-3.1.1-local-validation.zip'
     & $builderPath -OutputPath $testZip -UpdateUrl $packUrl -AllowInsecureLocalhost
     if (-not (Test-Path -LiteralPath $testZip -PathType Leaf)) { throw 'Migration test ZIP was not created.' }
 
@@ -352,6 +495,7 @@ try {
             'instance.cfg',
             'mmc-pack.json',
             'server-icon.png',
+            'minecraft/nbidal18-launch-guard.jar',
             'minecraft/packwiz-installer-bootstrap.jar'
         )
         $allowedEntries = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
@@ -385,6 +529,10 @@ try {
     if ((Get-FileHash -LiteralPath $bootstrapInstalled -Algorithm SHA256).Hash -ne (Get-FileHash -LiteralPath $bootstrapSource -Algorithm SHA256).Hash) {
         throw 'Migration ZIP bootstrap JAR does not match the official local source.'
     }
+    $launchGuardInstalled = Join-Path $minecraft 'nbidal18-launch-guard.jar'
+    if ((Get-FileHash -LiteralPath $launchGuardInstalled -Algorithm SHA256).Hash -ne (Get-FileHash -LiteralPath $launchGuardSource -Algorithm SHA256).Hash) {
+        throw 'Migration ZIP launch-guard JAR does not match the reviewed local source.'
+    }
     foreach ($unexpectedThinPath in @(
         'mods',
         'resourcepacks',
@@ -408,7 +556,11 @@ try {
     if ($instanceCfg -match '(?m)^ConfigVersion=') {
         throw 'Migration instance.cfg declares ConfigVersion before Prism has serialized the quoted pre-launch command.'
     }
-    foreach ($requiredText in @('name=nbidal18 3.1.0', 'ExportVersion=3.1.0', 'OverrideCommands=true', "PreLaunchCommand=`"`$INST_JAVA`" -jar packwiz-installer-bootstrap.jar $packUrl")) {
+    $preLaunchLines = @($instanceCfg -split "\r?\n" | Where-Object { $_ -match '^PreLaunchCommand=' })
+    if ($preLaunchLines.Count -ne 1 -or $preLaunchLines[0].Contains('packwiz-installer-bootstrap.jar')) {
+        throw 'Migration instance must have exactly one guarded pre-launch command, never the legacy direct-Packwiz command.'
+    }
+    foreach ($requiredText in @('name=nbidal18 3.1.1', 'ExportVersion=3.1.1', 'OverrideCommands=true', "PreLaunchCommand=`"`$INST_JAVA`" -jar nbidal18-launch-guard.jar $packUrl")) {
         if (-not $instanceCfg.Contains($requiredText)) { throw "instance.cfg assertion failed: $requiredText" }
     }
     $mmc = Get-Content -LiteralPath (Join-Path $instanceRoot 'mmc-pack.json') -Raw | ConvertFrom-Json
@@ -417,42 +569,83 @@ try {
     if ($minecraftComponent.Count -ne 1 -or $minecraftComponent[0].version -ne '1.21.1') { throw 'mmc-pack.json Minecraft version mismatch.' }
     if ($fabricComponent.Count -ne 1 -or $fabricComponent[0].version -ne '0.19.3') { throw 'mmc-pack.json Fabric version mismatch.' }
 
-    # Simulate files added separately by an authorized player or generated at runtime.
+    # Seed/player/runtime state must survive, while every unknown strict-root file
+    # must be moved to a recoverable quarantine before attestation.
+    $seedRules = @(Get-StrictSeedRules $siteA)
+    if ($seedRules.Count -eq 0) { throw 'Synthetic release A has no seed-once settings.' }
+    $seedTargets = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach ($seedRule in $seedRules) {
+        if (-not $seedTargets.Add($seedRule.Target)) { throw "Duplicate seed target: $($seedRule.Target)" }
+    }
+    foreach ($requiredSeedTarget in @('options.txt', 'config/iris.properties')) {
+        if (-not $seedTargets.Contains($requiredSeedTarget)) { throw "Required mixed-setting seed is absent: $requiredSeedTarget" }
+    }
+
     $installedStillLife = Join-Path $minecraft 'datapacks\Still_Life-1.0-beta1.zip'
     New-Item -ItemType Directory -Path (Split-Path -Parent $installedStillLife) -Force | Out-Null
     Copy-Item -LiteralPath $privateStillLifeSource -Destination $installedStillLife -Force
     Write-Utf8NoBom (Join-Path $minecraft 'saves\__validation\keep.txt') "keep-save`n"
     Write-Utf8NoBom (Join-Path $minecraft 'screenshots\__validation.txt') "keep-screenshot`n"
-    Write-Utf8NoBom (Join-Path $minecraft 'shaderpacks\__player-shader.zip') "player-shader`n"
-    Write-Utf8NoBom (Join-Path $minecraft 'shaderpacks\__player-shader.zip.txt') "player-settings`n"
     Write-Utf8NoBom (Join-Path $minecraft 'vinurl\downloads\__player-audio.ogg') "player-vinurl-download`n"
     Write-Utf8NoBom (Join-Path $minecraft 'vinurl\executables\__runtime-helper.exe') "runtime-vinurl-helper`n"
-    Write-Utf8NoBom (Join-Path $minecraft 'mods\__unknown-local.jar') "unknown-local-file`n"
-    Write-Utf8NoBom (Join-Path $minecraft 'config\iris.properties') "shaderPack=__player-shader.zip`nenableShaders=true`n"
+    Write-Utf8NoBom (Join-Path $minecraft "shaderpacks\$($shaderArchives[0].Name).txt") "approved-shader-sidecar-setting`n"
+    Write-Utf8NoBom (Join-Path $minecraft 'options.txt') "resourcePacks:[`"file/__unauthorized.zip`"]`nincompatibleResourcePacks:[`"file/__unauthorized.zip`"]`nkey_key.forward:key.keyboard.up`nvalidationPreference:keep`n"
+    Write-Utf8NoBom (Join-Path $minecraft 'config\iris.properties') "shaderPack=__unauthorized.zip`nenableShaders=true`nallowUnknownShaders=true`nvalidationPreference=keep`n"
+    Write-Utf8NoBom (Join-Path $minecraft 'config\controlify.json') "{`n  `"global`": { `"reach_around`": `"ON`" },`n  `"validationController`": `"keep`"`n}`n"
     Write-Utf8NoBom (Join-Path $minecraft 'config\voicechat\voicechat-client.properties') "player-voice-setting=true`n"
-    Write-Utf8NoBom (Join-Path $minecraft 'config\chat_heads.json5') "{ nameAliases: { player: 'custom' } }`n"
     Write-Utf8NoBom (Join-Path $minecraft 'config\sodium-fingerprint.json') "{ playerGenerated: true }`n"
-    Write-Utf8NoBom (Join-Path $minecraft 'config\presencefootsteps\userconfig.json') "{ playerVolume: 42 }`n"
+    Write-Utf8NoBom (Join-Path $minecraft 'config\euphoria_patcher\.data.json') "{ runtimeGenerated: true }`n"
     Write-Utf8NoBom (Join-Path $minecraft 'config\jei\world\__validation\state.ini') "player-world-state=true`n"
+    foreach ($generatedCacheCanary in @(
+        '.fabric/processedMods/__validation-cache.jar',
+        '.fabric/remappedJars/__validation-cache.jar',
+        '.fabric/tmp/__validation-cache.tmp',
+        'dynamic-resource-pack-cache/__validation/generated.json'
+    )) {
+        Write-Utf8NoBom (Join-Path $minecraft $generatedCacheCanary.Replace('/', '\')) "generated-cache-canary`n"
+    }
+    $preservedFabricState = Join-Path $minecraft '.fabric\preserved-state\keep.txt'
+    Write-Utf8NoBom $preservedFabricState "unrelated-fabric-state`n"
+
+    $euphoriaGeneratedRelative = 'shaderpacks/ComplementaryUnbound_r5.8.1 + EuphoriaPatches_1.9.3'
+    Write-Utf8NoBom (Join-Path $minecraft "$($euphoriaGeneratedRelative.Replace('/', '\'))\__validation-stale.txt") "disposable-generated-shader-tree`n"
+    $unauthorizedRelativePaths = @(
+        'mods/__unknown-local.jar',
+        'resourcepacks/__unknown-local.zip',
+        'shaderpacks/__unknown-local.zip',
+        'datapacks/__unknown-local.zip',
+        'moonlight-global-datapacks/__unknown-global.zip',
+        'villagerpacks/__unknown-villager-pack.zip',
+        'server-resource-packs/__unknown-server-pack.zip',
+        'config/__unknown-local.toml'
+    )
+    foreach ($relativePath in $unauthorizedRelativePaths) {
+        Write-Utf8NoBom (Join-Path $minecraft $relativePath.Replace('/', '\')) "unauthorized-$relativePath`n"
+    }
+    $quarantineHashes = @{}
+    foreach ($relativePath in $unauthorizedRelativePaths) {
+        $quarantineHashes[$relativePath] = (Get-FileHash -LiteralPath (Join-Path $minecraft $relativePath.Replace('/', '\')) -Algorithm SHA256).Hash
+    }
 
     $preservedPaths = New-Object Collections.Generic.List[string]
     foreach ($path in @(
         (Join-Path $minecraft 'saves\__validation\keep.txt'),
         (Join-Path $minecraft 'screenshots\__validation.txt'),
-        (Join-Path $minecraft 'shaderpacks\__player-shader.zip'),
-        (Join-Path $minecraft 'shaderpacks\__player-shader.zip.txt'),
+        (Join-Path $minecraft "shaderpacks\$($shaderArchives[0].Name).txt"),
         $installedStillLife,
         (Join-Path $minecraft 'vinurl\downloads\__player-audio.ogg'),
         (Join-Path $minecraft 'vinurl\executables\__runtime-helper.exe'),
-        (Join-Path $minecraft 'mods\__unknown-local.jar'),
-        (Join-Path $minecraft 'config\iris.properties'),
         (Join-Path $minecraft 'config\voicechat\voicechat-client.properties'),
-        (Join-Path $minecraft 'config\chat_heads.json5'),
         (Join-Path $minecraft 'config\sodium-fingerprint.json'),
-        (Join-Path $minecraft 'config\presencefootsteps\userconfig.json'),
-        (Join-Path $minecraft 'config\jei\world\__validation\state.ini')
+        (Join-Path $minecraft 'config\euphoria_patcher\.data.json'),
+        (Join-Path $minecraft 'config\jei\world\__validation\state.ini'),
+        $preservedFabricState
     )) { $preservedPaths.Add($path) }
     $preservationHashes = Get-PreservationHashes @($preservedPaths.ToArray())
+
+    $expectedSeededTargets = @($seedRules | Where-Object {
+        -not (Test-Path -LiteralPath (Join-Path $minecraft $_.Target.Replace('/', '\')))
+    } | ForEach-Object { $_.Target })
 
     $expectedManagedRecords = @(Get-IndexedInstallRecords $siteA)
     $expectedManagedTargets = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
@@ -483,8 +676,10 @@ try {
     }
     if (-not $serverReady) { throw "Local Packwiz server did not become ready. Logs: $serverOut $serverErr" }
 
-    $firstOutput = Invoke-UpdaterWithRetry $minecraft $packUrl -Attempts 4
-    Write-Utf8NoBom (Join-Path $temporaryRoot 'updater-first.log') (($firstOutput -join "`n") + "`n")
+    $firstOutput = Invoke-LaunchGuardWithRetry $minecraft $packUrl -Attempts 4
+    Write-Utf8NoBom (Join-Path $temporaryRoot 'launch-guard-first.log') (($firstOutput -join "`n") + "`n")
+    $firstPasses = @($firstOutput | Where-Object { $_ -match '^\[nbidal18-launch-guard\] Running Packwiz (normal update|forced hash-validation) pass\.\.\.$' })
+    if ($firstPasses.Count -ne 2) { throw 'Cold install did not complete both launch-guard Packwiz passes.' }
     if (-not (Test-Path -LiteralPath (Join-Path $minecraft 'packwiz-installer.jar'))) { throw 'First run did not download packwiz-installer.jar.' }
     $packwizStatePath = Join-Path $minecraft 'packwiz.json'
     if (-not (Test-Path -LiteralPath $packwizStatePath)) { throw 'First run did not create packwiz.json.' }
@@ -495,28 +690,120 @@ try {
         if ((Get-FileHash -LiteralPath $installedShader -Algorithm SHA256).Hash -ne (Get-FileHash -LiteralPath $shaderArchive.FullName -Algorithm SHA256).Hash) {
             throw "Packwiz-installed shader differs from the reviewed official source: $($shaderArchive.Name)"
         }
-        $preservationHashes[$installedShader] = (Get-FileHash -LiteralPath $installedShader -Algorithm SHA256).Hash
     }
     if ([IO.File]::ReadAllText((Join-Path $minecraft 'config\__validation_overwrite.txt')) -ne "release-A`n") { throw 'Release A overwrite canary is wrong.' }
     if ([IO.File]::ReadAllText((Join-Path $minecraft 'mods\__validation_remove.jar')) -ne "validation-mod-A`n") { throw 'Release A managed-mod canary is wrong.' }
     Assert-PreservationHashes $preservationHashes
+    Assert-QuarantinedFiles $minecraft $quarantineHashes
+    foreach ($purgedCacheRoot in @(
+        '.fabric\processedMods',
+        '.fabric\remappedJars',
+        '.fabric\tmp',
+        'dynamic-resource-pack-cache',
+        $euphoriaGeneratedRelative.Replace('/', '\')
+    )) {
+        if (Test-Path -LiteralPath (Join-Path $minecraft $purgedCacheRoot)) {
+            throw "Generated loadable cache survived the launch guard: $purgedCacheRoot"
+        }
+    }
+    $generatedQuarantineMatches = @(Get-ChildItem -LiteralPath (Join-Path $minecraft '.nbidal18\quarantine') `
+        -Recurse -Force -File -ErrorAction SilentlyContinue | Where-Object {
+            $_.Name -in @('__validation-stale.txt', 'generated.json')
+        })
+    if ($generatedQuarantineMatches.Count -ne 0) {
+        throw 'Disposable generated cache content accumulated in quarantine.'
+    }
 
-    # Prove an unchanged launch requests only pack.toml and changes no local bytes.
-    $treeHashBeforeNoOp = Get-TreeHash $minecraft
-    $stateHashBeforeNoOp = (Get-FileHash -LiteralPath $packwizStatePath -Algorithm SHA256).Hash
-    $publishedIndex = Join-Path $published 'index.toml'
-    $publishedIndexOffline = Join-Path $published 'index.toml.offline'
-    Move-Item -LiteralPath $publishedIndex -Destination $publishedIndexOffline
-    try {
-        $secondOutput = Invoke-Updater $minecraft $packUrl -NoBootstrapUpdate
-        Write-Utf8NoBom (Join-Path $temporaryRoot 'updater-noop.log') (($secondOutput -join "`n") + "`n")
+    foreach ($seedRule in $seedRules) {
+        $targetPath = Join-Path $minecraft $seedRule.Target.Replace('/', '\')
+        if (-not (Test-Path -LiteralPath $targetPath -PathType Leaf)) {
+            throw "Launch guard did not materialize seed-once setting: $($seedRule.Target)"
+        }
+        $preservationHashes[$targetPath] = (Get-FileHash -LiteralPath $targetPath -Algorithm SHA256).Hash
     }
-    finally {
-        Move-Item -LiteralPath $publishedIndexOffline -Destination $publishedIndex
+    foreach ($expectedSeededTarget in $expectedSeededTargets) {
+        if (($firstOutput -join "`n") -notmatch [regex]::Escape("Seeded first-run player setting: $expectedSeededTarget")) {
+            throw "Launch guard did not report seeding an absent setting: $expectedSeededTarget"
+        }
     }
-    if (-not (($secondOutput -join "`n") -match 'Modpack is already up to date!')) { throw 'Second run did not report a no-op.' }
-    if ((Get-FileHash -LiteralPath $packwizStatePath -Algorithm SHA256).Hash -ne $stateHashBeforeNoOp) { throw 'No-op run rewrote packwiz.json.' }
-    if ((Get-TreeHash $minecraft) -ne $treeHashBeforeNoOp) { throw 'No-op run changed the Minecraft tree.' }
+
+    $optionsRule = @($seedRules | Where-Object { $_.Target -eq 'options.txt' })
+    $irisRule = @($seedRules | Where-Object { $_.Target -eq 'config/iris.properties' })
+    if ($optionsRule.Count -ne 1 -or $irisRule.Count -ne 1) { throw 'Mixed-setting seed rules are ambiguous.' }
+    $optionsTemplateLines = @(Get-Content -LiteralPath (Join-Path $minecraft $optionsRule[0].Template.Replace('/', '\')))
+    $installedOptionsLines = @(Get-Content -LiteralPath (Join-Path $minecraft 'options.txt'))
+    foreach ($key in @('resourcePacks', 'incompatibleResourcePacks')) {
+        $canonical = @($optionsTemplateLines | Where-Object { $_.StartsWith("${key}:", [StringComparison]::Ordinal) })
+        $installed = @($installedOptionsLines | Where-Object { $_.StartsWith("${key}:", [StringComparison]::Ordinal) })
+        if ($canonical.Count -ne 1 -or $installed.Count -ne 1 -or $installed[0] -ne $canonical[0]) {
+            throw "Launch guard did not enforce the canonical options.txt ${key} line."
+        }
+    }
+    if ($installedOptionsLines -notcontains 'validationPreference:keep') {
+        throw 'Launch guard reset an unrelated options.txt player preference.'
+    }
+
+    $irisTemplateLines = @(Get-Content -LiteralPath (Join-Path $minecraft $irisRule[0].Template.Replace('/', '\')))
+    $installedIrisLines = @(Get-Content -LiteralPath (Join-Path $minecraft 'config\iris.properties'))
+    $canonicalShader = @($irisTemplateLines | Where-Object { $_ -match '^shaderPack=' })
+    $installedShaderSetting = @($installedIrisLines | Where-Object { $_ -match '^shaderPack=' })
+    if ($canonicalShader.Count -ne 1 -or $installedShaderSetting.Count -ne 1 -or $installedShaderSetting[0] -ne $canonicalShader[0]) {
+        throw 'Launch guard did not replace an unapproved Iris shader selection with the canonical selection.'
+    }
+    if (@($installedIrisLines | Where-Object { $_ -eq 'allowUnknownShaders=false' }).Count -ne 1 -or
+            $installedIrisLines -notcontains 'validationPreference=keep') {
+        throw 'Launch guard did not enforce Iris policy while retaining unrelated player settings.'
+    }
+
+    $controlifyPath = Join-Path $minecraft 'config\controlify.json'
+    $controlify = Get-Content -LiteralPath $controlifyPath -Raw | ConvertFrom-Json
+    if ($controlify.global.reach_around -ne 'OFF' -or $controlify.validationController -ne 'keep') {
+        throw 'Launch guard did not disable Controlify reach-around while preserving controller state.'
+    }
+    $preservationHashes[$controlifyPath] = (Get-FileHash -LiteralPath $controlifyPath -Algorithm SHA256).Hash
+    $releaseAManifestHash = Assert-IntegrityAttestation $minecraft
+
+    # An unchanged release still runs a normal pass and a forced hash-validation
+    # pass. Tamper one managed canary and add one unknown file to prove that the
+    # forced pass repairs only the canary and strict cleanup quarantines the extra.
+    $managedCanaryPath = Join-Path $minecraft 'config\__validation_overwrite.txt'
+    Write-Utf8NoBom $managedCanaryPath "tampered-between-launches`n"
+    $unchangedExtraRelative = 'mods/__validation_unchanged_extra.jar'
+    $unchangedExtraPath = Join-Path $minecraft $unchangedExtraRelative.Replace('/', '\')
+    Write-Utf8NoBom $unchangedExtraPath "unknown-on-unchanged-release`n"
+    $unchangedQuarantineHash = @{
+        $unchangedExtraRelative = (Get-FileHash -LiteralPath $unchangedExtraPath -Algorithm SHA256).Hash
+    }
+    $unchangedManagedHashes = @{}
+    foreach ($record in $expectedManagedRecords) {
+        if ($record.TargetPath -eq 'config/__validation_overwrite.txt') { continue }
+        $path = Join-Path $minecraft $record.TargetPath.Replace('/', '\')
+        $unchangedManagedHashes[$path] = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash
+    }
+
+    $secondOutput = Invoke-LaunchGuard $minecraft $packUrl
+    Write-Utf8NoBom (Join-Path $temporaryRoot 'launch-guard-unchanged.log') (($secondOutput -join "`n") + "`n")
+    $secondPasses = @($secondOutput | Where-Object { $_ -match '^\[nbidal18-launch-guard\] Running Packwiz (normal update|forced hash-validation) pass\.\.\.$' })
+    if ($secondPasses.Count -ne 2 -or -not (($secondOutput -join "`n") -match 'Modpack is already up to date!')) {
+        throw 'Unchanged launch did not perform the expected normal no-op plus forced validation passes.'
+    }
+    if ([IO.File]::ReadAllText($managedCanaryPath) -ne "release-A`n") {
+        throw 'Forced validation did not repair the tampered managed canary.'
+    }
+    $unchangedDownloads = @($secondOutput | ForEach-Object {
+        if ($_ -match '^\(\d+/\d+\) Downloaded (.+)$') {
+            [IO.Path]::GetFileName($Matches[1].Replace('/', '\'))
+        }
+    } | Sort-Object)
+    if (($unchangedDownloads -join '|') -ne '__validation_overwrite.txt') {
+        throw "Forced unchanged validation downloaded unexpected payloads: $($unchangedDownloads -join ', ')"
+    }
+    Assert-PreservationHashes $unchangedManagedHashes
+    Assert-PreservationHashes $preservationHashes
+    Assert-QuarantinedFiles $minecraft $unchangedQuarantineHash
+    if ((Assert-IntegrityAttestation $minecraft) -ne $releaseAManifestHash) {
+        throw 'Unchanged release attested a different strict manifest.'
+    }
 
     # Publish a manifest with one unavailable payload and characterize Packwiz's failure behavior.
     foreach ($file in Get-ChildItem -LiteralPath $siteFailure -Recurse -File -Force) {
@@ -527,8 +814,9 @@ try {
     }
     $treeHashBeforeFailure = Get-TreeHash $minecraft
     $stateHashBeforeFailure = (Get-FileHash -LiteralPath $packwizStatePath -Algorithm SHA256).Hash
-    $failedOutput = Invoke-UpdaterExpectFailure $minecraft $packUrl
-    Write-Utf8NoBom (Join-Path $temporaryRoot 'updater-expected-failure.log') (($failedOutput -join "`n") + "`n")
+    $failedOutput = Invoke-LaunchGuardExpectFailure $minecraft $packUrl
+    Write-Utf8NoBom (Join-Path $temporaryRoot 'launch-guard-expected-failure.log') (($failedOutput -join "`n") + "`n")
+    Assert-AttestationAbsent $minecraft
     if ((Get-FileHash -LiteralPath $packwizStatePath -Algorithm SHA256).Hash -ne $stateHashBeforeFailure) { throw 'Failed update advanced packwiz.json instead of retaining the previous manifest.' }
     if ((Get-TreeHash $minecraft) -eq $treeHashBeforeFailure) { throw 'Failure scenario no longer demonstrates Packwiz partial-write behavior; review the documented limitation.' }
     if ([IO.File]::ReadAllText((Join-Path $minecraft 'config\__validation_overwrite.txt')) -ne "failed-release-must-not-apply`n") { throw 'Failure scenario did not apply the available managed config before the later missing payload failed.' }
@@ -544,24 +832,32 @@ try {
         Copy-Item -LiteralPath $file.FullName -Destination $target -Force
     }
     Write-Utf8NoBom (Join-Path $minecraft 'config\__validation_overwrite.txt') "player-local-edit`n"
-    $thirdOutput = Invoke-Updater $minecraft $packUrl -NoBootstrapUpdate
-    Write-Utf8NoBom (Join-Path $temporaryRoot 'updater-release-b.log') (($thirdOutput -join "`n") + "`n")
+    $thirdOutput = Invoke-LaunchGuardWithRetry $minecraft $packUrl -Attempts 3
+    Write-Utf8NoBom (Join-Path $temporaryRoot 'launch-guard-release-b.log') (($thirdOutput -join "`n") + "`n")
     if ([IO.File]::ReadAllText((Join-Path $minecraft 'config\__validation_overwrite.txt')) -ne "release-B`n") { throw 'Managed local edit was not overwritten by release B.' }
     if (Test-Path -LiteralPath (Join-Path $minecraft 'mods\__validation_remove.jar')) { throw 'Removed managed mod survived release B.' }
     if ([IO.File]::ReadAllText((Join-Path $minecraft 'mods\__validation_added.jar')) -ne "validation-mod-B`n") { throw 'Added release B mod was not installed.' }
     $downloadedPayloads = @($thirdOutput | ForEach-Object {
-        if ($_ -match '^\(\d+/\d+\) Downloaded (.+)$') { $Matches[1] }
+        if ($_ -match '^\(\d+/\d+\) Downloaded (.+)$') {
+            [IO.Path]::GetFileName($Matches[1].Replace('/', '\'))
+        }
     } | Sort-Object)
-    if (($downloadedPayloads -join '|') -ne '__validation_added.jar|__validation_overwrite.txt') {
+    if (($downloadedPayloads -join '|') -ne '__validation_added.jar|__validation_overwrite.txt|strict-manifest.tsv') {
         throw "Release B downloaded unexpected payloads: $($downloadedPayloads -join ', ')"
     }
     $deletedPayloads = @($thirdOutput | ForEach-Object {
-        if ($_ -match '^Deleted (.+) \(removed from pack\)$') { $Matches[1] }
+        if ($_ -match '^Deleted (.+) \(removed from pack\)$') {
+            [IO.Path]::GetFileName($Matches[1].Replace('/', '\'))
+        }
     })
     if (($deletedPayloads -join '|') -ne '__validation_remove.jar') {
         throw "Release B deleted unexpected payloads: $($deletedPayloads -join ', ')"
     }
+    $expectedManagedRecordsB = @(Get-IndexedInstallRecords $siteB)
+    Assert-ManagedInstall $minecraft $expectedManagedRecordsB
     Assert-PreservationHashes $preservationHashes
+    $releaseBManifestHash = Assert-IntegrityAttestation $minecraft
+    if ($releaseBManifestHash -eq $releaseAManifestHash) { throw 'Release B retained release A strict-manifest attestation.' }
 
     $metadataReport = Import-Csv -LiteralPath (Join-Path $updaterRoot 'metadata\METADATA-REPORT.csv')
     $modrinthModCount = @($metadataReport | Where-Object { $_.management -eq 'modrinth' -and $_.type -eq 'mod' }).Count
@@ -578,7 +874,7 @@ try {
     $siteFiles = @(Get-ChildItem -LiteralPath $siteRoot -Recurse -File -Force)
     $completedAt = Get-Date
     $reportText = @"
-# nbidal18 v3.1.0 Packwiz validation report
+# nbidal18 v3.1.1 Packwiz validation report
 
 - Result: PASS
 - Started: $($startedAt.ToString('yyyy-MM-dd HH:mm:ss zzz'))
@@ -592,18 +888,23 @@ try {
 Validated:
 
 - Packwiz refresh is reproducible and the checked-in manifest is current.
-- Still Life, raw shader archives/sidecars, Iris state, VinURL helpers, player voice settings, Chat Heads aliases, and generated client fingerprints/warnings are absent from the public index.
-- The strict thin migration ZIP contains only Prism metadata/icon and the updater bootstrap; it contains no Packwiz-managed payload, VinURL data, Still Life, shaders, or player state.
-- The first updater run cold-installs and hash-verifies every managed payload, including the two supplied shaders from their exact official Modrinth files, before recording state.
-- A second unchanged launch is a byte-for-byte no-op and does not request index.toml.
-- A later release adds and removes JAR-named managed-file canaries in `mods/` and overwrites a managed config correctly.
-- The changed release reports exactly the two expected downloaded payloads and the one expected managed deletion.
-- A deliberately unavailable payload produces a clear nonzero failure, retains the previous Packwiz manifest, and is repaired by the next successful release.
-- Saves, screenshots, managed official and player-added shader files, shader sidecars, Iris selection, voice settings, separately installed Still Life, generated VinURL files, JEI world state, and unknown local mods survive updates unchanged.
+- Still Life, raw shader archives/sidecars, seed targets, Controlify state, Iris state, VinURL helpers, voice state, runtime caches, fingerprints, and warnings are absent from the public index; only reviewed seed templates are published.
+- The six-file thin migration ZIP contains only Prism metadata/icon, the Packwiz bootstrap, and the exact reviewed launch-guard JAR; it contains no Packwiz-managed payload, VinURL data, Still Life, shaders, or player state.
+- The first guarded launch performs both Packwiz passes, cold-installs and hash-verifies every managed payload, seeds absent settings once, and writes an attestation matching the installed strict manifest.
+- Generated Fabric nested/remapped-mod caches and Moonlight's loadable dynamic resource-pack cache are purged before attestation, while unrelated `.fabric` state remains byte-preserved.
+- Mixed settings are narrowed without resetting unrelated preferences: options.txt receives canonical resource-pack lines, Iris rejects unknown shaders, and Controlify reach-around is forced off.
+- Unknown mod, resource-pack, shader, datapack, Moonlight global-datapack, Villager API pack, server-pack cache, and config canaries are absent from strict roots and remain recoverable under `.nbidal18/quarantine`; the disposable Euphoria-generated shader tree is purged and rebuilt instead of accumulating in quarantine.
+- Exact optional Still Life, saves, screenshots, VinURL data, approved shader sidecar settings, JEI/runtime state, and seed-once settings persist byte-for-byte.
+- An unchanged release still performs the normal and forced Packwiz passes. The forced pass repairs the sole tampered managed canary, downloads no other managed payload, quarantines a newly added extra, and refreshes a matching attestation.
+- A later release adds and removes JAR-named managed-file canaries in `mods/`, overwrites a managed config, updates the strict manifest, and attests the new manifest.
+- The changed release reports exactly the added mod, changed config, and strict-manifest downloads plus the one expected managed deletion.
+- A deliberately unavailable payload produces a clear nonzero failure, retains the previous Packwiz state, demonstrates the known partial write, leaves no attestation, and is repaired and re-attested by the next successful release.
 
-External release gates are outside this isolated behavior report. `Build-Release.ps1` separately requires the anonymous HTTPS `pack.toml` and `index.toml` to match before it produces the final ZIP. Reaching the Minecraft menu, confirming that a failed pre-launch command blocks Minecraft, and production multiplayer compatibility remain manual checks.
+External release gates are outside this isolated behavior report. `Build-Release.ps1` separately requires the anonymous HTTPS `pack.toml`, `index.toml`, strict manifest, and every reviewed internal-hosted payload to match before it produces the final ZIP. Reaching the Minecraft menu, confirming that a failed pre-launch command blocks Minecraft, and production multiplayer compatibility remain manual checks.
 
-Known limitation: Packwiz is not transaction-wide atomic. In the deliberate failure test, an available managed config was written before a later payload returned 404, although player-controlled files and the previous manifest remained intact. The next successful pre-launch run repaired the managed release. Final Prism testing must confirm a nonzero pre-launch result blocks Minecraft from starting.
+Mandatory transition: an existing nbidal18 3.1.0 Prism instance whose pre-launch command directly invokes Packwiz cannot acquire the nbidal18 launch-guard JAR through Packwiz. Re-import the new 3.1.1 six-file migration ZIP before the strict site migration, and do not launch the old instance afterward: the old updater can remove or overwrite settings that leave the Packwiz manifest before any guard can preserve or sanitize them.
+
+Known limitation: Packwiz is not transaction-wide atomic. In the deliberate failure test, an available managed config was written before a later payload returned 404, although player-controlled/runtime files and the previous Packwiz state remained intact. The guard removed the stale attestation immediately, and the next successful pre-launch run repaired and attested the managed release. Final Prism testing must confirm a nonzero pre-launch result blocks Minecraft from starting.
 "@
     Write-Utf8NoBom $validationReport ($reportText.TrimStart() + "`n")
     Write-Host "Packwiz validation passed. Report: $validationReport"
@@ -612,7 +913,7 @@ catch {
     $failure = $_
     $failedAt = Get-Date
     $failureText = @"
-# nbidal18 v3.1.0 Packwiz validation report
+# nbidal18 v3.1.1 Packwiz validation report
 
 - Result: FAIL
 - Started: $($startedAt.ToString('yyyy-MM-dd HH:mm:ss zzz'))

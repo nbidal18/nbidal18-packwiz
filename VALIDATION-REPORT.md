@@ -1,9 +1,9 @@
-# nbidal18 v3.1.0 Packwiz validation report
+# nbidal18 v3.1.1 Packwiz validation report
 
 - Result: PASS
-- Started: 2026-08-10 23:52:47 +02:00
-- Completed: 2026-08-10 23:53:06 +02:00
-- Packwiz site files: 491
+- Started: 2026-08-11 01:59:43 +02:00
+- Completed: 2026-08-11 02:00:12 +02:00
+- Packwiz site files: 507
 - Exact Modrinth-managed archives: 225 (210 mods, 12 resource packs, 1 datapack, 2 shader packs)
 - Reviewed internal-hosted archives: 15 (11 mods, 2 resource packs, 2 datapacks, 0 shader packs)
 - Hosted datapack allowlist entries: 2
@@ -12,15 +12,20 @@
 Validated:
 
 - Packwiz refresh is reproducible and the checked-in manifest is current.
-- Still Life, raw shader archives/sidecars, Iris state, VinURL helpers, player voice settings, Chat Heads aliases, and generated client fingerprints/warnings are absent from the public index.
-- The strict thin migration ZIP contains only Prism metadata/icon and the updater bootstrap; it contains no Packwiz-managed payload, VinURL data, Still Life, shaders, or player state.
-- The first updater run cold-installs and hash-verifies every managed payload, including the two supplied shaders from their exact official Modrinth files, before recording state.
-- A second unchanged launch is a byte-for-byte no-op and does not request index.toml.
-- A later release adds and removes JAR-named managed-file canaries in mods/ and overwrites a managed config correctly.
-- The changed release reports exactly the two expected downloaded payloads and the one expected managed deletion.
-- A deliberately unavailable payload produces a clear nonzero failure, retains the previous Packwiz manifest, and is repaired by the next successful release.
-- Saves, screenshots, managed official and player-added shader files, shader sidecars, Iris selection, voice settings, separately installed Still Life, generated VinURL files, JEI world state, and unknown local mods survive updates unchanged.
+- Still Life, raw shader archives/sidecars, seed targets, Controlify state, Iris state, VinURL helpers, voice state, runtime caches, fingerprints, and warnings are absent from the public index; only reviewed seed templates are published.
+- The six-file thin migration ZIP contains only Prism metadata/icon, the Packwiz bootstrap, and the exact reviewed launch-guard JAR; it contains no Packwiz-managed payload, VinURL data, Still Life, shaders, or player state.
+- The first guarded launch performs both Packwiz passes, cold-installs and hash-verifies every managed payload, seeds absent settings once, and writes an attestation matching the installed strict manifest.
+- Generated Fabric nested/remapped-mod caches and Moonlight's loadable dynamic resource-pack cache are purged before attestation, while unrelated .fabric state remains byte-preserved.
+- Mixed settings are narrowed without resetting unrelated preferences: options.txt receives canonical resource-pack lines, Iris rejects unknown shaders, and Controlify reach-around is forced off.
+- Unknown mod, resource-pack, shader, datapack, Moonlight global-datapack, Villager API pack, server-pack cache, and config canaries are absent from strict roots and remain recoverable under .nbidal18/quarantine; the disposable Euphoria-generated shader tree is purged and rebuilt instead of accumulating in quarantine.
+- Exact optional Still Life, saves, screenshots, VinURL data, approved shader sidecar settings, JEI/runtime state, and seed-once settings persist byte-for-byte.
+- An unchanged release still performs the normal and forced Packwiz passes. The forced pass repairs the sole tampered managed canary, downloads no other managed payload, quarantines a newly added extra, and refreshes a matching attestation.
+- A later release adds and removes JAR-named managed-file canaries in mods/, overwrites a managed config, updates the strict manifest, and attests the new manifest.
+- The changed release reports exactly the added mod, changed config, and strict-manifest downloads plus the one expected managed deletion.
+- A deliberately unavailable payload produces a clear nonzero failure, retains the previous Packwiz state, demonstrates the known partial write, leaves no attestation, and is repaired and re-attested by the next successful release.
 
-External release gates are outside this isolated behavior report. Build-Release.ps1 separately requires the anonymous HTTPS pack.toml and index.toml to match before it produces the final ZIP. Reaching the Minecraft menu, confirming that a failed pre-launch command blocks Minecraft, and production multiplayer compatibility remain manual checks.
+External release gates are outside this isolated behavior report. Build-Release.ps1 separately requires the anonymous HTTPS pack.toml, index.toml, strict manifest, and every reviewed internal-hosted payload to match before it produces the final ZIP. Reaching the Minecraft menu, confirming that a failed pre-launch command blocks Minecraft, and production multiplayer compatibility remain manual checks.
 
-Known limitation: Packwiz is not transaction-wide atomic. In the deliberate failure test, an available managed config was written before a later payload returned 404, although player-controlled files and the previous manifest remained intact. The next successful pre-launch run repaired the managed release. Final Prism testing must confirm a nonzero pre-launch result blocks Minecraft from starting.
+Mandatory transition: an existing nbidal18 3.1.0 Prism instance whose pre-launch command directly invokes Packwiz cannot acquire the nbidal18 launch-guard JAR through Packwiz. Re-import the new 3.1.1 six-file migration ZIP before the strict site migration, and do not launch the old instance afterward: the old updater can remove or overwrite settings that leave the Packwiz manifest before any guard can preserve or sanitize them.
+
+Known limitation: Packwiz is not transaction-wide atomic. In the deliberate failure test, an available managed config was written before a later payload returned 404, although player-controlled/runtime files and the previous Packwiz state remained intact. The guard removed the stale attestation immediately, and the next successful pre-launch run repaired and attested the managed release. Final Prism testing must confirm a nonzero pre-launch result blocks Minecraft from starting.
