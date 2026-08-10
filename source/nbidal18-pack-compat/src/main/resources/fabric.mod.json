@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "nbidal18_pack_compat",
+  "version": "${version}",
+  "name": "nbidal18 Pack Compatibility Enforcer",
+  "description": "Rejects clients whose nbidal18 pack identity does not match the server.",
+  "authors": [
+    "nbidal18 contributors"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.nbidal18.packcompat.Nbidal18PackCompat"
+    ],
+    "client": [
+      "dev.nbidal18.packcompat.Nbidal18PackCompatClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": ">=${fabric_api_version}",
+    "minecraft": "=${minecraft_version}",
+    "bcc": "=${bcc_version}"
+  }
+}

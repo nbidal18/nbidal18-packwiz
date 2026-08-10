@@ -1,0 +1,12 @@
+name = "§5§lModded §f§lContainers §8§lDark§8"
+filename = "§5§lModded §f§lContainers §8§lDark§8.zip"
+side = "client"
+
+[download]
+hash-format = "sha512"
+hash = "b2b78fdca613639d21615167edb5afc9f0adf6f328e65d5d5a2dfb01b2613cc89a6da010055b19c2dc3139d052f7988b139989438a6738708fe5f466115ea3a6"
+url = "https://cdn.modrinth.com/data/RicjEnpc/versions/1x6OdGwK/%C2%A75%C2%A7lModded%20%C2%A7f%C2%A7lContainers%20%C2%A78%C2%A7lDark%C2%A78.zip"
+
+[update.modrinth]
+mod-id = "RicjEnpc"
+version = "1x6OdGwK"

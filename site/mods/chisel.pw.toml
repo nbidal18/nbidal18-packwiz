@@ -1,0 +1,12 @@
+name = "Chisel Refabricated"
+filename = "chisel-fabric-2.0.0+mc1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "354be16db7b0e4c17b585f4610574e411a3db974b15fa83d82c52a72b88008b164ece17a899f0c1ff128c4875747fde548cfa073f82bf36d3ec812e543223e55"
+url = "https://cdn.modrinth.com/data/4KWv7wbN/versions/QBqeHY1t/chisel-fabric-2.0.0%2Bmc1.21.1.jar"
+
+[update.modrinth]
+mod-id = "4KWv7wbN"
+version = "QBqeHY1t"

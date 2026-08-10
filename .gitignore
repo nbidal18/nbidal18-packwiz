@@ -1,0 +1,45 @@
+# Local tools and generated scratch data
+/tools/
+/.site-staging-*/
+/test-output/
+*.tmp
+Thumbs.db
+.DS_Store
+
+# Prevent accidental private/player content publication
+/site/datapacks/Still_Life-1.0-beta1.zip
+/site/shaderpacks/*.zip
+/site/shaderpacks/*.zip.txt
+/site/vinurl/
+/site/config/iris.properties
+/site/config/iris-excluded.json
+/site/config/chat_heads.json5
+/site/config/sodium-fingerprint.json
+/site/config/presencefootsteps/updater.json
+/site/config/presencefootsteps/userconfig.json
+/site/config/etf_warnings.json
+/site/config/voicechat/voicechat-client.properties
+/site/config/voicechat/player-volumes.properties
+/site/config/voicechat/category-volumes.properties
+/site/config/voicechat/username-cache.json
+/site/config/jei/world/
+
+# Raw mod/resource-pack binaries must be explicitly reviewed below.
+/site/datapacks/*.zip
+!/site/datapacks/Structure Tags Still_Life-1.0-beta1.zip
+!/site/datapacks/Yeetnado_1000_Chickens_1.21.1.zip
+/site/mods/*.jar
+!/site/mods/bandagesplus-configurable-fabric-1.2.0+1.21.1.jar
+!/site/mods/nbidal18-pack-compat-1.0.0+1.21.1.jar
+!/site/mods/carryon-slowness-fix-1.0.0+1.21.1.jar
+!/site/mods/nbidal18-autohud-thermoo-bridge-1.0.0+1.21.1.jar
+!/site/mods/nbidal18-autohud-vitals-sync-1.0.0+1.21.1.jar
+!/site/mods/nbidal18-jei-coverage-bridge-1.0.0+1.21.1.jar
+!/site/mods/nbidal18-jei-hidden-default-1.0.0+1.21.1.jar
+!/site/mods/nbidal18-playeremotes-fa-bridge-1.0.1+1.21.1.jar
+!/site/mods/playeremotes-with-fixes-0.1.0+patch-1.3.0+1.21.1.jar
+!/site/mods/treechop-sound-fix-1.2.1+1.21.1.jar
+!/site/mods/vanilla-refresh-all-in-one-1.4.26+config-1.1.0+1.21.1.jar
+/site/resourcepacks/*.zip
+!/site/resourcepacks/No Atlas Player Markers.zip
+!/site/resourcepacks/VanillaTweaks_r695951_MC1.21.x.zip

@@ -1,0 +1,12 @@
+name = "Spawn Mobs Active"
+filename = "spawncontrol-1.0.0.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "c07fb5424884a8bbbb1afc99d28048f3b4dc94bddcfe9c8bf32b9f809f31b7f20aebe3f637ab7cdf6adb3e7ed191d439f8c24b5cec7aa639bdd627777131fcac"
+url = "https://cdn.modrinth.com/data/btyOXtQa/versions/LCVHl8hm/spawncontrol-1.0.0.jar"
+
+[update.modrinth]
+mod-id = "btyOXtQa"
+version = "LCVHl8hm"

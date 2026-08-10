@@ -1,0 +1,18 @@
+[general]
+giveJournal = false
+holdToCast = true
+showUnread = false
+showToasts = false
+defaultLineColor = false
+rodDurabilityMultiplier = 1.0
+crateWeight = 6
+crateQuality = 1
+[minigame]
+doMinigame = true
+doFeedback = false
+doSuccessSound = false
+doFailSound = false
+minigameDifficulty = 3.0
+[worldgen]
+disableFishingBoat = false
+disableEndOases = false

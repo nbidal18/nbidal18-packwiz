@@ -1,0 +1,16 @@
+{
+  "repair_chance": {
+    "//": [
+      "The percent chance that the anvil will be repaired when using a repair item.    ",
+      "1=100%, 0.55=55%, etc.                                                          "
+    ],
+    "//range": ">=0.0 AND <=1.0",
+    "//default": 1.0,
+    "value": 1.0
+  },
+  "grant_advancement": {
+    "//": "Should the player be given an advancement when repairing the anvil?",
+    "//default": true,
+    "value": true
+  }
+}

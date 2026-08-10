@@ -1,0 +1,12 @@
+name = "Terrain Slabs"
+filename = "terrain_slabs-fabric-3.1.2.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "ed92aa90d0a27fa887c3e13a25a27f354337dc98b36ddaceea31bd5b654b95227cce9e65718d6f00aa5916dd98f98f0b5b34e6aeaa766c157b618e9db26d6ba7"
+url = "https://cdn.modrinth.com/data/SJu6sklj/versions/7uy3h3Wu/terrain_slabs-fabric-3.1.2.jar"
+
+[update.modrinth]
+mod-id = "SJu6sklj"
+version = "7uy3h3Wu"

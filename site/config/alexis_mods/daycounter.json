@@ -1,0 +1,18 @@
+{
+  "modEnabled": true,
+  "textSoundEnabled": true,
+  "milestone100Enabled": true,
+  "milestone1000Enabled": true,
+  "milestone10000Enabled": true,
+  "milestone100SoundEnabled": true,
+  "milestone1000SoundEnabled": true,
+  "milestone10000SoundEnabled": true,
+  "netherWastesColorEnabled": false,
+  "basaltDeltasColorEnabled": false,
+  "crimsonForestColorEnabled": false,
+  "warpedForestColorEnabled": false,
+  "soulSandValleyColorEnabled": false,
+  "deepDarkColorEnabled": false,
+  "mushroomIslandColorEnabled": false,
+  "endColorEnabled": false
+}

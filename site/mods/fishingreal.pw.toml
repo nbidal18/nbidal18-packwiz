@@ -1,0 +1,12 @@
+name = "FishingReal"
+filename = "fishingreal-fabric-1.21.1-1.9.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "d76ce66f1de7a109b7552edf21f73c93442de9b60ec745290e1f28b876a6e71decac8878e3210859206e188f47e34dc51bc2bf20027e446094a6c0c65c9d78c9"
+url = "https://cdn.modrinth.com/data/MIdaKqt7/versions/nwH0kWHx/fishingreal-fabric-1.21.1-1.9.1.jar"
+
+[update.modrinth]
+mod-id = "MIdaKqt7"
+version = "nwH0kWHx"

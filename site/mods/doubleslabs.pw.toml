@@ -1,0 +1,12 @@
+name = "DoubleSlabs"
+filename = "doubleslabs-fabric-1.21.1-0.3.0.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "3696cce755163c0dd185c100b9f677566c7565db66b1b6e28538cffa2d77889b595415205129c62815966299777d47e2742cad5152780136eba61761051deb94"
+url = "https://cdn.modrinth.com/data/hcHS5k6e/versions/6NWfQ2Rx/doubleslabs-fabric-1.21.1-0.3.0.jar"
+
+[update.modrinth]
+mod-id = "hcHS5k6e"
+version = "6NWfQ2Rx"

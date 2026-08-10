@@ -1,0 +1,13 @@
+[general]
+tanningLotion = false
+burnPlayers = false
+noOpBurn = true
+showConsoleIDS = false
+checkArmor = false
+damageArmor = false
+checkEffects = false
+mods = []
+mobs = ["minecraft:creeper"]
+ignoredBlocks = []
+invertDimensions = true
+dimensions = []

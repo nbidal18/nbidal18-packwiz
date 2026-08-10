@@ -1,0 +1,30 @@
+{
+  "unitsNote": "Durations are seconds. Effect levels are the in-game levels: 0 disables an effect, 1 means level I, 2 means level II, and so on.",
+  "luckNote": "Luck is preserved from the original behavior and applies when one player bandages another player.",
+  "forceDisableNaturalRegeneration": true,
+  "allowBandagingOtherPlayers": true,
+  "basicBandage": {
+    "regenerationDurationSeconds": 15.0,
+    "regenerationLevel": 1,
+    "absorptionDurationSeconds": 30.0,
+    "absorptionLevel": 1,
+    "luckDurationSeconds": 60.0,
+    "luckLevel": 1
+  },
+  "improvedBandage": {
+    "regenerationDurationSeconds": 12.5,
+    "regenerationLevel": 2,
+    "absorptionDurationSeconds": 45.0,
+    "absorptionLevel": 2,
+    "luckDurationSeconds": 120.0,
+    "luckLevel": 2
+  },
+  "advancedBandage": {
+    "regenerationDurationSeconds": 12.0,
+    "regenerationLevel": 3,
+    "absorptionDurationSeconds": 60.0,
+    "absorptionLevel": 3,
+    "luckDurationSeconds": 180.0,
+    "luckLevel": 3
+  }
+}

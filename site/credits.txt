@@ -1,0 +1,10 @@
+Credits:
+Vanilla Tweaks: https://vanillatweaks.net/
+Complementary Shaders - Unbound: https://modrinth.com/shader/complementary-unbound (included under the Complementary Agreement; any modpack integration issue is the responsibility of the nbidal18 pack author)
+MakeUp - Ultra Fast Shaders: https://modrinth.com/shader/makeup-ultra-fast-shaders
+HT's TreeChop by hammertater: https://modrinth.com/mod/treechop (MIT)
+Bandages Plus+ original assets and recipes by Xanthian: https://www.curseforge.com/minecraft/mc-mods/bandages-plus-fabric (MIT)
+Better Compatibility Checker by Gaz492: https://modrinth.com/mod/better-compatibility-checker (official direct download; ARR)
+Player Emotes: https://modrinth.com/mod/player-emotes (official Modrinth delivery; see notices)
+Vanilla Refresh: https://modrinth.com/mod/vanilla-refresh (author's modpack terms)
+Realistic Health: https://modrinth.com/datapack/realistic-health (official Modrinth download)

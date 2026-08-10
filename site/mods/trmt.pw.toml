@@ -1,0 +1,12 @@
+name = "TRMT"
+filename = "trmt-0.5.1-1.21.1-fabric.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "163e47ab73329af21a3eee7005c749691f5aa833ecc166da5c2091c5236b0e95fb0214186c3a4a28b8809f66df1d924a3113fc5a2bda6b04ec873994a8c9e997"
+url = "https://cdn.modrinth.com/data/74oZhrEe/versions/U5dkMGOY/trmt-0.5.1-1.21.1-fabric.jar"
+
+[update.modrinth]
+mod-id = "74oZhrEe"
+version = "U5dkMGOY"

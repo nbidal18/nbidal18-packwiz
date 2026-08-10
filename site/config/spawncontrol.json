@@ -1,0 +1,23 @@
+{
+  "enabled": true,
+  "logBlockedSpawns": false,
+  "disableChickenJockeys": false,
+  "removeChickenJockeyRiders": false,
+  "defaultAction": "ALLOW",
+  "rules": [
+    {
+      "comment": "Natural hostile mobs only below Y=0 in the Overworld. Y=0 and above is denied; spawners and other spawn reasons remain allowed.",
+      "action": "DENY",
+      "categories": [
+        "MONSTER"
+      ],
+      "spawnReasons": [
+        "NATURAL"
+      ],
+      "dimensions": [
+        "minecraft:overworld"
+      ],
+      "minY": 0
+    }
+  ]
+}

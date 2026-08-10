@@ -1,0 +1,12 @@
+name = "Tiny Pickup Animation"
+filename = "tpa_v1.0.0_1.21-1.21.5.jar"
+side = "client"
+
+[download]
+hash-format = "sha512"
+hash = "44dafb81e7753496ebc44c7da8d238e35c67d001b18bf0d905dde708c407497ef6ea41b3da3d534c945dad5fe724f42f89f02b4ca86cc1f99a6dcbf4f78a46f0"
+url = "https://cdn.modrinth.com/data/8q1zSbuv/versions/eHbI0Zli/tpa_v1.0.0_1.21-1.21.5.jar"
+
+[update.modrinth]
+mod-id = "8q1zSbuv"
+version = "eHbI0Zli"

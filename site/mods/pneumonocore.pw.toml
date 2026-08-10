@@ -1,0 +1,12 @@
+name = "PneumonoCore"
+filename = "pneumonocore-1.2.1+1.21+A.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "028e18a7ec6719f67b3d2e2d0c57d207ff7ddf0b048d64c2dfed127566283aaafc17d70927d1c30259d4990ce0c12d5c177c4f5bbc2285a9163c08e29b364c28"
+url = "https://cdn.modrinth.com/data/ZLKQjA7t/versions/QKvgjhTZ/pneumonocore-1.2.1%2B1.21%2BA.jar"
+
+[update.modrinth]
+mod-id = "ZLKQjA7t"
+version = "QKvgjhTZ"

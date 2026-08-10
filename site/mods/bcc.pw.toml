@@ -1,0 +1,12 @@
+name = "Better Compatibility Checker"
+filename = "better-compatability-checker-fabric-21.1.8.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "ede94f47ae3d8f9a4a9787f9e76a3a5e9fbd763a3fbd4982d88daa2361728ce6fd3e8d29c0281f2d8c25357aeb4b3d53274fb0f63cde46bcdae33732c625665a"
+url = "https://cdn.modrinth.com/data/KJhXPbHQ/versions/1uy9t7Jt/better-compatability-checker-fabric-21.1.8.jar"
+
+[update.modrinth]
+mod-id = "KJhXPbHQ"
+version = "1uy9t7Jt"

@@ -1,0 +1,12 @@
+name = "§8§lDarkmode §f§lColourful Containers§8"
+filename = "§8§lDarkmode §f§lColourful Containers§8.zip"
+side = "client"
+
+[download]
+hash-format = "sha512"
+hash = "46705e0554569d5dc5535c45aad9c6fcc0bb71d2118f10feb53a89c4056ec55ce5ae3f357cd063f4613e4347fe32f676bd8bfb89cb0de05dffe26a5680d863d1"
+url = "https://cdn.modrinth.com/data/PCGR5Y1W/versions/oEI1D9Sg/%C2%A78%C2%A7lDarkmode%20%C2%A7f%C2%A7lColourful%20Containers%C2%A78.zip"
+
+[update.modrinth]
+mod-id = "PCGR5Y1W"
+version = "oEI1D9Sg"

@@ -1,0 +1,4 @@
+{
+  "wheelScreenFraction": 0.5,
+  "instructions": "Fraction of the screen used by the quick wheel. Range: 0.20 to 0.95. Changes apply the next time the wheel opens."
+}

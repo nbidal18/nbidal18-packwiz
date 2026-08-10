@@ -1,0 +1,16 @@
+{
+	"enabled": false,
+	"doBackup": false,
+	"message": "This server is currently in maintenance mode! Please check back later",
+	"motd": "This server is currently undergoing maintenance!",
+	"maintenanceIcon": "",
+	"schedule": {
+		"startTime": "",
+		"endTime": "",
+		"disableOnRestart": false,
+		"maintanceNotifyMessage": "Maintenance is starting in %s minute(s)"
+	},
+	"kickOnlinePlayers": true,
+	"configVersion": 2,
+	"allowedUsers": []
+}

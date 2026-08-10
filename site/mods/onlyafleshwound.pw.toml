@@ -1,0 +1,12 @@
+name = "Only A Flesh Wound"
+filename = "NoHurtFlash-1.0.1.jar"
+side = "client"
+
+[download]
+hash-format = "sha512"
+hash = "167780127c8c4cf77b8c8606dccdad6926336c1591b42ed4ceff5ce654e6fa2c83b576b6f3f93973008b81ed77fb3aed9945a0ee3e6eebaacc8bef4d20710e33"
+url = "https://cdn.modrinth.com/data/9Z0nzGhm/versions/gTZ19QHF/NoHurtFlash-1.0.1.jar"
+
+[update.modrinth]
+mod-id = "9Z0nzGhm"
+version = "gTZ19QHF"

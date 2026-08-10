@@ -1,0 +1,12 @@
+name = "PlayerEmotes"
+filename = "playeremotes-fabric-1.21.1-0.1.0.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "8014109d08b5975d4ba0aee7d36f00448c201613ac7b502f0da2ea7e0dfd566ac545d5798cabb4f2c465fa797e93cc88ed773546294f353ef36980e8b282296e"
+url = "https://cdn.modrinth.com/data/TfUCUpDy/versions/t1bvALQN/playeremotes-fabric-1.21.1-0.1.0.jar"
+
+[update.modrinth]
+mod-id = "TfUCUpDy"
+version = "t1bvALQN"

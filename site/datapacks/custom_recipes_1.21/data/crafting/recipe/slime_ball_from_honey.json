@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " # ",
+        "GHG",
+        " # "
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:wheat"
+        },
+        "G": {
+            "item": "minecraft:green_dye"
+        },
+        "H": {
+            "item": "minecraft:honey_bottle"
+        }
+    },
+    "result": {
+        "id": "minecraft:slime_ball",
+        "count": 4
+    }
+}

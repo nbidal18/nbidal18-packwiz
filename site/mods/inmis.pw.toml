@@ -1,0 +1,12 @@
+name = "Inmis"
+filename = "inmis-2.8.2-1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "245e77e43f19408f37656f51e97246bb12aae9f4bc30db47c9a2cb3fc1cfd555264c34a1370221f940ebc168dc46463dc7972ca57806152c9bce90be65dddc2e"
+url = "https://cdn.modrinth.com/data/I0UYcPa0/versions/iE11BIfP/inmis-2.8.2-1.21.1.jar"
+
+[update.modrinth]
+mod-id = "I0UYcPa0"
+version = "iE11BIfP"

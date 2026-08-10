@@ -1,0 +1,12 @@
+name = "jumpoverfences-fabric-1.21.1-1.6.1"
+filename = "jumpoverfences-fabric-1.21.1-1.6.1.jar"
+side = "client"
+
+[download]
+hash-format = "sha512"
+hash = "c83cc9ed96b988f465555af91b7ee1374514f0a214f840e5dd6de8ffe827560aab137eed2b384624a7d12fb9869b00059db21feca643819dff3cda4fd299ef5e"
+url = "https://cdn.modrinth.com/data/4HeIHvIP/versions/dp0CUIrm/jumpoverfences-fabric-1.21.1-1.6.1.jar"
+
+[update.modrinth]
+mod-id = "4HeIHvIP"
+version = "dp0CUIrm"

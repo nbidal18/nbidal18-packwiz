@@ -1,0 +1,12 @@
+name = "Overlay’s§7"
+filename = "Overlay’s§7.zip"
+side = "client"
+
+[download]
+hash-format = "sha512"
+hash = "086809bc9f338953da0919905b5fbf1e16c01a5029b021c19c5cb2d1edecbdb6e54248ade519880df72fbb4fa2e468536a0459555cd6eb81d2fe724b10f418ba"
+url = "https://cdn.modrinth.com/data/1PGegzf5/versions/8ZAC7SmJ/Overlay%E2%80%99s%C2%A77.zip"
+
+[update.modrinth]
+mod-id = "1PGegzf5"
+version = "8ZAC7SmJ"

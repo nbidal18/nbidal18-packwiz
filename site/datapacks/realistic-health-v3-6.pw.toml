@@ -1,0 +1,12 @@
+name = "Realistic Health v3.6"
+filename = "Realistic Health v3.6.zip"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "d0db0f9f47fcd6ae5f336896f07e5daeceb0746da158182d18bf045cccfe03f677192ab74d285695bdda020446a6b326397b6e20dceaab05524891bb275ca530"
+url = "https://cdn.modrinth.com/data/tVXpaKa8/versions/4eO6dWtQ/Realistic%20Health%20v3.6.zip"
+
+[update.modrinth]
+mod-id = "tVXpaKa8"
+version = "4eO6dWtQ"

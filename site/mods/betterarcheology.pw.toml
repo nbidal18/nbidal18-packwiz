@@ -1,0 +1,12 @@
+name = "Better Archeology"
+filename = "betterarcheology-fabric-1.21.1-1.3.4.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "ab303cd59745fc7d3123671a767cefb431778d7ccd189d6aae3aeb4af54b34ca707732496b0863d5e6ac2173a6dccad5b6afab2b554df3fc0f43f474b893232a"
+url = "https://cdn.modrinth.com/data/zCh7omyG/versions/NmGdvCxA/betterarcheology-fabric-1.21.1-1.3.4.jar"
+
+[update.modrinth]
+mod-id = "zCh7omyG"
+version = "NmGdvCxA"

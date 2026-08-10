@@ -1,0 +1,28 @@
+{
+  "enableVillagerTrading": true,
+  "generateCurrencyInChests": true,
+  "moneyMessageLocation": "ACTIONBAR",
+  "purseOffsets": {
+    "survivalX": 0,
+    "survivalY": 0,
+    "creativeX": 0,
+    "creativeY": 0,
+    "merchantX": 0,
+    "merchantY": 0
+  },
+  "lootOptions": {
+    "desertMinLoot": 300,
+    "desertMaxLoot": 1200,
+    "dungeonMinLoot": 500,
+    "dungeonMaxLoot": 2000,
+    "structureMinLoot": 1500,
+    "structureMaxLoot": 4000,
+    "strongholdLibraryMinLoot": 2000,
+    "strongholdLibraryMaxLoot": 6000
+  },
+  "mobsToBaseValues": {
+    "#numismatic-overhaul:the_bourgeoisie": 75
+  },
+  "scaleOnHealth": false,
+  "healthScaleReduction": 1.0
+}

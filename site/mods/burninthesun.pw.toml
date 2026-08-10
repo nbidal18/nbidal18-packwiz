@@ -1,0 +1,12 @@
+name = "Burn in the Sun"
+filename = "burninthesun-fabric-1.21.1-1.10.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "69ecb4d91e6b8ff3ea7f775f63a92cc162fe7f866616712251a0f77e09322099d547dfecb5e7c7a4e1af32dc070193cf982347b55d31a83b0db818103f432d4d"
+url = "https://cdn.modrinth.com/data/V1dXZIGY/versions/4RLXmcFj/burninthesun-fabric-1.21.1-1.10.1.jar"
+
+[update.modrinth]
+mod-id = "V1dXZIGY"
+version = "4RLXmcFj"

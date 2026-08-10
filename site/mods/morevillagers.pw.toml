@@ -1,0 +1,12 @@
+name = "MoreVillagers"
+filename = "MoreVillagers-Re-1.21.1-fabric-1.25.12.4.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "a54e352fe8ec5cfe2034f6ea6c17ab08d65c2185da748c7254556cb7fcd45a70ab1c34dc2f2f8515f15d12265675c3b4760fcdc0b7f4a900e7b1499cc0f25594"
+url = "https://cdn.modrinth.com/data/1fOqTPRO/versions/6A4P2wqq/MoreVillagers-Re-1.21.1-fabric-1.25.12.4.jar"
+
+[update.modrinth]
+mod-id = "1fOqTPRO"
+version = "6A4P2wqq"

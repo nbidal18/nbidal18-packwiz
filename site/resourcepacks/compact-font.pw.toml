@@ -1,0 +1,12 @@
+name = "Compact Font"
+filename = "Compact Font.zip"
+side = "client"
+
+[download]
+hash-format = "sha512"
+hash = "e245568b8bf375559089de4b76e8f57aca60960a28cfe7f51cc9f75169b758c4867cbc4ffc315b2de8398e2a7e1479cd8eced16be3e96704c0d99e8b2c9a4c45"
+url = "https://cdn.modrinth.com/data/JsMwJ2g4/versions/r4IxEomv/Compact%20Font.zip"
+
+[update.modrinth]
+mod-id = "JsMwJ2g4"
+version = "r4IxEomv"
