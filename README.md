@@ -15,7 +15,7 @@ This folder is the standalone public repository for the nbidal18 Packwiz update 
 - Credits: Vanilla Tweaks: <https://vanillatweaks.net/>. Complementary Shaders - Unbound: <https://modrinth.com/shader/complementary-unbound>; any integration issue from its inclusion is the responsibility of the nbidal18 pack author. MakeUp - Ultra Fast: <https://modrinth.com/shader/makeup-ultra-fast-shaders> (LGPL-3.0-or-later).
 - `VALIDATION-REPORT.md` records the passing local updater behavior test.
 
-The player-facing manifest is live at <https://nbidal18.github.io/nbidal18-packwiz/pack.toml>. The guarded builder verified the live `pack.toml` and `index.toml`, reran the complete updater behavior test, and created `nbidal18-3.1.0-client.zip` outside this public repository with SHA-256 `B0AB6C3069A279CDECFE737F57A3AC24D5ACC21CF4222912AEE89FCADCEE85E5`.
+The player-facing manifest is live at <https://nbidal18.github.io/nbidal18-packwiz/pack.toml>. The guarded builder verified the live `pack.toml` and `index.toml`, reran the complete updater behavior test, and created `nbidal18-3.1.0-client.zip` outside this public repository with SHA-256 `9B07C4809396F81EA8EFE62759D00E4FA27E8A95CF4CCC55A2C96761D3E250F0`.
 
 ## Files and scripts
 

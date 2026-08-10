@@ -405,6 +405,9 @@ try {
         }
     }
     $instanceCfg = [IO.File]::ReadAllText((Join-Path $instanceRoot 'instance.cfg'))
+    if ($instanceCfg -match '(?m)^ConfigVersion=') {
+        throw 'Migration instance.cfg declares ConfigVersion before Prism has serialized the quoted pre-launch command.'
+    }
     foreach ($requiredText in @('name=nbidal18 3.1.0', 'ExportVersion=3.1.0', 'OverrideCommands=true', "PreLaunchCommand=`"`$INST_JAVA`" -jar packwiz-installer-bootstrap.jar $packUrl")) {
         if (-not $instanceCfg.Contains($requiredText)) { throw "instance.cfg assertion failed: $requiredText" }
     }
