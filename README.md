@@ -15,7 +15,7 @@ This folder is the standalone public repository for the nbidal18 Packwiz update 
 - Credits: Vanilla Tweaks: <https://vanillatweaks.net/>. Complementary Shaders - Unbound: <https://modrinth.com/shader/complementary-unbound>; any integration issue from its inclusion is the responsibility of the nbidal18 pack author. MakeUp - Ultra Fast: <https://modrinth.com/shader/makeup-ultra-fast-shaders> (LGPL-3.0-or-later).
 - `VALIDATION-REPORT.md` records the passing local updater behavior test.
 
-The player-facing `pack.toml` URL is still a placeholder in `UPDATE-URL.txt`. A final migration ZIP cannot be built until the public repository and GitHub Pages site exist.
+The player-facing manifest is live at <https://nbidal18.github.io/nbidal18-packwiz/pack.toml>. The guarded builder verified the live `pack.toml` and `index.toml`, reran the complete updater behavior test, and created `nbidal18-3.1.0-client.zip` outside this public repository with SHA-256 `B0AB6C3069A279CDECFE737F57A3AC24D5ACC21CF4222912AEE89FCADCEE85E5`.
 
 ## Files and scripts
 
@@ -51,7 +51,7 @@ The first click of **Play** on this thin instance downloads the complete managed
 
 ## One-time GitHub setup
 
-The pack owner must provide an account/organization and repository name, then create a **public** empty repository. Use this `5. updater` folder—not the release root—as the repository working tree.
+This folder is connected to the public <https://github.com/nbidal18/nbidal18-packwiz> repository, and GitHub Pages publishes only `site/`. The steps below document how that one-time setup is maintained or recreated; never use the release root as the public repository working tree.
 
 1. Run `SET-UPDATE-URL.bat` with `https://OWNER.github.io/REPOSITORY/pack.toml` using the real names.
 2. Initialize this folder on branch `main`, connect the remote, commit, and push.

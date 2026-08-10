@@ -598,7 +598,7 @@ Validated:
 - A deliberately unavailable payload produces a clear nonzero failure, retains the previous Packwiz manifest, and is repaired by the next successful release.
 - Saves, screenshots, managed official and player-added shader files, shader sidecars, Iris selection, voice settings, separately installed Still Life, generated VinURL files, JEI world state, and unknown local mods survive updates unchanged.
 
-Remaining release gates: publish at the real anonymous HTTPS pack.toml URL, build the final migration ZIP, reach the Minecraft menu through Prism, and verify multiplayer compatibility against the production server.
+External release gates are outside this isolated behavior report. `Build-Release.ps1` separately requires the anonymous HTTPS `pack.toml` and `index.toml` to match before it produces the final ZIP. Reaching the Minecraft menu, confirming that a failed pre-launch command blocks Minecraft, and production multiplayer compatibility remain manual checks.
 
 Known limitation: Packwiz is not transaction-wide atomic. In the deliberate failure test, an available managed config was written before a later payload returned 404, although player-controlled files and the previous manifest remained intact. The next successful pre-launch run repaired the managed release. Final Prism testing must confirm a nonzero pre-launch result blocks Minecraft from starting.
 "@
