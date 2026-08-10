@@ -1,1 +1,1 @@
-https://OWNER.github.io/REPOSITORY/pack.toml
+https://nbidal18.github.io/nbidal18-packwiz/pack.toml
