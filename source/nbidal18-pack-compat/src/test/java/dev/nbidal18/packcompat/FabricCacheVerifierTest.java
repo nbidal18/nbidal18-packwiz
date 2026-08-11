@@ -119,31 +119,6 @@ class FabricCacheVerifierTest {
         assertFalse(verifier.verifyRootFull(additionBaseline).clean());
     }
 
-    @Test
-    void dynamicCanonicalPinExcludesOnlyTheRootFingerprint() throws Exception {
-        write("dynamic-resource-pack-cache/assets/example.json", "{\"trusted\":true}");
-        write("dynamic-resource-pack-cache/hash.txt", "first Moonlight fingerprint");
-        FabricCacheVerifier.CacheRoot first = verifier.captureRequiredNonEmptyRoot(
-                ClientIntegrityMonitor.DYNAMIC_RESOURCE_CACHE_ROOT
-        );
-        String firstDigest = GeneratedTreePins.reviewed().validateDynamicResourceCache(first).actualSha256();
-
-        write("dynamic-resource-pack-cache/hash.txt", "different companion-version fingerprint");
-        FabricCacheVerifier.CacheRoot second = verifier.captureRequiredNonEmptyRoot(
-                ClientIntegrityMonitor.DYNAMIC_RESOURCE_CACHE_ROOT
-        );
-        String secondDigest = GeneratedTreePins.reviewed().validateDynamicResourceCache(second).actualSha256();
-        assertTrue(firstDigest.equals(secondDigest));
-
-        write("dynamic-resource-pack-cache/assets/example.json", "{\"trusted\":false}");
-        FabricCacheVerifier.CacheRoot changedPayload = verifier.captureRequiredNonEmptyRoot(
-                ClientIntegrityMonitor.DYNAMIC_RESOURCE_CACHE_ROOT
-        );
-        assertFalse(firstDigest.equals(
-                GeneratedTreePins.reviewed().validateDynamicResourceCache(changedPayload).actualSha256()
-        ));
-    }
-
     private Path write(String relative, String content) throws Exception {
         Path path = resolve(relative);
         Files.createDirectories(path.getParent());

@@ -322,17 +322,6 @@
                         "url":  "https://cdn.modrinth.com/data/jawg7zT1/versions/8zG4dQ2R/cave_dust-3.0.1.jar"
                     },
                     {
-                        "relativePath":  "mods/chat_heads-0.14.2-fabric-1.21.jar",
-                        "sha1":  "7f7b45a2b029165a7c980784fd103b7aa995691e",
-                        "sha512":  "155e95d91c01812be603d6940db8e1e348dafbbfd82cd9d238d17c951e7bd5859c42d99b612f59e5b4f52ac9babbf936495fa3ebf76a0f6acc2382d4ee4eb049",
-                        "projectId":  "Wb5oqrBJ",
-                        "versionId":  "9dRmYosQ",
-                        "versionName":  "0.14.2",
-                        "versionNumber":  "0.14.2",
-                        "remoteFilename":  "chat_heads-0.14.2-fabric-1.21.jar",
-                        "url":  "https://cdn.modrinth.com/data/Wb5oqrBJ/versions/9dRmYosQ/chat_heads-0.14.2-fabric-1.21.jar"
-                    },
-                    {
                         "relativePath":  "mods/chatanimation-fabric-1.21.1-1.1.3.jar",
                         "sha1":  "d507430a096fff29dabe028f74a55c6081c9912f",
                         "sha512":  "f7b1e3779cb0f4fb8968797d08800d3f0610d39249836e6c6987b4d50f2c3cd4b414bf2bd3d2293a379f8770d12ec7fc765102d59aadbf53a95219935876df11",

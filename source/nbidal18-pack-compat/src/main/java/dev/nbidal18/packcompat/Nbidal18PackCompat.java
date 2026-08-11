@@ -20,10 +20,11 @@ import java.util.regex.Pattern;
 public final class Nbidal18PackCompat implements ModInitializer {
     static final ResourceLocation VERSION_QUERY =
             ResourceLocation.fromNamespaceAndPath("nbidal18_pack_compat", "version");
-    static final int LEGACY_PROTOCOL_VERSION = 1;
-    static final int PROTOCOL_VERSION = 2;
-    static final int MAX_IDENTITY_LENGTH = 256;
-    static final int SHA256_LENGTH = 64;
+    static final int LEGACY_PROTOCOL_VERSION = IntegrityProtocol.IDENTITY_PROTOCOL;
+    static final int DIGEST_PROTOCOL_VERSION = IntegrityProtocol.DIGEST_PROTOCOL;
+    static final int PROTOCOL_VERSION = IntegrityProtocol.CURRENT_PROTOCOL;
+    static final int MAX_IDENTITY_LENGTH = IntegrityProtocol.MAX_IDENTITY_LENGTH;
+    static final int SHA256_LENGTH = IntegrityProtocol.SHA256_LENGTH;
     private static final Pattern SHA256 = Pattern.compile("[0-9a-f]{64}");
 
     @Override
@@ -68,9 +69,10 @@ public final class Nbidal18PackCompat implements ModInitializer {
         }
 
         FriendlyByteBuf request = PacketByteBufs.create();
-        request.writeVarInt(PROTOCOL_VERSION);
-        request.writeUtf(expected.name(), MAX_IDENTITY_LENGTH);
-        request.writeUtf(expected.version(), MAX_IDENTITY_LENGTH);
+        IntegrityProtocol.writeRequest(
+                request,
+                new IntegrityProtocol.Request(PROTOCOL_VERSION, expected.name(), expected.version())
+        );
         sender.sendPacket(VERSION_QUERY, request);
     }
 
@@ -87,33 +89,26 @@ public final class Nbidal18PackCompat implements ModInitializer {
         }
 
         try {
-            int protocol = response.readVarInt();
-            String actualName = response.readUtf(MAX_IDENTITY_LENGTH);
-            String actualVersion = response.readUtf(MAX_IDENTITY_LENGTH);
-            String actualManifestSha256 = response.readUtf(SHA256_LENGTH);
-            boolean integrityClean = response.readBoolean();
-            if (protocol != PROTOCOL_VERSION || response.isReadable()) {
-                disconnect(handler, "Your nbidal18 compatibility response is invalid. Reinstall the matching client pack.");
-                return;
-            }
-            if (!Objects.equals(expected.name(), actualName)
-                    || !Objects.equals(expected.version(), actualVersion)) {
+            IntegrityProtocol.Response actual = IntegrityProtocol.readResponse(response, PROTOCOL_VERSION);
+            if (!Objects.equals(expected.name(), actual.actualName())
+                    || !Objects.equals(expected.version(), actual.actualVersion())) {
                 disconnect(handler, "Modpack version mismatch. Server requires "
                         + expected.name() + " " + expected.version()
-                        + "; your client reports " + actualName + " " + actualVersion + ".");
+                        + "; your client reports " + actual.actualName() + " " + actual.actualVersion() + ".");
                 return;
             }
-            if (!integrityClean) {
-                disconnect(handler, "Your nbidal18 client did not pass the launch integrity check. "
-                        + "Close Minecraft and relaunch through Prism.");
-                return;
-            }
-            if (!SHA256.matcher(actualManifestSha256).matches()) {
+            if (!SHA256.matcher(actual.manifestSha256()).matches()) {
                 disconnect(handler, "Your nbidal18 integrity response is invalid. Reinstall the matching client pack.");
                 return;
             }
-            if (!Objects.equals(expectedManifestSha256, actualManifestSha256)) {
+            if (!Objects.equals(expectedManifestSha256, actual.manifestSha256())) {
                 disconnect(handler, "Managed-content policy mismatch. Update to the server's current nbidal18 pack.");
+                return;
+            }
+            if (!actual.integrityClean()) {
+                String reason = IntegrityReason.sanitizeForWire(actual.integrityReason());
+                disconnect(handler, "Your nbidal18 client did not pass the launch integrity check: "
+                        + reason + ". Close Minecraft and relaunch through Prism.");
             }
         } catch (RuntimeException malformedResponse) {
             disconnect(handler, "Your nbidal18 compatibility response is malformed. Reinstall the matching client pack.");

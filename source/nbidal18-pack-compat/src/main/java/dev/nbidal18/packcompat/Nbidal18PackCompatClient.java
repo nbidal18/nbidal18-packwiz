@@ -41,12 +41,9 @@ public final class Nbidal18PackCompatClient implements ClientModInitializer {
             ClientIntegrityMonitor integrityMonitor
     ) {
         try {
-            int protocol = request.readVarInt();
-            request.readUtf(Nbidal18PackCompat.MAX_IDENTITY_LENGTH);
-            request.readUtf(Nbidal18PackCompat.MAX_IDENTITY_LENGTH);
-            if ((protocol != Nbidal18PackCompat.PROTOCOL_VERSION
-                    && protocol != Nbidal18PackCompat.LEGACY_PROTOCOL_VERSION)
-                    || request.isReadable()) {
+            IntegrityProtocol.Request serverRequest = IntegrityProtocol.readRequest(request);
+            int protocol = serverRequest.protocol();
+            if (!IntegrityProtocol.clientSupports(protocol)) {
                 return CompletableFuture.completedFuture(null);
             }
 
@@ -56,17 +53,29 @@ public final class Nbidal18PackCompatClient implements ClientModInitializer {
             }
 
             FriendlyByteBuf response = PacketByteBufs.create();
-            response.writeVarInt(protocol);
-            response.writeUtf(status.name(), Nbidal18PackCompat.MAX_IDENTITY_LENGTH);
-            response.writeUtf(status.version(), Nbidal18PackCompat.MAX_IDENTITY_LENGTH);
-            if (protocol == Nbidal18PackCompat.PROTOCOL_VERSION) {
-                ClientIntegrityMonitor.LoginIntegrityState integrity = integrityMonitor.loginState();
+            ClientIntegrityMonitor.LoginIntegrityState integrity = protocol >= Nbidal18PackCompat.DIGEST_PROTOCOL_VERSION
+                    ? integrityMonitor.loginState()
+                    : new ClientIntegrityMonitor.LoginIntegrityState(true, "", "clean");
+            if (protocol >= Nbidal18PackCompat.DIGEST_PROTOCOL_VERSION) {
                 if (!integrity.clean()) {
-                    LOGGER.warn("nbidal18 protocol-2 login reports non-clean integrity: {}", integrity.message());
+                    LOGGER.warn(
+                            "nbidal18 protocol-{} login reports non-clean integrity: {}",
+                            protocol,
+                            integrity.message()
+                    );
                 }
-                response.writeUtf(integrity.manifestSha256(), Nbidal18PackCompat.SHA256_LENGTH);
-                response.writeBoolean(integrity.clean());
             }
+            IntegrityProtocol.writeResponse(
+                    response,
+                    new IntegrityProtocol.Response(
+                            protocol,
+                            status.name(),
+                            status.version(),
+                            integrity.manifestSha256(),
+                            integrity.clean(),
+                            integrity.message()
+                    )
+            );
             return CompletableFuture.completedFuture(response);
         } catch (RuntimeException malformedRequest) {
             return CompletableFuture.completedFuture(null);

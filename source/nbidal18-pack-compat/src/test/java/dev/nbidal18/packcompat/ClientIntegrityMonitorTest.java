@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClientIntegrityMonitorTest {
@@ -88,36 +89,61 @@ class ClientIntegrityMonitorTest {
     }
 
     @Test
-    void postReloadFinalizationMakesGeneratedRootEventsSticky() throws Exception {
-        Path dynamicRoot = temporary.resolve("dynamic-case");
-        ClientIntegrityMonitor dynamic = initializedWithTinyPinnedDynamicCache(dynamicRoot);
-        try (dynamic) {
-            assertTrue(dynamic.loginState().clean());
-            Path injected = dynamicRoot.resolve("dynamic-resource-pack-cache/injected.json");
-            Files.writeString(injected, "loaded then removed");
-            dynamic.handleChangedPath(injected, System.nanoTime());
-            assertFalse(dynamic.loginState().clean());
-            Files.delete(injected);
-            dynamic.handleChangedPath(injected, System.nanoTime());
-            Files.writeString(injected, "loaded then removed");
-            dynamic.handleChangedPath(injected, System.nanoTime());
-            assertFalse(dynamic.loginState().clean(), "create/delete/restore must remain sticky dirty");
-        }
+    void differentMachineGeneratedTreesLockPerLaunchAndPostLockMutationsStaySticky() throws Exception {
+        Path machineA = temporary.resolve("machine-a");
+        Path machineB = temporary.resolve("machine-b");
+        ClientIntegrityMonitor launchA = initializedGeneratedLaunch(
+                machineA,
+                "machine A Moonlight bytes",
+                "machine A Euphoria bytes"
+        );
+        ClientIntegrityMonitor launchB = initializedGeneratedLaunch(
+                machineB,
+                "machine B Moonlight bytes",
+                "machine B Euphoria bytes"
+        );
 
-        Path euphoriaRoot = temporary.resolve("euphoria-case");
-        ClientIntegrityMonitor euphoria = initializedWithTinyPinnedDynamicCache(euphoriaRoot);
-        try (euphoria) {
-            assertTrue(euphoria.loginState().clean());
-            Path generated = euphoriaRoot.resolve(
-                    "shaderpacks/ComplementaryUnbound_r5.8.1 + EuphoriaPatches_1.9.3/generated.glsl"
-            );
+        try (launchA; launchB) {
+            assertTrue(launchA.loginState().clean(), launchA.loginState().message());
+            assertTrue(launchB.loginState().clean(), launchB.loginState().message());
+            Path dynamicA = machineA.resolve("dynamic-resource-pack-cache/assets/generated.json");
+            Path dynamicB = machineB.resolve("dynamic-resource-pack-cache/assets/generated.json");
+            Path euphoriaA = machineA.resolve(EUPHORIA_ROOT).resolve("generated.glsl");
+            Path euphoriaB = machineB.resolve(EUPHORIA_ROOT).resolve("generated.glsl");
+            assertNotEquals(Files.readString(dynamicA), Files.readString(dynamicB));
+            assertNotEquals(Files.readString(euphoriaA), Files.readString(euphoriaB));
+
+            String originalDynamic = Files.readString(dynamicA);
+            Files.writeString(dynamicA, "post-lock Moonlight mutation");
+            launchA.handleChangedPath(dynamicA, System.nanoTime());
+            assertFalse(launchA.loginState().clean());
+            Files.writeString(dynamicA, originalDynamic);
+            launchA.handleChangedPath(dynamicA, System.nanoTime());
+            assertFalse(launchA.loginState().clean(), "restoring Moonlight bytes must remain sticky dirty");
+
+            String originalEuphoria = Files.readString(euphoriaB);
+            Files.writeString(euphoriaB, "post-lock Euphoria mutation");
+            launchB.handleChangedPath(euphoriaB, System.nanoTime());
+            assertFalse(launchB.loginState().clean());
+            Files.writeString(euphoriaB, originalEuphoria);
+            launchB.handleChangedPath(euphoriaB, System.nanoTime());
+            assertFalse(launchB.loginState().clean(), "restoring Euphoria bytes must remain sticky dirty");
+        }
+    }
+
+    @Test
+    void absentEuphoriaCreationAfterLockIsStickyDirty() throws Exception {
+        Path root = temporary.resolve("absent-euphoria");
+        ClientIntegrityMonitor monitor = initializedGeneratedLaunch(root, "Moonlight bytes", null);
+        try (monitor) {
+            Path generated = root.resolve(EUPHORIA_ROOT).resolve("generated.glsl");
             Files.createDirectories(generated.getParent());
             Files.writeString(generated, "created after startup");
-            euphoria.handleChangedPath(generated, System.nanoTime());
-            assertFalse(euphoria.loginState().clean(), "absent-at-finalization Euphoria creation must be dirty");
+            monitor.handleChangedPath(generated, System.nanoTime());
+            assertFalse(monitor.loginState().clean());
             Files.delete(generated);
-            euphoria.handleChangedPath(generated, System.nanoTime());
-            assertFalse(euphoria.loginState().clean(), "removing the transient shader must not restore clean state");
+            monitor.handleChangedPath(generated, System.nanoTime());
+            assertFalse(monitor.loginState().clean(), "removing the transient shader must not restore clean state");
         }
     }
 
@@ -146,10 +172,7 @@ class ClientIntegrityMonitorTest {
     }
 
     @Test
-    void cacheAbsentAtClientStartedCanAppearBeforePostReloadPinning() throws Exception {
-        Path referenceRoot = temporary.resolve("late-cache-reference");
-        GeneratedTreePins pins = tinyGeneratedPins(referenceRoot, false);
-
+    void cacheAbsentAtClientStartedCanAppearBeforePostReloadLock() throws Exception {
         Path liveRoot = temporary.resolve("late-cache-live");
         TestPackFixture fixture = new TestPackFixture(liveRoot);
         StrictManifest manifest = fixture.writeManifest();
@@ -158,8 +181,7 @@ class ClientIntegrityMonitorTest {
 
         try (ClientIntegrityMonitor monitor = ClientIntegrityMonitor.initialize(
                 liveRoot,
-                Clock.fixed(now, ZoneOffset.UTC),
-                pins
+                Clock.fixed(now, ZoneOffset.UTC)
         )) {
             monitor.clientStarted();
             assertFalse(monitor.loginState().clean());
@@ -175,10 +197,7 @@ class ClientIntegrityMonitorTest {
     }
 
     @Test
-    void delayedInitialResourceLoadCannotStartPeriodicScansBeforeGeneratedTreesArePinned() throws Exception {
-        Path referenceRoot = temporary.resolve("delayed-load-reference");
-        GeneratedTreePins pins = tinyGeneratedPins(referenceRoot, true);
-
+    void delayedInitialResourceLoadCannotStartPeriodicScansBeforeGeneratedTreesAreLocked() throws Exception {
         Path liveRoot = temporary.resolve("delayed-load-live");
         TestPackFixture fixture = new TestPackFixture(liveRoot);
         StrictManifest manifest = fixture.writeManifest();
@@ -187,8 +206,7 @@ class ClientIntegrityMonitorTest {
 
         try (ClientIntegrityMonitor monitor = ClientIntegrityMonitor.initialize(
                 liveRoot,
-                Clock.fixed(now, ZoneOffset.UTC),
-                pins
+                Clock.fixed(now, ZoneOffset.UTC)
         )) {
             monitor.clientStarted();
             writeTinyDynamicCache(liveRoot, "trusted generated payload");
@@ -207,10 +225,7 @@ class ClientIntegrityMonitorTest {
     }
 
     @Test
-    void initializationAllowsPinnedEuphoriaCreatedByEarlierClientInitializer() throws Exception {
-        Path referenceRoot = temporary.resolve("early-euphoria-reference");
-        GeneratedTreePins pins = tinyGeneratedPins(referenceRoot, true);
-
+    void initializationAllowsEuphoriaCreatedByEarlierClientInitializerThenLocksIt() throws Exception {
         Path liveRoot = temporary.resolve("early-euphoria-live");
         TestPackFixture fixture = new TestPackFixture(liveRoot);
         writeTinyDynamicCache(liveRoot, "trusted generated payload");
@@ -221,8 +236,7 @@ class ClientIntegrityMonitorTest {
 
         try (ClientIntegrityMonitor monitor = ClientIntegrityMonitor.initialize(
                 liveRoot,
-                Clock.fixed(now, ZoneOffset.UTC),
-                pins
+                Clock.fixed(now, ZoneOffset.UTC)
         )) {
             assertFalse(monitor.loginState().clean());
             assertTrue(monitor.loginState().message().contains("still pending"));
@@ -235,22 +249,18 @@ class ClientIntegrityMonitorTest {
     }
 
     @Test
-    void earlyEuphoriaWithWrongPinFailsClosedDuringPostReloadFinalization() throws Exception {
-        Path referenceRoot = temporary.resolve("wrong-euphoria-reference");
-        GeneratedTreePins pins = tinyGeneratedPins(referenceRoot, true);
-
-        Path liveRoot = temporary.resolve("wrong-euphoria-live");
+    void emptyEuphoriaFailsClosedDuringPostReloadFinalization() throws Exception {
+        Path liveRoot = temporary.resolve("empty-euphoria-live");
         TestPackFixture fixture = new TestPackFixture(liveRoot);
         writeTinyDynamicCache(liveRoot, "trusted generated payload");
-        writeTinyEuphoria(liveRoot, "tampered generated shader");
+        Files.createDirectories(liveRoot.resolve(EUPHORIA_ROOT));
         StrictManifest manifest = fixture.writeManifest();
         Instant now = Instant.parse("2026-08-11T12:00:00Z");
         fixture.writeAttestation(manifest, now);
 
         try (ClientIntegrityMonitor monitor = ClientIntegrityMonitor.initialize(
                 liveRoot,
-                Clock.fixed(now, ZoneOffset.UTC),
-                pins
+                Clock.fixed(now, ZoneOffset.UTC)
         )) {
             assertFalse(monitor.loginState().clean());
             assertTrue(monitor.loginState().message().contains("still pending"));
@@ -258,44 +268,12 @@ class ClientIntegrityMonitorTest {
             monitor.clientStarted();
             monitor.advanceStartupFinalization(true);
             assertFalse(monitor.loginState().clean());
-            assertTrue(monitor.loginState().message().contains("Euphoria generated shader tree"));
-            assertTrue(monitor.loginState().message().contains("does not match the reviewed release pin"));
-        }
-    }
-
-    @Test
-    void wrongGeneratedCachePinFailsClosedAndCannotReturnClean() throws Exception {
-        Path referenceRoot = temporary.resolve("wrong-cache-reference");
-        GeneratedTreePins pins = tinyGeneratedPins(referenceRoot, false);
-
-        Path liveRoot = temporary.resolve("wrong-cache-live");
-        TestPackFixture fixture = new TestPackFixture(liveRoot);
-        writeTinyDynamicCache(liveRoot, "tampered generated payload");
-        StrictManifest manifest = fixture.writeManifest();
-        Instant now = Instant.parse("2026-08-11T12:00:00Z");
-        fixture.writeAttestation(manifest, now);
-
-        try (ClientIntegrityMonitor monitor = ClientIntegrityMonitor.initialize(
-                liveRoot,
-                Clock.fixed(now, ZoneOffset.UTC),
-                pins
-        )) {
-            monitor.clientStarted();
-            monitor.advanceStartupFinalization(true);
-            assertFalse(monitor.loginState().clean());
-            assertTrue(monitor.loginState().message().contains("does not match the reviewed release pin"));
-
-            writeTinyDynamicCache(liveRoot, "trusted generated payload");
-            monitor.advanceStartupFinalization(true);
-            assertFalse(monitor.loginState().clean(), "repair after a failed pin must require a clean relaunch");
+            assertTrue(monitor.loginState().message().contains("Regenerated shader tree is empty"));
         }
     }
 
     @Test
     void malformedGeneratedCacheFailsClosed() throws Exception {
-        Path referenceRoot = temporary.resolve("malformed-cache-reference");
-        GeneratedTreePins pins = tinyGeneratedPins(referenceRoot, false);
-
         Path liveRoot = temporary.resolve("malformed-cache-live");
         TestPackFixture fixture = new TestPackFixture(liveRoot);
         fixture.write("dynamic-resource-pack-cache/assets/generated.json", "trusted generated payload");
@@ -305,63 +283,52 @@ class ClientIntegrityMonitorTest {
 
         try (ClientIntegrityMonitor monitor = ClientIntegrityMonitor.initialize(
                 liveRoot,
-                Clock.fixed(now, ZoneOffset.UTC),
-                pins
+                Clock.fixed(now, ZoneOffset.UTC)
         )) {
             monitor.clientStarted();
             monitor.advanceStartupFinalization(true);
             assertFalse(monitor.loginState().clean());
-            assertTrue(monitor.loginState().message().contains("exclusion was not present"));
+            assertTrue(monitor.loginState().message().contains("missing required marker"));
         }
     }
 
-    private static ClientIntegrityMonitor initializedWithTinyPinnedDynamicCache(Path root) throws Exception {
+    @Test
+    void fullScanDetectsSameMetadataGeneratedMutationWithoutWatcherEvent() throws Exception {
+        Path root = temporary.resolve("full-scan");
+        ClientIntegrityMonitor monitor = initializedGeneratedLaunch(root, "AAAA", "CCCC");
+        try (monitor) {
+            Path dynamic = root.resolve("dynamic-resource-pack-cache/assets/generated.json");
+            FileTime originalTime = Files.getLastModifiedTime(dynamic);
+            Files.writeString(dynamic, "BBBB");
+            Files.setLastModifiedTime(dynamic, originalTime);
+            monitor.runFullScan();
+            assertFalse(monitor.loginState().clean());
+            assertTrue(monitor.loginState().message().contains("hash changed"));
+        }
+    }
+
+    private static ClientIntegrityMonitor initializedGeneratedLaunch(
+            Path root,
+            String dynamicPayload,
+            String euphoriaPayload
+    ) throws Exception {
         TestPackFixture fixture = new TestPackFixture(root);
-        writeTinyDynamicCache(root, "trusted generated payload");
+        writeTinyDynamicCache(root, dynamicPayload);
+        if (euphoriaPayload != null) {
+            writeTinyEuphoria(root, euphoriaPayload);
+        }
         StrictManifest manifest = fixture.writeManifest();
         Instant now = Instant.parse("2026-08-11T12:00:00Z");
         fixture.writeAttestation(manifest, now);
 
-        FabricCacheVerifier cacheVerifier = new FabricCacheVerifier(root);
-        FabricCacheVerifier.CacheRoot dynamic = cacheVerifier.captureRequiredNonEmptyRoot(
-                ClientIntegrityMonitor.DYNAMIC_RESOURCE_CACHE_ROOT
-        );
-        String dynamicDigest = GeneratedTreePins.reviewed()
-                .validateDynamicResourceCache(dynamic)
-                .actualSha256();
-        GeneratedTreePins pins = GeneratedTreePins.withExpectedDigests(
-                GeneratedTreePins.EUPHORIA_TREE_SHA256,
-                dynamicDigest
-        );
         ClientIntegrityMonitor monitor = ClientIntegrityMonitor.initialize(
                 root,
-                Clock.fixed(now, ZoneOffset.UTC),
-                pins
+                Clock.fixed(now, ZoneOffset.UTC)
         );
         monitor.clientStarted();
         monitor.advanceStartupFinalization(true);
+        assertTrue(monitor.loginState().clean(), monitor.loginState().message());
         return monitor;
-    }
-
-    private static GeneratedTreePins tinyGeneratedPins(Path root, boolean includeEuphoria) throws Exception {
-        Files.createDirectories(root);
-        writeTinyDynamicCache(root, "trusted generated payload");
-        FabricCacheVerifier cacheVerifier = new FabricCacheVerifier(root);
-        FabricCacheVerifier.CacheRoot dynamic = cacheVerifier.captureRequiredNonEmptyRoot(
-                ClientIntegrityMonitor.DYNAMIC_RESOURCE_CACHE_ROOT
-        );
-        String dynamicDigest = GeneratedTreePins.reviewed()
-                .validateDynamicResourceCache(dynamic)
-                .actualSha256();
-
-        String euphoriaDigest = GeneratedTreePins.EUPHORIA_TREE_SHA256;
-        if (includeEuphoria) {
-            writeTinyEuphoria(root, "trusted generated shader");
-            IntegrityVerifier verifier = new IntegrityVerifier(root);
-            IntegrityVerifier.RegeneratedTree euphoria = verifier.captureRegeneratedTree(EUPHORIA_ROOT);
-            euphoriaDigest = GeneratedTreePins.reviewed().validateEuphoria(euphoria).actualSha256();
-        }
-        return GeneratedTreePins.withExpectedDigests(euphoriaDigest, dynamicDigest);
     }
 
     private static void writeTinyDynamicCache(Path root, String payload) throws Exception {

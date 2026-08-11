@@ -1,6 +1,6 @@
 {
 	"downloadEnabled": true,
-	"updatesOnStartup": true,
+	"updatesOnStartup": false,
 	"showDescription": true,
 	"urlWhitelist": [
 		"https://www.youtube.com",

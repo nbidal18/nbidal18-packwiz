@@ -43,7 +43,6 @@ final class ClientIntegrityMonitor implements AutoCloseable {
     private final FabricCacheVerifier fabricCacheVerifier;
     private final FabricCacheVerifier.CacheBaseline fabricCacheBaseline;
     private final ClosedEmptyRootVerifier closedEmptyRootVerifier;
-    private final GeneratedTreePins generatedTreePins;
     private final ExecutorService worker;
     private final WatchService watchService;
     private final Object watchLock = new Object();
@@ -72,34 +71,20 @@ final class ClientIntegrityMonitor implements AutoCloseable {
     private Connection lastDisconnectedConnection;
 
     static ClientIntegrityMonitor initialize(Path gameDirectory) {
-        return initialize(gameDirectory, Clock.systemUTC(), GeneratedTreePins.reviewed(), false);
+        return initialize(gameDirectory, Clock.systemUTC(), false);
     }
 
     static ClientIntegrityMonitor initialize(Path gameDirectory, boolean customSkinLoaderPresent) {
-        return initialize(
-                gameDirectory,
-                Clock.systemUTC(),
-                GeneratedTreePins.reviewed(),
-                customSkinLoaderPresent
-        );
+        return initialize(gameDirectory, Clock.systemUTC(), customSkinLoaderPresent);
     }
 
     static ClientIntegrityMonitor initialize(Path gameDirectory, Clock clock) {
-        return initialize(gameDirectory, clock, GeneratedTreePins.reviewed(), false);
+        return initialize(gameDirectory, clock, false);
     }
 
     static ClientIntegrityMonitor initialize(
             Path gameDirectory,
             Clock clock,
-            GeneratedTreePins generatedTreePins
-    ) {
-        return initialize(gameDirectory, clock, generatedTreePins, false);
-    }
-
-    static ClientIntegrityMonitor initialize(
-            Path gameDirectory,
-            Clock clock,
-            GeneratedTreePins generatedTreePins,
             boolean customSkinLoaderPresent
     ) {
         Path normalized;
@@ -117,7 +102,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             // Re-hash loadable managed content before reporting clean. This closes the narrow
             // guard-process to game-JVM race even when a path is replaced with identical metadata.
             // A declared regenerate-prefix may already have been created by an earlier client
-            // initializer, so it remains explicitly uncaptured/pending until post-reload pinning.
+            // initializer, so it remains explicitly uncaptured/pending until post-reload capture.
             IntegrityVerifier.VerificationResult verification = verifier.verifyFull(manifest, Map.of(), true);
             if (!verification.clean()) {
                 throw new IntegrityException(verification.message());
@@ -145,7 +130,6 @@ final class ClientIntegrityMonitor implements AutoCloseable {
                     fabricCacheVerifier,
                     fabricCacheBaseline,
                     closedEmptyRootVerifier,
-                    generatedTreePins,
                     verification.fingerprints(),
                     new LoginIntegrityState(true, manifest.sha256(), "clean")
             );
@@ -161,7 +145,6 @@ final class ClientIntegrityMonitor implements AutoCloseable {
                     null,
                     null,
                     null,
-                    generatedTreePins,
                     Map.of(),
                     new LoginIntegrityState(false, digest, message)
             );
@@ -180,7 +163,6 @@ final class ClientIntegrityMonitor implements AutoCloseable {
                 null,
                 null,
                 null,
-                GeneratedTreePins.reviewed(),
                 Map.of(),
                 new LoginIntegrityState(false, "", message)
         );
@@ -194,7 +176,6 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             FabricCacheVerifier fabricCacheVerifier,
             FabricCacheVerifier.CacheBaseline fabricCacheBaseline,
             ClosedEmptyRootVerifier closedEmptyRootVerifier,
-            GeneratedTreePins generatedTreePins,
             Map<String, IntegrityVerifier.FileFingerprint> fingerprints,
             LoginIntegrityState initialState
     ) {
@@ -205,7 +186,6 @@ final class ClientIntegrityMonitor implements AutoCloseable {
         this.fabricCacheVerifier = fabricCacheVerifier;
         this.fabricCacheBaseline = fabricCacheBaseline;
         this.closedEmptyRootVerifier = closedEmptyRootVerifier;
-        this.generatedTreePins = generatedTreePins;
         this.fingerprints = fingerprints;
         this.loginState = initialState;
         this.worker = Executors.newSingleThreadExecutor(task -> {
@@ -363,7 +343,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
         if (loginState.clean()) {
             // A watcher event observed by the post-capture poll may require a final settings or
             // managed-content audit. Drain it synchronously while protocol responses still see
-            // pending, then arm periodic workers from the completed, pinned startup boundary.
+            // pending, then arm periodic workers from the completed, locked startup boundary.
             drainStartupBoundaryWork();
         }
         if (loginState.clean()) {
@@ -519,9 +499,14 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             FabricCacheVerifier.CacheRoot dynamicCache = fabricCacheVerifier.captureRequiredNonEmptyRoot(
                     DYNAMIC_RESOURCE_CACHE_ROOT
             );
-            GeneratedTreePins.Validation dynamicPin = generatedTreePins.validateDynamicResourceCache(dynamicCache);
-            if (!dynamicPin.clean()) {
-                throw new IntegrityException(dynamicPin.message());
+            Path dynamicHashMarker = DYNAMIC_RESOURCE_CACHE_ROOT.resolve("hash.txt");
+            FabricCacheVerifier.CachedFile capturedHashMarker =
+                    dynamicCache.filesByKey().get(StrictManifest.key(dynamicHashMarker));
+            if (capturedHashMarker == null
+                    || !StrictManifest.portable(capturedHashMarker.relativePath())
+                    .equals(StrictManifest.portable(dynamicHashMarker))) {
+                throw new IntegrityException("Generated cache root is missing required marker: "
+                        + StrictManifest.portable(dynamicHashMarker));
             }
 
             Map<String, IntegrityVerifier.RegeneratedTree> capturedRegeneration = new LinkedHashMap<>();
@@ -533,10 +518,6 @@ final class ClientIntegrityMonitor implements AutoCloseable {
                         continue;
                     }
                     IntegrityVerifier.RegeneratedTree captured = verifier.captureRegeneratedTree(state.prefix);
-                    GeneratedTreePins.Validation pin = generatedTreePins.validateEuphoria(captured);
-                    if (!pin.clean()) {
-                        throw new IntegrityException(pin.message());
-                    }
                     capturedRegeneration.put(entry.getKey(), captured);
                 }
             }

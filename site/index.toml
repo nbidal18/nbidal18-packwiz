@@ -1,10 +1,6 @@
 hash-format = "sha256"
 
 [[files]]
-file = ".nbidal18/defaults/config/chat_heads.json5"
-hash = "e12b19df5220b5dbefc3d28c7953d6dbe961eacbf8e2221ffa487738f71dc6aa"
-
-[[files]]
 file = ".nbidal18/defaults/config/fzzy_config/keybinds.toml"
 hash = "26ac5810c9b5dc5c1968827357f0a58c58ac2b6f7b082630960228e16585062f"
 
@@ -22,7 +18,7 @@ hash = "c8258bef50291e61bb219351d4e55f0cbe96d5331bb66f788a488aa71252f241"
 
 [[files]]
 file = ".nbidal18/defaults/config/modmenu.json"
-hash = "a884ca28c66b90080b7470dc1a2efdddd47c325af5d699aa45d7974b4b254628"
+hash = "f67acccd7a156a8986435cddb4d798b30761b7154ac584eb1b52ced9ec789509"
 
 [[files]]
 file = ".nbidal18/defaults/config/playeremotes-wheel-fix.json"
@@ -86,7 +82,7 @@ hash = "a3ec0efcc2030281a6828bf7f59b128009275e0c4fabfc07411ac793319ad7c7"
 
 [[files]]
 file = ".nbidal18/strict-manifest.tsv"
-hash = "f736d220e09ede1b211e47049a9ca2a880309432cb9417f722f97abd3935f37f"
+hash = "d55a2a561f1eef8599b45c94ab7a1ec5c860df99427e133bab26c2f702bad89a"
 
 [[files]]
 file = "CustomSkinLoader/ExtraList/nbidal18-closed.marker"
@@ -98,7 +94,7 @@ hash = "9a5dc08daf4760d4cfc2214b4af0525a07ff6de90d24bdf475f8ab91b706cbfa"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "e547755f89bb102553662e8e146e0c28f4e5662161af5938b64158a3b452a6de"
+hash = "b5b07255efd6a31f1fd8071d7ea44698250477ee8b245daa20353c6c2eb65a87"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -118,7 +114,7 @@ hash = "8de3a0f0b4d7b17757fed8f1338909b0cb6cdf851604616a5698c36f95011e1d"
 
 [[files]]
 file = "config/VinURLConfig.json5"
-hash = "77fd149d1d1e61f13406f6a4a432c7b69586ecc1076d43023b7099d66cab7ab6"
+hash = "8324582340db83883d47bed33b105769c45d75ff5f71ce838207e848f2c5eebc"
 
 [[files]]
 file = "config/alexis_mods/daycounter.json"
@@ -166,7 +162,7 @@ hash = "5517ad3e06aa1bfeec0a41174677a9ee094b02ee8b58194e39584cc1191cb98b"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "6fd58f68c4584f0154b095f1207d5ce5c732f26f4c57679a9a4875d7c1ff76c3"
+hash = "3d2bf20f50bfd6c56ccd2bd14d8c3e6154aa9ddb9c8f886425f96c801deb0e90"
 
 [[files]]
 file = "config/beautify.json"
@@ -522,7 +518,7 @@ hash = "134eca5eafff0ffe0d52cf8774dd02fb247a6e2f6ca617f0acac396c9565ebd6"
 
 [[files]]
 file = "config/euphoria_patcher/settings.toml"
-hash = "fec26d01025e152ce4d897a86863b1125be7ff5d03266f19b000de4d9bdb617f"
+hash = "67a67f36821cca5d9cb8d6e4b15cf64c189c8b6a722eb41a9c2b3c0f060ca950"
 
 [[files]]
 file = "config/exposure-client.toml"
@@ -1267,11 +1263,6 @@ hash = "530633b76c65c09e3a54fe59d74945c35b5c69c1c0d31f952171e5e88967f504"
 metafile = true
 
 [[files]]
-file = "mods/chat-heads.pw.toml"
-hash = "a1dad6d7c7ea855b2e4df045c3a2d2ac369aa6e8274374c1fad51d35093e85c8"
-metafile = true
-
-[[files]]
 file = "mods/chatanimation.pw.toml"
 hash = "49f591c147ec06f3c26c596350b18c57e00aec337380fec22e528360bbe6abd3"
 metafile = true
@@ -1833,8 +1824,8 @@ file = "mods/nbidal18-jei-hidden-default-1.0.0+1.21.1.jar"
 hash = "5aeffa5d9e70178c6c54991e4f769159d6c40fb0ce3455d9acdbd4c3b5e69ab5"
 
 [[files]]
-file = "mods/nbidal18-pack-compat-1.1.5+1.21.1.jar"
-hash = "289cb4443f2d70e25846b1d55319f10698bfd4f1a560bc4b4a2c6eeb675cd65c"
+file = "mods/nbidal18-pack-compat-1.1.6+1.21.1.jar"
+hash = "9594dc3a9a6701e6b4307ad0a783889a3515f8d3083fded5e47e0d92060986d4"
 
 [[files]]
 file = "mods/nbidal18-playeremotes-fa-bridge-1.0.1+1.21.1.jar"

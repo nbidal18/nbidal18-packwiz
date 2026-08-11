@@ -254,7 +254,6 @@ class CustomSkinLoaderCacheIntegrityTest {
         return ClientIntegrityMonitor.initialize(
                 root,
                 Clock.fixed(NOW, ZoneOffset.UTC),
-                GeneratedTreePins.reviewed(),
                 true
         );
     }
@@ -266,21 +265,9 @@ class CustomSkinLoaderCacheIntegrityTest {
         StrictManifest manifest = fixture.writeManifest();
         fixture.writeAttestation(manifest, NOW);
 
-        FabricCacheVerifier cacheVerifier = new FabricCacheVerifier(root, true);
-        FabricCacheVerifier.CacheRoot dynamic = cacheVerifier.captureRequiredNonEmptyRoot(
-                ClientIntegrityMonitor.DYNAMIC_RESOURCE_CACHE_ROOT
-        );
-        String dynamicDigest = GeneratedTreePins.reviewed()
-                .validateDynamicResourceCache(dynamic)
-                .actualSha256();
-        GeneratedTreePins pins = GeneratedTreePins.withExpectedDigests(
-                GeneratedTreePins.EUPHORIA_TREE_SHA256,
-                dynamicDigest
-        );
         ClientIntegrityMonitor monitor = ClientIntegrityMonitor.initialize(
                 root,
                 Clock.fixed(NOW, ZoneOffset.UTC),
-                pins,
                 true
         );
         monitor.clientStarted();
