@@ -3,6 +3,8 @@ package dev.nbidal18.packcompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -28,6 +30,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 final class ClientIntegrityMonitor implements AutoCloseable {
+    private static final Logger LOGGER = LoggerFactory.getLogger("nbidal18-pack-compat");
     private static final long METADATA_SCAN_NANOS = 15_000_000_000L;
     private static final long SETTINGS_SCAN_NANOS = 10_000_000_000L;
     private static final long FULL_SCAN_NANOS = 300_000_000_000L;
@@ -60,6 +63,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
     private volatile FabricCacheVerifier.CacheRoot dynamicResourceCacheBaseline;
     private DynamicCachePhase dynamicCachePhase = DynamicCachePhase.WAITING;
     private volatile boolean clientLifecycleStarted;
+    private volatile boolean generatedRootsFinalizationStarted;
     private volatile boolean closed;
     private long nextMetadataScan;
     private long nextSettingsScan;
@@ -93,7 +97,9 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             IntegrityVerifier verifier = new IntegrityVerifier(normalized);
             // Re-hash loadable managed content before reporting clean. This closes the narrow
             // guard-process to game-JVM race even when a path is replaced with identical metadata.
-            IntegrityVerifier.VerificationResult verification = verifier.verifyFull(manifest, Map.of(), false);
+            // A declared regenerate-prefix may already have been created by an earlier client
+            // initializer, so it remains explicitly uncaptured/pending until post-reload pinning.
+            IntegrityVerifier.VerificationResult verification = verifier.verifyFull(manifest, Map.of(), true);
             if (!verification.clean()) {
                 throw new IntegrityException(verification.message());
             }
@@ -124,6 +130,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
         } catch (IOException | IntegrityException | RuntimeException failure) {
             String digest = manifest == null ? "" : manifest.sha256();
             String message = safeMessage(failure);
+            LOGGER.warn("nbidal18 integrity initialization failed: {}", message);
             return new ClientIntegrityMonitor(
                     normalized,
                     manifest,
@@ -224,6 +231,13 @@ final class ClientIntegrityMonitor implements AutoCloseable {
                     "generated-cache verification is still pending until client startup completes"
             );
         }
+        if (!generatedRootsFinalizationStarted) {
+            return new LoginIntegrityState(
+                    false,
+                    current.manifestSha256(),
+                    "generated-cache verification is still pending until initial resource loading completes"
+            );
+        }
         synchronized (dynamicCacheLock) {
             if (dynamicCachePhase != DynamicCachePhase.LOCKED) {
                 return new LoginIntegrityState(
@@ -250,14 +264,8 @@ final class ClientIntegrityMonitor implements AutoCloseable {
         if (closed || clientLifecycleStarted || !loginState.clean()) {
             return;
         }
-        // Consume events that belong to initial resource generation before establishing the
-        // lifecycle boundary. All later generated-root events are sticky integrity failures.
-        pollWatchEvents(System.nanoTime());
-        if (!loginState.clean()) {
-            return;
-        }
         clientLifecycleStarted = true;
-        finalizeGeneratedRoots();
+        LOGGER.info("nbidal18 integrity is waiting for initial resource loading to complete");
     }
 
     void tick(Minecraft client) {
@@ -266,6 +274,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
         }
         long now = System.nanoTime();
         pollWatchEvents(now);
+        advanceStartupFinalization(client.isGameLoadFinished());
 
         if (loginState.clean()) {
             if (now >= nextMetadataScan) {
@@ -285,6 +294,33 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             }
         }
         disconnectIfDirty(client);
+    }
+
+    void advanceStartupFinalization(boolean initialResourceLoadingComplete) {
+        if (closed
+                || !clientLifecycleStarted
+                || generatedRootsFinalizationStarted
+                || !initialResourceLoadingComplete
+                || !loginState.clean()) {
+            return;
+        }
+
+        // Consume writes from initial resource generation while they are still exempt. The
+        // boundary is established immediately afterward, so every subsequently observed write
+        // in a generated root remains a sticky integrity failure, including writes queued while
+        // the synchronous capture and exact verification are running.
+        pollWatchEvents(System.nanoTime());
+        if (!loginState.clean()) {
+            return;
+        }
+        generatedRootsFinalizationStarted = true;
+        LOGGER.info("nbidal18 integrity is finalizing generated content after initial resource loading");
+        finalizeGeneratedRoots();
+        if (loginState.clean()) {
+            // Consume anything queued while synchronous capture/hash verification was running
+            // before a protocol query can observe a clean, locked state.
+            pollWatchEvents(System.nanoTime());
+        }
     }
 
     private void pollWatchEvents(long now) {
@@ -355,7 +391,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             return;
         }
         if (StrictManifest.withinOrEqual(DYNAMIC_RESOURCE_CACHE_ROOT, relative)) {
-            if (clientLifecycleStarted) {
+            if (generatedRootsFinalizationStarted) {
                 markDirty("The dynamic resource-cache watcher overflowed after startup finalization");
             }
             return;
@@ -384,7 +420,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             return;
         }
         if (StrictManifest.withinOrEqual(DYNAMIC_RESOURCE_CACHE_ROOT, relative)) {
-            if (clientLifecycleStarted) {
+            if (generatedRootsFinalizationStarted) {
                 markDirty("dynamic-resource-pack-cache changed after startup finalization: "
                         + StrictManifest.portable(relative));
             }
@@ -400,7 +436,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
 
         Path regeneratePrefix = containingPrefix(relative, manifest.regeneratePrefixes());
         if (regeneratePrefix != null) {
-            if (clientLifecycleStarted) {
+            if (generatedRootsFinalizationStarted) {
                 markDirty("Generated shader content changed after startup finalization: "
                         + StrictManifest.portable(relative));
             }
@@ -480,6 +516,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
                 dynamicResourceCacheBaseline = dynamicCache;
                 dynamicCachePhase = DynamicCachePhase.LOCKED;
             }
+            LOGGER.info("nbidal18 integrity locked generated content for manifest {}", manifest.sha256());
         } catch (IOException | IntegrityException | RuntimeException failure) {
             markDirty(safeMessage(failure));
         }
@@ -610,6 +647,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
         LoginIntegrityState current = loginState;
         if (current.clean()) {
             loginState = new LoginIntegrityState(false, current.manifestSha256(), reason);
+            LOGGER.warn("nbidal18 integrity marked dirty: {}", reason);
         }
     }
 

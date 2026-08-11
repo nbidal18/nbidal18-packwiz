@@ -8,10 +8,14 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.FriendlyByteBuf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
 
 public final class Nbidal18PackCompatClient implements ClientModInitializer {
+    private static final Logger LOGGER = LoggerFactory.getLogger("nbidal18-pack-compat");
+
     @Override
     public void onInitializeClient() {
         ClientIntegrityMonitor integrityMonitor = ClientIntegrityMonitor.initialize(
@@ -54,6 +58,9 @@ public final class Nbidal18PackCompatClient implements ClientModInitializer {
             response.writeUtf(status.version(), Nbidal18PackCompat.MAX_IDENTITY_LENGTH);
             if (protocol == Nbidal18PackCompat.PROTOCOL_VERSION) {
                 ClientIntegrityMonitor.LoginIntegrityState integrity = integrityMonitor.loginState();
+                if (!integrity.clean()) {
+                    LOGGER.warn("nbidal18 protocol-2 login reports non-clean integrity: {}", integrity.message());
+                }
                 response.writeUtf(integrity.manifestSha256(), Nbidal18PackCompat.SHA256_LENGTH);
                 response.writeBoolean(integrity.clean());
             }
