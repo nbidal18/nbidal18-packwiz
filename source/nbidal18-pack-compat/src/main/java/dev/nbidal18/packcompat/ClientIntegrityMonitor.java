@@ -373,7 +373,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
                     continue;
                 }
                 Path changed = watchedDirectory.resolve(context).toAbsolutePath().normalize();
-                handleChangedPath(changed, now);
+                handleChangedPath(changed, now, event.kind());
                 if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE
                         && Files.isDirectory(changed, LinkOption.NOFOLLOW_LINKS)) {
                     try {
@@ -425,6 +425,10 @@ final class ClientIntegrityMonitor implements AutoCloseable {
     }
 
     void handleChangedPath(Path changed, long now) {
+        handleChangedPath(changed, now, null);
+    }
+
+    void handleChangedPath(Path changed, long now, WatchEvent.Kind<?> eventKind) {
         if (!changed.startsWith(gameDirectory)) {
             markDirty("A watched managed path escaped the game directory");
             return;
@@ -464,6 +468,13 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             return;
         }
         if (containingPrefix(relative, manifest.runtimePrefixes()) != null) {
+            return;
+        }
+        if (isBenignStrictDirectoryMetadataEvent(changed, relative, eventKind)) {
+            // Re-scan promptly as defense in depth. Direct child events remain the immediate
+            // detector; this catches unexpected content if a platform reports only metadata.
+            metadataScanRequested.set(true);
+            startWorker();
             return;
         }
         if (isImmediateStrictViolation(relative)) {
@@ -775,6 +786,42 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             }
         }
         return false;
+    }
+
+    private boolean isBenignStrictDirectoryMetadataEvent(
+            Path changed,
+            Path relative,
+            WatchEvent.Kind<?> eventKind
+    ) {
+        if (eventKind == StandardWatchEventKinds.ENTRY_MODIFY
+                && isRuntimeMonitoredStrictRoot(relative)) {
+            return isPlainDirectory(changed);
+        }
+        return false;
+    }
+
+    private boolean isRuntimeMonitoredStrictRoot(Path relative) {
+        String key = StrictManifest.key(relative);
+        for (Path strict : manifest.strictDirectories()) {
+            if (IntegrityVerifier.runtimeMonitored(strict)
+                    && key.equals(StrictManifest.key(strict))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isPlainDirectory(Path directory) {
+        try {
+            BasicFileAttributes attributes = Files.readAttributes(
+                    directory,
+                    BasicFileAttributes.class,
+                    LinkOption.NOFOLLOW_LINKS
+            );
+            return attributes.isDirectory() && !IntegrityFiles.isLinkOrReparse(directory, attributes);
+        } catch (IOException | RuntimeException failure) {
+            return false;
+        }
     }
 
     private boolean isDeclaredMutableFile(Path relative) {

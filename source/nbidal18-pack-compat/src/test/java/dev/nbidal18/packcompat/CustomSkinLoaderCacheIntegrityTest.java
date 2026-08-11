@@ -1,10 +1,12 @@
 package dev.nbidal18.packcompat;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.attribute.FileTime;
 import java.time.Clock;
 import java.time.Instant;
@@ -102,6 +104,129 @@ class CustomSkinLoaderCacheIntegrityTest {
     }
 
     @Test
+    void windowsParentDirectoryModifyForLegitimateRuntimeWritesRemainsClean() throws Exception {
+        Path root = temporary.resolve("parent-metadata");
+        try (ClientIntegrityMonitor monitor = initializedRunningMonitor(root)) {
+            Path runtimeConfig = root.resolve("CustomSkinLoader/CustomSkinLoader.json");
+            Files.writeString(runtimeConfig, "{\"enable\":true}");
+            monitor.handleChangedPath(
+                    runtimeConfig,
+                    System.nanoTime(),
+                    StandardWatchEventKinds.ENTRY_CREATE
+            );
+
+            Path runtimeCache = root.resolve("CustomSkinLoader/ProfileCache/player.json");
+            Files.createDirectories(runtimeCache.getParent());
+            monitor.handleChangedPath(
+                    runtimeCache.getParent(),
+                    System.nanoTime(),
+                    StandardWatchEventKinds.ENTRY_CREATE
+            );
+            Files.writeString(runtimeCache, "runtime cache");
+            monitor.handleChangedPath(
+                    runtimeCache,
+                    System.nanoTime(),
+                    StandardWatchEventKinds.ENTRY_CREATE
+            );
+
+            monitor.runFullScan();
+            assertTrue(monitor.loginState().clean(), monitor.loginState().message());
+
+            monitor.handleChangedPath(
+                    root.resolve("CustomSkinLoader"),
+                    System.nanoTime(),
+                    StandardWatchEventKinds.ENTRY_MODIFY
+            );
+            assertTrue(monitor.loginState().clean(), monitor.loginState().message());
+        }
+    }
+
+    @Test
+    void parentDirectoryModifyDoesNotMaskUnexpectedPluginOrExtraListChildren() throws Exception {
+        for (String relative : new String[] {
+                "CustomSkinLoader/Plugins/injected.jar",
+                "CustomSkinLoader/ExtraList/injected.json"
+        }) {
+            Path root = temporary.resolve(relative.contains("Plugins") ? "parent-plugin" : "parent-extra-list");
+            try (ClientIntegrityMonitor monitor = initializedRunningMonitor(root)) {
+                monitor.handleChangedPath(
+                        root.resolve("CustomSkinLoader"),
+                        System.nanoTime(),
+                        StandardWatchEventKinds.ENTRY_MODIFY
+                );
+                assertTrue(monitor.loginState().clean(), monitor.loginState().message());
+
+                Path injected = root.resolve(relative);
+                Files.createDirectories(injected.getParent());
+                Files.writeString(injected, "unmanaged runtime content");
+                monitor.handleChangedPath(
+                        injected,
+                        System.nanoTime(),
+                        StandardWatchEventKinds.ENTRY_CREATE
+                );
+
+                assertFalse(monitor.loginState().clean());
+                assertTrue(monitor.loginState().message().contains(relative));
+            }
+        }
+    }
+
+    @Test
+    void strictRootCreateDeleteAndNonDirectoryModifyRemainStickyDirty() throws Exception {
+        for (var eventKind : new java.nio.file.WatchEvent.Kind<?>[] {
+                StandardWatchEventKinds.ENTRY_CREATE,
+                StandardWatchEventKinds.ENTRY_DELETE
+        }) {
+            Path root = temporary.resolve(eventKind == StandardWatchEventKinds.ENTRY_CREATE
+                    ? "root-create"
+                    : "root-delete");
+            try (ClientIntegrityMonitor monitor = initializedRunningMonitor(root)) {
+                monitor.handleChangedPath(root.resolve("CustomSkinLoader"), System.nanoTime(), eventKind);
+                assertFalse(monitor.loginState().clean());
+                assertTrue(monitor.loginState().message().contains("CustomSkinLoader"));
+            }
+        }
+
+        Path replacementRoot = temporary.resolve("root-replacement");
+        try (ClientIntegrityMonitor monitor = initializedRunningMonitor(replacementRoot)) {
+            Path customSkinLoader = replacementRoot.resolve("CustomSkinLoader");
+            removeCustomSkinLoaderRoot(customSkinLoader);
+            Files.writeString(customSkinLoader, "not a directory");
+            monitor.handleChangedPath(
+                    customSkinLoader,
+                    System.nanoTime(),
+                    StandardWatchEventKinds.ENTRY_MODIFY
+            );
+            assertFalse(monitor.loginState().clean());
+            assertTrue(monitor.loginState().message().contains("CustomSkinLoader"));
+        }
+    }
+
+    @Test
+    void strictRootReparseModifyRemainsStickyDirtyWhenLinksAreSupported() throws Exception {
+        Path root = temporary.resolve("root-reparse");
+        try (ClientIntegrityMonitor monitor = initializedRunningMonitor(root)) {
+            Path customSkinLoader = root.resolve("CustomSkinLoader");
+            removeCustomSkinLoaderRoot(customSkinLoader);
+            Path target = root.resolve("outside-target");
+            Files.createDirectories(target);
+            try {
+                Files.createSymbolicLink(customSkinLoader, target);
+            } catch (UnsupportedOperationException | java.io.IOException | SecurityException unavailable) {
+                Assumptions.abort("Symbolic-link creation is unavailable: " + unavailable.getMessage());
+            }
+
+            monitor.handleChangedPath(
+                    customSkinLoader,
+                    System.nanoTime(),
+                    StandardWatchEventKinds.ENTRY_MODIFY
+            );
+            assertFalse(monitor.loginState().clean());
+            assertTrue(monitor.loginState().message().contains("CustomSkinLoader"));
+        }
+    }
+
+    @Test
     void loadedBootstrapRequiresAFileBearingCoreBaseline() throws Exception {
         Path missing = temporary.resolve("missing");
         Files.createDirectories(missing);
@@ -132,6 +257,53 @@ class CustomSkinLoaderCacheIntegrityTest {
                 GeneratedTreePins.reviewed(),
                 true
         );
+    }
+
+    private static ClientIntegrityMonitor initializedRunningMonitor(Path root) throws Exception {
+        TestPackFixture fixture = new TestPackFixture(root);
+        fixture.write("CustomSkinLoader/Core/core.jar", "AAAA");
+        writeTinyDynamicCache(root);
+        StrictManifest manifest = fixture.writeManifest();
+        fixture.writeAttestation(manifest, NOW);
+
+        FabricCacheVerifier cacheVerifier = new FabricCacheVerifier(root, true);
+        FabricCacheVerifier.CacheRoot dynamic = cacheVerifier.captureRequiredNonEmptyRoot(
+                ClientIntegrityMonitor.DYNAMIC_RESOURCE_CACHE_ROOT
+        );
+        String dynamicDigest = GeneratedTreePins.reviewed()
+                .validateDynamicResourceCache(dynamic)
+                .actualSha256();
+        GeneratedTreePins pins = GeneratedTreePins.withExpectedDigests(
+                GeneratedTreePins.EUPHORIA_TREE_SHA256,
+                dynamicDigest
+        );
+        ClientIntegrityMonitor monitor = ClientIntegrityMonitor.initialize(
+                root,
+                Clock.fixed(NOW, ZoneOffset.UTC),
+                pins,
+                true
+        );
+        monitor.clientStarted();
+        monitor.advanceStartupFinalization(true);
+        assertTrue(monitor.loginState().clean(), monitor.loginState().message());
+        return monitor;
+    }
+
+    private static void writeTinyDynamicCache(Path root) throws Exception {
+        Path generated = root.resolve("dynamic-resource-pack-cache/assets/generated.json");
+        Files.createDirectories(generated.getParent());
+        Files.writeString(generated, "trusted generated payload");
+        Files.writeString(root.resolve("dynamic-resource-pack-cache/hash.txt"), "variable fingerprint");
+    }
+
+    private static void removeCustomSkinLoaderRoot(Path customSkinLoader) throws Exception {
+        Files.delete(customSkinLoader.resolve("Plugins/nbidal18-closed.marker"));
+        Files.delete(customSkinLoader.resolve("Plugins"));
+        Files.delete(customSkinLoader.resolve("ExtraList/nbidal18-closed.marker"));
+        Files.delete(customSkinLoader.resolve("ExtraList"));
+        Files.delete(customSkinLoader.resolve("Core/core.jar"));
+        Files.delete(customSkinLoader.resolve("Core"));
+        Files.delete(customSkinLoader);
     }
 
     private static void assertCacheEventIsDirty(ClientIntegrityMonitor monitor) {

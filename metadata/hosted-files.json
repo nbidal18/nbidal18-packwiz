@@ -6,7 +6,7 @@
       "reason": "Configurable MIT rebuild; the embedded NOTICE and LICENSE_BandagePlus-Xanthian retain the original Copyright (c) 2023 Xanthian MIT attribution for reused art assets and recipe data."
     },
     {
-      "path": "mods/nbidal18-pack-compat-1.1.2+1.21.1.jar",
+      "path": "mods/nbidal18-pack-compat-1.1.3+1.21.1.jar",
       "reason": "First-party clean-room MIT protocol-2 compatibility and runtime-integrity companion; complete reproducible source and tests are published under source/nbidal18-pack-compat, CustomSkinLoader executable/runtime roots are monitored without copying its code, and the JAR contains no Better Compatibility Checker or CustomSkinLoader classes or assets."
     },
     {

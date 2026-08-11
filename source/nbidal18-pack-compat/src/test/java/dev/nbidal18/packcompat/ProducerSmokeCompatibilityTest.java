@@ -23,7 +23,13 @@ class ProducerSmokeCompatibilityTest {
         List<String> closedRoots = List.of(
                 "moonlight-global-datapacks", "villagerpacks", "server-resource-packs");
         assumeTrue(strictKeys.contains("customskinloader"),
-                "generated site has not yet received the v3.2.0 CustomSkinLoader policy");
+                "generated site has not yet received the v3.2.1 CustomSkinLoader policy");
+        List<String> customSkinLoaderMarkers = List.of(
+                "customskinloader/plugins/nbidal18-closed.marker",
+                "customskinloader/extralist/nbidal18-closed.marker"
+        );
+        assumeTrue(customSkinLoaderMarkers.stream().allMatch(manifest.filesByKey()::containsKey),
+                "generated site has not yet received the v3.2.1 closed-directory markers");
         assertEquals(10, strictKeys.size());
         for (String closedRoot : closedRoots) {
             assertTrue(strictKeys.contains(closedRoot));
@@ -48,6 +54,9 @@ class ProducerSmokeCompatibilityTest {
         }
         assertFalse(runtimePrefixes.contains("customskinloader/plugins"));
         assertFalse(runtimePrefixes.contains("customskinloader/extralist"));
+        for (String marker : customSkinLoaderMarkers) {
+            assertTrue(manifest.filesByKey().containsKey(marker));
+        }
         assertTrue(manifest.filesByKey().size() > 400);
         assertFalse(manifest.seeds().isEmpty());
         assertEquals(1, manifest.regeneratePrefixes().size());

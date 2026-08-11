@@ -38,6 +38,8 @@ final class TestPackFixture {
         addManaged("datapacks/public.zip", "managed datapack");
         addManaged("config/general.toml", "managed launch config");
         addManaged("defaultconfigs/default.toml", "managed default config");
+        addManaged("CustomSkinLoader/Plugins/nbidal18-closed.marker", "managed empty-directory marker");
+        addManaged("CustomSkinLoader/ExtraList/nbidal18-closed.marker", "managed empty-directory marker");
         addManaged(".nbidal18/defaults/options.txt", OPTIONS_TEXT);
         addManaged(".nbidal18/defaults/iris.properties", IRIS_TEXT);
 

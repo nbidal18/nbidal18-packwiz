@@ -82,15 +82,23 @@ hash = "57677d1d947bf3b787848b6330c2a8988477336fa4d9010a42caca638395adce"
 
 [[files]]
 file = ".nbidal18/defaults/servers.dat"
-hash = "eb2e9dee7ca3cc9dccec455a0d71c8acc0fe6ff292d5b83d06a5e7d243342047"
+hash = "5cd2a34eea9327e51d05033234651de90f17767d9e85f9e77a042ff3a0424854"
 
 [[files]]
 file = ".nbidal18/strict-manifest.tsv"
-hash = "67efd5e94c6607ff123536eef6bdb0683c33948ba7c5a66710d97ead900eed52"
+hash = "338a0a354c1eeaa94ac43bb9b1291facc7fe9579f93dc9fb4805e70050e06d6a"
+
+[[files]]
+file = "CustomSkinLoader/ExtraList/nbidal18-closed.marker"
+hash = "efda05f36c773d2bc3e0f299646406655eee8b857fbf7260b387247773ba786c"
+
+[[files]]
+file = "CustomSkinLoader/Plugins/nbidal18-closed.marker"
+hash = "9a5dc08daf4760d4cfc2214b4af0525a07ff6de90d24bdf475f8ab91b706cbfa"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "3cffd72454c2fe9ccb6dc7fb0f4183834393e3c57055295994734a66d1aed96a"
+hash = "7f75e95806e68f9fe9bb7238da941bf54de08335a13e02a5c6730bb4005ce52b"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -158,7 +166,7 @@ hash = "5517ad3e06aa1bfeec0a41174677a9ee094b02ee8b58194e39584cc1191cb98b"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "c1a33d5ccf8c3625036842307808c7810be5b971c7db2324ee6981781f85b1d2"
+hash = "dd1c166766120e0797a14c39d2cf42a663c0d917e7458ec7cbc0f64952735ffb"
 
 [[files]]
 file = "config/beautify.json"
@@ -1825,8 +1833,8 @@ file = "mods/nbidal18-jei-hidden-default-1.0.0+1.21.1.jar"
 hash = "5aeffa5d9e70178c6c54991e4f769159d6c40fb0ce3455d9acdbd4c3b5e69ab5"
 
 [[files]]
-file = "mods/nbidal18-pack-compat-1.1.2+1.21.1.jar"
-hash = "315b9660cb2ea836fbbed2038d64b28ccb214cee7b2075c9b13503b7d6ac0ffa"
+file = "mods/nbidal18-pack-compat-1.1.3+1.21.1.jar"
+hash = "b535fa891ff615404751685e344c05705676c653111b8b3990c3e0c6b60da9af"
 
 [[files]]
 file = "mods/nbidal18-playeremotes-fa-bridge-1.0.1+1.21.1.jar"

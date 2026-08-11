@@ -397,21 +397,47 @@ try {
         'CustomSkinLoader/CustomSkinLoader.log',
         'CustomSkinLoader/CustomSkinAPIPlus-ClientID'
     )) { [void] $forbiddenIndexedFiles.Add($forbidden) }
+    $allowedCustomSkinLoaderMarkers = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    [void] $allowedCustomSkinLoaderMarkers.Add('CustomSkinLoader/Plugins/nbidal18-closed.marker')
+    [void] $allowedCustomSkinLoaderMarkers.Add('CustomSkinLoader/ExtraList/nbidal18-closed.marker')
     $forbiddenIndexedPrefixes = @(
         'config/crash_assistant/',
         'config/jei/world/',
         'config/spark/tmp/',
-        'CustomSkinLoader/',
         'skin_overrides/',
         'cape_overrides/',
         'vinurl/'
     )
     foreach ($indexedSourcePath in $indexedSourcePaths) {
         if ($forbiddenIndexedFiles.Contains($indexedSourcePath) -or
+                ($indexedSourcePath.StartsWith('CustomSkinLoader/', [StringComparison]::OrdinalIgnoreCase) -and
+                    -not $allowedCustomSkinLoaderMarkers.Contains($indexedSourcePath)) -or
                 @($forbiddenIndexedPrefixes | Where-Object {
                     $indexedSourcePath.StartsWith($_, [StringComparison]::OrdinalIgnoreCase)
                 }).Count -gt 0) {
             throw "Forbidden player/private path is indexed: $indexedSourcePath"
+        }
+    }
+    $indexedCustomSkinLoaderPaths = @(
+        $indexedSourcePaths |
+            Where-Object { $_.StartsWith('CustomSkinLoader/', [StringComparison]::OrdinalIgnoreCase) } |
+            Sort-Object
+    )
+    $expectedCustomSkinLoaderPaths = @(
+        'CustomSkinLoader/ExtraList/nbidal18-closed.marker',
+        'CustomSkinLoader/Plugins/nbidal18-closed.marker'
+    )
+    if (($indexedCustomSkinLoaderPaths -join "`n") -cne ($expectedCustomSkinLoaderPaths -join "`n")) {
+        throw "The public CustomSkinLoader tree must contain exactly the two inert closed-directory markers; found: $($indexedCustomSkinLoaderPaths -join ', ')"
+    }
+    $strictManifestLines = @(
+        Get-Content -LiteralPath (Join-Path $siteRoot '.nbidal18\strict-manifest.tsv')
+    )
+    foreach ($markerPath in $expectedCustomSkinLoaderPaths) {
+        $markerHash = (Get-FileHash -LiteralPath (Join-Path $siteRoot $markerPath.Replace('/', '\')) -Algorithm SHA256).Hash.ToLowerInvariant()
+        $expectedManagedRecord = "managed`t$markerHash`t$markerPath"
+        if (@($strictManifestLines | Where-Object { $_ -ceq $expectedManagedRecord }).Count -ne 1) {
+            throw "The strict manifest must manage the exact closed-directory marker: $markerPath"
         }
     }
     if ($indexText -match 'file = "shaderpacks/[^"]+\.zip(?:\.txt)?"') {
@@ -494,7 +520,7 @@ try {
     # Build a localhost-only migration ZIP for isolated testing.
     $port = Get-FreeTcpPort
     $packUrl = "http://127.0.0.1:$port/pack.toml"
-    $testZip = Join-Path $temporaryRoot 'nbidal18-3.2.0-local-validation.zip'
+    $testZip = Join-Path $temporaryRoot 'nbidal18-3.2.1-local-validation.zip'
     & $builderPath -OutputPath $testZip -UpdateUrl $packUrl -AllowInsecureLocalhost
     if (-not (Test-Path -LiteralPath $testZip -PathType Leaf)) { throw 'Migration test ZIP was not created.' }
 
@@ -571,7 +597,7 @@ try {
     if ($preLaunchLines.Count -ne 1 -or $preLaunchLines[0].Contains('packwiz-installer-bootstrap.jar')) {
         throw 'Migration instance must have exactly one guarded pre-launch command, never the legacy direct-Packwiz command.'
     }
-    foreach ($requiredText in @('name=nbidal18-client', 'ExportName=nbidal18-client', 'ExportVersion=3.2.0', 'OverrideCommands=true', "PreLaunchCommand=`"`$INST_JAVA`" -jar nbidal18-launch-guard.jar $packUrl")) {
+    foreach ($requiredText in @('name=nbidal18-client', 'ExportName=nbidal18-client', 'ExportVersion=3.2.1', 'OverrideCommands=true', "PreLaunchCommand=`"`$INST_JAVA`" -jar nbidal18-launch-guard.jar $packUrl")) {
         if (-not $instanceCfg.Contains($requiredText)) { throw "instance.cfg assertion failed: $requiredText" }
     }
     $mmc = Get-Content -LiteralPath (Join-Path $instanceRoot 'mmc-pack.json') -Raw | ConvertFrom-Json
@@ -887,7 +913,7 @@ try {
     $siteFiles = @(Get-ChildItem -LiteralPath $siteRoot -Recurse -File -Force)
     $completedAt = Get-Date
     $reportText = @"
-# nbidal18 v3.2.0 Packwiz validation report
+# nbidal18 v3.2.1 Packwiz validation report
 
 - Result: PASS
 - Started: $($startedAt.ToString('yyyy-MM-dd HH:mm:ss zzz'))
@@ -915,7 +941,7 @@ Validated:
 
 External release gates are outside this isolated behavior report. `Build-Release.ps1` separately requires the anonymous HTTPS `pack.toml`, `index.toml`, strict manifest, and every reviewed internal-hosted payload to match before it produces the final ZIP. Reaching the Minecraft menu, confirming that a failed pre-launch command blocks Minecraft, and production multiplayer compatibility remain manual checks.
 
-Historical 3.1.0 -> 3.1.1 transition: the old direct-Packwiz Prism instance could not acquire the nbidal18 launch-guard JAR through Packwiz, so that cutover required a one-time import of the 3.1.1 six-file migration ZIP. An existing guarded 3.1.1 instance receives 3.2.0 in place on its next successful launch; it does not require another import.
+Historical 3.1.0 -> 3.1.1 transition: the old direct-Packwiz Prism instance could not acquire the nbidal18 launch-guard JAR through Packwiz, so that cutover required a one-time import of the 3.1.1 six-file migration ZIP. Existing guarded instances receive 3.2.1 in place on their next successful launch; they do not require another import.
 
 Known limitation: Packwiz is not transaction-wide atomic. In the deliberate failure test, an available managed config was written before a later payload returned 404, although player-controlled/runtime files and the previous Packwiz state remained intact. The guard removed the stale attestation immediately, and the next successful pre-launch run repaired and attested the managed release. Final Prism testing must confirm a nonzero pre-launch result blocks Minecraft from starting.
 "@
@@ -926,7 +952,7 @@ catch {
     $failure = $_
     $failedAt = Get-Date
     $failureText = @"
-# nbidal18 v3.2.0 Packwiz validation report
+# nbidal18 v3.2.1 Packwiz validation report
 
 - Result: FAIL
 - Started: $($startedAt.ToString('yyyy-MM-dd HH:mm:ss zzz'))
