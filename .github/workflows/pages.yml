@@ -29,6 +29,10 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: site
+          # The strict client manifest and seed templates intentionally live
+          # under site/.nbidal18. upload-pages-artifact excludes dot paths by
+          # default, so the deployed updater would otherwise fail closed.
+          include-hidden-files: true
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
