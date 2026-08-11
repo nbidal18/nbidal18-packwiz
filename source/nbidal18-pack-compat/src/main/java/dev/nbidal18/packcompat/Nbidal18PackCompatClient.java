@@ -19,6 +19,7 @@ public final class Nbidal18PackCompatClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        SkinOverridesTitleButton.register();
         ClientIntegrityMonitor integrityMonitor = ClientIntegrityMonitor.initialize(
                 FabricLoader.getInstance().getGameDir(),
                 FabricLoader.getInstance().isModLoaded(CUSTOM_SKIN_LOADER_BOOTSTRAP_MOD_ID)

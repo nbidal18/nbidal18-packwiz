@@ -92,7 +92,7 @@ function Copy-FilteredTree(
 }
 
 function Invoke-ModrinthBatch([string[]] $Hashes) {
-    $headers = @{ 'User-Agent' = 'nbidal18-packwiz-builder/3.2.1 (maintainer tooling)' }
+    $headers = @{ 'User-Agent' = 'nbidal18-packwiz-builder/3.2.2 (maintainer tooling)' }
     $body = @{ hashes = @($Hashes); algorithm = 'sha1' } | ConvertTo-Json -Compress
     $delay = 1
     for ($attempt = 1; $attempt -le 5; $attempt++) {
@@ -717,7 +717,7 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
     Write-Utf8NoBom (Join-Path $stagePath 'index.toml') ('hash-format = "sha256"' + "`n")
     Write-Utf8NoBom (Join-Path $stagePath 'pack.toml') @'
 name = "nbidal18"
-version = "3.2.1"
+version = "3.2.2"
 description = "Fabric 1.21.1 adventure modpack with incremental Prism updates"
 pack-format = "packwiz:1.1.0"
 

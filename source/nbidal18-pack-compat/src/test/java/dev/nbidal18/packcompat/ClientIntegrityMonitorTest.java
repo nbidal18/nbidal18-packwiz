@@ -175,6 +175,38 @@ class ClientIntegrityMonitorTest {
     }
 
     @Test
+    void delayedInitialResourceLoadCannotStartPeriodicScansBeforeGeneratedTreesArePinned() throws Exception {
+        Path referenceRoot = temporary.resolve("delayed-load-reference");
+        GeneratedTreePins pins = tinyGeneratedPins(referenceRoot, true);
+
+        Path liveRoot = temporary.resolve("delayed-load-live");
+        TestPackFixture fixture = new TestPackFixture(liveRoot);
+        StrictManifest manifest = fixture.writeManifest();
+        Instant now = Instant.parse("2026-08-11T12:00:00Z");
+        fixture.writeAttestation(manifest, now);
+
+        try (ClientIntegrityMonitor monitor = ClientIntegrityMonitor.initialize(
+                liveRoot,
+                Clock.fixed(now, ZoneOffset.UTC),
+                pins
+        )) {
+            monitor.clientStarted();
+            writeTinyDynamicCache(liveRoot, "trusted generated payload");
+            writeTinyEuphoria(liveRoot, "trusted generated shader");
+
+            // Model an initial reload that outlives every constructor-armed interval without
+            // sleeping in the test. The old raw-state gate started verifyIncremental here with
+            // an empty regeneratedTrees map and produced "existed before launch".
+            assertFalse(monitor.queueDuePeriodicScans(Long.MAX_VALUE / 2));
+            assertFalse(monitor.loginState().clean());
+            assertTrue(monitor.loginState().message().contains("initial resource loading"));
+
+            monitor.advanceStartupFinalization(true);
+            assertTrue(monitor.loginState().clean());
+        }
+    }
+
+    @Test
     void initializationAllowsPinnedEuphoriaCreatedByEarlierClientInitializer() throws Exception {
         Path referenceRoot = temporary.resolve("early-euphoria-reference");
         GeneratedTreePins pins = tinyGeneratedPins(referenceRoot, true);

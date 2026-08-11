@@ -64,6 +64,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
     private DynamicCachePhase dynamicCachePhase = DynamicCachePhase.WAITING;
     private volatile boolean clientLifecycleStarted;
     private volatile boolean generatedRootsFinalizationStarted;
+    private volatile boolean startupFinalizationComplete;
     private volatile boolean closed;
     private long nextMetadataScan;
     private long nextSettingsScan;
@@ -234,10 +235,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
                 // A later full scan remains the fail-closed source of truth.
             }
         }
-        long now = System.nanoTime();
-        nextMetadataScan = now + METADATA_SCAN_NANOS;
-        nextSettingsScan = now + SETTINGS_SCAN_NANOS;
-        nextFullScan = now + FULL_SCAN_NANOS;
+        resetPeriodicScanDeadlines(System.nanoTime());
     }
 
     LoginIntegrityState loginState() {
@@ -278,6 +276,13 @@ final class ClientIntegrityMonitor implements AutoCloseable {
                 );
             }
         }
+        if (!startupFinalizationComplete) {
+            return new LoginIntegrityState(
+                    false,
+                    current.manifestSha256(),
+                    "generated-cache verification is still completing the startup boundary audit"
+            );
+        }
         return current;
     }
 
@@ -296,25 +301,34 @@ final class ClientIntegrityMonitor implements AutoCloseable {
         long now = System.nanoTime();
         pollWatchEvents(now);
         advanceStartupFinalization(client.isGameLoadFinished());
-
-        if (loginState.clean()) {
-            if (now >= nextMetadataScan) {
-                nextMetadataScan = now + METADATA_SCAN_NANOS;
-                metadataScanRequested.set(true);
-                startWorker();
-            }
-            if (now >= nextSettingsScan) {
-                nextSettingsScan = now + SETTINGS_SCAN_NANOS;
-                settingsScanRequested.set(true);
-                startWorker();
-            }
-            if (now >= nextFullScan) {
-                nextFullScan = now + FULL_SCAN_NANOS;
-                fullScanRequested.set(true);
-                startWorker();
-            }
-        }
+        queueDuePeriodicScans(now);
         disconnectIfDirty(client);
+    }
+
+    boolean queueDuePeriodicScans(long now) {
+        if (!monitoringReady()) {
+            return false;
+        }
+        boolean queued = false;
+        if (now >= nextMetadataScan) {
+            nextMetadataScan = now + METADATA_SCAN_NANOS;
+            metadataScanRequested.set(true);
+            queued = true;
+        }
+        if (now >= nextSettingsScan) {
+            nextSettingsScan = now + SETTINGS_SCAN_NANOS;
+            settingsScanRequested.set(true);
+            queued = true;
+        }
+        if (now >= nextFullScan) {
+            nextFullScan = now + FULL_SCAN_NANOS;
+            fullScanRequested.set(true);
+            queued = true;
+        }
+        if (queued) {
+            startWorker();
+        }
+        return queued;
     }
 
     void advanceStartupFinalization(boolean initialResourceLoadingComplete) {
@@ -334,6 +348,10 @@ final class ClientIntegrityMonitor implements AutoCloseable {
         if (!loginState.clean()) {
             return;
         }
+        // Every pre-boundary request is subsumed by finalizeGeneratedRoots(), which performs
+        // full managed/cache/closed-root verification plus a settings check. Requests observed
+        // after the boundary is raised are drained separately before clean can be exposed.
+        clearPendingWork();
         generatedRootsFinalizationStarted = true;
         LOGGER.info("nbidal18 integrity is finalizing generated content after initial resource loading");
         finalizeGeneratedRoots();
@@ -341,6 +359,19 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             // Consume anything queued while synchronous capture/hash verification was running
             // before a protocol query can observe a clean, locked state.
             pollWatchEvents(System.nanoTime());
+        }
+        if (loginState.clean()) {
+            // A watcher event observed by the post-capture poll may require a final settings or
+            // managed-content audit. Drain it synchronously while protocol responses still see
+            // pending, then arm periodic workers from the completed, pinned startup boundary.
+            drainStartupBoundaryWork();
+        }
+        if (loginState.clean()) {
+            resetPeriodicScanDeadlines(System.nanoTime());
+            startupFinalizationComplete = true;
+            if (hasPendingWork()) {
+                startWorker();
+            }
         }
     }
 
@@ -396,7 +427,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
                 handleWatchOverflow(watchedDirectory);
             }
         }
-        if (fullScanRequested.get() || settingsScanRequested.get()) {
+        if (monitoringReady() && (fullScanRequested.get() || settingsScanRequested.get())) {
             startWorker();
         }
     }
@@ -534,6 +565,19 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             if (!dynamicVerified.clean()) {
                 throw new IntegrityException(dynamicVerified.message());
             }
+            ClosedEmptyRootVerifier.VerificationResult closedRoot = closedEmptyRootVerifier.verify();
+            if (!closedRoot.clean()) {
+                throw new IntegrityException(closedRoot.message());
+            }
+            FabricCacheVerifier.VerificationResult generatedCodeCaches =
+                    fabricCacheVerifier.verifyFull(fabricCacheBaseline);
+            if (!generatedCodeCaches.clean()) {
+                throw new IntegrityException(generatedCodeCaches.message());
+            }
+            RuntimeSettingsVerifier.SettingsResult settings = settingsVerifier.verify(manifest);
+            if (!settings.clean()) {
+                throw new IntegrityException(settings.message());
+            }
 
             regeneratedTrees = Collections.unmodifiableMap(new LinkedHashMap<>(capturedRegeneration));
             fingerprints = managed.fingerprints();
@@ -555,7 +599,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
     }
 
     private void startWorker() {
-        if (closed || !loginState.clean() || verifier == null) {
+        if (closed || !monitoringReady() || verifier == null) {
             return;
         }
         if (workerRunning.compareAndSet(false, true)) {
@@ -565,7 +609,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
 
     private void drainWork() {
         try {
-            while (!closed && loginState.clean()) {
+            while (!closed && monitoringReady()) {
                 boolean full = fullScanRequested.getAndSet(false);
                 boolean metadata = metadataScanRequested.getAndSet(false);
                 boolean settings = settingsScanRequested.getAndSet(false);
@@ -583,7 +627,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             }
         } finally {
             workerRunning.set(false);
-            if (!closed && loginState.clean() && hasPendingWork()) {
+            if (!closed && monitoringReady() && hasPendingWork()) {
                 startWorker();
             }
         }
@@ -673,6 +717,41 @@ final class ClientIntegrityMonitor implements AutoCloseable {
 
     private boolean hasPendingWork() {
         return fullScanRequested.get() || metadataScanRequested.get() || settingsScanRequested.get();
+    }
+
+    private void clearPendingWork() {
+        fullScanRequested.set(false);
+        metadataScanRequested.set(false);
+        settingsScanRequested.set(false);
+    }
+
+    private void drainStartupBoundaryWork() {
+        while (!closed && loginState.clean()) {
+            boolean full = fullScanRequested.getAndSet(false);
+            boolean metadata = metadataScanRequested.getAndSet(false);
+            boolean settings = settingsScanRequested.getAndSet(false);
+            if (!full && !metadata && !settings) {
+                return;
+            }
+            if (full) {
+                runFullScan();
+            } else if (metadata) {
+                runMetadataScan();
+            }
+            if (settings && loginState.clean()) {
+                runSettingsScan();
+            }
+        }
+    }
+
+    private boolean monitoringReady() {
+        return startupFinalizationComplete && loginState().clean();
+    }
+
+    private void resetPeriodicScanDeadlines(long now) {
+        nextMetadataScan = now + METADATA_SCAN_NANOS;
+        nextSettingsScan = now + SETTINGS_SCAN_NANOS;
+        nextFullScan = now + FULL_SCAN_NANOS;
     }
 
     private void markDirty(String reason) {

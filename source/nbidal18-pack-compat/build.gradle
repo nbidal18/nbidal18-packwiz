@@ -28,6 +28,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     modCompileOnly "maven.modrinth:better-compatibility-checker:${project.bcc_version}"
+    modCompileOnly "maven.modrinth:skin-overrides:${project.skin_overrides_version}"
 
     testImplementation platform('org.junit:junit-bom:5.11.4')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -44,6 +45,7 @@ processResources {
     inputs.property 'fabric_loader_version', project.fabric_loader_version
     inputs.property 'fabric_api_version', project.fabric_api_version
     inputs.property 'bcc_version', project.bcc_version
+    inputs.property 'skin_overrides_version', project.skin_overrides_version
 
     filesMatching('fabric.mod.json') {
         expand(
@@ -51,7 +53,8 @@ processResources {
             minecraft_version: project.minecraft_version,
             fabric_loader_version: project.fabric_loader_version,
             fabric_api_version: project.fabric_api_version,
-            bcc_version: project.bcc_version
+            bcc_version: project.bcc_version,
+            skin_overrides_version: project.skin_overrides_version
         )
     }
 }
