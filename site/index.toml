@@ -82,15 +82,15 @@ hash = "57677d1d947bf3b787848b6330c2a8988477336fa4d9010a42caca638395adce"
 
 [[files]]
 file = ".nbidal18/defaults/servers.dat"
-hash = "f4d2f7294da7d14fdce1a7a9989883f1bcfad1124ea47e8b488708a061455876"
+hash = "eb2e9dee7ca3cc9dccec455a0d71c8acc0fe6ff292d5b83d06a5e7d243342047"
 
 [[files]]
 file = ".nbidal18/strict-manifest.tsv"
-hash = "10bd18e8c2499dd6daabc7ba9d6de26d75a3540e8cb7f639f564c5bdcbfea4a3"
+hash = "67efd5e94c6607ff123536eef6bdb0683c33948ba7c5a66710d97ead900eed52"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "4c9307799d07c512bc24e8fa107a7be0e248d5c311d42abae425d828ebfa8bbc"
+hash = "3cffd72454c2fe9ccb6dc7fb0f4183834393e3c57055295994734a66d1aed96a"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -158,7 +158,7 @@ hash = "5517ad3e06aa1bfeec0a41174677a9ee094b02ee8b58194e39584cc1191cb98b"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "896febf2604bb8d2f4106e0aa49e122a47ef9be3587c31fca00501a3e04bc44c"
+hash = "c1a33d5ccf8c3625036842307808c7810be5b971c7db2324ee6981781f85b1d2"
 
 [[files]]
 file = "config/beautify.json"
@@ -958,7 +958,7 @@ hash = "50057a63c98167f7b05727906f17ae6fb182a5eb40bcdb3314d1a8a325c4eec8"
 
 [[files]]
 file = "credits.txt"
-hash = "ce4ca3c61805ee2383f50927ba025d724220611f30ee5eedbf6301c98ee202fc"
+hash = "1a1ce1b5a61067b35acda1836984b56f9b7c5d270723bfed811baed99c7cbc96"
 
 [[files]]
 file = "datapacks/Structure Tags Still_Life-1.0-beta1.zip"
@@ -1366,6 +1366,11 @@ metafile = true
 [[files]]
 file = "mods/ctov.pw.toml"
 hash = "97f3b320349ba56ee6efc1fa8a788d89f8b5089e501d280737d51f782aa2dc22"
+metafile = true
+
+[[files]]
+file = "mods/customskinloader-bootstrap.pw.toml"
+hash = "fca495f5e36636f7b6e408b8bc11b82a51e7c5c1bc75b1c6e95c71585fcbb436"
 metafile = true
 
 [[files]]
@@ -1820,8 +1825,8 @@ file = "mods/nbidal18-jei-hidden-default-1.0.0+1.21.1.jar"
 hash = "5aeffa5d9e70178c6c54991e4f769159d6c40fb0ce3455d9acdbd4c3b5e69ab5"
 
 [[files]]
-file = "mods/nbidal18-pack-compat-1.1.1+1.21.1.jar"
-hash = "64eba34c1dd2a40a7dfdd02b4c6f10867679cb9b681a932d9720958705e239e5"
+file = "mods/nbidal18-pack-compat-1.1.2+1.21.1.jar"
+hash = "315b9660cb2ea836fbbed2038d64b28ccb214cee7b2075c9b13503b7d6ac0ffa"
 
 [[files]]
 file = "mods/nbidal18-playeremotes-fa-bridge-1.0.1+1.21.1.jar"
@@ -1944,6 +1949,11 @@ metafile = true
 [[files]]
 file = "mods/shifting-wares.pw.toml"
 hash = "72f5d35c8547dd272689ffaff44eed381901334451bb682918c428851f7f9195"
+metafile = true
+
+[[files]]
+file = "mods/skin-overrides.pw.toml"
+hash = "ae4795bab4d1d23dca3ab55595ead9aa0f3b0d6140acb9d130bfaaa1b4ccae19"
 metafile = true
 
 [[files]]

@@ -71,17 +71,35 @@ final class ClientIntegrityMonitor implements AutoCloseable {
     private Connection lastDisconnectedConnection;
 
     static ClientIntegrityMonitor initialize(Path gameDirectory) {
-        return initialize(gameDirectory, Clock.systemUTC(), GeneratedTreePins.reviewed());
+        return initialize(gameDirectory, Clock.systemUTC(), GeneratedTreePins.reviewed(), false);
+    }
+
+    static ClientIntegrityMonitor initialize(Path gameDirectory, boolean customSkinLoaderPresent) {
+        return initialize(
+                gameDirectory,
+                Clock.systemUTC(),
+                GeneratedTreePins.reviewed(),
+                customSkinLoaderPresent
+        );
     }
 
     static ClientIntegrityMonitor initialize(Path gameDirectory, Clock clock) {
-        return initialize(gameDirectory, clock, GeneratedTreePins.reviewed());
+        return initialize(gameDirectory, clock, GeneratedTreePins.reviewed(), false);
     }
 
     static ClientIntegrityMonitor initialize(
             Path gameDirectory,
             Clock clock,
             GeneratedTreePins generatedTreePins
+    ) {
+        return initialize(gameDirectory, clock, generatedTreePins, false);
+    }
+
+    static ClientIntegrityMonitor initialize(
+            Path gameDirectory,
+            Clock clock,
+            GeneratedTreePins generatedTreePins,
+            boolean customSkinLoaderPresent
     ) {
         Path normalized;
         try {
@@ -108,7 +126,10 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             if (!settings.clean()) {
                 throw new IntegrityException(settings.message());
             }
-            FabricCacheVerifier fabricCacheVerifier = new FabricCacheVerifier(normalized);
+            FabricCacheVerifier fabricCacheVerifier = new FabricCacheVerifier(
+                    normalized,
+                    customSkinLoaderPresent
+            );
             FabricCacheVerifier.CacheBaseline fabricCacheBaseline = fabricCacheVerifier.capture();
             ClosedEmptyRootVerifier closedEmptyRootVerifier = new ClosedEmptyRootVerifier(normalized);
             ClosedEmptyRootVerifier.VerificationResult closedRoot = closedEmptyRootVerifier.verify();
@@ -415,7 +436,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
             return;
         }
         if (fabricCacheVerifier.contains(relative)) {
-            markDirty("Fabric generated cache changed after its trusted baseline was captured: "
+            markDirty("Protected generated executable cache changed after its trusted baseline was captured: "
                     + StrictManifest.portable(relative));
             return;
         }
@@ -557,7 +578,7 @@ final class ClientIntegrityMonitor implements AutoCloseable {
         }
     }
 
-    private void runFullScan() {
+    void runFullScan() {
         ClosedEmptyRootVerifier.VerificationResult closedRoot = closedEmptyRootVerifier.verify();
         if (!closedRoot.clean()) {
             markDirty(closedRoot.message());

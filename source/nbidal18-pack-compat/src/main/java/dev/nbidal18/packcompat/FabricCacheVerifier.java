@@ -14,23 +14,35 @@ import java.util.List;
 import java.util.Map;
 
 final class FabricCacheVerifier {
+    static final Path CUSTOM_SKIN_LOADER_CORE_ROOT = Path.of("CustomSkinLoader", "Core");
     static final List<Path> RELATIVE_ROOTS = List.of(
             Path.of(".fabric", "processedMods"),
-            Path.of(".fabric", "remappedJars")
+            Path.of(".fabric", "remappedJars"),
+            CUSTOM_SKIN_LOADER_CORE_ROOT
     );
 
     private static final int MAXIMUM_NODES_PER_ROOT = 100_000;
 
     private final Path gameDirectory;
+    private final boolean customSkinLoaderPresent;
 
     FabricCacheVerifier(Path gameDirectory) throws IntegrityException {
+        this(gameDirectory, false);
+    }
+
+    FabricCacheVerifier(Path gameDirectory, boolean customSkinLoaderPresent) throws IntegrityException {
         this.gameDirectory = StrictManifest.normalizedRoot(gameDirectory);
+        this.customSkinLoaderPresent = customSkinLoaderPresent;
     }
 
     CacheBaseline capture() throws IOException, IntegrityException {
         Map<String, CacheRoot> roots = new LinkedHashMap<>();
         for (Path relativeRoot : RELATIVE_ROOTS) {
             CacheRoot root = inspectRoot(relativeRoot, true);
+            if (customSkinLoaderPresent
+                    && StrictManifest.key(relativeRoot).equals(StrictManifest.key(CUSTOM_SKIN_LOADER_CORE_ROOT))) {
+                requireCustomSkinLoaderCore(root);
+            }
             roots.put(StrictManifest.key(relativeRoot), root);
         }
         return new CacheBaseline(roots);
@@ -74,13 +86,23 @@ final class FabricCacheVerifier {
         return false;
     }
 
+    private static void requireCustomSkinLoaderCore(CacheRoot root) throws IntegrityException {
+        String display = StrictManifest.portable(CUSTOM_SKIN_LOADER_CORE_ROOT);
+        if (!root.present()) {
+            throw new IntegrityException("CustomSkinLoader executable cache did not appear: " + display);
+        }
+        if (root.filesByKey().isEmpty()) {
+            throw new IntegrityException("CustomSkinLoader executable cache is still empty: " + display);
+        }
+    }
+
     private VerificationResult verify(CacheBaseline baseline, boolean hashFiles) {
         try {
             for (Path relativeRoot : RELATIVE_ROOTS) {
                 String rootKey = StrictManifest.key(relativeRoot);
                 CacheRoot expected = baseline.rootsByKey().get(rootKey);
                 if (expected == null) {
-                    return VerificationResult.failure("Fabric cache baseline is incomplete");
+                    return VerificationResult.failure("Generated executable-cache baseline is incomplete");
                 }
                 CacheRoot actual = inspectRoot(relativeRoot, hashFiles);
                 String difference = compare(expected, actual, hashFiles);
@@ -92,7 +114,9 @@ final class FabricCacheVerifier {
         } catch (IOException | IntegrityException failure) {
             String message = failure.getMessage();
             return VerificationResult.failure(
-                    message == null || message.isBlank() ? "Fabric generated-cache verification failed" : message
+                    message == null || message.isBlank()
+                            ? "Generated executable-cache verification failed"
+                            : message
             );
         }
     }
@@ -121,7 +145,7 @@ final class FabricCacheVerifier {
         }
         BasicFileAttributes rootAttributes = readAttributes(absoluteRoot);
         if (!rootAttributes.isDirectory() || IntegrityFiles.isLinkOrReparse(absoluteRoot, rootAttributes)) {
-            throw new IntegrityException("Fabric generated-cache root is not a plain directory: "
+            throw new IntegrityException("Generated executable-cache root is not a plain directory: "
                     + StrictManifest.portable(relativeRoot));
         }
 
@@ -134,12 +158,12 @@ final class FabricCacheVerifier {
                     throws IOException {
                 countNode(nodeCount, relativeRoot);
                 if (IntegrityFiles.isLinkOrReparse(directory, attributes)) {
-                    throw new CacheVerificationFailure("Unsafe directory in Fabric generated cache: "
+                    throw new CacheVerificationFailure("Unsafe directory in generated executable cache: "
                             + display(directory));
                 }
                 Path relative = relative(directory);
                 if (directories.putIfAbsent(StrictManifest.key(relative), relative) != null) {
-                    throw new CacheVerificationFailure("Case-conflicting directory in Fabric generated cache: "
+                    throw new CacheVerificationFailure("Case-conflicting directory in generated executable cache: "
                             + StrictManifest.portable(relative));
                 }
                 return FileVisitResult.CONTINUE;
@@ -149,7 +173,7 @@ final class FabricCacheVerifier {
             public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
                 countNode(nodeCount, relativeRoot);
                 if (!attributes.isRegularFile() || IntegrityFiles.isLinkOrReparse(file, attributes)) {
-                    throw new CacheVerificationFailure("Unsafe node in Fabric generated cache: " + display(file));
+                    throw new CacheVerificationFailure("Unsafe node in generated executable cache: " + display(file));
                 }
                 Path relative = relative(file);
                 String key = StrictManifest.key(relative);
@@ -157,7 +181,7 @@ final class FabricCacheVerifier {
                 String sha256 = hashFiles ? IntegrityFiles.sha256(file) : "";
                 BasicFileAttributes after = readAttributes(file);
                 if (!stable(before, after)) {
-                    throw new CacheVerificationFailure("Fabric generated-cache file changed during verification: "
+                    throw new CacheVerificationFailure("Generated executable-cache file changed during verification: "
                             + StrictManifest.portable(relative));
                 }
                 if (files.putIfAbsent(key, new CachedFile(
@@ -167,7 +191,7 @@ final class FabricCacheVerifier {
                         fileKey(after),
                         sha256
                 )) != null) {
-                    throw new CacheVerificationFailure("Case-conflicting file in Fabric generated cache: "
+                    throw new CacheVerificationFailure("Case-conflicting file in generated executable cache: "
                             + StrictManifest.portable(relative));
                 }
                 return FileVisitResult.CONTINUE;
@@ -175,7 +199,7 @@ final class FabricCacheVerifier {
 
             @Override
             public FileVisitResult visitFileFailed(Path file, IOException failure) throws IOException {
-                throw new CacheVerificationFailure("Could not inspect Fabric generated-cache path: "
+                throw new CacheVerificationFailure("Could not inspect generated executable-cache path: "
                         + display(file), failure);
             }
         });
@@ -185,16 +209,16 @@ final class FabricCacheVerifier {
     private static String compare(CacheRoot expected, CacheRoot actual, boolean compareHashes) {
         String root = StrictManifest.portable(expected.relativeRoot());
         if (expected.present() != actual.present()) {
-            return "Fabric generated-cache root presence changed: " + root;
+            return "Generated executable-cache root presence changed: " + root;
         }
         if (!expected.present()) {
             return null;
         }
         if (!expected.directoriesByKey().keySet().equals(actual.directoriesByKey().keySet())) {
-            return "Fabric generated-cache directory set changed: " + root;
+            return "Generated executable-cache directory set changed: " + root;
         }
         if (!expected.filesByKey().keySet().equals(actual.filesByKey().keySet())) {
-            return "Fabric generated-cache file set changed: " + root;
+            return "Generated executable-cache file set changed: " + root;
         }
         for (Map.Entry<String, CachedFile> entry : expected.filesByKey().entrySet()) {
             CachedFile expectedFile = entry.getValue();
@@ -202,11 +226,11 @@ final class FabricCacheVerifier {
             if (expectedFile.size() != actualFile.size()
                     || !expectedFile.lastModified().equals(actualFile.lastModified())
                     || !expectedFile.fileKey().equals(actualFile.fileKey())) {
-                return "Fabric generated-cache file metadata changed: "
+                return "Generated executable-cache file metadata changed: "
                         + StrictManifest.portable(expectedFile.relativePath());
             }
             if (compareHashes && !expectedFile.sha256().equals(actualFile.sha256())) {
-                return "Fabric generated-cache file hash changed: "
+                return "Generated executable-cache file hash changed: "
                         + StrictManifest.portable(expectedFile.relativePath());
             }
         }
@@ -222,7 +246,7 @@ final class FabricCacheVerifier {
             }
             BasicFileAttributes attributes = readAttributes(cursor);
             if (IntegrityFiles.isLinkOrReparse(cursor, attributes)) {
-                throw new IntegrityException("Unsafe link or reparse point in Fabric generated-cache path: "
+                throw new IntegrityException("Unsafe link or reparse point in generated executable-cache path: "
                         + display(cursor));
             }
         }
@@ -231,7 +255,7 @@ final class FabricCacheVerifier {
     private Path resolve(Path relative) throws IntegrityException {
         Path result = gameDirectory.resolve(relative).normalize();
         if (!result.startsWith(gameDirectory)) {
-            throw new IntegrityException("Fabric generated-cache path escaped the game directory");
+            throw new IntegrityException("Generated executable-cache path escaped the game directory");
         }
         return result;
     }
@@ -239,7 +263,7 @@ final class FabricCacheVerifier {
     private Path relative(Path absolute) throws CacheVerificationFailure {
         Path normalized = absolute.toAbsolutePath().normalize();
         if (!normalized.startsWith(gameDirectory)) {
-            throw new CacheVerificationFailure("Fabric generated-cache path escaped the game directory");
+            throw new CacheVerificationFailure("Generated executable-cache path escaped the game directory");
         }
         return gameDirectory.relativize(normalized);
     }
@@ -255,7 +279,7 @@ final class FabricCacheVerifier {
     private static void countNode(int[] count, Path root) throws CacheVerificationFailure {
         count[0]++;
         if (count[0] > MAXIMUM_NODES_PER_ROOT) {
-            throw new CacheVerificationFailure("Fabric generated cache contains too many nodes: "
+            throw new CacheVerificationFailure("Generated executable cache contains too many nodes: "
                     + StrictManifest.portable(root));
         }
     }

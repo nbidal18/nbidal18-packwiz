@@ -92,7 +92,7 @@ function Copy-FilteredTree(
 }
 
 function Invoke-ModrinthBatch([string[]] $Hashes) {
-    $headers = @{ 'User-Agent' = 'nbidal18-packwiz-builder/3.1.1 (maintainer tooling)' }
+    $headers = @{ 'User-Agent' = 'nbidal18-packwiz-builder/3.2.0 (maintainer tooling)' }
     $body = @{ hashes = @($Hashes); algorithm = 'sha1' } | ConvertTo-Json -Compress
     $delay = 1
     for ($attempt = 1; $attempt -le 5; $attempt++) {
@@ -402,6 +402,14 @@ try {
                 (([string] $entry.projectId) -ne 'tVXpaKa8' -or ([string] $entry.versionId) -ne '4eO6dWtQ')) {
                 throw 'Realistic Health must resolve to the reviewed Modrinth project tVXpaKa8, version 4eO6dWtQ.'
             }
+            if ($record.RelativePath -eq 'mods/skin_overrides-2.6.0+1.21.1.jar' -and
+                (([string] $entry.projectId) -ne 'GON0Fdk5' -or ([string] $entry.versionId) -ne 'Z99ddIuX')) {
+                throw 'Skin Overrides must resolve to the reviewed Modrinth project GON0Fdk5, version Z99ddIuX.'
+            }
+            if ($record.RelativePath -eq 'mods/CustomSkinLoader_Universal-15.0.1.jar' -and
+                (([string] $entry.projectId) -ne 'idMHQ4n2' -or ([string] $entry.versionId) -ne 'OLaesh5y')) {
+                throw 'CustomSkinLoader must resolve to the reviewed Modrinth project idMHQ4n2, version OLaesh5y.'
+            }
             if ($record.RelativePath -eq 'shaderpacks/ComplementaryUnbound_r5.8.1.zip' -and
                 (([string] $entry.projectId) -ne 'R6NEzAwj' -or ([string] $entry.versionId) -ne 'VMHXIk50')) {
                 throw 'Complementary Unbound must resolve to the reviewed Modrinth project R6NEzAwj, version VMHXIk50.'
@@ -507,6 +515,10 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
         'datapacks',
         'config',
         'defaultconfigs',
+        # CustomSkinLoader can load arbitrary JAR/ZIP plugins from this root.
+        # Keep the root closed; only the exact cosmetic/runtime exceptions below
+        # are allowed, while Plugins and ExtraList remain quarantined.
+        'CustomSkinLoader',
         # Moonlight automatically loads datapacks placed here into every world.
         # Keep it as an intentionally empty closed set, never a player/runtime
         # exception, so the launch guard quarantines any injected content.
@@ -568,6 +580,9 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
     }
     $strictManifestLines.Add("personal`tconfig/controlify.json")
     foreach ($runtimeFile in @(
+        'CustomSkinLoader/CustomSkinLoader.json',
+        'CustomSkinLoader/CustomSkinLoader.log',
+        'CustomSkinLoader/CustomSkinAPIPlus-ClientID',
         'config/euphoria_patcher/.data.json',
         'config/etf_warnings.json',
         'config/jade/usernamecache.json',
@@ -579,6 +594,14 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
         $strictManifestLines.Add("runtime`t$runtimeFile")
     }
     foreach ($runtimePrefix in @(
+        # The official bootstrap rewrites Core before Fabric client entrypoints;
+        # nbidal18-pack-compat then captures and watches its executable baseline.
+        'CustomSkinLoader/Core',
+        # Cosmetic local textures and non-executable caches are intentionally
+        # mutable. Plugins and ExtraList are not exceptions.
+        'CustomSkinLoader/LocalSkin',
+        'CustomSkinLoader/ProfileCache',
+        'CustomSkinLoader/caches',
         'config/crash_assistant',
         'config/jei/world',
         'config/spark/tmp'
@@ -624,6 +647,9 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
 /moddata/
 /moonlight-global-datapacks/
 /villagerpacks/
+/CustomSkinLoader/
+/skin_overrides/
+/cape_overrides/
 /usercache.json
 /command_history.txt
 /hotbar.nbt
@@ -665,7 +691,7 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
     Write-Utf8NoBom (Join-Path $stagePath 'index.toml') ('hash-format = "sha256"' + "`n")
     Write-Utf8NoBom (Join-Path $stagePath 'pack.toml') @'
 name = "nbidal18"
-version = "3.1.1"
+version = "3.2.0"
 description = "Fabric 1.21.1 adventure modpack with incremental Prism updates"
 pack-format = "packwiz:1.1.0"
 
@@ -699,7 +725,8 @@ minecraft = "1.21.1"
         'datapacks/Still_Life-1.0-beta1.zip', 'vinurl', 'saves', 'screenshots', 'logs',
         'crash-reports', 'debug', '.fabric', '.mixin.out', 'data', 'downloads',
         'dynamic-resource-pack-cache', 'server-resource-packs', 'local', 'moddata',
-        'moonlight-global-datapacks', 'villagerpacks', 'usercache.json',
+        'moonlight-global-datapacks', 'villagerpacks', 'CustomSkinLoader',
+        'skin_overrides', 'cape_overrides', 'usercache.json',
         'command_history.txt', 'hotbar.nbt', 'servers.dat_old'
     )) { $forbiddenIndexRoots.Add($runtimeRoot) }
     $privateIndexMatches = New-Object Collections.Generic.List[string]

@@ -15,11 +15,13 @@ import java.util.concurrent.CompletableFuture;
 
 public final class Nbidal18PackCompatClient implements ClientModInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger("nbidal18-pack-compat");
+    private static final String CUSTOM_SKIN_LOADER_BOOTSTRAP_MOD_ID = "customskinloader-bootstrap";
 
     @Override
     public void onInitializeClient() {
         ClientIntegrityMonitor integrityMonitor = ClientIntegrityMonitor.initialize(
-                FabricLoader.getInstance().getGameDir()
+                FabricLoader.getInstance().getGameDir(),
+                FabricLoader.getInstance().isModLoaded(CUSTOM_SKIN_LOADER_BOOTSTRAP_MOD_ID)
         );
         boolean registered = ClientLoginNetworking.registerGlobalReceiver(
                 Nbidal18PackCompat.VERSION_QUERY,

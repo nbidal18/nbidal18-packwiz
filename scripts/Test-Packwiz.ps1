@@ -392,9 +392,20 @@ try {
         'config/presencefootsteps/updater.json',
         'config/resourceful-config-web.json',
         'config/sodium-fingerprint.json',
-        'config/voicechat/username-cache.json'
+        'config/voicechat/username-cache.json',
+        'CustomSkinLoader/CustomSkinLoader.json',
+        'CustomSkinLoader/CustomSkinLoader.log',
+        'CustomSkinLoader/CustomSkinAPIPlus-ClientID'
     )) { [void] $forbiddenIndexedFiles.Add($forbidden) }
-    $forbiddenIndexedPrefixes = @('config/crash_assistant/', 'config/jei/world/', 'config/spark/tmp/', 'vinurl/')
+    $forbiddenIndexedPrefixes = @(
+        'config/crash_assistant/',
+        'config/jei/world/',
+        'config/spark/tmp/',
+        'CustomSkinLoader/',
+        'skin_overrides/',
+        'cape_overrides/',
+        'vinurl/'
+    )
     foreach ($indexedSourcePath in $indexedSourcePaths) {
         if ($forbiddenIndexedFiles.Contains($indexedSourcePath) -or
                 @($forbiddenIndexedPrefixes | Where-Object {
@@ -483,7 +494,7 @@ try {
     # Build a localhost-only migration ZIP for isolated testing.
     $port = Get-FreeTcpPort
     $packUrl = "http://127.0.0.1:$port/pack.toml"
-    $testZip = Join-Path $temporaryRoot 'nbidal18-3.1.1-local-validation.zip'
+    $testZip = Join-Path $temporaryRoot 'nbidal18-3.2.0-local-validation.zip'
     & $builderPath -OutputPath $testZip -UpdateUrl $packUrl -AllowInsecureLocalhost
     if (-not (Test-Path -LiteralPath $testZip -PathType Leaf)) { throw 'Migration test ZIP was not created.' }
 
@@ -560,7 +571,7 @@ try {
     if ($preLaunchLines.Count -ne 1 -or $preLaunchLines[0].Contains('packwiz-installer-bootstrap.jar')) {
         throw 'Migration instance must have exactly one guarded pre-launch command, never the legacy direct-Packwiz command.'
     }
-    foreach ($requiredText in @('name=nbidal18 3.1.1', 'ExportVersion=3.1.1', 'OverrideCommands=true', "PreLaunchCommand=`"`$INST_JAVA`" -jar nbidal18-launch-guard.jar $packUrl")) {
+    foreach ($requiredText in @('name=nbidal18-client', 'ExportName=nbidal18-client', 'ExportVersion=3.2.0', 'OverrideCommands=true', "PreLaunchCommand=`"`$INST_JAVA`" -jar nbidal18-launch-guard.jar $packUrl")) {
         if (-not $instanceCfg.Contains($requiredText)) { throw "instance.cfg assertion failed: $requiredText" }
     }
     $mmc = Get-Content -LiteralPath (Join-Path $instanceRoot 'mmc-pack.json') -Raw | ConvertFrom-Json
@@ -617,6 +628,8 @@ try {
         'moonlight-global-datapacks/__unknown-global.zip',
         'villagerpacks/__unknown-villager-pack.zip',
         'server-resource-packs/__unknown-server-pack.zip',
+        'CustomSkinLoader/Plugins/__unknown-plugin.jar',
+        'CustomSkinLoader/ExtraList/__unknown-provider.json',
         'config/__unknown-local.toml'
     )
     foreach ($relativePath in $unauthorizedRelativePaths) {
@@ -874,7 +887,7 @@ try {
     $siteFiles = @(Get-ChildItem -LiteralPath $siteRoot -Recurse -File -Force)
     $completedAt = Get-Date
     $reportText = @"
-# nbidal18 v3.1.1 Packwiz validation report
+# nbidal18 v3.2.0 Packwiz validation report
 
 - Result: PASS
 - Started: $($startedAt.ToString('yyyy-MM-dd HH:mm:ss zzz'))
@@ -893,7 +906,7 @@ Validated:
 - The first guarded launch performs both Packwiz passes, cold-installs and hash-verifies every managed payload, seeds absent settings once, and writes an attestation matching the installed strict manifest.
 - Generated Fabric nested/remapped-mod caches and Moonlight's loadable dynamic resource-pack cache are purged before attestation, while unrelated `.fabric` state remains byte-preserved.
 - Mixed settings are narrowed without resetting unrelated preferences: options.txt receives canonical resource-pack lines, Iris rejects unknown shaders, and Controlify reach-around is forced off.
-- Unknown mod, resource-pack, shader, datapack, Moonlight global-datapack, Villager API pack, server-pack cache, and config canaries are absent from strict roots and remain recoverable under `.nbidal18/quarantine`; the disposable Euphoria-generated shader tree is purged and rebuilt instead of accumulating in quarantine.
+- Unknown mod, resource-pack, shader, datapack, Moonlight global-datapack, Villager API pack, server-pack cache, CustomSkinLoader plugin/provider, and config canaries are absent from strict roots and remain recoverable under `.nbidal18/quarantine`; the disposable Euphoria-generated shader tree is purged and rebuilt instead of accumulating in quarantine.
 - Exact optional Still Life, saves, screenshots, VinURL data, approved shader sidecar settings, JEI/runtime state, and seed-once settings persist byte-for-byte.
 - An unchanged release still performs the normal and forced Packwiz passes. The forced pass repairs the sole tampered managed canary, downloads no other managed payload, quarantines a newly added extra, and refreshes a matching attestation.
 - A later release adds and removes JAR-named managed-file canaries in `mods/`, overwrites a managed config, updates the strict manifest, and attests the new manifest.
@@ -902,7 +915,7 @@ Validated:
 
 External release gates are outside this isolated behavior report. `Build-Release.ps1` separately requires the anonymous HTTPS `pack.toml`, `index.toml`, strict manifest, and every reviewed internal-hosted payload to match before it produces the final ZIP. Reaching the Minecraft menu, confirming that a failed pre-launch command blocks Minecraft, and production multiplayer compatibility remain manual checks.
 
-Mandatory transition: an existing nbidal18 3.1.0 Prism instance whose pre-launch command directly invokes Packwiz cannot acquire the nbidal18 launch-guard JAR through Packwiz. Re-import the new 3.1.1 six-file migration ZIP before the strict site migration, and do not launch the old instance afterward: the old updater can remove or overwrite settings that leave the Packwiz manifest before any guard can preserve or sanitize them.
+Historical 3.1.0 -> 3.1.1 transition: the old direct-Packwiz Prism instance could not acquire the nbidal18 launch-guard JAR through Packwiz, so that cutover required a one-time import of the 3.1.1 six-file migration ZIP. An existing guarded 3.1.1 instance receives 3.2.0 in place on its next successful launch; it does not require another import.
 
 Known limitation: Packwiz is not transaction-wide atomic. In the deliberate failure test, an available managed config was written before a later payload returned 404, although player-controlled/runtime files and the previous Packwiz state remained intact. The guard removed the stale attestation immediately, and the next successful pre-launch run repaired and attested the managed release. Final Prism testing must confirm a nonzero pre-launch result blocks Minecraft from starting.
 "@
@@ -913,7 +926,7 @@ catch {
     $failure = $_
     $failedAt = Get-Date
     $failureText = @"
-# nbidal18 v3.1.1 Packwiz validation report
+# nbidal18 v3.2.0 Packwiz validation report
 
 - Result: FAIL
 - Started: $($startedAt.ToString('yyyy-MM-dd HH:mm:ss zzz'))

@@ -22,11 +22,32 @@ class ProducerSmokeCompatibilityTest {
         List<String> strictKeys = manifest.strictDirectories().stream().map(StrictManifest::key).toList();
         List<String> closedRoots = List.of(
                 "moonlight-global-datapacks", "villagerpacks", "server-resource-packs");
-        assumeTrue(strictKeys.containsAll(closedRoots), "generated site has not yet received the latest closed roots");
-        assertEquals(9, strictKeys.size());
+        assumeTrue(strictKeys.contains("customskinloader"),
+                "generated site has not yet received the v3.2.0 CustomSkinLoader policy");
+        assertEquals(10, strictKeys.size());
         for (String closedRoot : closedRoots) {
             assertTrue(strictKeys.contains(closedRoot));
         }
+        assertTrue(strictKeys.contains("customskinloader"));
+
+        for (String runtimeFile : List.of(
+                "customskinloader/customskinloader.json",
+                "customskinloader/customskinloader.log",
+                "customskinloader/customskinapiplus-clientid"
+        )) {
+            assertTrue(manifest.runtimeFilesByKey().containsKey(runtimeFile));
+        }
+        List<String> runtimePrefixes = manifest.runtimePrefixes().stream().map(StrictManifest::key).toList();
+        for (String runtimePrefix : List.of(
+                "customskinloader/core",
+                "customskinloader/localskin",
+                "customskinloader/profilecache",
+                "customskinloader/caches"
+        )) {
+            assertTrue(runtimePrefixes.contains(runtimePrefix));
+        }
+        assertFalse(runtimePrefixes.contains("customskinloader/plugins"));
+        assertFalse(runtimePrefixes.contains("customskinloader/extralist"));
         assertTrue(manifest.filesByKey().size() > 400);
         assertFalse(manifest.seeds().isEmpty());
         assertEquals(1, manifest.regeneratePrefixes().size());

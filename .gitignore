@@ -30,6 +30,9 @@ Thumbs.db
 /site/moddata/
 /site/moonlight-global-datapacks/
 /site/villagerpacks/
+/site/CustomSkinLoader/
+/site/skin_overrides/
+/site/cape_overrides/
 /site/usercache.json
 /site/command_history.txt
 /site/hotbar.nbt
@@ -69,7 +72,7 @@ Thumbs.db
 !/site/datapacks/Yeetnado_1000_Chickens_1.21.1.zip
 /site/mods/*.jar
 !/site/mods/bandagesplus-configurable-fabric-1.2.0+1.21.1.jar
-!/site/mods/nbidal18-pack-compat-1.1.1+1.21.1.jar
+!/site/mods/nbidal18-pack-compat-1.1.2+1.21.1.jar
 !/site/mods/carryon-slowness-fix-1.0.0+1.21.1.jar
 !/site/mods/nbidal18-autohud-thermoo-bridge-1.0.0+1.21.1.jar
 !/site/mods/nbidal18-autohud-vitals-sync-1.0.0+1.21.1.jar

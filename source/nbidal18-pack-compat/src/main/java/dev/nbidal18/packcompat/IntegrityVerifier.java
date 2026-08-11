@@ -25,7 +25,8 @@ final class IntegrityVerifier {
             "resourcepacks",
             "shaderpacks",
             "datapacks",
-            "defaultconfigs"
+            "defaultconfigs",
+            "customskinloader"
     );
 
     private final Path gameDirectory;

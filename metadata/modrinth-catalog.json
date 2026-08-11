@@ -1,6 +1,6 @@
 {
     "schemaVersion":  1,
-    "generatedAtUtc":  "2026-08-10T18:47:54.2949463Z",
+    "generatedAtUtc":  "2026-08-11T05:28:17.9815105Z",
     "entries":  [
                     {
                         "relativePath":  "mods/[Fabric]ctov-3.6.1.jar",
@@ -551,6 +551,17 @@
                         "versionNumber":  "fabric-1.21.11-1.0.0",
                         "remoteFilename":  "cryonicconfig-fabric-1.0.0+mc1.21.11.jar",
                         "url":  "https://cdn.modrinth.com/data/oEhQIkOs/versions/biJLv3Vb/cryonicconfig-fabric-1.0.0%2Bmc1.21.11.jar"
+                    },
+                    {
+                        "relativePath":  "mods/CustomSkinLoader_Universal-15.0.1.jar",
+                        "sha1":  "ab8dd841cafc3b4ecbf0250d3f5aee8a1fdb506a",
+                        "sha512":  "8c65193c46c1435ddea571901f1dd04cc179179f59f1c1a0449349de04722b9c1b6e5efaec166975e05d2fa0b05f6c07c9d5d93a05f1c9a57fece2a0d0fc1ce7",
+                        "projectId":  "idMHQ4n2",
+                        "versionId":  "OLaesh5y",
+                        "versionName":  "CustomSkinLoader_Universal_15.0.1",
+                        "versionNumber":  "15.0.1-Universal",
+                        "remoteFilename":  "CustomSkinLoader_Universal-15.0.1.jar",
+                        "url":  "https://cdn.modrinth.com/data/idMHQ4n2/versions/OLaesh5y/CustomSkinLoader_Universal-15.0.1.jar"
                     },
                     {
                         "relativePath":  "mods/darcenos-minecarts-1.4.jar",
@@ -1728,6 +1739,17 @@
                         "versionNumber":  "3.1.1+1.21.3",
                         "remoteFilename":  "shifting-wares-3.1.1+1.21.3.jar",
                         "url":  "https://cdn.modrinth.com/data/jD7tenmB/versions/wU2XBQbM/shifting-wares-3.1.1%2B1.21.3.jar"
+                    },
+                    {
+                        "relativePath":  "mods/skin_overrides-2.6.0+1.21.1.jar",
+                        "sha1":  "1d80ad938af46d53fa717fa834c282544ee88923",
+                        "sha512":  "f9ce76489b86cbc0b93a544559a79155c0486a29da7d9df34a9fe3120da3fb2bd28a3f9abce51034b432b4e58a44d347c77509dcfa07d053cf5bb7de6a559499",
+                        "projectId":  "GON0Fdk5",
+                        "versionId":  "Z99ddIuX",
+                        "versionName":  "skin overrides 2.6.0 for 1.21.1",
+                        "versionNumber":  "2.6.0+1.21.1",
+                        "remoteFilename":  "skin_overrides-2.6.0+1.21.1.jar",
+                        "url":  "https://cdn.modrinth.com/data/GON0Fdk5/versions/Z99ddIuX/skin_overrides-2.6.0%2B1.21.1.jar"
                     },
                     {
                         "relativePath":  "mods/skinlayers3d-fabric-1.10.1-mc1.21.1.jar",

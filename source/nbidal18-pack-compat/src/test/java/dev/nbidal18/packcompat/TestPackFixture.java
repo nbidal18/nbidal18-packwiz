@@ -25,7 +25,8 @@ final class TestPackFixture {
         this.root = root;
         for (String directory : List.of(
                 "mods", "resourcepacks", "shaderpacks", "datapacks", "config", "defaultconfigs",
-                "moonlight-global-datapacks", "villagerpacks", "server-resource-packs", ".nbidal18/defaults"
+                "CustomSkinLoader", "moonlight-global-datapacks", "villagerpacks",
+                "server-resource-packs", ".nbidal18/defaults"
         )) {
             Files.createDirectories(resolve(directory));
         }
@@ -48,7 +49,14 @@ final class TestPackFixture {
         extraRecords.add("personal\tshaderpacks/ComplementaryUnbound_r5.8.1.zip.txt");
         extraRecords.add("personal\tshaderpacks/MakeUp-UltraFast-9.4b.zip.txt");
         extraRecords.add("personal\tconfig/controlify.json");
+        extraRecords.add("runtime\tCustomSkinLoader/CustomSkinLoader.json");
+        extraRecords.add("runtime\tCustomSkinLoader/CustomSkinLoader.log");
+        extraRecords.add("runtime\tCustomSkinLoader/CustomSkinAPIPlus-ClientID");
         extraRecords.add("runtime\tconfig/runtime.json");
+        extraRecords.add("runtime-prefix\tCustomSkinLoader/Core");
+        extraRecords.add("runtime-prefix\tCustomSkinLoader/LocalSkin");
+        extraRecords.add("runtime-prefix\tCustomSkinLoader/ProfileCache");
+        extraRecords.add("runtime-prefix\tCustomSkinLoader/caches");
         extraRecords.add("runtime-prefix\tconfig/runtime-cache");
         extraRecords.add("seed\t.nbidal18/defaults/options.txt\toptions.txt");
         extraRecords.add("seed\t.nbidal18/defaults/iris.properties\tconfig/iris.properties");
@@ -60,7 +68,7 @@ final class TestPackFixture {
         lines.add("nbidal18-strict-manifest\t1");
         for (String directory : List.of(
                 "mods", "resourcepacks", "shaderpacks", "datapacks", "config", "defaultconfigs",
-                "moonlight-global-datapacks", "villagerpacks", "server-resource-packs"
+                "CustomSkinLoader", "moonlight-global-datapacks", "villagerpacks", "server-resource-packs"
         )) {
             lines.add("strict-dir\t" + directory);
         }

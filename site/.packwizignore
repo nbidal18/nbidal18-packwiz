@@ -21,6 +21,9 @@
 /moddata/
 /moonlight-global-datapacks/
 /villagerpacks/
+/CustomSkinLoader/
+/skin_overrides/
+/cape_overrides/
 /usercache.json
 /command_history.txt
 /hotbar.nbt
