@@ -89,7 +89,11 @@ public final class PrismRelaunchStandalone {
                             prism.toString(),
                             "--dir", launcherRoot.toString(),
                             "--launch", instanceId
-                    ).directory(launcherRoot.toFile()).start();
+                    ).directory(launcherRoot.toFile())
+                            .redirectInput(ProcessBuilder.Redirect.from(Path.of("NUL").toFile()))
+                            .redirectOutput(ProcessBuilder.Redirect.DISCARD)
+                            .redirectError(ProcessBuilder.Redirect.DISCARD)
+                            .start();
                     Instant ackDeadline = Instant.now().plus(attempt == 0
                             ? Duration.ofSeconds(90) : Duration.ofSeconds(45));
                     while (Instant.now().isBefore(ackDeadline)) {

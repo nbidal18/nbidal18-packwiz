@@ -1,6 +1,6 @@
 # Tool provenance
 
-The standalone binaries live under the git-ignored `tools/` directory and are never indexed as Packwiz-managed files. The reviewed launch-guard bytes are also embedded inside the internally hosted pack-compat companion. Version 3.2.5 is the bridge to guard 1.1.0: the companion can install it after startup and request a controlled exact-instance relaunch, while guard 1.1.0 can self-handoff later embedded guard updates during pre-launch.
+The standalone binaries live under the git-ignored `tools/` directory and are never indexed as Packwiz-managed files. The reviewed launch-guard bytes are also embedded inside the internally hosted pack-compat companion. Version 3.2.5 introduced the bridge to guard 1.1.0; version 3.2.6 companion 1.1.10 fixes the detached Prism child's output-pipe deadlock while retaining the exact reviewed guard bytes. Guard 1.1.0 can self-handoff later embedded guard updates during pre-launch.
 
 ## packwiz-installer-bootstrap
 

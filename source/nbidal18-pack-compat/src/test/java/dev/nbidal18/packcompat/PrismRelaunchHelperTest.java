@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,16 +78,34 @@ class PrismRelaunchHelperTest {
 
     @Test
     @EnabledOnOs(OS.WINDOWS)
+    void systemOperationsLaunchCannotBlockOnEitherPrismOutputStream() throws Exception {
+        Path launcherRoot = Files.createDirectory(temporary.resolve("system-operations-launcher"));
+        Path fakePrism = buildFloodingFakePrism(launcherRoot);
+        String instanceId = "nbidal18-client";
+
+        new PrismRelaunchHelper.SystemOperations().startPrism(fakePrism, launcherRoot, instanceId);
+
+        assertTrue(waitForExactLaunchRecord(
+                launcherRoot.resolve("flood-complete.tsv"),
+                launcherRoot,
+                instanceId,
+                Duration.ofSeconds(30)
+        ), "the fake Prism child did not finish flooding both stdout and stderr");
+    }
+
+    @Test
+    @EnabledOnOs(OS.WINDOWS)
     void detachedRuntimeCompletesAfterManagedCompanionIsMoved() throws Exception {
-        Path game = Files.createDirectory(temporary.resolve("live-game"));
+        String instanceId = "nbidal18-client";
+        Path launcherRoot = Files.createDirectory(temporary.resolve("live-launcher"));
+        Path instance = Files.createDirectories(launcherRoot.resolve("instances").resolve(instanceId));
+        Path game = Files.createDirectory(instance.resolve("minecraft"));
         Files.createDirectory(game.resolve(".nbidal18"));
         Path mods = Files.createDirectory(game.resolve("mods"));
         Path managedCompanion = Files.writeString(mods.resolve("companion.jar"), "replace me");
         Path classpath = PrismAutoRelaunch.extractStandaloneHelper(game);
 
-        Path launcherRoot = Files.createDirectory(temporary.resolve("live-launcher"));
-        Path fakePrism = launcherRoot.resolve("prismlauncher.exe");
-        Files.copy(Path.of(System.getenv("SystemRoot"), "System32", "cmd.exe"), fakePrism);
+        Path fakePrism = buildFloodingFakePrism(launcherRoot);
         Process minecraft = new ProcessBuilder(
                 Path.of(System.getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0",
                         "powershell.exe").toString(),
@@ -96,11 +116,9 @@ class PrismRelaunchHelperTest {
         Instant startedAt = minecraft.info().startInstant().orElseThrow();
         String nonce = "0123456789abcdef0123456789abcdef";
         String guard = "a".repeat(64);
-        PrismRelaunchState.RelaunchMarker request = PrismRelaunchState.arm(
-                game, guard, "nbidal18-client", Instant.now(), nonce
-        );
+        PrismRelaunchState.arm(game, guard, instanceId, Instant.now(), nonce);
         PrismRelaunchHelper.Arguments helperArguments = new PrismRelaunchHelper.Arguments(
-                fakePrism, launcherRoot, game, "nbidal18-client", minecraft.pid(), startedAt, nonce, guard
+                fakePrism, launcherRoot, game, instanceId, minecraft.pid(), startedAt, nonce, guard
         );
         Path javaExecutable = Path.of(ProcessHandle.current().info().command().orElseThrow());
         java.util.List<String> command = new java.util.ArrayList<>();
@@ -115,18 +133,113 @@ class PrismRelaunchHelperTest {
                 .start();
 
         Files.move(managedCompanion, temporary.resolve("companion-replaced.jar"));
-        assertTrue(minecraft.waitFor(10, java.util.concurrent.TimeUnit.SECONDS));
-        Thread.sleep(2500);
-        PrismRelaunchState.RelaunchMarker acknowledgement = new PrismRelaunchState.RelaunchMarker(
-                PrismRelaunchState.MarkerState.ACKNOWLEDGED,
-                request.nonce(), request.guardSha256(), request.instanceIdBase64(), request.armedAtUtc(),
-                Instant.now()
-        );
-        Files.write(game.resolve(PrismRelaunchState.RELATIVE_PATH), acknowledgement.serialize());
-
-        assertTrue(helper.waitFor(10, java.util.concurrent.TimeUnit.SECONDS));
+        assertTrue(minecraft.waitFor(10, TimeUnit.SECONDS));
+        assertTrue(waitForExactLaunchRecord(
+                launcherRoot.resolve("flood-complete.tsv"),
+                launcherRoot,
+                instanceId,
+                Duration.ofSeconds(30)
+        ), "the detached fake Prism child did not finish flooding both output streams");
+        assertTrue(helper.waitFor(15, TimeUnit.SECONDS));
         assertEquals(0, helper.exitValue());
         assertFalse(Files.exists(game.resolve(PrismRelaunchState.RELATIVE_PATH)));
+        Path diagnostic = game.resolve(".nbidal18").resolve("prism-relaunch.log");
+        assertTrue(!Files.exists(diagnostic)
+                || !Files.readString(diagnostic).contains("PRIVATE_PRISM_OUTPUT"));
+    }
+
+    private Path buildFloodingFakePrism(Path launcherRoot) throws Exception {
+        Path compiler = Path.of(
+                System.getenv("WINDIR"),
+                "Microsoft.NET", "Framework64", "v4.0.30319", "csc.exe"
+        );
+        assertTrue(Files.isRegularFile(compiler), "the Windows .NET Framework C# compiler is unavailable");
+        Path source = launcherRoot.resolve("FloodingPrism.cs");
+        Path executable = launcherRoot.resolve("prismlauncher.exe");
+        Files.writeString(source, """
+                using System;
+                using System.IO;
+                using System.Text;
+
+                internal static class FloodingPrism
+                {
+                    private static int Main(string[] args)
+                    {
+                        if (args.Length != 4 || args[0] != "--dir" || args[2] != "--launch")
+                        {
+                            return 10;
+                        }
+
+                        string chunk = new string('P', 4096) + "PRIVATE_PRISM_OUTPUT";
+                        for (int index = 0; index < 4096; index++)
+                        {
+                            Console.Out.Write(chunk);
+                            Console.Error.Write(chunk);
+                        }
+                        Console.Out.Flush();
+                        Console.Error.Flush();
+
+                        var utf8 = new UTF8Encoding(false);
+                        File.WriteAllText(
+                            Path.Combine(args[1], "flood-complete.tsv"),
+                            string.Join("\\n", args) + "\\n",
+                            utf8
+                        );
+
+                        string marker = Path.Combine(
+                            args[1], "instances", args[3], "minecraft", ".nbidal18",
+                            "prism-relaunch.tsv"
+                        );
+                        if (File.Exists(marker))
+                        {
+                            string text = File.ReadAllText(marker, utf8);
+                            if (!text.Contains("state\\tarmed\\n"))
+                            {
+                                return 11;
+                            }
+                            text = text.Replace("state\\tarmed\\n", "state\\tacknowledged\\n")
+                                + "acknowledged-at-utc\\t2026-08-12T14:30:00Z\\n";
+                            File.WriteAllText(marker, text, utf8);
+                        }
+                        return 0;
+                    }
+                }
+                """);
+        Process compilerProcess = new ProcessBuilder(
+                compiler.toString(),
+                "/nologo",
+                "/target:exe",
+                "/out:" + executable,
+                source.toString()
+        ).redirectInput(ProcessBuilder.Redirect.from(Path.of("NUL").toFile()))
+                .redirectOutput(ProcessBuilder.Redirect.DISCARD)
+                .redirectError(ProcessBuilder.Redirect.DISCARD)
+                .start();
+        assertTrue(compilerProcess.waitFor(30, TimeUnit.SECONDS), "fake Prism compilation timed out");
+        assertEquals(0, compilerProcess.exitValue(), "fake Prism compilation failed");
+        assertTrue(Files.isRegularFile(executable));
+        return executable;
+    }
+
+    private static boolean waitForExactLaunchRecord(
+            Path record,
+            Path launcherRoot,
+            String instanceId,
+            Duration timeout
+    ) throws Exception {
+        List<String> expected = List.of("--dir", launcherRoot.toString(), "--launch", instanceId);
+        Instant deadline = Instant.now().plus(timeout);
+        while (Instant.now().isBefore(deadline)) {
+            try {
+                if (Files.readAllLines(record).equals(expected)) {
+                    return true;
+                }
+            } catch (java.nio.file.NoSuchFileException ignored) {
+                // The child has not yet drained both output writes.
+            }
+            Thread.sleep(50);
+        }
+        return false;
     }
 
     private PrismRelaunchHelper.Arguments arguments() throws Exception {

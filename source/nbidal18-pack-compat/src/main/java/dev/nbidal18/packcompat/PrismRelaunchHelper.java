@@ -200,7 +200,11 @@ final class PrismRelaunchHelper {
                     executable.toString(),
                     "--dir", launcherRoot.toString(),
                     "--launch", instanceId
-            ).directory(launcherRoot.toFile()).start();
+            ).directory(launcherRoot.toFile())
+                    .redirectInput(ProcessBuilder.Redirect.from(Path.of("NUL").toFile()))
+                    .redirectOutput(ProcessBuilder.Redirect.DISCARD)
+                    .redirectError(ProcessBuilder.Redirect.DISCARD)
+                    .start();
         }
 
         @Override

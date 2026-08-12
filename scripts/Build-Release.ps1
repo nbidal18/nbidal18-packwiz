@@ -25,12 +25,12 @@ $outputPath = Join-Path $releaseRoot '1. setup\nbidal18-client.zip'
 $packCompatSourceRoot = Join-Path $updaterRoot 'source\nbidal18-pack-compat'
 $packCompatPropertiesPath = Join-Path $packCompatSourceRoot 'gradle.properties'
 $packCompatGradle = Join-Path $packCompatSourceRoot 'gradlew.bat'
-$expectedReleaseVersion = '3.2.5'
-$expectedPackCompatVersion = '1.1.9+1.21.1'
+$expectedReleaseVersion = '3.2.6'
+$expectedPackCompatVersion = '1.1.10+1.21.1'
 $expectedLaunchGuardVersion = '1.1.0'
 $publishedV324LaunchGuardSha256 = '63243A6972BF4B89C0E2DDE79B48F20009781C021AA68D30DCB19063AECCAC45'
 $reviewedLaunchGuardSha256 = '7BE9B87B00B92307A2F9B830C6D5FB2E5D74D583E5AB9FF3A9779AB7FF8FA79A'
-$reviewedPackCompatSha256 = '1E4C3785499F5734C0DFAFB63F26CCD9011E522EC46A2ECB5A52BAF2DD10EE30'
+$reviewedPackCompatSha256 = 'DADDAF7BE02F93A9F714D74158C291C3C782FA3077A5FC86FC2AD0CEFF08B0C8'
 
 function Get-GradleProperty([string] $Path, [string] $Name) {
     $match = @(Get-Content -LiteralPath $Path | Where-Object {
