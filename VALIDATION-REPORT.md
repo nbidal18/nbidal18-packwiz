@@ -1,11 +1,11 @@
-# nbidal18 v3.2.6 Packwiz validation report
+# nbidal18 v3.2.7 Packwiz validation report
 
 - Result: PASS
-- Started: 2026-08-12 14:35:31 +02:00
-- Completed: 2026-08-12 14:36:04 +02:00
-- Packwiz site files: 506
+- Started: 2026-08-12 16:22:42 +02:00
+- Completed: 2026-08-12 16:23:14 +02:00
+- Packwiz site files: 504
 - Exact Modrinth-managed archives: 225 (210 mods, 12 resource packs, 1 datapack, 2 shader packs)
-- Reviewed internal-hosted archives: 15 (11 mods, 2 resource packs, 2 datapacks, 0 shader packs)
+- Reviewed internal-hosted archives: 13 (9 mods, 2 resource packs, 2 datapacks, 0 shader packs)
 - Hosted datapack allowlist entries: 2
 - Migration-only external files in the public manifest: 0
 
@@ -29,6 +29,6 @@ Validated:
 
 External release gates are outside this isolated behavior report. Build-Release.ps1 separately requires the anonymous HTTPS pack.toml, index.toml, strict manifest, and every reviewed internal-hosted payload to match before it produces the final ZIP. Reaching the Minecraft menu, confirming that a failed pre-launch command blocks Minecraft, and production multiplayer compatibility remain manual checks.
 
-Historical 3.1.0 -> 3.1.1 transition: the old direct-Packwiz Prism instance could not acquire the nbidal18 launch-guard JAR or Prism pre-launch command through Packwiz, so that cutover required a one-time import of the 3.1.1 six-file migration ZIP. Existing runnable guarded instances receive 3.2.6 and companion 1.1.10 in place. Version 3.2.5 bridged to launch guard 1.1.0 through a controlled exact-instance Prism relaunch; version 3.2.6 fixes its Windows child-output pipe deadlock by disconnecting all three standard streams. The companion regression floods both stdout and stderr beyond pipe capacity, requires the exact acknowledgment, and completes without changing the validated Prism arguments or bounded retries. Later guard updates self-handoff during pre-launch. Missing/corrupt guards and command/filename changes still require the recovery ZIP. The isolated behavior test verifies the embedded guard migration and next guarded launch; a real Prism process handoff remains a final end-to-end release check.
+Historical 3.1.0 -> 3.1.1 transition: the old direct-Packwiz Prism instance could not acquire the nbidal18 launch-guard JAR or Prism pre-launch command through Packwiz, so that cutover required a one-time import of the 3.1.1 six-file migration ZIP. Existing runnable guarded instances receive 3.2.7 and companion 1.1.11 in place. Version 3.2.5 bridged to launch guard 1.1.0 through a controlled exact-instance Prism relaunch; version 3.2.6 fixed its Windows child-output pipe deadlock by disconnecting all three standard streams. Version 3.2.7 retains that path and adds the consolidated Auto HUD integration. The companion regression floods both stdout and stderr beyond pipe capacity, requires the exact acknowledgment, and completes without changing the validated Prism arguments or bounded retries. Later guard updates self-handoff during pre-launch. Missing/corrupt guards and command/filename changes still require the recovery ZIP. The isolated behavior test verifies the embedded guard migration and next guarded launch; a real Prism process handoff remains a final end-to-end release check.
 
 Known limitation: Packwiz is not transaction-wide atomic. In the deliberate failure test, an available managed config was written before a later payload returned 404, although player-controlled/runtime files and the previous Packwiz state remained intact. The guard removed the stale attestation immediately, and the next successful pre-launch run repaired and attested the managed release. Final Prism testing must confirm a nonzero pre-launch result blocks Minecraft from starting.

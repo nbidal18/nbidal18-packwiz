@@ -82,11 +82,11 @@ hash = "a3ec0efcc2030281a6828bf7f59b128009275e0c4fabfc07411ac793319ad7c7"
 
 [[files]]
 file = ".nbidal18/strict-manifest.tsv"
-hash = "4597eadbc7d02dfc8aff76ae7787aab7dadc07ce92fad89c2805eebf6fd2676f"
+hash = "a2a519c73aae3e02fde20a27080f4152d7dad45f925284e55d0f07a0ef296fef"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "ed181563c481581c0dd35c0995a5fa2a26355b3c62ef1762ee96f794e8f0a991"
+hash = "2b6351c3475f1a6ab0638b150ea34604d7e87ec949ea0697719665a564b8c3b3"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -146,7 +146,7 @@ hash = "4ad2b5325a9ddd32792b0cca532ab88914ae0c85aef8f5f56db8f5e75609bc28"
 
 [[files]]
 file = "config/autohud.json5"
-hash = "16088ffbd361b2d24e4f72b41fcfa69c85c8244e13627a953c05dbeb3afe5b22"
+hash = "6009d09dee160134ee2ab8e0ebd2ee55bf250c4db3113a7dbee26a39962f6bc2"
 
 [[files]]
 file = "config/bandagesplus.json"
@@ -154,7 +154,7 @@ hash = "5517ad3e06aa1bfeec0a41174677a9ee094b02ee8b58194e39584cc1191cb98b"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "6c62ec559373f46b9310523e4d836f3220b995728bb594c8f588e836f1ff3cd9"
+hash = "cd5473d5b2ca0c4d1df3cf44600d760d897ca629a820afee9dc649ce3b7e0289"
 
 [[files]]
 file = "config/beautify.json"
@@ -922,7 +922,7 @@ hash = "693643b1d393cbb3ea7f062afc4474fcd66e4036c4f8d7c056434979cbf512d1"
 
 [[files]]
 file = "config/voicechat/voicechat-server.properties"
-hash = "b00d2c2e953cc307dd73085df23ae79758f6bc47c60ce2c9179d0294e20c2189"
+hash = "7db636a6736fb5bbc8edb4d4b65aad91cb6b373c0a3631a0ad8263e961fc820a"
 
 [[files]]
 file = "config/voxy-config.json"
@@ -1795,14 +1795,6 @@ hash = "aba710a7e9530504aeacee4a1a07e87db60411d64705e1e042d7e292368d71de"
 metafile = true
 
 [[files]]
-file = "mods/nbidal18-autohud-thermoo-bridge-1.0.0+1.21.1.jar"
-hash = "7fd6622570a880c5806c9f00d5070f352466944d1104d88f75726edc5ea33c44"
-
-[[files]]
-file = "mods/nbidal18-autohud-vitals-sync-1.0.0+1.21.1.jar"
-hash = "4a3d37283e3543192683a8f0a29f857c953d27d856471c1051e3a497abba46c6"
-
-[[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.0.0+1.21.1.jar"
 hash = "274dcc5766fdbd70ca0d6490fa985cbb4e0876405c66dcb219795f86311de968"
 
@@ -1811,8 +1803,8 @@ file = "mods/nbidal18-jei-hidden-default-1.0.0+1.21.1.jar"
 hash = "5aeffa5d9e70178c6c54991e4f769159d6c40fb0ce3455d9acdbd4c3b5e69ab5"
 
 [[files]]
-file = "mods/nbidal18-pack-compat-1.1.10+1.21.1.jar"
-hash = "daddaf7be02f93a9f714d74158c291c3c782fa3077a5fc86fc2ad0ceff08b0c8"
+file = "mods/nbidal18-pack-compat-1.1.11+1.21.1.jar"
+hash = "c4bc14b0b6eccdd60ce9d8dd9e47e8c32ab3579226cbb5ee9e94b902af0abef5"
 
 [[files]]
 file = "mods/nbidal18-playeremotes-fa-bridge-1.0.1+1.21.1.jar"

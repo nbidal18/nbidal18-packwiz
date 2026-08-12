@@ -10,7 +10,7 @@ Protocol 2 added the client's strict-manifest SHA-256 and clean/dirty status to 
 expected-manifest-sha256=<64 lowercase hexadecimal characters>
 ```
 
-The generated config is deliberately external to the JAR, so each release can update the expected digest without rebuilding this mod. A protocol-3 dedicated server rejects missing/malformed policy config, older clients, dirty clients, and digest mismatches. It validates pack identity and the manifest digest before displaying any client-supplied diagnostic reason, then sanitizes that reason again. The login-query initializer is deliberately disabled in Fabric's client environment, so an integrated singleplayer server does not apply the dedicated-server gate. A 1.1.10 client still emits the exact historical response requested by a protocol-1 or protocol-2 server, including no trailing reason field for protocol 2; a 1.1.10 dedicated server requires protocol 3.
+The generated config is deliberately external to the JAR, so each release can update the expected digest without rebuilding this mod. A protocol-3 dedicated server rejects missing/malformed policy config, older clients, dirty clients, and digest mismatches. It validates pack identity and the manifest digest before displaying any client-supplied diagnostic reason, then sanitizes that reason again. The login-query initializer is deliberately disabled in Fabric's client environment, so an integrated singleplayer server does not apply the dedicated-server gate. A 1.1.11 client still emits the exact historical response requested by a protocol-1 or protocol-2 server, including no trailing reason field for protocol 2; a 1.1.11 dedicated server requires protocol 3.
 
 The client artifact embeds the exact reviewed `nbidal18-launch-guard.jar` built immediately before it. During client initialization, the embedded descriptor and payload size/SHA-256 are validated, and the guard in the plain Minecraft root is installed or replaced only through a same-directory atomic move. A matching target is left byte-for-byte and metadata unchanged; linked/reparse roots or targets, non-regular targets, malformed resources, and filesystems without atomic replacement fail closed. A failed install stops that game startup with an explicit mod-initialization error; staging failures leave the prior guard unchanged. The dedicated-server entrypoint never performs this client-side installation.
 
@@ -36,7 +36,7 @@ The checked-in Gradle wrapper pins Gradle 9.2.1. Fabric Loom, Minecraft, Fabric 
 
 ```powershell
 .\gradlew.bat clean test remapJar --no-daemon
-Get-FileHash .\build\libs\nbidal18-pack-compat-1.1.10+1.21.1.jar -Algorithm SHA256
+Get-FileHash .\build\libs\nbidal18-pack-compat-1.1.11+1.21.1.jar -Algorithm SHA256
 ```
 
 The Better Compatibility Checker and Skin Overrides dependencies are resolved from Modrinth's Maven endpoint for compilation only; neither is bundled in the output. The reviewed first-party launch guard is intentionally bundled as a resource and validated by both the build and runtime installer.

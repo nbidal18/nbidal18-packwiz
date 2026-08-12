@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.nbidal18.packcompat.autohud.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ArtifactsCooldownOverlayMixin",
+    "ArtifactsHeliumOverlayMixin",
+    "AutoHudVitalsSyncMixin",
+    "ImmersiveAircraftOverlayMixin",
+    "ImmersiveMachineryOverlayMixin",
+    "SodiumExtraHudMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

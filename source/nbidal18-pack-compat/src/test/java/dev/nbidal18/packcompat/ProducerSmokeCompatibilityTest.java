@@ -18,8 +18,14 @@ class ProducerSmokeCompatibilityTest {
         assumeTrue(Files.isRegularFile(siteRoot.resolve(StrictManifest.RELATIVE_PATH)));
         Path packToml = siteRoot.resolve("pack.toml");
         assumeTrue(Files.isRegularFile(packToml)
-                        && Files.readString(packToml).contains("version = \"3.2.5\""),
-                "generated site has not yet been rebuilt for v3.2.5");
+                        && Files.readString(packToml).contains("version = \"3.2.7\""),
+                "generated site has not yet been rebuilt for v3.2.7");
+
+        String autoHudConfig = Files.readString(siteRoot.resolve("config/autohud.json5"));
+        String voiceServerConfig = Files.readString(siteRoot.resolve("config/voicechat/voicechat-server.properties"));
+        assertTrue(autoHudConfig.contains("\"ticksRevealed\": 250"));
+        assertTrue(voiceServerConfig.lines().anyMatch("port=27051"::equals));
+        assertFalse(voiceServerConfig.lines().anyMatch(line -> line.matches("port=(?!27051$).*")));
 
         StrictManifest manifest = StrictManifest.load(siteRoot);
 

@@ -25,12 +25,12 @@ $outputPath = Join-Path $releaseRoot '1. setup\nbidal18-client.zip'
 $packCompatSourceRoot = Join-Path $updaterRoot 'source\nbidal18-pack-compat'
 $packCompatPropertiesPath = Join-Path $packCompatSourceRoot 'gradle.properties'
 $packCompatGradle = Join-Path $packCompatSourceRoot 'gradlew.bat'
-$expectedReleaseVersion = '3.2.6'
-$expectedPackCompatVersion = '1.1.10+1.21.1'
+$expectedReleaseVersion = '3.2.7'
+$expectedPackCompatVersion = '1.1.11+1.21.1'
 $expectedLaunchGuardVersion = '1.1.0'
 $publishedV324LaunchGuardSha256 = '63243A6972BF4B89C0E2DDE79B48F20009781C021AA68D30DCB19063AECCAC45'
 $reviewedLaunchGuardSha256 = '7BE9B87B00B92307A2F9B830C6D5FB2E5D74D583E5AB9FF3A9779AB7FF8FA79A'
-$reviewedPackCompatSha256 = 'DADDAF7BE02F93A9F714D74158C291C3C782FA3077A5FC86FC2AD0CEFF08B0C8'
+$reviewedPackCompatSha256 = 'C4BC14B0B6ECCDD60CE9D8DD9E47E8C32AB3579226CBB5EE9E94B902AF0ABEF5'
 
 function Get-GradleProperty([string] $Path, [string] $Name) {
     $match = @(Get-Content -LiteralPath $Path | Where-Object {
@@ -99,10 +99,18 @@ function Assert-CompanionRelaunchPayload([string] $CompanionJar, [string] $Label
             'dev/nbidal18/packcompat/PrismLaunchContext.class',
             'dev/nbidal18/packcompat/PrismRelaunchHelper.class',
             'dev/nbidal18/packcompat/PrismRelaunchStandalone.class',
-            'dev/nbidal18/packcompat/PrismRelaunchState.class'
+            'dev/nbidal18/packcompat/PrismRelaunchState.class',
+            'dev/nbidal18/packcompat/autohud/Nbidal18AutoHudApi.class',
+            'dev/nbidal18/packcompat/autohud/mixin/AutoHudVitalsSyncMixin.class',
+            'dev/nbidal18/packcompat/autohud/mixin/ImmersiveAircraftOverlayMixin.class',
+            'dev/nbidal18/packcompat/autohud/mixin/ImmersiveMachineryOverlayMixin.class',
+            'dev/nbidal18/packcompat/autohud/mixin/ArtifactsCooldownOverlayMixin.class',
+            'dev/nbidal18/packcompat/autohud/mixin/ArtifactsHeliumOverlayMixin.class',
+            'dev/nbidal18/packcompat/autohud/mixin/SodiumExtraHudMixin.class',
+            'nbidal18-pack-compat.client.mixins.json'
         )) {
             if ($null -eq $archive.GetEntry($requiredClass)) {
-                throw "$Label is missing the one-click migration component: $requiredClass"
+                throw "$Label is missing a required first-party companion component: $requiredClass"
             }
         }
     }
@@ -169,6 +177,33 @@ function Build-AndVerifyPackCompat {
         }
     }
     return [pscustomobject]@{ FileName = $fileName; BuiltJar = $builtJar; Hash = $builtHash }
+}
+
+function Invoke-GeneratedSiteCompatibilityTest {
+    $previousJavaHome = $env:JAVA_HOME
+    $assignedJavaHome = $false
+    if ([string]::IsNullOrWhiteSpace($env:JAVA_HOME)) {
+        $prismJavaHome = Join-Path $env:APPDATA 'PrismLauncher\java\java-runtime-delta'
+        if (Test-Path -LiteralPath (Join-Path $prismJavaHome 'bin\java.exe') -PathType Leaf) {
+            $env:JAVA_HOME = $prismJavaHome
+            $assignedJavaHome = $true
+        }
+    }
+    try {
+        Push-Location $packCompatSourceRoot
+        try {
+            & $packCompatGradle test `
+                --tests 'dev.nbidal18.packcompat.ProducerSmokeCompatibilityTest' `
+                --no-daemon --rerun-tasks
+            if ($LASTEXITCODE -ne 0) {
+                throw 'The post-Sync generated-site compatibility test failed.'
+            }
+        }
+        finally { Pop-Location }
+    }
+    finally {
+        if ($assignedJavaHome) { $env:JAVA_HOME = $previousJavaHome }
+    }
 }
 
 function Build-AndVerifyLaunchGuard {
@@ -241,6 +276,10 @@ if ($generatedIndex -match '(?im)^file = "nbidal18-launch-guard\.jar"\r?$' -or
         (Test-Path -LiteralPath (Join-Path $siteRoot 'nbidal18-launch-guard.jar'))) {
     throw 'The standalone launch guard entered the Packwiz site; it must remain only in the Prism shell and embedded companion.'
 }
+if ($generatedIndex -match '(?im)^file = "mods/nbidal18-autohud-(?:thermoo-bridge|vitals-sync)-[^\"]+\.jar"\r?$') {
+    throw 'A retired loose Auto HUD bridge JAR entered the generated Packwiz site.'
+}
+Invoke-GeneratedSiteCompatibilityTest
 
 & $guardSmokePath
 if ($LASTEXITCODE -ne 0) {

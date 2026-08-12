@@ -15,13 +15,30 @@
     ],
     "client": [
       "dev.nbidal18.packcompat.Nbidal18PackCompatClient"
+    ],
+    "autohud": [
+      "dev.nbidal18.packcompat.autohud.Nbidal18AutoHudApi"
     ]
   },
+  "mixins": [
+    {
+      "config": "nbidal18-pack-compat.client.mixins.json",
+      "environment": "client"
+    }
+  ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": ">=${fabric_api_version}",
     "minecraft": "=${minecraft_version}",
     "bcc": "=${bcc_version}",
     "skin_overrides": "=${skin_overrides_version}"
+  },
+  "suggests": {
+    "autohud": "=${autohud_version}",
+    "thermoo": "=${thermoo_version}",
+    "immersive_aircraft": "=${immersive_aircraft_version}",
+    "immersive_machinery": "=${immersive_machinery_version}",
+    "artifacts": "=${artifacts_version}",
+    "sodium-extra": "=${sodium_extra_version}"
   }
 }

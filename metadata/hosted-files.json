@@ -6,20 +6,12 @@
       "reason": "Configurable MIT rebuild; the embedded NOTICE and LICENSE_BandagePlus-Xanthian retain the original Copyright (c) 2023 Xanthian MIT attribution for reused art assets and recipe data."
     },
     {
-      "path": "mods/nbidal18-pack-compat-1.1.10+1.21.1.jar",
-      "reason": "First-party clean-room MIT protocol-3 compatibility, bounded sanitized reason reporting, runtime integrity, client title-screen bridge, and guarded-instance launch-guard migration; complete reproducible source and tests are published under source/nbidal18-pack-compat. The exact reviewed guard 1.1.0 is embedded with its SHA-256 descriptor for controlled same-instance relaunch and later pre-launch self-handoff. Version 1.1.10 redirects every detached Prism child's stdin from Windows NUL and discards both stdout and stderr so undrained output cannot deadlock the automatic restart; bounded diagnostics remain in .nbidal18/prism-relaunch.log. Generated-cache baselines complete synchronously before clean login status and periodic monitoring can begin, exact protocol-1/protocol-2 client responses remain available to older servers, and the bridge opens Skin Overrides' existing selector without copying Better Compatibility Checker or Skin Overrides classes or assets."
+      "path": "mods/nbidal18-pack-compat-1.1.11+1.21.1.jar",
+      "reason": "First-party clean-room MIT protocol-3 compatibility, bounded sanitized reason reporting, runtime integrity, client title-screen and Auto HUD bridges, and guarded-instance launch-guard migration; complete reproducible source and tests are published under source/nbidal18-pack-compat. The exact reviewed guard 1.1.0 is embedded with its SHA-256 descriptor for controlled same-instance relaunch and later pre-launch self-handoff. The companion preserves the fixed detached Prism stream handling, opens Skin Overrides' existing selector, groups the vanilla vitals, and integrates reviewed Immersive Aircraft, Immersive Machinery, Artifacts, Sodium Extra, and Thermoo HUD behavior without copying third-party classes or assets."
     },
     {
       "path": "mods/carryon-slowness-fix-1.0.0+1.21.1.jar",
       "reason": "Compatibility patch; embedded metadata and LICENSE declare MIT."
-    },
-    {
-      "path": "mods/nbidal18-autohud-thermoo-bridge-1.0.0+1.21.1.jar",
-      "reason": "First-party nbidal18 compatibility mod; embedded metadata declares MIT."
-    },
-    {
-      "path": "mods/nbidal18-autohud-vitals-sync-1.0.0+1.21.1.jar",
-      "reason": "First-party nbidal18 compatibility mod; embedded metadata declares MIT."
     },
     {
       "path": "mods/nbidal18-jei-coverage-bridge-1.0.0+1.21.1.jar",

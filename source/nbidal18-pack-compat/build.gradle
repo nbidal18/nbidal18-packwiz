@@ -91,6 +91,12 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     modCompileOnly "maven.modrinth:better-compatibility-checker:${project.bcc_version}"
     modCompileOnly "maven.modrinth:skin-overrides:${project.skin_overrides_version}"
+    modCompileOnly "maven.modrinth:autohud:${project.autohud_version}"
+    modCompileOnly "maven.modrinth:thermoo:${project.thermoo_version}"
+    modCompileOnly "maven.modrinth:immersive-aircraft:${project.immersive_aircraft_version}"
+    modCompileOnly "maven.modrinth:immersive-machinery:${project.immersive_machinery_version}"
+    modCompileOnly "maven.modrinth:artifacts:${project.artifacts_version}"
+    modCompileOnly "maven.modrinth:sodium-extra:${project.sodium_extra_version}"
 
     testImplementation platform('org.junit:junit-bom:5.11.4')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -109,6 +115,12 @@ processResources {
     inputs.property 'fabric_api_version', project.fabric_api_version
     inputs.property 'bcc_version', project.bcc_version
     inputs.property 'skin_overrides_version', project.skin_overrides_version
+    inputs.property 'autohud_version', project.autohud_version
+    inputs.property 'thermoo_version', project.thermoo_version
+    inputs.property 'immersive_aircraft_version', project.immersive_aircraft_version
+    inputs.property 'immersive_machinery_version', project.immersive_machinery_version
+    inputs.property 'artifacts_version', project.artifacts_version
+    inputs.property 'sodium_extra_version', project.sodium_extra_version
 
     filesMatching('fabric.mod.json') {
         expand(
@@ -117,7 +129,13 @@ processResources {
             fabric_loader_version: project.fabric_loader_version,
             fabric_api_version: project.fabric_api_version,
             bcc_version: project.bcc_version,
-            skin_overrides_version: project.skin_overrides_version
+            skin_overrides_version: project.skin_overrides_version,
+            autohud_version: project.autohud_version,
+            thermoo_version: project.thermoo_version,
+            immersive_aircraft_version: project.immersive_aircraft_version,
+            immersive_machinery_version: project.immersive_machinery_version,
+            artifacts_version: project.artifacts_version,
+            sodium_extra_version: project.sodium_extra_version
         )
     }
 }

@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -81,6 +82,7 @@ class PrismRelaunchHelperTest {
     void systemOperationsLaunchCannotBlockOnEitherPrismOutputStream() throws Exception {
         Path launcherRoot = Files.createDirectory(temporary.resolve("system-operations-launcher"));
         Path fakePrism = buildFloodingFakePrism(launcherRoot);
+        prewarmFakePrism(fakePrism);
         String instanceId = "nbidal18-client";
 
         new PrismRelaunchHelper.SystemOperations().startPrism(fakePrism, launcherRoot, instanceId);
@@ -91,6 +93,8 @@ class PrismRelaunchHelperTest {
                 instanceId,
                 Duration.ofSeconds(30)
         ), "the fake Prism child did not finish flooding both stdout and stderr");
+        assertTrue(waitForExecutableUnlock(fakePrism, Duration.ofSeconds(15)),
+                "the fake Prism executable remained locked after its output flood");
     }
 
     @Test
@@ -106,6 +110,7 @@ class PrismRelaunchHelperTest {
         Path classpath = PrismAutoRelaunch.extractStandaloneHelper(game);
 
         Path fakePrism = buildFloodingFakePrism(launcherRoot);
+        prewarmFakePrism(fakePrism);
         Process minecraft = new ProcessBuilder(
                 Path.of(System.getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0",
                         "powershell.exe").toString(),
@@ -142,6 +147,8 @@ class PrismRelaunchHelperTest {
         ), "the detached fake Prism child did not finish flooding both output streams");
         assertTrue(helper.waitFor(15, TimeUnit.SECONDS));
         assertEquals(0, helper.exitValue());
+        assertTrue(waitForExecutableUnlock(fakePrism, Duration.ofSeconds(15)),
+                "the detached fake Prism executable remained locked after helper completion");
         assertFalse(Files.exists(game.resolve(PrismRelaunchState.RELATIVE_PATH)));
         Path diagnostic = game.resolve(".nbidal18").resolve("prism-relaunch.log");
         assertTrue(!Files.exists(diagnostic)
@@ -154,8 +161,12 @@ class PrismRelaunchHelperTest {
                 "Microsoft.NET", "Framework64", "v4.0.30319", "csc.exe"
         );
         assertTrue(Files.isRegularFile(compiler), "the Windows .NET Framework C# compiler is unavailable");
-        Path source = launcherRoot.resolve("FloodingPrism.cs");
-        Path executable = launcherRoot.resolve("prismlauncher.exe");
+        Path fixtureDirectory = Path.of(
+                "build", "test-fixtures", "flooding-prism-" + UUID.randomUUID()
+        ).toAbsolutePath().normalize();
+        Files.createDirectories(fixtureDirectory);
+        Path source = fixtureDirectory.resolve("FloodingPrism.cs");
+        Path executable = fixtureDirectory.resolve("prismlauncher.exe");
         Files.writeString(source, """
                 using System;
                 using System.IO;
@@ -219,6 +230,31 @@ class PrismRelaunchHelperTest {
         assertEquals(0, compilerProcess.exitValue(), "fake Prism compilation failed");
         assertTrue(Files.isRegularFile(executable));
         return executable;
+    }
+
+    private static void prewarmFakePrism(Path executable) throws Exception {
+        Process process = new ProcessBuilder(executable.toString())
+                .redirectInput(ProcessBuilder.Redirect.from(Path.of("NUL").toFile()))
+                .redirectOutput(ProcessBuilder.Redirect.DISCARD)
+                .redirectError(ProcessBuilder.Redirect.DISCARD)
+                .start();
+        assertTrue(process.waitFor(30, TimeUnit.SECONDS), "fake Prism prewarm timed out");
+        assertEquals(10, process.exitValue(), "fake Prism prewarm did not reach its argument check");
+    }
+
+    private static boolean waitForExecutableUnlock(Path executable, Duration timeout) throws Exception {
+        Instant deadline = Instant.now().plus(timeout);
+        while (Instant.now().isBefore(deadline)) {
+            try (java.nio.channels.FileChannel ignored = java.nio.channels.FileChannel.open(
+                    executable,
+                    java.nio.file.StandardOpenOption.WRITE
+            )) {
+                return true;
+            } catch (java.nio.file.AccessDeniedException ignored) {
+                Thread.sleep(50);
+            }
+        }
+        return false;
     }
 
     private static boolean waitForExactLaunchRecord(
