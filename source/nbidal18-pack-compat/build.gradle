@@ -208,6 +208,42 @@ def verifyRemappedEmbeddedLaunchGuard = tasks.register('verifyRemappedEmbeddedLa
             if (descriptor != expectedDescriptor) {
                 throw new GradleException("The final embedded launch-guard descriptor is stale or malformed")
             }
+
+            String mixinResource = 'nbidal18-pack-compat.client.mixins.json'
+            java.util.jar.JarEntry mixinEntry = archive.getJarEntry(mixinResource)
+            if (mixinEntry == null) {
+                throw new GradleException("The final companion is missing ${mixinResource}")
+            }
+            Map mixinConfig = archive.getInputStream(mixinEntry).withCloseable { input ->
+                (Map) new groovy.json.JsonSlurper().parse(input)
+            }
+            String mixinPackage = (String) mixinConfig.get('package')
+            Set<String> expectedTopLevelMixins = ((List) mixinConfig.get('client'))
+                .collect { String name -> name + '.class' }
+                .toSet()
+            String mixinPrefix = mixinPackage.replace('.', '/') + '/'
+            Set<String> actualTopLevelClasses = [] as Set
+            archive.entries().each { java.util.jar.JarEntry entry ->
+                if (!entry.directory && entry.name.startsWith(mixinPrefix)) {
+                    String relative = entry.name.substring(mixinPrefix.length())
+                    if (!relative.contains('/') && relative.endsWith('.class') && !relative.contains('$')) {
+                        actualTopLevelClasses.add(relative)
+                    }
+                }
+            }
+            if (actualTopLevelClasses != expectedTopLevelMixins) {
+                throw new GradleException(
+                    "The Mixin-owned package must contain only configured mixins; expected " +
+                    "${expectedTopLevelMixins.sort()}, found ${actualTopLevelClasses.sort()}"
+                )
+            }
+            if (archive.getJarEntry('dev/nbidal18/packcompat/autohud/AutoHudRenderGate.class') == null
+                    || archive.getJarEntry(
+                        'dev/nbidal18/packcompat/autohud/mixin/AutoHudRenderGate.class') != null) {
+                throw new GradleException(
+                    'AutoHudRenderGate must be outside the package reserved for Mixin classes'
+                )
+            }
         }
     }
 }

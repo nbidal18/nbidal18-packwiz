@@ -1,5 +1,6 @@
 package dev.nbidal18.packcompat.autohud.mixin;
 
+import dev.nbidal18.packcompat.autohud.AutoHudRenderGate;
 import me.flashyreese.mods.sodiumextra.client.gui.SodiumExtraHud;
 import mod.crend.autohud.render.ComponentRenderer;
 import net.minecraft.client.DeltaTracker;

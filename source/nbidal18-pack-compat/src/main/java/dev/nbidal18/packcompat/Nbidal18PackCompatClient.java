@@ -1,5 +1,6 @@
 package dev.nbidal18.packcompat;
 
+import dev.nbidal18.packcompat.autohud.AutoHudRenderGate;
 import dev.wuffs.bcc.data.BetterStatus;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -24,6 +25,7 @@ public final class Nbidal18PackCompatClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        AutoHudRenderGate.verifyLoadable();
         FabricLoader loader = FabricLoader.getInstance();
         if (!shouldInstallLaunchGuard(loader.getEnvironmentType())) {
             return;

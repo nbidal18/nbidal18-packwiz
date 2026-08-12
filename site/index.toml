@@ -82,11 +82,11 @@ hash = "a3ec0efcc2030281a6828bf7f59b128009275e0c4fabfc07411ac793319ad7c7"
 
 [[files]]
 file = ".nbidal18/strict-manifest.tsv"
-hash = "a2a519c73aae3e02fde20a27080f4152d7dad45f925284e55d0f07a0ef296fef"
+hash = "31a7d860c6a79aea947ee1351bd86d4de247fb089321c8273f09d67f69af6971"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "2b6351c3475f1a6ab0638b150ea34604d7e87ec949ea0697719665a564b8c3b3"
+hash = "957875a30c4f27ec92ab0ee8606c389851803c178bb1f46e8b3b704327f105c4"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -154,7 +154,7 @@ hash = "5517ad3e06aa1bfeec0a41174677a9ee094b02ee8b58194e39584cc1191cb98b"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "cd5473d5b2ca0c4d1df3cf44600d760d897ca629a820afee9dc649ce3b7e0289"
+hash = "8b18c647a03c399ad456a8b1733d2a1784ae2dd6abfc84277020fd3e45675148"
 
 [[files]]
 file = "config/beautify.json"
@@ -1803,8 +1803,8 @@ file = "mods/nbidal18-jei-hidden-default-1.0.0+1.21.1.jar"
 hash = "5aeffa5d9e70178c6c54991e4f769159d6c40fb0ce3455d9acdbd4c3b5e69ab5"
 
 [[files]]
-file = "mods/nbidal18-pack-compat-1.1.11+1.21.1.jar"
-hash = "c4bc14b0b6eccdd60ce9d8dd9e47e8c32ab3579226cbb5ee9e94b902af0abef5"
+file = "mods/nbidal18-pack-compat-1.1.12+1.21.1.jar"
+hash = "cf18fe6723b6792e823724da1e0248ab9c0095e408b1c34b540540ef042d6773"
 
 [[files]]
 file = "mods/nbidal18-playeremotes-fa-bridge-1.0.1+1.21.1.jar"

@@ -1,6 +1,7 @@
 package dev.nbidal18.packcompat.autohud.mixin;
 
 import artifacts.client.CooldownOverlayRenderer;
+import dev.nbidal18.packcompat.autohud.AutoHudRenderGate;
 import mod.crend.autohud.render.ComponentRenderer;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;

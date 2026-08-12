@@ -1,6 +1,7 @@
 package dev.nbidal18.packcompat.autohud.mixin;
 
 import artifacts.client.HeliumFlamingoOverlay;
+import dev.nbidal18.packcompat.autohud.AutoHudRenderGate;
 import mod.crend.autohud.render.ComponentRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;

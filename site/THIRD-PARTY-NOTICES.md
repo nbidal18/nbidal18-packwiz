@@ -16,7 +16,7 @@ The byte-exact official `playeremotes-fabric-1.21.1-0.1.0.jar` is installed as a
 
 ## Better Compatibility Checker
 
-The all-rights-reserved official `better-compatability-checker-fabric-21.1.8.jar` by Gaz492 is downloaded directly from Modrinth project/version `KJhXPbHQ` / `1uy9t7Jt`; nbidal18 does not rehost or alter it. `nbidal18-pack-compat-1.1.11+1.21.1.jar` is a separate clean-room MIT first-party protocol-3 login, runtime-integrity, launch-guard migration, client UI, and Auto HUD integration companion with exact legacy protocol-1/protocol-2 client responses for older servers. It uses third-party public APIs/mixin targets without embedding their classes or assets. Complete companion and launch-guard source and tests are published in the updater repository.
+The all-rights-reserved official `better-compatability-checker-fabric-21.1.8.jar` by Gaz492 is downloaded directly from Modrinth project/version `KJhXPbHQ` / `1uy9t7Jt`; nbidal18 does not rehost or alter it. `nbidal18-pack-compat-1.1.12+1.21.1.jar` is a separate clean-room MIT first-party protocol-3 login, runtime-integrity, launch-guard migration, client UI, and Auto HUD integration companion with exact legacy protocol-1/protocol-2 client responses for older servers. It uses third-party public APIs/mixin targets without embedding their classes or assets. Complete companion and launch-guard source and tests are published in the updater repository.
 
 ## Vanilla Refresh
 

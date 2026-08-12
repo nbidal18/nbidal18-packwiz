@@ -1,5 +1,6 @@
 package dev.nbidal18.packcompat.autohud.mixin;
 
+import dev.nbidal18.packcompat.autohud.AutoHudRenderGate;
 import immersive_machinery.client.OverlayRenderer;
 import immersive_machinery.entity.MachineEntity;
 import mod.crend.autohud.render.ComponentRenderer;

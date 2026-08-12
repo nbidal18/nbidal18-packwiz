@@ -18,8 +18,8 @@ class ProducerSmokeCompatibilityTest {
         assumeTrue(Files.isRegularFile(siteRoot.resolve(StrictManifest.RELATIVE_PATH)));
         Path packToml = siteRoot.resolve("pack.toml");
         assumeTrue(Files.isRegularFile(packToml)
-                        && Files.readString(packToml).contains("version = \"3.2.7\""),
-                "generated site has not yet been rebuilt for v3.2.7");
+                        && Files.readString(packToml).contains("version = \"3.2.8\""),
+                "generated site has not yet been rebuilt for v3.2.8");
 
         String autoHudConfig = Files.readString(siteRoot.resolve("config/autohud.json5"));
         String voiceServerConfig = Files.readString(siteRoot.resolve("config/voicechat/voicechat-server.properties"));

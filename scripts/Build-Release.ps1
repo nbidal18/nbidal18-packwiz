@@ -25,12 +25,12 @@ $outputPath = Join-Path $releaseRoot '1. setup\nbidal18-client.zip'
 $packCompatSourceRoot = Join-Path $updaterRoot 'source\nbidal18-pack-compat'
 $packCompatPropertiesPath = Join-Path $packCompatSourceRoot 'gradle.properties'
 $packCompatGradle = Join-Path $packCompatSourceRoot 'gradlew.bat'
-$expectedReleaseVersion = '3.2.7'
-$expectedPackCompatVersion = '1.1.11+1.21.1'
+$expectedReleaseVersion = '3.2.8'
+$expectedPackCompatVersion = '1.1.12+1.21.1'
 $expectedLaunchGuardVersion = '1.1.0'
 $publishedV324LaunchGuardSha256 = '63243A6972BF4B89C0E2DDE79B48F20009781C021AA68D30DCB19063AECCAC45'
 $reviewedLaunchGuardSha256 = '7BE9B87B00B92307A2F9B830C6D5FB2E5D74D583E5AB9FF3A9779AB7FF8FA79A'
-$reviewedPackCompatSha256 = 'C4BC14B0B6ECCDD60CE9D8DD9E47E8C32AB3579226CBB5EE9E94B902AF0ABEF5'
+$reviewedPackCompatSha256 = 'CF18FE6723B6792E823724DA1E0248AB9C0095E408B1C34B540540EF042D6773'
 
 function Get-GradleProperty([string] $Path, [string] $Name) {
     $match = @(Get-Content -LiteralPath $Path | Where-Object {
@@ -101,6 +101,7 @@ function Assert-CompanionRelaunchPayload([string] $CompanionJar, [string] $Label
             'dev/nbidal18/packcompat/PrismRelaunchStandalone.class',
             'dev/nbidal18/packcompat/PrismRelaunchState.class',
             'dev/nbidal18/packcompat/autohud/Nbidal18AutoHudApi.class',
+            'dev/nbidal18/packcompat/autohud/AutoHudRenderGate.class',
             'dev/nbidal18/packcompat/autohud/mixin/AutoHudVitalsSyncMixin.class',
             'dev/nbidal18/packcompat/autohud/mixin/ImmersiveAircraftOverlayMixin.class',
             'dev/nbidal18/packcompat/autohud/mixin/ImmersiveMachineryOverlayMixin.class',
@@ -112,6 +113,30 @@ function Assert-CompanionRelaunchPayload([string] $CompanionJar, [string] $Label
             if ($null -eq $archive.GetEntry($requiredClass)) {
                 throw "$Label is missing a required first-party companion component: $requiredClass"
             }
+        }
+
+
+        if ($null -ne $archive.GetEntry('dev/nbidal18/packcompat/autohud/mixin/AutoHudRenderGate.class')) {
+            throw "$Label illegally places AutoHudRenderGate in the package reserved for Mixin classes."
+        }
+
+        $mixinDescriptor = $archive.GetEntry('nbidal18-pack-compat.client.mixins.json')
+        $mixinReader = [IO.StreamReader]::new($mixinDescriptor.Open(), [Text.UTF8Encoding]::new($false, $true), $true)
+        try { $mixinConfig = $mixinReader.ReadToEnd() | ConvertFrom-Json }
+        finally { $mixinReader.Dispose() }
+        $mixinPrefix = ($mixinConfig.package.Replace('.', '/') + '/')
+        $expectedMixinClasses = @($mixinConfig.client | ForEach-Object { "$_.class" } | Sort-Object -CaseSensitive)
+        $actualMixinClasses = @($archive.Entries | ForEach-Object {
+            if ($_.FullName.StartsWith($mixinPrefix, [StringComparison]::Ordinal)) {
+                $relative = $_.FullName.Substring($mixinPrefix.Length)
+                if ($relative.EndsWith('.class', [StringComparison]::Ordinal) -and
+                    -not $relative.Contains('/') -and -not $relative.Contains('$')) {
+                    $relative
+                }
+            }
+        } | Sort-Object -CaseSensitive)
+        if (($expectedMixinClasses -join "`n") -cne ($actualMixinClasses -join "`n")) {
+            throw "$Label has an unconfigured ordinary class in the Mixin-owned package."
         }
     }
     finally {

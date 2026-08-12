@@ -1,5 +1,6 @@
 package dev.nbidal18.packcompat.autohud.mixin;
 
+import dev.nbidal18.packcompat.autohud.AutoHudRenderGate;
 import immersive_aircraft.client.OverlayRenderer;
 import immersive_aircraft.entity.EngineVehicle;
 import immersive_aircraft.entity.VehicleEntity;

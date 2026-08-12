@@ -6,7 +6,7 @@
       "reason": "Configurable MIT rebuild; the embedded NOTICE and LICENSE_BandagePlus-Xanthian retain the original Copyright (c) 2023 Xanthian MIT attribution for reused art assets and recipe data."
     },
     {
-      "path": "mods/nbidal18-pack-compat-1.1.11+1.21.1.jar",
+      "path": "mods/nbidal18-pack-compat-1.1.12+1.21.1.jar",
       "reason": "First-party clean-room MIT protocol-3 compatibility, bounded sanitized reason reporting, runtime integrity, client title-screen and Auto HUD bridges, and guarded-instance launch-guard migration; complete reproducible source and tests are published under source/nbidal18-pack-compat. The exact reviewed guard 1.1.0 is embedded with its SHA-256 descriptor for controlled same-instance relaunch and later pre-launch self-handoff. The companion preserves the fixed detached Prism stream handling, opens Skin Overrides' existing selector, groups the vanilla vitals, and integrates reviewed Immersive Aircraft, Immersive Machinery, Artifacts, Sodium Extra, and Thermoo HUD behavior without copying third-party classes or assets."
     },
     {
