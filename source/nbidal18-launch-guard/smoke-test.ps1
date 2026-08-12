@@ -192,6 +192,16 @@ try {
             -not (Select-String -LiteralPath (Join-Path $temporary 'config\iris.properties') -Pattern '^customPlayerSetting=keep$')) {
         throw 'Iris shader policy reset too much or failed to reset an unapproved shader.'
     }
+
+    $approvedGeneratedShader = 'ComplementaryUnbound_r5.8.1 + EuphoriaPatches_1.9.3'
+    [IO.File]::WriteAllText((Join-Path $temporary 'config\iris.properties'),
+        "allowUnknownShaders=false`nshaderPack=$approvedGeneratedShader`ncustomPlayerSetting=keep`n", [Text.UTF8Encoding]::new($false))
+    Invoke-Checked $java @('-jar', 'nbidal18-launch-guard.jar', 'http://localhost/smoke/pack.toml') $temporary
+    if (-not (Select-String -LiteralPath (Join-Path $temporary 'config\iris.properties') -SimpleMatch "shaderPack=$approvedGeneratedShader") -or
+            -not (Select-String -LiteralPath (Join-Path $temporary 'config\iris.properties') -Pattern '^allowUnknownShaders=false$') -or
+            -not (Select-String -LiteralPath (Join-Path $temporary 'config\iris.properties') -Pattern '^customPlayerSetting=keep$')) {
+        throw 'The exact reviewed Euphoria-generated shader selection was not preserved.'
+    }
     if (-not (Select-String -LiteralPath (Join-Path $temporary 'options.txt') -SimpleMatch 'resourcePacks:["vanilla"]') -or
             -not (Select-String -LiteralPath (Join-Path $temporary 'options.txt') -Pattern '^fov:0\.9$')) {
         throw 'options.txt mixed policy did not preserve player settings while enforcing managed packs.'
@@ -229,6 +239,7 @@ try {
         throw 'Integrity attestation did not match the v1 protocol.'
     }
 
+    $bootstrapCountBeforeMalformed = (Get-Content -LiteralPath (Join-Path $temporary 'fake-bootstrap-count.txt') -Raw).Trim()
     [IO.File]::WriteAllText((Join-Path $temporary '.nbidal18\strict-manifest.tsv'),
         "nbidal18-strict-manifest`t1`nstrict-dir`t../outside`n", [Text.UTF8Encoding]::new($false))
     Push-Location $temporary
@@ -245,7 +256,7 @@ try {
     if ($negativeExit -eq 0 -or ($negativeOutput -join "`n") -notmatch 'path traversal is forbidden') {
         throw 'Malformed traversal manifest did not fail closed before Packwiz.'
     }
-    if ((Get-Content -LiteralPath (Join-Path $temporary 'fake-bootstrap-count.txt') -Raw).Trim() -ne '2') {
+    if ((Get-Content -LiteralPath (Join-Path $temporary 'fake-bootstrap-count.txt') -Raw).Trim() -ne $bootstrapCountBeforeMalformed) {
         throw 'Packwiz ran despite a malformed pre-existing manifest.'
     }
     Write-Host 'Launch-guard smoke test passed.'

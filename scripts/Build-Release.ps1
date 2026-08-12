@@ -8,6 +8,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $releaseRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
 $updaterRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
@@ -20,7 +21,7 @@ $guardPath = Join-Path $updaterRoot 'tools\nbidal18-launch-guard.jar'
 $guardBuildPath = Join-Path $updaterRoot 'source\nbidal18-launch-guard\build.ps1'
 $guardSmokePath = Join-Path $updaterRoot 'source\nbidal18-launch-guard\smoke-test.ps1'
 $toolProvenancePath = Join-Path $updaterRoot 'TOOL-PROVENANCE.md'
-$outputPath = Join-Path $releaseRoot '1. setup\nbidal18-3.2.3-client.zip'
+$outputPath = Join-Path $releaseRoot '1. setup\nbidal18-client.zip'
 $packCompatSourceRoot = Join-Path $updaterRoot 'source\nbidal18-pack-compat'
 $packCompatPropertiesPath = Join-Path $packCompatSourceRoot 'gradle.properties'
 $packCompatGradle = Join-Path $packCompatSourceRoot 'gradlew.bat'
@@ -31,6 +32,56 @@ function Get-GradleProperty([string] $Path, [string] $Name) {
     })
     if ($match.Count -ne 1) { throw "Expected exactly one $Name property in $Path" }
     return ([regex]::Match($match[0], '^[^=]+=(.+)$')).Groups[1].Value.Trim()
+}
+
+function Assert-EmbeddedLaunchGuard([string] $CompanionJar, [string] $ExpectedGuard, [string] $Label) {
+    if (-not (Test-Path -LiteralPath $CompanionJar -PathType Leaf)) {
+        throw "Missing $Label companion JAR: $CompanionJar"
+    }
+    if (-not (Test-Path -LiteralPath $ExpectedGuard -PathType Leaf)) {
+        throw "Missing reviewed launch guard for $Label verification: $ExpectedGuard"
+    }
+
+    $expectedFile = Get-Item -LiteralPath $ExpectedGuard
+    $expectedHash = (Get-FileHash -LiteralPath $ExpectedGuard -Algorithm SHA256).Hash.ToLowerInvariant()
+    $payloadName = 'META-INF/nbidal18/nbidal18-launch-guard.jar'
+    $descriptorName = 'META-INF/nbidal18/launch-guard.tsv'
+    $archive = [IO.Compression.ZipFile]::OpenRead($CompanionJar)
+    try {
+        $payloadEntries = @($archive.Entries | Where-Object { $_.FullName -ceq $payloadName })
+        $descriptorEntries = @($archive.Entries | Where-Object { $_.FullName -ceq $descriptorName })
+        if ($payloadEntries.Count -ne 1 -or $descriptorEntries.Count -ne 1) {
+            throw "$Label must contain exactly one embedded launch guard and descriptor."
+        }
+        if ($payloadEntries[0].Length -ne $expectedFile.Length) {
+            throw "$Label embedded launch-guard size differs from the reviewed tool."
+        }
+
+        $algorithm = [Security.Cryptography.SHA256]::Create()
+        $payloadStream = $payloadEntries[0].Open()
+        try { $payloadHashBytes = $algorithm.ComputeHash($payloadStream) }
+        finally {
+            $payloadStream.Dispose()
+            $algorithm.Dispose()
+        }
+        $payloadHash = (($payloadHashBytes | ForEach-Object { $_.ToString('x2') }) -join '')
+        if ($payloadHash -cne $expectedHash) {
+            throw "$Label embedded launch guard differs from the reviewed tool: $payloadHash"
+        }
+
+        $descriptorStream = $descriptorEntries[0].Open()
+        $reader = [IO.StreamReader]::new($descriptorStream, [Text.UTF8Encoding]::new($false, $true), $true)
+        try { $descriptor = $reader.ReadToEnd() }
+        finally {
+            $reader.Dispose()
+            $descriptorStream.Dispose()
+        }
+        $expectedDescriptor = "nbidal18-launch-guard`t1`nsha256`t$expectedHash`nsize`t$($expectedFile.Length)`n"
+        if ($descriptor -cne $expectedDescriptor -or $descriptor.Contains('\t')) {
+            throw "$Label launch-guard descriptor is not the exact reviewed tab-delimited record."
+        }
+    }
+    finally { $archive.Dispose() }
 }
 
 function Build-AndVerifyPackCompat {
@@ -71,6 +122,7 @@ function Build-AndVerifyPackCompat {
     }
 
     $builtHash = (Get-FileHash -LiteralPath $builtJar -Algorithm SHA256).Hash
+    Assert-EmbeddedLaunchGuard $builtJar $guardPath 'Reproducible pack-compat'
     foreach ($payloadPath in @(
         (Join-Path $releaseRoot "3. modpack\client\mods\$fileName"),
         (Join-Path $releaseRoot "3. modpack\server\mods\$fileName"),
@@ -132,6 +184,7 @@ if (-not (Test-Path -LiteralPath $sitePackCompat -PathType Leaf) -or
     (Get-FileHash -LiteralPath $sitePackCompat -Algorithm SHA256).Hash -ne $packCompat.Hash) {
     throw "Generated updater site pack-compat JAR differs from the reproducible build: $sitePackCompat"
 }
+Assert-EmbeddedLaunchGuard $sitePackCompat $guardPath 'Generated updater-site pack-compat'
 
 if (-not (Test-Path -LiteralPath $guardPath -PathType Leaf)) {
     throw "Build the reproducible launch guard before packaging: $guardPath"

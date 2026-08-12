@@ -92,7 +92,7 @@ function Copy-FilteredTree(
 }
 
 function Invoke-ModrinthBatch([string[]] $Hashes) {
-    $headers = @{ 'User-Agent' = 'nbidal18-packwiz-builder/3.2.3 (maintainer tooling)' }
+    $headers = @{ 'User-Agent' = 'nbidal18-packwiz-builder/3.2.4 (maintainer tooling)' }
     $body = @{ hashes = @($Hashes); algorithm = 'sha1' } | ConvertTo-Json -Compress
     $delay = 1
     for ($attempt = 1; $attempt -le 5; $attempt++) {
@@ -371,27 +371,6 @@ $datapackExclusions = [Collections.Generic.HashSet[string]]::new([StringComparer
 foreach ($privateName in $privateDatapackArchives) { [void] $datapackExclusions.Add($privateName) }
 foreach ($record in $records | Where-Object { $_.Type -eq 'datapack' }) { [void] $datapackExclusions.Add($record.FileName) }
 
-# CustomSkinLoader creates these two empty scaffolding directories on its first
-# skin lookup. Managed inert markers make the directories exist before the
-# runtime integrity monitor locks; the official loader ignores the .marker
-# extension, while every executable/provider file below either directory stays
-# outside the allowlist and is rejected.
-$customSkinLoaderMarkers = @(
-    [pscustomobject]@{
-        SourcePath = Join-Path $clientRoot 'CustomSkinLoader\Plugins\nbidal18-closed.marker'
-        RelativePath = 'CustomSkinLoader/Plugins/nbidal18-closed.marker'
-    },
-    [pscustomobject]@{
-        SourcePath = Join-Path $clientRoot 'CustomSkinLoader\ExtraList\nbidal18-closed.marker'
-        RelativePath = 'CustomSkinLoader/ExtraList/nbidal18-closed.marker'
-    }
-)
-foreach ($marker in $customSkinLoaderMarkers) {
-    if (-not (Test-Path -LiteralPath $marker.SourcePath -PathType Leaf)) {
-        throw "Required closed CustomSkinLoader marker is missing: $($marker.SourcePath)"
-    }
-}
-
 $report = New-Object Collections.Generic.List[object]
 $blocking = New-Object Collections.Generic.List[string]
 $usedMetadataNames = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
@@ -402,12 +381,6 @@ try {
     Copy-FilteredTree (Join-Path $clientRoot 'config') (Join-Path $stagePath 'config') $configExclusions
     Copy-FilteredTree $datapackRoot (Join-Path $stagePath 'datapacks') $datapackExclusions
     Copy-FilteredTree (Join-Path $clientRoot 'defaultconfigs') (Join-Path $stagePath 'defaultconfigs') ([Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase))
-
-    foreach ($marker in $customSkinLoaderMarkers) {
-        $markerTarget = Join-Path $stagePath $marker.RelativePath.Replace('/', '\')
-        New-Item -ItemType Directory -Path (Split-Path -Parent $markerTarget) -Force | Out-Null
-        Copy-Item -LiteralPath $marker.SourcePath -Destination $markerTarget -Force
-    }
 
     Copy-Item -LiteralPath (Join-Path $clientRoot 'credits.txt') -Destination (Join-Path $stagePath 'credits.txt') -Force
     Copy-Item -LiteralPath (Join-Path $clientRoot 'THIRD-PARTY-NOTICES.md') -Destination (Join-Path $stagePath 'THIRD-PARTY-NOTICES.md') -Force
@@ -431,10 +404,6 @@ try {
             if ($record.RelativePath -eq 'mods/skin_overrides-2.6.0+1.21.1.jar' -and
                 (([string] $entry.projectId) -ne 'GON0Fdk5' -or ([string] $entry.versionId) -ne 'Z99ddIuX')) {
                 throw 'Skin Overrides must resolve to the reviewed Modrinth project GON0Fdk5, version Z99ddIuX.'
-            }
-            if ($record.RelativePath -eq 'mods/CustomSkinLoader_Universal-15.0.1.jar' -and
-                (([string] $entry.projectId) -ne 'idMHQ4n2' -or ([string] $entry.versionId) -ne 'OLaesh5y')) {
-                throw 'CustomSkinLoader must resolve to the reviewed Modrinth project idMHQ4n2, version OLaesh5y.'
             }
             if ($record.RelativePath -eq 'shaderpacks/ComplementaryUnbound_r5.8.1.zip' -and
                 (([string] $entry.projectId) -ne 'R6NEzAwj' -or ([string] $entry.versionId) -ne 'VMHXIk50')) {
@@ -541,9 +510,9 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
         'datapacks',
         'config',
         'defaultconfigs',
-        # CustomSkinLoader can load arbitrary JAR/ZIP plugins from this root.
-        # Keep the root closed; only the exact cosmetic/runtime exceptions below
-        # are allowed, while Plugins and ExtraList remain quarantined.
+        # CustomSkinLoader was retired in 3.2.4. Keep its old runtime root as an
+        # exact-empty closed set so Core, caches, configs, plugins, and provider
+        # lists left by an earlier release are recoverably quarantined.
         'CustomSkinLoader',
         # Moonlight automatically loads datapacks placed here into every world.
         # Keep it as an intentionally empty closed set, never a player/runtime
@@ -565,7 +534,7 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
         }
         $strictManaged[$relativePath] = $sha256
     }
-    foreach ($directory in @('datapacks', 'config', 'defaultconfigs', 'CustomSkinLoader', '.nbidal18/defaults')) {
+    foreach ($directory in @('datapacks', 'config', 'defaultconfigs', '.nbidal18/defaults')) {
         $directoryRoot = Join-Path $stagePath $directory
         if (-not (Test-Path -LiteralPath $directoryRoot -PathType Container)) { continue }
         foreach ($file in Get-ChildItem -LiteralPath $directoryRoot -Recurse -File -Force) {
@@ -606,9 +575,6 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
     }
     $strictManifestLines.Add("personal`tconfig/controlify.json")
     foreach ($runtimeFile in @(
-        'CustomSkinLoader/CustomSkinLoader.json',
-        'CustomSkinLoader/CustomSkinLoader.log',
-        'CustomSkinLoader/CustomSkinAPIPlus-ClientID',
         'config/euphoria_patcher/.data.json',
         'config/etf_warnings.json',
         'config/jade/usernamecache.json',
@@ -620,14 +586,6 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
         $strictManifestLines.Add("runtime`t$runtimeFile")
     }
     foreach ($runtimePrefix in @(
-        # The official bootstrap rewrites Core before Fabric client entrypoints;
-        # nbidal18-pack-compat then captures and watches its executable baseline.
-        'CustomSkinLoader/Core',
-        # Cosmetic local textures and non-executable caches are intentionally
-        # mutable. Plugins and ExtraList are not exceptions.
-        'CustomSkinLoader/LocalSkin',
-        'CustomSkinLoader/ProfileCache',
-        'CustomSkinLoader/caches',
         'config/crash_assistant',
         'config/jei/world',
         'config/spark/tmp'
@@ -654,6 +612,8 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
 /.packwizignore
 /pack.toml
 /index.toml
+/nbidal18-launch-guard.jar
+/packwiz-installer-bootstrap.jar
 /options.txt
 /options.amecsapi.txt
 /servers.dat
@@ -715,7 +675,7 @@ version = "$(ConvertTo-TomlString ([string] $entry.versionId))"
     Write-Utf8NoBom (Join-Path $stagePath 'index.toml') ('hash-format = "sha256"' + "`n")
     Write-Utf8NoBom (Join-Path $stagePath 'pack.toml') @'
 name = "nbidal18"
-version = "3.2.3"
+version = "3.2.4"
 description = "Fabric 1.21.1 adventure modpack with incremental Prism updates"
 pack-format = "packwiz:1.1.0"
 
@@ -749,13 +709,11 @@ minecraft = "1.21.1"
         'datapacks/Still_Life-1.0-beta1.zip', 'vinurl', 'saves', 'screenshots', 'logs',
         'crash-reports', 'debug', '.fabric', '.mixin.out', 'data', 'downloads',
         'dynamic-resource-pack-cache', 'server-resource-packs', 'local', 'moddata',
-        'moonlight-global-datapacks', 'villagerpacks',
+        'moonlight-global-datapacks', 'villagerpacks', 'CustomSkinLoader',
         'skin_overrides', 'cape_overrides', 'usercache.json',
         'command_history.txt', 'hotbar.nbt', 'servers.dat_old'
     )) { $forbiddenIndexRoots.Add($runtimeRoot) }
     $privateIndexMatches = New-Object Collections.Generic.List[string]
-    $allowedCustomSkinLoaderMarkers = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
-    foreach ($marker in $customSkinLoaderMarkers) { [void] $allowedCustomSkinLoaderMarkers.Add($marker.RelativePath) }
     foreach ($indexedPath in $indexedPaths) {
         $isForbidden = $false
         foreach ($forbiddenRoot in $forbiddenIndexRoots) {
@@ -764,10 +722,6 @@ minecraft = "1.21.1"
                 $isForbidden = $true
                 break
             }
-        }
-        if ($indexedPath.StartsWith('CustomSkinLoader/', [StringComparison]::OrdinalIgnoreCase) -and
-                -not $allowedCustomSkinLoaderMarkers.Contains($indexedPath)) {
-            $isForbidden = $true
         }
         if ($indexedPath -match '^shaderpacks/.+\.zip(?:\.txt)?$') { $isForbidden = $true }
         if ($isForbidden) { $privateIndexMatches.Add($indexedPath) }

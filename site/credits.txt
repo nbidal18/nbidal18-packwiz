@@ -9,4 +9,3 @@ Player Emotes: https://modrinth.com/mod/player-emotes (official Modrinth deliver
 Vanilla Refresh: https://modrinth.com/mod/vanilla-refresh (author's modpack terms)
 Realistic Health: https://modrinth.com/datapack/realistic-health (official Modrinth download)
 Skin Overrides by rosebud/orifu: https://modrinth.com/mod/skin-overrides (official Modrinth delivery; MPL-2.0)
-CustomSkinLoader by xfl03, JLChnToZ, and ZekerZhayard: https://modrinth.com/mod/customskinloader / https://github.com/xfl03/MCCustomSkinLoader (official unmodified Modrinth delivery)

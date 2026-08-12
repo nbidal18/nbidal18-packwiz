@@ -40,7 +40,7 @@ managed	aa746e8a60dd6bb4de1cd6745629f3b2fa421249581aa88b58c53f333c67c936	config/
 managed	4ad2b5325a9ddd32792b0cca532ab88914ae0c85aef8f5f56db8f5e75609bc28	config/artifacts/items.toml
 managed	16088ffbd361b2d24e4f72b41fcfa69c85c8244e13627a953c05dbeb3afe5b22	config/autohud.json5
 managed	5517ad3e06aa1bfeec0a41174677a9ee094b02ee8b58194e39584cc1191cb98b	config/bandagesplus.json
-managed	3d2bf20f50bfd6c56ccd2bd14d8c3e6154aa9ddb9c8f886425f96c801deb0e90	config/bcc-common.toml
+managed	0e37fa4333a40281308467639c9ab40289414fcfebe1a474d63cfd40a1e6d441	config/bcc-common.toml
 managed	285f55d00f7e50b3e6191e22fc02083dd3648e1fe717da6a20a59bfc84044fab	config/beautify.json
 managed	82ffaabd04cb676394314ad57bacb68b9160d2d8fec5109f1f106115e71417af	config/betteradvancements.json
 managed	d79f3120a5a4d7185074d3e791574efefa5c5b6c2db034e0c625ca372fe8804f	config/betterarcheology.jsonc
@@ -245,8 +245,6 @@ managed	fe1b0780c3b8a855a6ab46570ee0bc35e988e30a130d9e2481be3a1c31d61ee6	config/
 managed	00c6e34f0adbb41db954d296fd7c55dc3412463a38038dc836626433dd7f6d92	config/whitenoise-client.toml
 managed	7bea6cc8cc83a66e1482764774661611c5c15bc276684a2eea660204a3bd86c9	config/wildernature.json
 managed	50057a63c98167f7b05727906f17ae6fb182a5eb40bcdb3314d1a8a325c4eec8	config/worldplaytime/config.json
-managed	efda05f36c773d2bc3e0f299646406655eee8b857fbf7260b387247773ba786c	CustomSkinLoader/ExtraList/nbidal18-closed.marker
-managed	9a5dc08daf4760d4cfc2214b4af0525a07ff6de90d24bdf475f8ab91b706cbfa	CustomSkinLoader/Plugins/nbidal18-closed.marker
 managed	e123ea1b312282db621ae2eec6086f3f7334cea6a6fcdbecab0462f8512bf8f5	datapacks/custom_recipes_1.21/data/crafting/recipe/bone.json
 managed	4d90304f527ffd36cc02867ade92cca7d08c5975d2d762ba36fba95ff356d1af	datapacks/custom_recipes_1.21/data/crafting/recipe/gunpowder.json
 managed	ca28be275db55b91bafff21faec46aacf3175d9dcb490e1d611fca2528d4bd3c	datapacks/custom_recipes_1.21/data/crafting/recipe/rotten_flesh.json
@@ -321,7 +319,6 @@ managed	b26d876dc8959c7f8722505f54ceb9dab68c686449afe40e35af03192b459a05	mods/cr
 managed	daaadf98c856fd18d66a2e366efea5f9a5adbe3201544b0085beb3da6f107e58	mods/critical_strike-fabric-1.0.4+1.21.1.jar
 managed	80afd705b02b68baf2199421a112cb806697ffe6b28cc5bdd860eb305d1a949a	mods/crittersandcompanions-fabric-1.21.1-2.3.4.jar
 managed	6fbd56d2599c3f08908a076333e416a86d3d544d28fd702dbbbb7739f8c7efc5	mods/cryonicconfig-fabric-1.0.0+mc1.21.11.jar
-managed	026d8b38ea93edccd647f60568193e79801a377b7bd4e916dcfc0d5482b767fc	mods/CustomSkinLoader_Universal-15.0.1.jar
 managed	7c39f38f2cb1f5d85fe15dc2e1846db050d94999b13166846c2f05f1fac3f9a8	mods/darcenos-minecarts-1.4.jar
 managed	8cd7b290ac1ca12eaa1c245e71e8c9755d13dbc5d104e77a9e1c85fe37c437b6	mods/data-loader-1.1.6+1.21.jar
 managed	06a86cd16c53b950addf51b153f80296388867306b909b3b8bc276ea61b81632	mods/day-counter-1.2.1+fabric-mc1.21-1.21.8.jar
@@ -409,7 +406,7 @@ managed	7fd6622570a880c5806c9f00d5070f352466944d1104d88f75726edc5ea33c44	mods/nb
 managed	4a3d37283e3543192683a8f0a29f857c953d27d856471c1051e3a497abba46c6	mods/nbidal18-autohud-vitals-sync-1.0.0+1.21.1.jar
 managed	274dcc5766fdbd70ca0d6490fa985cbb4e0876405c66dcb219795f86311de968	mods/nbidal18-jei-coverage-bridge-1.0.0+1.21.1.jar
 managed	5aeffa5d9e70178c6c54991e4f769159d6c40fb0ce3455d9acdbd4c3b5e69ab5	mods/nbidal18-jei-hidden-default-1.0.0+1.21.1.jar
-managed	9594dc3a9a6701e6b4307ad0a783889a3515f8d3083fded5e47e0d92060986d4	mods/nbidal18-pack-compat-1.1.6+1.21.1.jar
+managed	0f3a61d73cd7c8074d8dabc41ded8ed1bcc8116fea730de86a60afa0538b766a	mods/nbidal18-pack-compat-1.1.8+1.21.1.jar
 managed	38101ec421114a88c19f9442221193a6c1d79de38e2515aec0602e6a39ddbc32	mods/nbidal18-playeremotes-fa-bridge-1.0.1+1.21.1.jar
 managed	ed999ceca5abd949d7bcc00baa83e270440f4e56c778e404c0686900d20d9ae2	mods/niftycarts-21.1.1.jar
 managed	8bdda0a5d33cf139c3e9ccd8ab96bb7217e1b93d8bbc7723bacb852747e9721d	mods/NoHurtFlash-1.0.1.jar
@@ -512,9 +509,6 @@ optional	6d6cf7c67d0faa16b37c8a00a7fd39131ad1a9c43e4a3356b88e2ea9c39159bc	datapa
 personal	shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt
 personal	shaderpacks/MakeUp-UltraFast-9.4b.zip.txt
 personal	config/controlify.json
-runtime	CustomSkinLoader/CustomSkinLoader.json
-runtime	CustomSkinLoader/CustomSkinLoader.log
-runtime	CustomSkinLoader/CustomSkinAPIPlus-ClientID
 runtime	config/euphoria_patcher/.data.json
 runtime	config/etf_warnings.json
 runtime	config/jade/usernamecache.json
@@ -522,10 +516,6 @@ runtime	config/presencefootsteps/updater.json
 runtime	config/resourceful-config-web.json
 runtime	config/sodium-fingerprint.json
 runtime	config/voicechat/username-cache.json
-runtime-prefix	CustomSkinLoader/Core
-runtime-prefix	CustomSkinLoader/LocalSkin
-runtime-prefix	CustomSkinLoader/ProfileCache
-runtime-prefix	CustomSkinLoader/caches
 runtime-prefix	config/crash_assistant
 runtime-prefix	config/jei/world
 runtime-prefix	config/spark/tmp

@@ -384,6 +384,8 @@ try {
     $forbiddenIndexedFiles = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
     foreach ($seedRule in @(Get-StrictSeedRules $siteRoot)) { [void] $forbiddenIndexedFiles.Add($seedRule.Target) }
     foreach ($forbidden in @(
+        'nbidal18-launch-guard.jar',
+        'packwiz-installer-bootstrap.jar',
         'datapacks/Still_Life-1.0-beta1.zip',
         'config/controlify.json',
         'config/euphoria_patcher/.data.json',
@@ -392,26 +394,19 @@ try {
         'config/presencefootsteps/updater.json',
         'config/resourceful-config-web.json',
         'config/sodium-fingerprint.json',
-        'config/voicechat/username-cache.json',
-        'CustomSkinLoader/CustomSkinLoader.json',
-        'CustomSkinLoader/CustomSkinLoader.log',
-        'CustomSkinLoader/CustomSkinAPIPlus-ClientID'
+        'config/voicechat/username-cache.json'
     )) { [void] $forbiddenIndexedFiles.Add($forbidden) }
-    $allowedCustomSkinLoaderMarkers = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
-    [void] $allowedCustomSkinLoaderMarkers.Add('CustomSkinLoader/Plugins/nbidal18-closed.marker')
-    [void] $allowedCustomSkinLoaderMarkers.Add('CustomSkinLoader/ExtraList/nbidal18-closed.marker')
     $forbiddenIndexedPrefixes = @(
         'config/crash_assistant/',
         'config/jei/world/',
         'config/spark/tmp/',
+        'CustomSkinLoader/',
         'skin_overrides/',
         'cape_overrides/',
         'vinurl/'
     )
     foreach ($indexedSourcePath in $indexedSourcePaths) {
         if ($forbiddenIndexedFiles.Contains($indexedSourcePath) -or
-                ($indexedSourcePath.StartsWith('CustomSkinLoader/', [StringComparison]::OrdinalIgnoreCase) -and
-                    -not $allowedCustomSkinLoaderMarkers.Contains($indexedSourcePath)) -or
                 @($forbiddenIndexedPrefixes | Where-Object {
                     $indexedSourcePath.StartsWith($_, [StringComparison]::OrdinalIgnoreCase)
                 }).Count -gt 0) {
@@ -423,22 +418,27 @@ try {
             Where-Object { $_.StartsWith('CustomSkinLoader/', [StringComparison]::OrdinalIgnoreCase) } |
             Sort-Object
     )
-    $expectedCustomSkinLoaderPaths = @(
-        'CustomSkinLoader/ExtraList/nbidal18-closed.marker',
-        'CustomSkinLoader/Plugins/nbidal18-closed.marker'
-    )
-    if (($indexedCustomSkinLoaderPaths -join "`n") -cne ($expectedCustomSkinLoaderPaths -join "`n")) {
-        throw "The public CustomSkinLoader tree must contain exactly the two inert closed-directory markers; found: $($indexedCustomSkinLoaderPaths -join ', ')"
+    if ($indexedCustomSkinLoaderPaths.Count -ne 0) {
+        throw "The retired CustomSkinLoader tree must be absent from the public index; found: $($indexedCustomSkinLoaderPaths -join ', ')"
     }
     $strictManifestLines = @(
         Get-Content -LiteralPath (Join-Path $siteRoot '.nbidal18\strict-manifest.tsv')
     )
-    foreach ($markerPath in $expectedCustomSkinLoaderPaths) {
-        $markerHash = (Get-FileHash -LiteralPath (Join-Path $siteRoot $markerPath.Replace('/', '\')) -Algorithm SHA256).Hash.ToLowerInvariant()
-        $expectedManagedRecord = "managed`t$markerHash`t$markerPath"
-        if (@($strictManifestLines | Where-Object { $_ -ceq $expectedManagedRecord }).Count -ne 1) {
-            throw "The strict manifest must manage the exact closed-directory marker: $markerPath"
+    foreach ($standaloneTool in @('nbidal18-launch-guard.jar', 'packwiz-installer-bootstrap.jar')) {
+        if (@($strictManifestLines | Where-Object {
+                    $_ -match ('(?i)\t' + [regex]::Escape($standaloneTool) + '$')
+                }).Count -ne 0) {
+            throw "The standalone launcher tool must not enter the strict manifest: $standaloneTool"
         }
+    }
+    if (@($strictManifestLines | Where-Object { $_ -ceq "strict-dir`tCustomSkinLoader" }).Count -ne 1) {
+        throw 'The retired CustomSkinLoader root must remain an exact-empty strict directory.'
+    }
+    $customSkinLoaderExceptions = @($strictManifestLines | Where-Object {
+        $_ -cne "strict-dir`tCustomSkinLoader" -and $_ -match '(?i)\tCustomSkinLoader(?:/|$)'
+    })
+    if ($customSkinLoaderExceptions.Count -ne 0) {
+        throw "The retired CustomSkinLoader root must have no managed, personal, runtime, or prefix exceptions: $($customSkinLoaderExceptions -join '; ')"
     }
     if ($indexText -match 'file = "shaderpacks/[^"]+\.zip(?:\.txt)?"') {
         throw 'A raw shader archive or sidecar entered the Packwiz index instead of official metadata.'
@@ -520,7 +520,7 @@ try {
     # Build a localhost-only migration ZIP for isolated testing.
     $port = Get-FreeTcpPort
     $packUrl = "http://127.0.0.1:$port/pack.toml"
-    $testZip = Join-Path $temporaryRoot 'nbidal18-3.2.3-local-validation.zip'
+    $testZip = Join-Path $temporaryRoot 'nbidal18-client-local-validation.zip'
     & $builderPath -OutputPath $testZip -UpdateUrl $packUrl -AllowInsecureLocalhost
     if (-not (Test-Path -LiteralPath $testZip -PathType Leaf)) { throw 'Migration test ZIP was not created.' }
 
@@ -597,7 +597,7 @@ try {
     if ($preLaunchLines.Count -ne 1 -or $preLaunchLines[0].Contains('packwiz-installer-bootstrap.jar')) {
         throw 'Migration instance must have exactly one guarded pre-launch command, never the legacy direct-Packwiz command.'
     }
-    foreach ($requiredText in @('name=nbidal18-client', 'ExportName=nbidal18-client', 'ExportVersion=3.2.3', 'OverrideCommands=true', "PreLaunchCommand=`"`$INST_JAVA`" -jar nbidal18-launch-guard.jar $packUrl")) {
+    foreach ($requiredText in @('name=nbidal18-client', 'ExportName=nbidal18-client', 'ExportVersion=3.2.4', 'OverrideCommands=true', "PreLaunchCommand=`"`$INST_JAVA`" -jar nbidal18-launch-guard.jar $packUrl")) {
         if (-not $instanceCfg.Contains($requiredText)) { throw "instance.cfg assertion failed: $requiredText" }
     }
     $mmc = Get-Content -LiteralPath (Join-Path $instanceRoot 'mmc-pack.json') -Raw | ConvertFrom-Json
@@ -625,6 +625,10 @@ try {
     Write-Utf8NoBom (Join-Path $minecraft 'screenshots\__validation.txt') "keep-screenshot`n"
     Write-Utf8NoBom (Join-Path $minecraft 'vinurl\downloads\__player-audio.ogg') "player-vinurl-download`n"
     Write-Utf8NoBom (Join-Path $minecraft 'vinurl\executables\__runtime-helper.exe') "runtime-vinurl-helper`n"
+    Write-Utf8NoBom (Join-Path $minecraft 'skin_overrides\__validation-player.txt') "player-skin-selection`n"
+    Write-Utf8NoBom (Join-Path $minecraft 'skin_overrides\library\__validation-player.png') "player-skin-library`n"
+    Write-Utf8NoBom (Join-Path $minecraft 'cape_overrides\__validation-player.txt') "player-cape-selection`n"
+    Write-Utf8NoBom (Join-Path $minecraft 'cape_overrides\library\__validation-player.png') "player-cape-library`n"
     Write-Utf8NoBom (Join-Path $minecraft "shaderpacks\$($shaderArchives[0].Name).txt") "approved-shader-sidecar-setting`n"
     Write-Utf8NoBom (Join-Path $minecraft 'options.txt') "resourcePacks:[`"file/__unauthorized.zip`"]`nincompatibleResourcePacks:[`"file/__unauthorized.zip`"]`nkey_key.forward:key.keyboard.up`nvalidationPreference:keep`n"
     Write-Utf8NoBom (Join-Path $minecraft 'config\iris.properties') "shaderPack=__unauthorized.zip`nenableShaders=true`nallowUnknownShaders=true`nvalidationPreference=keep`n"
@@ -654,6 +658,9 @@ try {
         'moonlight-global-datapacks/__unknown-global.zip',
         'villagerpacks/__unknown-villager-pack.zip',
         'server-resource-packs/__unknown-server-pack.zip',
+        'CustomSkinLoader/CustomSkinLoader.json',
+        'CustomSkinLoader/Core/CustomSkinLoader-Common.jar',
+        'CustomSkinLoader/ProfileCache/__stale-profile.json',
         'CustomSkinLoader/Plugins/__unknown-plugin.jar',
         'CustomSkinLoader/ExtraList/__unknown-provider.json',
         'config/__unknown-local.toml'
@@ -674,6 +681,10 @@ try {
         $installedStillLife,
         (Join-Path $minecraft 'vinurl\downloads\__player-audio.ogg'),
         (Join-Path $minecraft 'vinurl\executables\__runtime-helper.exe'),
+        (Join-Path $minecraft 'skin_overrides\__validation-player.txt'),
+        (Join-Path $minecraft 'skin_overrides\library\__validation-player.png'),
+        (Join-Path $minecraft 'cape_overrides\__validation-player.txt'),
+        (Join-Path $minecraft 'cape_overrides\library\__validation-player.png'),
         (Join-Path $minecraft 'config\voicechat\voicechat-client.properties'),
         (Join-Path $minecraft 'config\sodium-fingerprint.json'),
         (Join-Path $minecraft 'config\euphoria_patcher\.data.json'),
@@ -802,6 +813,83 @@ try {
     $preservationHashes[$controlifyPath] = (Get-FileHash -LiteralPath $controlifyPath -Algorithm SHA256).Hash
     $releaseAManifestHash = Assert-IntegrityAttestation $minecraft
 
+    # Prove that an already-guarded instance can receive the reviewed next
+    # guard from the managed companion without reimporting or changing Prism's
+    # outer shell. Fabric calls this same package-private updater from the
+    # client entrypoint; the tiny harness exercises the production method with
+    # only the installed companion on its classpath.
+    $companionRecords = @($expectedManagedRecords | Where-Object {
+        $_.TargetPath -match '^mods/nbidal18-pack-compat-[^/]+\.jar$'
+    })
+    if ($companionRecords.Count -ne 1) {
+        throw 'Expected exactly one installed nbidal18 pack-compat companion for guard migration.'
+    }
+    $installedCompanion = Join-Path $minecraft $companionRecords[0].TargetPath.Replace('/', '\')
+    $reviewedGuardHash = (Get-FileHash -LiteralPath $launchGuardSource -Algorithm SHA256).Hash
+    $shellHashes = Get-PreservationHashes @(
+        (Join-Path $instanceRoot 'instance.cfg'),
+        (Join-Path $instanceRoot 'mmc-pack.json'),
+        (Join-Path $instanceRoot 'server-icon.png'),
+        $bootstrapInstalled
+    )
+    Write-Utf8NoBom $launchGuardInstalled "legacy-guard-migration-canary`n"
+    if ((Get-FileHash -LiteralPath $launchGuardInstalled -Algorithm SHA256).Hash -eq $reviewedGuardHash) {
+        throw 'The simulated legacy guard did not differ from the reviewed current guard.'
+    }
+
+    $javacPath = Join-Path (Split-Path -Parent $JavaPath) 'javac.exe'
+    if (-not (Test-Path -LiteralPath $javacPath -PathType Leaf)) {
+        throw "Java compiler required for the guard-migration harness was not found: $javacPath"
+    }
+    $harnessRoot = Join-Path $temporaryRoot 'guard-migration-harness'
+    $harnessSourceDirectory = Join-Path $harnessRoot 'src\dev\nbidal18\packcompat'
+    $harnessClasses = Join-Path $harnessRoot 'classes'
+    New-Item -ItemType Directory -Path $harnessSourceDirectory -Force | Out-Null
+    New-Item -ItemType Directory -Path $harnessClasses -Force | Out-Null
+    $harnessSource = Join-Path $harnessSourceDirectory 'LaunchGuardMigrationHarness.java'
+    Write-Utf8NoBom $harnessSource @'
+package dev.nbidal18.packcompat;
+
+import java.nio.file.Path;
+
+public final class LaunchGuardMigrationHarness {
+    public static void main(String[] args) throws Exception {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Expected the Minecraft game directory");
+        }
+        System.out.print(LaunchGuardUpdater.install(Path.of(args[0])).name());
+    }
+}
+'@
+    $compilerOutput = @(& $javacPath '-encoding' 'UTF-8' '-cp' $installedCompanion '-d' $harnessClasses $harnessSource 2>&1 | ForEach-Object { "$_" })
+    if ($LASTEXITCODE -ne 0) {
+        throw "Guard-migration harness compilation failed: $($compilerOutput -join [Environment]::NewLine)"
+    }
+    $harnessClassPath = "$harnessClasses;$installedCompanion"
+    $migrationOutput = @(& $JavaPath '-cp' $harnessClassPath 'dev.nbidal18.packcompat.LaunchGuardMigrationHarness' $minecraft 2>&1 | ForEach-Object { "$_" })
+    if ($LASTEXITCODE -ne 0 -or ($migrationOutput -join '').Trim() -ne 'REPLACED') {
+        throw "Managed companion did not replace the simulated legacy guard: $($migrationOutput -join [Environment]::NewLine)"
+    }
+    if ((Get-FileHash -LiteralPath $launchGuardInstalled -Algorithm SHA256).Hash -ne $reviewedGuardHash) {
+        throw 'Managed companion installed launch-guard bytes that differ from the reviewed tool.'
+    }
+    if (@(Get-ChildItem -LiteralPath $minecraft -Force -File -Filter '.nbidal18-launch-guard-*.tmp').Count -ne 0) {
+        throw 'Guard migration left a staging file in the Minecraft root.'
+    }
+    Assert-PreservationHashes $shellHashes
+    [void] (Assert-IntegrityAttestation $minecraft)
+    $guardMtime = (Get-Item -LiteralPath $launchGuardInstalled).LastWriteTimeUtc
+    $noOpOutput = @(& $JavaPath '-cp' $harnessClassPath 'dev.nbidal18.packcompat.LaunchGuardMigrationHarness' $minecraft 2>&1 | ForEach-Object { "$_" })
+    if ($LASTEXITCODE -ne 0 -or ($noOpOutput -join '').Trim() -ne 'UP_TO_DATE' -or
+            (Get-Item -LiteralPath $launchGuardInstalled).LastWriteTimeUtc -ne $guardMtime) {
+        throw 'A matching launch guard was not a byte/metadata-preserving migration no-op.'
+    }
+
+    $approvedGeneratedShader = 'ComplementaryUnbound_r5.8.1 + EuphoriaPatches_1.9.3'
+    $irisPath = Join-Path $minecraft 'config\iris.properties'
+    Write-Utf8NoBom $irisPath "allowUnknownShaders=false`nshaderPack=$approvedGeneratedShader`nvalidationPreference=keep`n"
+    $preservationHashes[$irisPath] = (Get-FileHash -LiteralPath $irisPath -Algorithm SHA256).Hash
+
     # An unchanged release still runs a normal pass and a forced hash-validation
     # pass. Tamper one managed canary and add one unknown file to prove that the
     # forced pass repairs only the canary and strict cleanup quarantines the extra.
@@ -825,6 +913,9 @@ try {
     $secondPasses = @($secondOutput | Where-Object { $_ -match '^\[nbidal18-launch-guard\] Running Packwiz (normal update|forced hash-validation) pass\.\.\.$' })
     if ($secondPasses.Count -ne 2 -or -not (($secondOutput -join "`n") -match 'Modpack is already up to date!')) {
         throw 'Unchanged launch did not perform the expected normal no-op plus forced validation passes.'
+    }
+    if (-not (Select-String -LiteralPath (Join-Path $minecraft 'config\iris.properties') -SimpleMatch "shaderPack=$approvedGeneratedShader")) {
+        throw 'The companion-installed launch guard did not preserve the exact generated Euphoria selection on the following Play.'
     }
     if ([IO.File]::ReadAllText($managedCanaryPath) -ne "release-A`n") {
         throw 'Forced validation did not repair the tampered managed canary.'
@@ -913,7 +1004,7 @@ try {
     $siteFiles = @(Get-ChildItem -LiteralPath $siteRoot -Recurse -File -Force)
     $completedAt = Get-Date
     $reportText = @"
-# nbidal18 v3.2.3 Packwiz validation report
+# nbidal18 v3.2.4 Packwiz validation report
 
 - Result: PASS
 - Started: $($startedAt.ToString('yyyy-MM-dd HH:mm:ss zzz'))
@@ -931,9 +1022,10 @@ Validated:
 - The six-file thin migration ZIP contains only Prism metadata/icon, the Packwiz bootstrap, and the exact reviewed launch-guard JAR; it contains no Packwiz-managed payload, VinURL data, Still Life, shaders, or player state.
 - The first guarded launch performs both Packwiz passes, cold-installs and hash-verifies every managed payload, seeds absent settings once, and writes an attestation matching the installed strict manifest.
 - Generated Fabric nested/remapped-mod caches and Moonlight's loadable dynamic resource-pack cache are purged before attestation, while unrelated `.fabric` state remains byte-preserved.
-- Mixed settings are narrowed without resetting unrelated preferences: options.txt receives canonical resource-pack lines, Iris rejects unknown shaders, and Controlify reach-around is forced off.
-- Unknown mod, resource-pack, shader, datapack, Moonlight global-datapack, Villager API pack, server-pack cache, CustomSkinLoader plugin/provider, and config canaries are absent from strict roots and remain recoverable under `.nbidal18/quarantine`; the disposable Euphoria-generated shader tree is purged and rebuilt instead of accumulating in quarantine.
-- Exact optional Still Life, saves, screenshots, VinURL data, approved shader sidecar settings, JEI/runtime state, and seed-once settings persist byte-for-byte.
+- Mixed settings are narrowed without resetting unrelated preferences: options.txt receives canonical resource-pack lines, Iris rejects unknown shaders while retaining the exact generated Euphoria selection, and Controlify reach-around is forced off.
+- The managed companion contains the exact reviewed launch guard. A different plain regular-file guard canary is atomically replaced through the production client updater without changing Prism metadata/bootstrap files; a second updater call is a true no-op, and the following guarded launch preserves the generated Euphoria selection. Compatibility with the deployed v3.2.3 guard is separately supported by the unchanged manifest grammar and pre-launch command.
+- Unknown mod, resource-pack, shader, datapack, Moonlight global-datapack, Villager API pack, server-pack cache, retired CustomSkinLoader runtime/core/cache/plugin/provider, and config canaries are absent from strict roots and remain recoverable under `.nbidal18/quarantine`; the disposable Euphoria-generated shader tree is purged and rebuilt instead of accumulating in quarantine.
+- Exact optional Still Life, saves, screenshots, Skin Overrides skin/cape selections and libraries, VinURL data, approved shader sidecar settings, JEI/runtime state, and seed-once settings persist byte-for-byte.
 - An unchanged release still performs the normal and forced Packwiz passes. The forced pass repairs the sole tampered managed canary, downloads no other managed payload, quarantines a newly added extra, and refreshes a matching attestation.
 - A later release adds and removes JAR-named managed-file canaries in `mods/`, overwrites a managed config, updates the strict manifest, and attests the new manifest.
 - The changed release reports exactly the added mod, changed config, and strict-manifest downloads plus the one expected managed deletion.
@@ -941,7 +1033,7 @@ Validated:
 
 External release gates are outside this isolated behavior report. `Build-Release.ps1` separately requires the anonymous HTTPS `pack.toml`, `index.toml`, strict manifest, and every reviewed internal-hosted payload to match before it produces the final ZIP. Reaching the Minecraft menu, confirming that a failed pre-launch command blocks Minecraft, and production multiplayer compatibility remain manual checks.
 
-Historical 3.1.0 -> 3.1.1 transition: the old direct-Packwiz Prism instance could not acquire the nbidal18 launch-guard JAR through Packwiz, so that cutover required a one-time import of the 3.1.1 six-file migration ZIP. Existing guarded instances receive 3.2.3 in place on their next successful launch; they do not require another import.
+Historical 3.1.0 -> 3.1.1 transition: the old direct-Packwiz Prism instance could not acquire the nbidal18 launch-guard JAR or Prism pre-launch command through Packwiz, so that cutover required a one-time import of the 3.1.1 six-file migration ZIP. Existing runnable guarded instances receive 3.2.4 and companion 1.1.8 in place; the companion installs the embedded reviewed guard during that game initialization, and the new guard runs on the following Prism launch. Missing/corrupt guards and command/filename changes still require the recovery ZIP.
 
 Known limitation: Packwiz is not transaction-wide atomic. In the deliberate failure test, an available managed config was written before a later payload returned 404, although player-controlled/runtime files and the previous Packwiz state remained intact. The guard removed the stale attestation immediately, and the next successful pre-launch run repaired and attested the managed release. Final Prism testing must confirm a nonzero pre-launch result blocks Minecraft from starting.
 "@
@@ -952,7 +1044,7 @@ catch {
     $failure = $_
     $failedAt = Get-Date
     $failureText = @"
-# nbidal18 v3.2.3 Packwiz validation report
+# nbidal18 v3.2.4 Packwiz validation report
 
 - Result: FAIL
 - Started: $($startedAt.ToString('yyyy-MM-dd HH:mm:ss zzz'))

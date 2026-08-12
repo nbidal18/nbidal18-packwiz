@@ -3,6 +3,68 @@ plugins {
     id 'maven-publish'
 }
 
+def launchGuardSource = layout.projectDirectory.file('../../tools/nbidal18-launch-guard.jar')
+def generatedLaunchGuardResources = layout.buildDirectory.dir('generated/launch-guard-resources')
+
+def prepareEmbeddedLaunchGuard = tasks.register('prepareEmbeddedLaunchGuard') {
+    inputs.file(launchGuardSource)
+    outputs.dir(generatedLaunchGuardResources)
+
+    doLast {
+        File source = launchGuardSource.asFile
+        if (!source.isFile() || java.nio.file.Files.isSymbolicLink(source.toPath())) {
+            throw new GradleException("The reviewed launch guard is missing or unsafe: ${source}")
+        }
+
+        java.nio.file.attribute.BasicFileAttributes sourceAttributes = java.nio.file.Files.readAttributes(
+            source.toPath(),
+            java.nio.file.attribute.BasicFileAttributes,
+            java.nio.file.LinkOption.NOFOLLOW_LINKS
+        )
+        if (!sourceAttributes.isRegularFile() || sourceAttributes.isOther()) {
+            throw new GradleException("The reviewed launch guard is not a plain regular file: ${source}")
+        }
+        if (sourceAttributes.size() <= 0 || sourceAttributes.size() > 16 * 1024 * 1024) {
+            throw new GradleException("The reviewed launch guard has an unsafe size: ${sourceAttributes.size()}")
+        }
+
+        new java.util.jar.JarFile(source, false).withCloseable { archive ->
+            java.util.jar.Attributes attributes = archive.manifest?.mainAttributes
+            if (attributes?.getValue('Main-Class') != 'dev.nbidal18.launchguard.LaunchGuard'
+                    || attributes?.getValue('Implementation-Title') != 'nbidal18-launch-guard'
+                    || archive.getJarEntry('dev/nbidal18/launchguard/LaunchGuard.class') == null) {
+                throw new GradleException("The reviewed launch-guard source artifact has an unexpected identity: ${source}")
+            }
+        }
+
+        java.security.MessageDigest digest = java.security.MessageDigest.getInstance('SHA-256')
+        source.withInputStream { input ->
+            byte[] buffer = new byte[128 * 1024]
+            int read
+            while ((read = input.read(buffer)) >= 0) {
+                digest.update(buffer, 0, read)
+            }
+        }
+        String sha256 = java.util.HexFormat.of().formatHex(digest.digest())
+
+        File resourceRoot = generatedLaunchGuardResources.get().asFile
+        File payloadDirectory = new File(resourceRoot, 'META-INF/nbidal18')
+        if (!payloadDirectory.mkdirs() && !payloadDirectory.isDirectory()) {
+            throw new GradleException("Could not create generated resource directory: ${payloadDirectory}")
+        }
+        java.nio.file.Files.copy(
+            source.toPath(),
+            new File(payloadDirectory, 'nbidal18-launch-guard.jar').toPath(),
+            java.nio.file.StandardCopyOption.REPLACE_EXISTING
+        )
+        java.nio.file.Files.writeString(
+            new File(payloadDirectory, 'launch-guard.tsv').toPath(),
+            "nbidal18-launch-guard\t1\nsha256\t${sha256}\nsize\t${sourceAttributes.size()}\n",
+            java.nio.charset.StandardCharsets.UTF_8
+        )
+    }
+}
+
 version = project.mod_version
 group = project.maven_group
 
@@ -40,6 +102,7 @@ test {
 }
 
 processResources {
+    dependsOn prepareEmbeddedLaunchGuard
     inputs.property 'version', project.version
     inputs.property 'minecraft_version', project.minecraft_version
     inputs.property 'fabric_loader_version', project.fabric_loader_version
@@ -57,6 +120,82 @@ processResources {
             skin_overrides_version: project.skin_overrides_version
         )
     }
+}
+
+sourceSets {
+    main {
+        resources.srcDir(generatedLaunchGuardResources)
+    }
+}
+
+def verifyRemappedEmbeddedLaunchGuard = tasks.register('verifyRemappedEmbeddedLaunchGuard') {
+    doLast {
+        File source = launchGuardSource.asFile
+        File remapped = tasks.named('remapJar').get().archiveFile.get().asFile
+        if (!remapped.isFile()) {
+            throw new GradleException("The remapped companion JAR is missing: ${remapped}")
+        }
+
+        java.security.MessageDigest sourceDigest = java.security.MessageDigest.getInstance('SHA-256')
+        source.withInputStream { input ->
+            byte[] buffer = new byte[128 * 1024]
+            int read
+            while ((read = input.read(buffer)) >= 0) {
+                sourceDigest.update(buffer, 0, read)
+            }
+        }
+        String expectedHash = java.util.HexFormat.of().formatHex(sourceDigest.digest())
+        String expectedDescriptor = "nbidal18-launch-guard\t1\nsha256\t${expectedHash}\nsize\t${source.length()}\n"
+
+        new java.util.jar.JarFile(remapped, false).withCloseable { archive ->
+            List<java.util.jar.JarEntry> payloadEntries = []
+            List<java.util.jar.JarEntry> descriptorEntries = []
+            java.util.Enumeration<java.util.jar.JarEntry> entries = archive.entries()
+            while (entries.hasMoreElements()) {
+                java.util.jar.JarEntry entry = entries.nextElement()
+                if (entry.name == 'META-INF/nbidal18/nbidal18-launch-guard.jar') {
+                    payloadEntries.add(entry)
+                } else if (entry.name == 'META-INF/nbidal18/launch-guard.tsv') {
+                    descriptorEntries.add(entry)
+                }
+            }
+            if (payloadEntries.size() != 1 || descriptorEntries.size() != 1) {
+                throw new GradleException(
+                    "The final companion must contain exactly one embedded launch guard and descriptor"
+                )
+            }
+
+            java.util.jar.JarEntry payloadEntry = payloadEntries.first()
+            if (payloadEntry.size != source.length()) {
+                throw new GradleException("The final embedded launch-guard size differs from the reviewed source")
+            }
+            java.security.MessageDigest embeddedDigest = java.security.MessageDigest.getInstance('SHA-256')
+            archive.getInputStream(payloadEntry).withCloseable { input ->
+                byte[] buffer = new byte[128 * 1024]
+                int read
+                while ((read = input.read(buffer)) >= 0) {
+                    embeddedDigest.update(buffer, 0, read)
+                }
+            }
+            String embeddedHash = java.util.HexFormat.of().formatHex(embeddedDigest.digest())
+            if (embeddedHash != expectedHash) {
+                throw new GradleException(
+                    "The final embedded launch guard differs from the reviewed source: ${embeddedHash}"
+                )
+            }
+
+            String descriptor = archive.getInputStream(descriptorEntries.first()).withCloseable { input ->
+                new String(input.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8)
+            }
+            if (descriptor != expectedDescriptor) {
+                throw new GradleException("The final embedded launch-guard descriptor is stale or malformed")
+            }
+        }
+    }
+}
+
+tasks.named('remapJar') {
+    finalizedBy verifyRemappedEmbeddedLaunchGuard
 }
 
 tasks.withType(JavaCompile).configureEach {

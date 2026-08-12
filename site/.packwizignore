@@ -2,6 +2,8 @@
 /.packwizignore
 /pack.toml
 /index.toml
+/nbidal18-launch-guard.jar
+/packwiz-installer-bootstrap.jar
 /options.txt
 /options.amecsapi.txt
 /servers.dat

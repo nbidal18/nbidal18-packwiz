@@ -16,6 +16,7 @@ final class MixedSettings {
     private static final Set<String> ALLOWED_SHADERS = Set.of(
             "",
             "ComplementaryUnbound_r5.8.1.zip",
+            "ComplementaryUnbound_r5.8.1 + EuphoriaPatches_1.9.3",
             "MakeUp-UltraFast-9.4b.zip");
 
     private MixedSettings() {}

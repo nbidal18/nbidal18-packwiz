@@ -12,4 +12,10 @@ class ServerEnvironmentTest {
         assertTrue(Nbidal18PackCompat.shouldEnforceServerLogin(EnvType.SERVER));
         assertFalse(Nbidal18PackCompat.shouldEnforceServerLogin(EnvType.CLIENT));
     }
+
+    @Test
+    void launchGuardInstallationRunsOnlyInTheClientEntrypointEnvironment() {
+        assertTrue(Nbidal18PackCompatClient.shouldInstallLaunchGuard(EnvType.CLIENT));
+        assertFalse(Nbidal18PackCompatClient.shouldInstallLaunchGuard(EnvType.SERVER));
+    }
 }

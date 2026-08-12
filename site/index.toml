@@ -82,19 +82,11 @@ hash = "a3ec0efcc2030281a6828bf7f59b128009275e0c4fabfc07411ac793319ad7c7"
 
 [[files]]
 file = ".nbidal18/strict-manifest.tsv"
-hash = "d55a2a561f1eef8599b45c94ab7a1ec5c860df99427e133bab26c2f702bad89a"
-
-[[files]]
-file = "CustomSkinLoader/ExtraList/nbidal18-closed.marker"
-hash = "efda05f36c773d2bc3e0f299646406655eee8b857fbf7260b387247773ba786c"
-
-[[files]]
-file = "CustomSkinLoader/Plugins/nbidal18-closed.marker"
-hash = "9a5dc08daf4760d4cfc2214b4af0525a07ff6de90d24bdf475f8ab91b706cbfa"
+hash = "a6a47fb511949a2880a5d269ae62539ac0bd6d36498a9b1793567e70eb1a5744"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "b5b07255efd6a31f1fd8071d7ea44698250477ee8b245daa20353c6c2eb65a87"
+hash = "c935e12d0d85428650d0441935812db977e07050ea760c4f17b63c17d098ef3e"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -162,7 +154,7 @@ hash = "5517ad3e06aa1bfeec0a41174677a9ee094b02ee8b58194e39584cc1191cb98b"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "3d2bf20f50bfd6c56ccd2bd14d8c3e6154aa9ddb9c8f886425f96c801deb0e90"
+hash = "0e37fa4333a40281308467639c9ab40289414fcfebe1a474d63cfd40a1e6d441"
 
 [[files]]
 file = "config/beautify.json"
@@ -962,7 +954,7 @@ hash = "50057a63c98167f7b05727906f17ae6fb182a5eb40bcdb3314d1a8a325c4eec8"
 
 [[files]]
 file = "credits.txt"
-hash = "1a1ce1b5a61067b35acda1836984b56f9b7c5d270723bfed811baed99c7cbc96"
+hash = "2d88bfcf031dede2345340c9f5c69633a8d47dc635ac1304923d26df799ea3fa"
 
 [[files]]
 file = "datapacks/Structure Tags Still_Life-1.0-beta1.zip"
@@ -1365,11 +1357,6 @@ metafile = true
 [[files]]
 file = "mods/ctov.pw.toml"
 hash = "97f3b320349ba56ee6efc1fa8a788d89f8b5089e501d280737d51f782aa2dc22"
-metafile = true
-
-[[files]]
-file = "mods/customskinloader-bootstrap.pw.toml"
-hash = "fca495f5e36636f7b6e408b8bc11b82a51e7c5c1bc75b1c6e95c71585fcbb436"
 metafile = true
 
 [[files]]
@@ -1824,8 +1811,8 @@ file = "mods/nbidal18-jei-hidden-default-1.0.0+1.21.1.jar"
 hash = "5aeffa5d9e70178c6c54991e4f769159d6c40fb0ce3455d9acdbd4c3b5e69ab5"
 
 [[files]]
-file = "mods/nbidal18-pack-compat-1.1.6+1.21.1.jar"
-hash = "9594dc3a9a6701e6b4307ad0a783889a3515f8d3083fded5e47e0d92060986d4"
+file = "mods/nbidal18-pack-compat-1.1.8+1.21.1.jar"
+hash = "0f3a61d73cd7c8074d8dabc41ded8ed1bcc8116fea730de86a60afa0538b766a"
 
 [[files]]
 file = "mods/nbidal18-playeremotes-fa-bridge-1.0.1+1.21.1.jar"

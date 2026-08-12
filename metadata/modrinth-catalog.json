@@ -542,17 +542,6 @@
                         "url":  "https://cdn.modrinth.com/data/oEhQIkOs/versions/biJLv3Vb/cryonicconfig-fabric-1.0.0%2Bmc1.21.11.jar"
                     },
                     {
-                        "relativePath":  "mods/CustomSkinLoader_Universal-15.0.1.jar",
-                        "sha1":  "ab8dd841cafc3b4ecbf0250d3f5aee8a1fdb506a",
-                        "sha512":  "8c65193c46c1435ddea571901f1dd04cc179179f59f1c1a0449349de04722b9c1b6e5efaec166975e05d2fa0b05f6c07c9d5d93a05f1c9a57fece2a0d0fc1ce7",
-                        "projectId":  "idMHQ4n2",
-                        "versionId":  "OLaesh5y",
-                        "versionName":  "CustomSkinLoader_Universal_15.0.1",
-                        "versionNumber":  "15.0.1-Universal",
-                        "remoteFilename":  "CustomSkinLoader_Universal-15.0.1.jar",
-                        "url":  "https://cdn.modrinth.com/data/idMHQ4n2/versions/OLaesh5y/CustomSkinLoader_Universal-15.0.1.jar"
-                    },
-                    {
                         "relativePath":  "mods/darcenos-minecarts-1.4.jar",
                         "sha1":  "7811c1eb6e0eed7a413dd2a188f72d30486df29e",
                         "sha512":  "dfe544ac0b7fcb9401fc95e79cd65ce7d51abeabdbc6dcd728a0634e6548dd15f8a1d61ea6ac05933620893bb1c13190c5e1f74d153c4d7898f17c6546529239",

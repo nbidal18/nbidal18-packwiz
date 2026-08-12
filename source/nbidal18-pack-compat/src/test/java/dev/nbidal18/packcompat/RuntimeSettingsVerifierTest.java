@@ -10,6 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RuntimeSettingsVerifierTest {
+    private static final String EUPHORIA_SELECTION =
+            "ComplementaryUnbound_r5.8.1 + EuphoriaPatches_1.9.3";
+
     @TempDir
     Path temporary;
 
@@ -48,6 +51,30 @@ class RuntimeSettingsVerifierTest {
         fixture.write("config/iris.properties", TestPackFixture.IRIS_TEXT);
         fixture.write("config/controlify.json", "{\"global\":{\"reach_around\":\"ON\"}}\n");
         assertFalse(verifier.verify(manifest).clean());
+    }
+
+    @Test
+    void acceptsOnlyTheExactGeneratedEuphoriaShaderSelection() throws Exception {
+        fixture.write("config/iris.properties",
+                "allowUnknownShaders=false\nshaderPack=" + EUPHORIA_SELECTION + "\n");
+        assertTrue(verifier.verify(manifest).clean());
+
+        fixture.write("config/iris.properties",
+                "allowUnknownShaders=true\nshaderPack=" + EUPHORIA_SELECTION + "\n");
+        assertFalse(verifier.verify(manifest).clean(),
+                "the exact generated shader selection must not weaken allowUnknownShaders=false");
+
+        for (String nearMiss : new String[] {
+                EUPHORIA_SELECTION + ".zip",
+                EUPHORIA_SELECTION.toLowerCase(java.util.Locale.ROOT),
+                "ComplementaryUnbound_r5.8.1  + EuphoriaPatches_1.9.3",
+                "ComplementaryUnbound_r5.8.1 + EuphoriaPatches_1.9.4"
+        }) {
+            fixture.write("config/iris.properties",
+                    "allowUnknownShaders=false\nshaderPack=" + nearMiss + "\n");
+            assertFalse(verifier.verify(manifest).clean(),
+                    "Iris shader selection must be an exact allow-list match: " + nearMiss);
+        }
     }
 
     @Test

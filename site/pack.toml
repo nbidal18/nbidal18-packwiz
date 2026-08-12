@@ -1,12 +1,12 @@
 name = "nbidal18"
-version = "3.2.3"
+version = "3.2.4"
 description = "Fabric 1.21.1 adventure modpack with incremental Prism updates"
 pack-format = "packwiz:1.1.0"
 
 [index]
 file = "index.toml"
 hash-format = "sha256"
-hash = "174570ee440ca4e543b659fd36501603c665eda8c08e96259d99a0ed1bd03844"
+hash = "87c37fa4def9ba37cc79bfc869228023c087751e7d1dac5a7e7597967636d08d"
 
 [versions]
 fabric = "0.19.3"

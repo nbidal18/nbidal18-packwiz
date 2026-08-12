@@ -4,10 +4,6 @@
 
 The byte-exact official `skin_overrides-2.6.0+1.21.1.jar` is delivered directly from Modrinth project/version `GON0Fdk5` / `Z99ddIuX`. The project declares MPL-2.0 and publishes its source at <https://codeberg.org/rose_bush/skin-overrides>. The same official file is installed on the client and server so its multiplayer skin-update receiver is available.
 
-## CustomSkinLoader
-
-The byte-exact official `CustomSkinLoader_Universal-15.0.1.jar` is delivered directly from Modrinth project/version `idMHQ4n2` / `OLaesh5y`. Its metadata declares GPL-3.0-only, and its embedded binary-distribution notice permits unmodified modpack use when CustomSkinLoader is listed in the mod list and the binary is not reposted. Packwiz therefore downloads the unmodified official Modrinth file rather than hosting the JAR. Source: <https://github.com/xfl03/MCCustomSkinLoader>.
-
 ## Player Emotes
 
 The byte-exact official `playeremotes-fabric-1.21.1-0.1.0.jar` is installed as a standalone dependency from the Player Emotes project:
@@ -20,7 +16,7 @@ The byte-exact official `playeremotes-fabric-1.21.1-0.1.0.jar` is installed as a
 
 ## Better Compatibility Checker
 
-The all-rights-reserved official `better-compatability-checker-fabric-21.1.8.jar` by Gaz492 is downloaded directly from Modrinth project/version `KJhXPbHQ` / `1uy9t7Jt`; nbidal18 does not rehost or alter it. `nbidal18-pack-compat-1.1.6+1.21.1.jar` is a separate clean-room MIT first-party protocol-3 login, runtime-integrity, and client UI companion with exact legacy protocol-1/protocol-2 client responses for older servers. It uses the official checker's public pack identity and opens Skin Overrides' public selector from its own title-screen button; it contains no Better Compatibility Checker or Skin Overrides class or asset. Complete companion source and tests are published under `source/nbidal18-pack-compat` in the updater repository.
+The all-rights-reserved official `better-compatability-checker-fabric-21.1.8.jar` by Gaz492 is downloaded directly from Modrinth project/version `KJhXPbHQ` / `1uy9t7Jt`; nbidal18 does not rehost or alter it. `nbidal18-pack-compat-1.1.8+1.21.1.jar` is a separate clean-room MIT first-party protocol-3 login, runtime-integrity, launch-guard migration, and client UI companion with exact legacy protocol-1/protocol-2 client responses for older servers. It uses the official checker's public pack identity, embeds the first-party MIT launch guard for safe installation on the following Prism launch, and opens Skin Overrides' public selector from its own title-screen button; it contains no Better Compatibility Checker or Skin Overrides class or asset. Complete companion and launch-guard source and tests are published in the updater repository.
 
 ## Vanilla Refresh
 

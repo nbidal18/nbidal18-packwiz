@@ -2,6 +2,7 @@ package dev.nbidal18.packcompat;
 
 import dev.wuffs.bcc.data.BetterStatus;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
@@ -19,10 +20,29 @@ public final class Nbidal18PackCompatClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        FabricLoader loader = FabricLoader.getInstance();
+        if (!shouldInstallLaunchGuard(loader.getEnvironmentType())) {
+            return;
+        }
+        try {
+            LaunchGuardUpdater.UpdateResult guardUpdate = LaunchGuardUpdater.install(loader.getGameDir());
+            if (guardUpdate != LaunchGuardUpdater.UpdateResult.UP_TO_DATE) {
+                LOGGER.info(
+                        "Installed the current nbidal18 launch guard for the next Prism launch ({})",
+                        guardUpdate
+                );
+            }
+        } catch (java.io.IOException | IntegrityException failure) {
+            throw new IllegalStateException(
+                    "Could not safely install the current nbidal18 launch guard for the next Prism launch",
+                    failure
+            );
+        }
+
         SkinOverridesTitleButton.register();
         ClientIntegrityMonitor integrityMonitor = ClientIntegrityMonitor.initialize(
-                FabricLoader.getInstance().getGameDir(),
-                FabricLoader.getInstance().isModLoaded(CUSTOM_SKIN_LOADER_BOOTSTRAP_MOD_ID)
+                loader.getGameDir(),
+                loader.isModLoaded(CUSTOM_SKIN_LOADER_BOOTSTRAP_MOD_ID)
         );
         boolean registered = ClientLoginNetworking.registerGlobalReceiver(
                 Nbidal18PackCompat.VERSION_QUERY,
@@ -34,6 +54,10 @@ public final class Nbidal18PackCompatClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(integrityMonitor::tick);
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> integrityMonitor.clientStarted());
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> integrityMonitor.close());
+    }
+
+    static boolean shouldInstallLaunchGuard(EnvType environmentType) {
+        return environmentType == EnvType.CLIENT;
     }
 
     private static CompletableFuture<FriendlyByteBuf> createResponse(
