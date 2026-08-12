@@ -14,6 +14,9 @@ $siteRoot = Join-Path $updaterRoot 'site'
 $builderPath = Join-Path $releaseRoot '1. setup\support\scripts\build-prism-instance.ps1'
 $bootstrapSource = Join-Path $updaterRoot 'tools\packwiz-installer-bootstrap.jar'
 $launchGuardSource = Join-Path $updaterRoot 'tools\nbidal18-launch-guard.jar'
+$previousReleaseRoot = Join-Path (Split-Path -Parent $releaseRoot) 'nbidal18 v3.2.4'
+$previousLaunchGuardSource = Join-Path $previousReleaseRoot '5. updater\tools\nbidal18-launch-guard.jar'
+$expectedPreviousLaunchGuardSha256 = '63243A6972BF4B89C0E2DDE79B48F20009781C021AA68D30DCB19063AECCAC45'
 $shaderSourceRoot = Join-Path $releaseRoot '2. appearance\shaderpacks'
 $privateStillLifeSource = Join-Path $releaseRoot '3. modpack\client\datapacks\Still_Life-1.0-beta1.zip'
 $validationReport = Join-Path $updaterRoot 'VALIDATION-REPORT.md'
@@ -42,12 +45,17 @@ foreach ($required in @(
     $builderPath,
     $bootstrapSource,
     $launchGuardSource,
+    $previousLaunchGuardSource,
     $shaderSourceRoot,
     $privateStillLifeSource,
     $PackwizPath,
     $JavaPath
 )) {
     if (-not (Test-Path -LiteralPath $required)) { throw "Required path is missing: $required" }
+}
+if ((Get-FileHash -LiteralPath $previousLaunchGuardSource -Algorithm SHA256).Hash -cne
+        $expectedPreviousLaunchGuardSha256) {
+    throw "The retained v3.2.4 launch guard is not the exact published artifact: $previousLaunchGuardSource"
 }
 $shaderArchives = @(Get-ChildItem -LiteralPath $shaderSourceRoot -File -Filter '*.zip' | Sort-Object Name)
 if ($shaderArchives.Count -ne 2) { throw "Expected exactly two migration shader ZIPs, found $($shaderArchives.Count)." }
@@ -597,7 +605,7 @@ try {
     if ($preLaunchLines.Count -ne 1 -or $preLaunchLines[0].Contains('packwiz-installer-bootstrap.jar')) {
         throw 'Migration instance must have exactly one guarded pre-launch command, never the legacy direct-Packwiz command.'
     }
-    foreach ($requiredText in @('name=nbidal18-client', 'ExportName=nbidal18-client', 'ExportVersion=3.2.4', 'OverrideCommands=true', "PreLaunchCommand=`"`$INST_JAVA`" -jar nbidal18-launch-guard.jar $packUrl")) {
+    foreach ($requiredText in @('name=nbidal18-client', 'ExportName=nbidal18-client', 'ExportVersion=3.2.5', 'OverrideCommands=true', "PreLaunchCommand=`"`$INST_JAVA`" -jar nbidal18-launch-guard.jar $packUrl")) {
         if (-not $instanceCfg.Contains($requiredText)) { throw "instance.cfg assertion failed: $requiredText" }
     }
     $mmc = Get-Content -LiteralPath (Join-Path $instanceRoot 'mmc-pack.json') -Raw | ConvertFrom-Json
@@ -824,6 +832,9 @@ try {
     if ($companionRecords.Count -ne 1) {
         throw 'Expected exactly one installed nbidal18 pack-compat companion for guard migration.'
     }
+    if ($companionRecords[0].TargetPath -cne 'mods/nbidal18-pack-compat-1.1.9+1.21.1.jar') {
+        throw "Release 3.2.5 must install pack-compat 1.1.9+1.21.1; found $($companionRecords[0].TargetPath)"
+    }
     $installedCompanion = Join-Path $minecraft $companionRecords[0].TargetPath.Replace('/', '\')
     $reviewedGuardHash = (Get-FileHash -LiteralPath $launchGuardSource -Algorithm SHA256).Hash
     $shellHashes = Get-PreservationHashes @(
@@ -832,9 +843,13 @@ try {
         (Join-Path $instanceRoot 'server-icon.png'),
         $bootstrapInstalled
     )
-    Write-Utf8NoBom $launchGuardInstalled "legacy-guard-migration-canary`n"
-    if ((Get-FileHash -LiteralPath $launchGuardInstalled -Algorithm SHA256).Hash -eq $reviewedGuardHash) {
-        throw 'The simulated legacy guard did not differ from the reviewed current guard.'
+    Copy-Item -LiteralPath $previousLaunchGuardSource -Destination $launchGuardInstalled -Force
+    $installedPreviousGuardHash = (Get-FileHash -LiteralPath $launchGuardInstalled -Algorithm SHA256).Hash
+    if ($installedPreviousGuardHash -cne $expectedPreviousLaunchGuardSha256) {
+        throw 'The migration fixture did not install the exact published v3.2.4 launch guard.'
+    }
+    if ($installedPreviousGuardHash -eq $reviewedGuardHash) {
+        throw 'The published v3.2.4 guard unexpectedly matches the reviewed v3.2.5 guard.'
     }
 
     $javacPath = Join-Path (Split-Path -Parent $JavaPath) 'javac.exe'
@@ -861,14 +876,211 @@ public final class LaunchGuardMigrationHarness {
     }
 }
 '@
-    $compilerOutput = @(& $javacPath '-encoding' 'UTF-8' '-cp' $installedCompanion '-d' $harnessClasses $harnessSource 2>&1 | ForEach-Object { "$_" })
+    $oneClickHarnessSource = Join-Path $harnessSourceDirectory 'OneClickReleaseHarness.java'
+    Write-Utf8NoBom $oneClickHarnessSource @'
+package dev.nbidal18.packcompat;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
+
+/** Release-only caller of the production package-private one-click primitives. */
+public final class OneClickReleaseHarness {
+    private static final String INSTANCE_ID = "nbidal18-client";
+    private static final String NONCE = "0123456789abcdef0123456789abcdef";
+    private static final long MINECRAFT_PID = 424242L;
+    private static final Instant MINECRAFT_STARTED = Instant.parse("2026-08-12T08:00:00Z");
+    private static final Instant ARMED_AT = Instant.parse("2026-08-12T08:01:00Z");
+
+    public static void main(String[] args) throws Exception {
+        if (args.length == 0) throw new IllegalArgumentException("Expected a harness mode");
+        switch (args[0]) {
+            case "bridge" -> bridge(args);
+            case "noop" -> noOp();
+            case "suppress" -> suppress(args);
+            default -> throw new IllegalArgumentException("Unknown harness mode: " + args[0]);
+        }
+    }
+
+    private static void bridge(String[] args) throws Exception {
+        if (args.length != 5) {
+            throw new IllegalArgumentException("bridge requires game, Prism executable, launcher root, and guard hash");
+        }
+        Path game = Path.of(args[1]).toAbsolutePath().normalize();
+        Path prism = Path.of(args[2]).toAbsolutePath().normalize();
+        Path launcher = Path.of(args[3]).toAbsolutePath().normalize();
+        String guard = args[4];
+
+        if (!PrismRelaunchState.shouldPrepareRelaunch(
+                LaunchGuardUpdater.UpdateResult.REPLACED, false)) {
+            throw new AssertionError("The v3.2.4 replacement did not request the one-time relaunch");
+        }
+        PrismRelaunchState.RelaunchMarker armed = PrismRelaunchState.arm(
+                game, guard, INSTANCE_ID, ARMED_AT, NONCE);
+        if (armed.state() != PrismRelaunchState.MarkerState.ARMED
+                || !armed.nonce().equals(NONCE)
+                || !armed.guardSha256().equals(guard)
+                || armed.acknowledgedAtUtc() != null) {
+            throw new AssertionError("The deterministic production relaunch marker is not exactly armed");
+        }
+
+        PrismRelaunchHelper.Arguments original = new PrismRelaunchHelper.Arguments(
+                prism, launcher, game, INSTANCE_ID, MINECRAFT_PID, MINECRAFT_STARTED, NONCE, guard);
+        PrismRelaunchHelper.Arguments parsed = PrismRelaunchHelper.Arguments.parse(original.serialize());
+        if (!parsed.equals(original)) {
+            throw new AssertionError("The production helper argument round trip changed an exact path or identity");
+        }
+        FakeOperations operations = new FakeOperations(parsed);
+        int exitCode = PrismRelaunchHelper.run(parsed, operations);
+        if (exitCode != 0 || operations.launches != 1 || operations.exitWaits != 1
+                || operations.ackWaits != 1 || operations.deletes != 1
+                || Files.exists(game.resolve(PrismRelaunchState.RELATIVE_PATH), LinkOption.NOFOLLOW_LINKS)) {
+            throw new AssertionError("The production helper did not complete one exact acknowledged handoff");
+        }
+        System.out.print("BRIDGE_RELAUNCH_ACK_CONSUMED");
+    }
+
+    private static void noOp() {
+        if (PrismRelaunchState.shouldPrepareRelaunch(
+                    LaunchGuardUpdater.UpdateResult.UP_TO_DATE, false)
+                || PrismRelaunchState.shouldPrepareRelaunch(
+                    LaunchGuardUpdater.UpdateResult.UP_TO_DATE, true)
+                || PrismRelaunchState.shouldPrepareRelaunch(
+                    LaunchGuardUpdater.UpdateResult.REPLACED, true)) {
+            throw new AssertionError("An up-to-date or already handed-off guard would create a restart loop");
+        }
+        System.out.print("UP_TO_DATE_NO_RELAUNCH");
+    }
+
+    private static void suppress(String[] args) throws Exception {
+        if (args.length != 7) {
+            throw new IllegalArgumentException(
+                    "suppress requires game, companion, guard hash, clock instant, expectation, and label");
+        }
+        boolean expected = Boolean.parseBoolean(args[5]);
+        boolean consumed = LaunchGuardHandoff.consumeIfMatching(
+                Path.of(args[1]),
+                Path.of(args[2]),
+                args[3],
+                Clock.fixed(Instant.parse(args[4]), java.time.ZoneOffset.UTC)
+        );
+        if (consumed != expected
+                || PrismRelaunchState.shouldPrepareRelaunch(
+                    LaunchGuardUpdater.UpdateResult.REPLACED, consumed) == expected) {
+            throw new AssertionError("Unexpected handoff suppression decision for " + args[6]);
+        }
+        System.out.print(consumed ? "HANDOFF_CONSUMED_NO_RELAUNCH" : "HANDOFF_REJECTED_RELAUNCH");
+    }
+
+    private static final class FakeOperations implements PrismRelaunchHelper.Operations {
+        private final PrismRelaunchHelper.Arguments expected;
+        int launches;
+        int exitWaits;
+        int ackWaits;
+        int deletes;
+
+        FakeOperations(PrismRelaunchHelper.Arguments expected) {
+            this.expected = expected;
+        }
+
+        @Override
+        public void requirePlainRegularFile(Path path, String label) throws IOException {
+            if (!path.equals(expected.prismExecutable()) || !Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)
+                    || !"Prism executable".equals(label)) {
+                throw new AssertionError("Helper validated a different Prism executable");
+            }
+        }
+
+        @Override
+        public void requirePlainDirectory(Path path, String label) throws IOException {
+            boolean expectedPath = path.equals(expected.launcherRoot()) || path.equals(expected.gameDirectory());
+            if (!expectedPath || !Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
+                throw new AssertionError("Helper validated an unexpected directory: " + label);
+            }
+        }
+
+        @Override
+        public boolean waitForExactProcessExit(long pid, Instant startedAt, Duration timeout) {
+            exitWaits++;
+            if (pid != MINECRAFT_PID || !startedAt.equals(MINECRAFT_STARTED)
+                    || !timeout.equals(PrismRelaunchHelper.MINECRAFT_EXIT_TIMEOUT)) {
+                throw new AssertionError("Helper lost the exact Minecraft PID/start-time identity");
+            }
+            return true;
+        }
+
+        @Override
+        public void sleep(Duration duration) {
+            if (!duration.equals(PrismRelaunchHelper.PRISM_SETTLE_DELAY)) {
+                throw new AssertionError("Unexpected helper settle delay");
+            }
+        }
+
+        @Override
+        public void startPrism(Path executable, Path launcherRoot, String instanceId) {
+            launches++;
+            if (!executable.equals(expected.prismExecutable())
+                    || !launcherRoot.equals(expected.launcherRoot())
+                    || !instanceId.equals(INSTANCE_ID)) {
+                throw new AssertionError("Helper attempted to launch a different Prism instance");
+            }
+        }
+
+        @Override
+        public boolean waitForAcknowledgment(
+                PrismRelaunchHelper.Arguments arguments, Duration timeout) {
+            ackWaits++;
+            if (!arguments.equals(expected) || !timeout.equals(PrismRelaunchHelper.ACK_TIMEOUT)) {
+                throw new AssertionError("Helper waited for a different request or timeout");
+            }
+            try {
+                PrismRelaunchState.RelaunchMarker marker = PrismRelaunchState.read(expected.gameDirectory());
+                PrismRelaunchState.RelaunchMarker acknowledged = new PrismRelaunchState.RelaunchMarker(
+                        PrismRelaunchState.MarkerState.ACKNOWLEDGED,
+                        marker.nonce(),
+                        marker.guardSha256(),
+                        marker.instanceIdBase64(),
+                        marker.armedAtUtc(),
+                        marker.armedAtUtc().plusSeconds(1)
+                );
+                Files.write(
+                        expected.gameDirectory().resolve(PrismRelaunchState.RELATIVE_PATH),
+                        acknowledged.serialize(),
+                        StandardOpenOption.TRUNCATE_EXISTING,
+                        StandardOpenOption.WRITE,
+                        LinkOption.NOFOLLOW_LINKS
+                );
+                return PrismRelaunchState.acknowledgedMatches(
+                        expected.gameDirectory(), NONCE, expected.guardSha256(), INSTANCE_ID);
+            } catch (IOException | IntegrityException failure) {
+                throw new AssertionError("Could not simulate the exact guard acknowledgement", failure);
+            }
+        }
+
+        @Override
+        public void deleteAcknowledgment(PrismRelaunchHelper.Arguments arguments)
+                throws IOException, IntegrityException {
+            deletes++;
+            if (!arguments.equals(expected)) throw new AssertionError("Helper consumed a different request");
+            PrismRelaunchState.RelaunchMarker marker = PrismRelaunchState.read(expected.gameDirectory());
+            PrismRelaunchState.deleteMatching(expected.gameDirectory(), marker);
+        }
+    }
+}
+'@
+    $compilerOutput = @(& $javacPath '-encoding' 'UTF-8' '-cp' $installedCompanion '-d' $harnessClasses $harnessSource $oneClickHarnessSource 2>&1 | ForEach-Object { "$_" })
     if ($LASTEXITCODE -ne 0) {
         throw "Guard-migration harness compilation failed: $($compilerOutput -join [Environment]::NewLine)"
     }
     $harnessClassPath = "$harnessClasses;$installedCompanion"
     $migrationOutput = @(& $JavaPath '-cp' $harnessClassPath 'dev.nbidal18.packcompat.LaunchGuardMigrationHarness' $minecraft 2>&1 | ForEach-Object { "$_" })
     if ($LASTEXITCODE -ne 0 -or ($migrationOutput -join '').Trim() -ne 'REPLACED') {
-        throw "Managed companion did not replace the simulated legacy guard: $($migrationOutput -join [Environment]::NewLine)"
+        throw "Managed companion did not replace the exact published v3.2.4 guard: $($migrationOutput -join [Environment]::NewLine)"
     }
     if ((Get-FileHash -LiteralPath $launchGuardInstalled -Algorithm SHA256).Hash -ne $reviewedGuardHash) {
         throw 'Managed companion installed launch-guard bytes that differ from the reviewed tool.'
@@ -878,12 +1090,90 @@ public final class LaunchGuardMigrationHarness {
     }
     Assert-PreservationHashes $shellHashes
     [void] (Assert-IntegrityAttestation $minecraft)
+
+    # Exercise the JDK-only production relaunch primitives without opening a
+    # real Prism process. The fake boundary verifies that exact normalized
+    # paths, instance ID, nonce, PID, and process start time flow through the
+    # serialized helper request, then simulates the new guard's exact ACK.
+    $fakeLauncherRoot = Join-Path $temporaryRoot 'fake-prism-root'
+    New-Item -ItemType Directory -Path $fakeLauncherRoot -Force | Out-Null
+    $fakePrismExecutable = Join-Path $fakeLauncherRoot 'prismlauncher.exe'
+    Write-Utf8NoBom $fakePrismExecutable "validation-placeholder`n"
+    $bridgeOutput = @(& $JavaPath '-cp' $harnessClassPath 'dev.nbidal18.packcompat.OneClickReleaseHarness' `
+        'bridge' $minecraft $fakePrismExecutable $fakeLauncherRoot ($reviewedGuardHash.ToLowerInvariant()) `
+        2>&1 | ForEach-Object { "$_" })
+    if ($LASTEXITCODE -ne 0 -or ($bridgeOutput -join '').Trim() -cne 'BRIDGE_RELAUNCH_ACK_CONSUMED') {
+        throw "One-click v3.2.4 bridge harness failed: $($bridgeOutput -join [Environment]::NewLine)"
+    }
+    $relaunchMarkerPath = Join-Path $minecraft '.nbidal18\prism-relaunch.tsv'
+    if (Test-Path -LiteralPath $relaunchMarkerPath) {
+        throw 'The acknowledged one-click Prism relaunch marker was not consumed.'
+    }
+
     $guardMtime = (Get-Item -LiteralPath $launchGuardInstalled).LastWriteTimeUtc
     $noOpOutput = @(& $JavaPath '-cp' $harnessClassPath 'dev.nbidal18.packcompat.LaunchGuardMigrationHarness' $minecraft 2>&1 | ForEach-Object { "$_" })
     if ($LASTEXITCODE -ne 0 -or ($noOpOutput -join '').Trim() -ne 'UP_TO_DATE' -or
             (Get-Item -LiteralPath $launchGuardInstalled).LastWriteTimeUtc -ne $guardMtime) {
         throw 'A matching launch guard was not a byte/metadata-preserving migration no-op.'
     }
+    $noRestartOutput = @(& $JavaPath '-cp' $harnessClassPath 'dev.nbidal18.packcompat.OneClickReleaseHarness' `
+        'noop' 2>&1 | ForEach-Object { "$_" })
+    if ($LASTEXITCODE -ne 0 -or ($noRestartOutput -join '').Trim() -cne 'UP_TO_DATE_NO_RELAUNCH' -or
+            (Test-Path -LiteralPath $relaunchMarkerPath)) {
+        throw "An UP_TO_DATE guard could enter a relaunch loop: $($noRestartOutput -join [Environment]::NewLine)"
+    }
+
+    # Future guard generations write this proof during the child handoff. A
+    # fresh exact proof suppresses a restart and is consumed atomically; stale
+    # or hash-mismatched proofs remain untrusted and cannot suppress relaunch.
+    $handoffPath = Join-Path $minecraft '.nbidal18\launch-guard-handoff.tsv'
+    $companionHash = (Get-FileHash -LiteralPath $installedCompanion -Algorithm SHA256).Hash.ToLowerInvariant()
+    $manifestHash = (Get-FileHash -LiteralPath (Join-Path $minecraft '.nbidal18\strict-manifest.tsv') -Algorithm SHA256).Hash.ToLowerInvariant()
+    $guardHashLower = $reviewedGuardHash.ToLowerInvariant()
+    $handoffClock = [DateTimeOffset]::UtcNow
+    $handoffClockText = $handoffClock.ToString('yyyy-MM-ddTHH:mm:ss.fffZ', [Globalization.CultureInfo]::InvariantCulture)
+
+    function Write-HandoffFixture([string] $GuardHash, [DateTimeOffset] $VerifiedAt) {
+        $verifiedText = $VerifiedAt.ToUniversalTime().ToString(
+            'yyyy-MM-ddTHH:mm:ss.fffZ',
+            [Globalization.CultureInfo]::InvariantCulture
+        )
+        Write-Utf8NoBom $handoffPath ((@(
+            "nbidal18-launch-guard-handoff`t1",
+            "guard-sha256`t$GuardHash",
+            "companion-sha256`t$companionHash",
+            "manifest-sha256`t$manifestHash",
+            "verified-at-utc`t$verifiedText"
+        ) -join "`n") + "`n")
+    }
+
+    Write-HandoffFixture $guardHashLower $handoffClock
+    $freshHandoffOutput = @(& $JavaPath '-cp' $harnessClassPath 'dev.nbidal18.packcompat.OneClickReleaseHarness' `
+        'suppress' $minecraft $installedCompanion $guardHashLower $handoffClockText 'true' 'fresh-exact' `
+        2>&1 | ForEach-Object { "$_" })
+    if ($LASTEXITCODE -ne 0 -or ($freshHandoffOutput -join '').Trim() -cne 'HANDOFF_CONSUMED_NO_RELAUNCH' -or
+            (Test-Path -LiteralPath $handoffPath)) {
+        throw "Fresh exact guard handoff did not suppress and atomically consume: $($freshHandoffOutput -join [Environment]::NewLine)"
+    }
+
+    Write-HandoffFixture $guardHashLower ($handoffClock.AddMinutes(-11))
+    $staleHandoffOutput = @(& $JavaPath '-cp' $harnessClassPath 'dev.nbidal18.packcompat.OneClickReleaseHarness' `
+        'suppress' $minecraft $installedCompanion $guardHashLower $handoffClockText 'false' 'stale' `
+        2>&1 | ForEach-Object { "$_" })
+    if ($LASTEXITCODE -ne 0 -or ($staleHandoffOutput -join '').Trim() -cne 'HANDOFF_REJECTED_RELAUNCH' -or
+            -not (Test-Path -LiteralPath $handoffPath -PathType Leaf)) {
+        throw "A stale guard handoff incorrectly suppressed relaunch: $($staleHandoffOutput -join [Environment]::NewLine)"
+    }
+
+    Write-HandoffFixture ('0' * 64) $handoffClock
+    $mismatchedHandoffOutput = @(& $JavaPath '-cp' $harnessClassPath 'dev.nbidal18.packcompat.OneClickReleaseHarness' `
+        'suppress' $minecraft $installedCompanion $guardHashLower $handoffClockText 'false' 'guard-mismatch' `
+        2>&1 | ForEach-Object { "$_" })
+    if ($LASTEXITCODE -ne 0 -or ($mismatchedHandoffOutput -join '').Trim() -cne 'HANDOFF_REJECTED_RELAUNCH' -or
+            -not (Test-Path -LiteralPath $handoffPath -PathType Leaf)) {
+        throw "A mismatched guard handoff incorrectly suppressed relaunch: $($mismatchedHandoffOutput -join [Environment]::NewLine)"
+    }
+    Remove-Item -LiteralPath $handoffPath -Force
 
     $approvedGeneratedShader = 'ComplementaryUnbound_r5.8.1 + EuphoriaPatches_1.9.3'
     $irisPath = Join-Path $minecraft 'config\iris.properties'
@@ -1004,7 +1294,7 @@ public final class LaunchGuardMigrationHarness {
     $siteFiles = @(Get-ChildItem -LiteralPath $siteRoot -Recurse -File -Force)
     $completedAt = Get-Date
     $reportText = @"
-# nbidal18 v3.2.4 Packwiz validation report
+# nbidal18 v3.2.5 Packwiz validation report
 
 - Result: PASS
 - Started: $($startedAt.ToString('yyyy-MM-dd HH:mm:ss zzz'))
@@ -1023,7 +1313,9 @@ Validated:
 - The first guarded launch performs both Packwiz passes, cold-installs and hash-verifies every managed payload, seeds absent settings once, and writes an attestation matching the installed strict manifest.
 - Generated Fabric nested/remapped-mod caches and Moonlight's loadable dynamic resource-pack cache are purged before attestation, while unrelated `.fabric` state remains byte-preserved.
 - Mixed settings are narrowed without resetting unrelated preferences: options.txt receives canonical resource-pack lines, Iris rejects unknown shaders while retaining the exact generated Euphoria selection, and Controlify reach-around is forced off.
-- The managed companion contains the exact reviewed launch guard. A different plain regular-file guard canary is atomically replaced through the production client updater without changing Prism metadata/bootstrap files; a second updater call is a true no-op, and the following guarded launch preserves the generated Euphoria selection. Compatibility with the deployed v3.2.3 guard is separately supported by the unchanged manifest grammar and pre-launch command.
+- The managed companion contains the exact reviewed launch guard. The exact published v3.2.4 guard artifact (SHA-256 $expectedPreviousLaunchGuardSha256) is atomically replaced through the production client updater without changing Prism metadata/bootstrap files; a second updater call is a true no-op, and the following guarded launch preserves the generated Euphoria selection.
+- A production package-private one-click harness proves the v3.2.4 replacement chooses relaunch, round-trips the exact Prism executable/root/game/instance/PID/start-time/nonce helper request, consumes one matching acknowledgement, and refuses every UP_TO_DATE or already-handed-off restart decision. A fresh exact guard/companion/manifest handoff proof is consumed and suppresses relaunch; stale and guard-mismatched proofs remain untrusted.
+- The launch-guard producer smoke separately executes a byte-distinct, identity-valid next guard as a child in the same pre-launch, checks exact child-exit propagation, one-generation depth enforcement, immutable hash-named staging, malformed-descriptor rejection, and the exact hash-bound handoff-attestation and Prism-marker schemas. This is an isolated JVM test, not a real Prism process handoff.
 - Unknown mod, resource-pack, shader, datapack, Moonlight global-datapack, Villager API pack, server-pack cache, retired CustomSkinLoader runtime/core/cache/plugin/provider, and config canaries are absent from strict roots and remain recoverable under `.nbidal18/quarantine`; the disposable Euphoria-generated shader tree is purged and rebuilt instead of accumulating in quarantine.
 - Exact optional Still Life, saves, screenshots, Skin Overrides skin/cape selections and libraries, VinURL data, approved shader sidecar settings, JEI/runtime state, and seed-once settings persist byte-for-byte.
 - An unchanged release still performs the normal and forced Packwiz passes. The forced pass repairs the sole tampered managed canary, downloads no other managed payload, quarantines a newly added extra, and refreshes a matching attestation.
@@ -1033,7 +1325,7 @@ Validated:
 
 External release gates are outside this isolated behavior report. `Build-Release.ps1` separately requires the anonymous HTTPS `pack.toml`, `index.toml`, strict manifest, and every reviewed internal-hosted payload to match before it produces the final ZIP. Reaching the Minecraft menu, confirming that a failed pre-launch command blocks Minecraft, and production multiplayer compatibility remain manual checks.
 
-Historical 3.1.0 -> 3.1.1 transition: the old direct-Packwiz Prism instance could not acquire the nbidal18 launch-guard JAR or Prism pre-launch command through Packwiz, so that cutover required a one-time import of the 3.1.1 six-file migration ZIP. Existing runnable guarded instances receive 3.2.4 and companion 1.1.8 in place; the companion installs the embedded reviewed guard during that game initialization, and the new guard runs on the following Prism launch. Missing/corrupt guards and command/filename changes still require the recovery ZIP.
+Historical 3.1.0 -> 3.1.1 transition: the old direct-Packwiz Prism instance could not acquire the nbidal18 launch-guard JAR or Prism pre-launch command through Packwiz, so that cutover required a one-time import of the 3.1.1 six-file migration ZIP. Existing runnable guarded instances receive 3.2.5 and companion 1.1.9 in place. This release bridges to launch guard 1.1.0 through a controlled exact-instance Prism relaunch when launcher discovery succeeds, with a manual second Play as the safe fallback; later guard updates self-handoff during pre-launch. Missing/corrupt guards and command/filename changes still require the recovery ZIP. The isolated behavior test verifies the embedded guard migration and next guarded launch; the real Prism process handoff remains a final manual release check.
 
 Known limitation: Packwiz is not transaction-wide atomic. In the deliberate failure test, an available managed config was written before a later payload returned 404, although player-controlled/runtime files and the previous Packwiz state remained intact. The guard removed the stale attestation immediately, and the next successful pre-launch run repaired and attested the managed release. Final Prism testing must confirm a nonzero pre-launch result blocks Minecraft from starting.
 "@
@@ -1044,7 +1336,7 @@ catch {
     $failure = $_
     $failedAt = Get-Date
     $failureText = @"
-# nbidal18 v3.2.4 Packwiz validation report
+# nbidal18 v3.2.5 Packwiz validation report
 
 - Result: FAIL
 - Started: $($startedAt.ToString('yyyy-MM-dd HH:mm:ss zzz'))

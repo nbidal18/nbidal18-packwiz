@@ -60,7 +60,7 @@ function Build-Jar([string] $workRoot, [string] $jarPath) {
     Get-ChildItem -LiteralPath $classes -Force | Copy-Item -Destination $stage -Recurse -Force
     Copy-Item -LiteralPath (Join-Path $projectRoot 'LICENSE') -Destination (Join-Path $stage 'LICENSE')
     $manifest = Join-Path $workRoot 'MANIFEST.MF'
-    $manifestText = "Manifest-Version: 1.0`r`nMain-Class: dev.nbidal18.launchguard.LaunchGuard`r`nImplementation-Title: nbidal18-launch-guard`r`nImplementation-Version: 1.0.1`r`n`r`n"
+    $manifestText = "Manifest-Version: 1.0`r`nMain-Class: dev.nbidal18.launchguard.LaunchGuard`r`nImplementation-Title: nbidal18-launch-guard`r`nImplementation-Version: 1.1.0`r`n`r`n"
     [IO.File]::WriteAllText($manifest, $manifestText, [Text.ASCIIEncoding]::new())
     Invoke-Checked $jar @('--create', '--file', $jarPath, '--date=1980-01-01T00:00:02Z', '--manifest', $manifest, '-C', $stage, '.')
 }

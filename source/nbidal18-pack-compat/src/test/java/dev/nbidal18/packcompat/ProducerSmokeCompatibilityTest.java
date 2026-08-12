@@ -18,8 +18,8 @@ class ProducerSmokeCompatibilityTest {
         assumeTrue(Files.isRegularFile(siteRoot.resolve(StrictManifest.RELATIVE_PATH)));
         Path packToml = siteRoot.resolve("pack.toml");
         assumeTrue(Files.isRegularFile(packToml)
-                        && Files.readString(packToml).contains("version = \"3.2.4\""),
-                "generated site has not yet been rebuilt for v3.2.4");
+                        && Files.readString(packToml).contains("version = \"3.2.5\""),
+                "generated site has not yet been rebuilt for v3.2.5");
 
         StrictManifest manifest = StrictManifest.load(siteRoot);
 

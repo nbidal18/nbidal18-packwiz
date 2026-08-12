@@ -1,6 +1,6 @@
 # Tool provenance
 
-Recorded on 2026-08-10. The standalone binaries live under the git-ignored `tools/` directory and are never indexed as Packwiz-managed files. The reviewed launch-guard bytes are also embedded inside the internally hosted pack-compat companion so an already-guarded client can install the next guard for its following Prism launch without replacing a running JAR.
+The standalone binaries live under the git-ignored `tools/` directory and are never indexed as Packwiz-managed files. The reviewed launch-guard bytes are also embedded inside the internally hosted pack-compat companion. Version 3.2.5 is the bridge to guard 1.1.0: the companion can install it after startup and request a controlled exact-instance relaunch, while guard 1.1.0 can self-handoff later embedded guard updates during pre-launch.
 
 ## packwiz-installer-bootstrap
 
@@ -18,7 +18,9 @@ This JAR is copied into the final Prism migration ZIP and invokes the Packwiz in
 - License: first-party MIT
 - Source: `source/nbidal18-launch-guard/`
 - Local path: `tools/nbidal18-launch-guard.jar`
-- SHA-256: `63243A6972BF4B89C0E2DDE79B48F20009781C021AA68D30DCB19063AECCAC45`
+- Release: `1.1.0`
+- Size: `65,406` bytes
+- SHA-256: `7BE9B87B00B92307A2F9B830C6D5FB2E5D74D583E5AB9FF3A9779AB7FF8FA79A`
 
 The reproducible Java 21 build compiles twice with fixed archive timestamps and requires byte-identical output. The final Prism migration ZIP runs this guard, which invokes Packwiz, exact-cleans strict content, verifies SHA-256 values, applies the narrow settings policy, purges generated loadable Fabric/Moonlight caches, and writes the runtime attestation before Minecraft starts.
 

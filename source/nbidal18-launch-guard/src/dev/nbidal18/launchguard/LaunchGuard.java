@@ -43,6 +43,7 @@ import java.util.UUID;
 public final class LaunchGuard {
     private static final String CONTROL_DIR = ".nbidal18";
     private static final String ATTESTATION = CONTROL_DIR + "/integrity-attestation.tsv";
+    private static final String HANDOFF_ATTESTATION = CONTROL_DIR + "/launch-guard-handoff.tsv";
     private static final String STATE = "packwiz.json";
     private static final String BOOTSTRAP = "packwiz-installer-bootstrap.jar";
     private static final long MAX_TEXT_BYTES = 16L * 1024L * 1024L;
@@ -89,6 +90,7 @@ public final class LaunchGuard {
     private int runWithLock() throws Exception {
         Path lockPath = resolve(root, CONTROL_DIR + "/launch-guard.lock");
         if (Files.exists(lockPath, NO_FOLLOW)) requirePlainRegular(lockPath, "launch guard lock");
+        ExecutionOutcome outcome;
         try (FileChannel channel = FileChannel.open(lockPath,
                 StandardOpenOption.CREATE, StandardOpenOption.WRITE, LinkOption.NOFOLLOW_LINKS)) {
             final FileLock lock;
@@ -99,14 +101,24 @@ public final class LaunchGuard {
             }
             if (lock == null) throw new GuardException("Another launch guard is already running.");
             try (lock) {
-                return execute();
+                String currentGuardSha256 = NextGuardHandoff.currentArtifactSha256();
+                PrismRelaunchMarker.acknowledgeIfArmed(root, currentGuardSha256);
+                NextGuardHandoff.consumeOrClearParentRequest(root, currentGuardSha256);
+                outcome = execute(currentGuardSha256);
             }
         }
+        if (outcome.handoff() != null) {
+            int exitCode = NextGuardHandoff.invoke(root, packUrl, outcome.handoff());
+            if (exitCode == 0) internalWork.removeAfterSuccess();
+            return exitCode;
+        }
+        return outcome.exitCode();
     }
 
-    private int execute() throws Exception {
+    private ExecutionOutcome execute(String currentGuardSha256) throws Exception {
         System.out.println("[nbidal18-launch-guard] Starting strict pre-launch validation in " + root);
         deleteStaleAttestation();
+        deleteStaleHandoffAttestation();
         requirePlainRegular(resolve(root, BOOTSTRAP), "Packwiz bootstrap");
 
         Path localManifestPath = resolve(root, StrictManifest.RELATIVE_MANIFEST);
@@ -131,10 +143,21 @@ public final class LaunchGuard {
             }
 
             applyStrictPolicy(manifest);
+            // Candidate code is considered only after the forced Packwiz pass,
+            // manifest stability check, strict cleanup, and exact managed-file
+            // verification have all succeeded. The normal Packwiz fast path is
+            // deliberately insufficient authority to execute downloaded code.
+            NextGuardHandoff.Request handoff = NextGuardHandoff.find(
+                    root, manifest, currentGuardSha256);
+            if (handoff != null) {
+                System.out.println("[nbidal18-launch-guard] A fully validated newer embedded guard will finish this launch.");
+                return ExecutionOutcome.handoff(handoff);
+            }
             writeAttestation(manifest.sha256);
+            NextGuardHandoff.writeSuccessfulHandoffAttestation(root, manifest.sha256, currentGuardSha256);
             successful = true;
             System.out.println("[nbidal18-launch-guard] Strict integrity validation passed.");
-            return 0;
+            return ExecutionOutcome.success();
         } finally {
             if (successful) internalWork.removeAfterSuccess();
         }
@@ -420,6 +443,16 @@ public final class LaunchGuard {
         Files.delete(path); // Deletes a link/reparse node itself; it never follows it.
     }
 
+    private void deleteStaleHandoffAttestation() throws IOException, GuardException {
+        Path path = resolve(root, HANDOFF_ATTESTATION);
+        if (!Files.exists(path, NO_FOLLOW)) return;
+        BasicFileAttributes attributes = Files.readAttributes(path, BasicFileAttributes.class, NO_FOLLOW);
+        if (attributes.isDirectory() && !attributes.isSymbolicLink()) {
+            throw new GuardException("Launch-guard handoff attestation path is unexpectedly a directory: " + path);
+        }
+        Files.delete(path);
+    }
+
     static String validatePackUrl(String value) throws GuardException {
         final URI uri;
         try { uri = new URI(value); }
@@ -531,7 +564,7 @@ public final class LaunchGuard {
         }
     }
 
-    private static String hash(Path path) throws IOException, GuardException {
+    static String hash(Path path) throws IOException, GuardException {
         requirePlainRegular(path, "hash target");
         final MessageDigest digest;
         try { digest = MessageDigest.getInstance("SHA-256"); }
@@ -557,7 +590,7 @@ public final class LaunchGuard {
         }
     }
 
-    private static void ensurePlainDirectoryTree(Path trustedRoot, Path directory) throws IOException, GuardException {
+    static void ensurePlainDirectoryTree(Path trustedRoot, Path directory) throws IOException, GuardException {
         Path root = trustedRoot.toAbsolutePath().normalize();
         Path target = directory.toAbsolutePath().normalize();
         if (!target.startsWith(root)) throw new GuardException("Directory escapes trusted root: " + target);
@@ -575,7 +608,7 @@ public final class LaunchGuard {
         }
     }
 
-    private static boolean isLinkOrReparse(Path path, BasicFileAttributes attributes) throws IOException {
+    static boolean isLinkOrReparse(Path path, BasicFileAttributes attributes) throws IOException {
         if (attributes.isSymbolicLink() || attributes.isOther() || Files.isSymbolicLink(path)) return true;
         if (isWindows()) {
             try {
@@ -786,5 +819,12 @@ public final class LaunchGuard {
     private static final class PackwizExit extends Exception {
         final int exitCode;
         PackwizExit(int exitCode) { this.exitCode = exitCode; }
+    }
+
+    private record ExecutionOutcome(int exitCode, NextGuardHandoff.Request handoff) {
+        static ExecutionOutcome success() { return new ExecutionOutcome(0, null); }
+        static ExecutionOutcome handoff(NextGuardHandoff.Request request) {
+            return new ExecutionOutcome(0, request);
+        }
     }
 }

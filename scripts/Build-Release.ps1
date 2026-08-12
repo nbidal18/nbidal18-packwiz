@@ -25,6 +25,12 @@ $outputPath = Join-Path $releaseRoot '1. setup\nbidal18-client.zip'
 $packCompatSourceRoot = Join-Path $updaterRoot 'source\nbidal18-pack-compat'
 $packCompatPropertiesPath = Join-Path $packCompatSourceRoot 'gradle.properties'
 $packCompatGradle = Join-Path $packCompatSourceRoot 'gradlew.bat'
+$expectedReleaseVersion = '3.2.5'
+$expectedPackCompatVersion = '1.1.9+1.21.1'
+$expectedLaunchGuardVersion = '1.1.0'
+$publishedV324LaunchGuardSha256 = '63243A6972BF4B89C0E2DDE79B48F20009781C021AA68D30DCB19063AECCAC45'
+$reviewedLaunchGuardSha256 = '7BE9B87B00B92307A2F9B830C6D5FB2E5D74D583E5AB9FF3A9779AB7FF8FA79A'
+$reviewedPackCompatSha256 = '1E4C3785499F5734C0DFAFB63F26CCD9011E522EC46A2ECB5A52BAF2DD10EE30'
 
 function Get-GradleProperty([string] $Path, [string] $Name) {
     $match = @(Get-Content -LiteralPath $Path | Where-Object {
@@ -84,6 +90,27 @@ function Assert-EmbeddedLaunchGuard([string] $CompanionJar, [string] $ExpectedGu
     finally { $archive.Dispose() }
 }
 
+function Assert-CompanionRelaunchPayload([string] $CompanionJar, [string] $Label) {
+    $archive = [IO.Compression.ZipFile]::OpenRead($CompanionJar)
+    try {
+        foreach ($requiredClass in @(
+            'dev/nbidal18/packcompat/LaunchGuardHandoff.class',
+            'dev/nbidal18/packcompat/PrismAutoRelaunch.class',
+            'dev/nbidal18/packcompat/PrismLaunchContext.class',
+            'dev/nbidal18/packcompat/PrismRelaunchHelper.class',
+            'dev/nbidal18/packcompat/PrismRelaunchStandalone.class',
+            'dev/nbidal18/packcompat/PrismRelaunchState.class'
+        )) {
+            if ($null -eq $archive.GetEntry($requiredClass)) {
+                throw "$Label is missing the one-click migration component: $requiredClass"
+            }
+        }
+    }
+    finally {
+        $archive.Dispose()
+    }
+}
+
 function Build-AndVerifyPackCompat {
     if (-not (Test-Path -LiteralPath $packCompatGradle -PathType Leaf) -or
         -not (Test-Path -LiteralPath $packCompatPropertiesPath -PathType Leaf)) {
@@ -115,6 +142,9 @@ function Build-AndVerifyPackCompat {
 
     $archiveBase = Get-GradleProperty $packCompatPropertiesPath 'archives_base_name'
     $modVersion = Get-GradleProperty $packCompatPropertiesPath 'mod_version'
+    if ($modVersion -cne $expectedPackCompatVersion) {
+        throw "Pack-compat version must be $expectedPackCompatVersion for release $expectedReleaseVersion; found $modVersion"
+    }
     $fileName = "$archiveBase-$modVersion.jar"
     $builtJar = Join-Path $packCompatSourceRoot "build\libs\$fileName"
     if (-not (Test-Path -LiteralPath $builtJar -PathType Leaf)) {
@@ -123,6 +153,11 @@ function Build-AndVerifyPackCompat {
 
     $builtHash = (Get-FileHash -LiteralPath $builtJar -Algorithm SHA256).Hash
     Assert-EmbeddedLaunchGuard $builtJar $guardPath 'Reproducible pack-compat'
+    Assert-CompanionRelaunchPayload $builtJar 'Reproducible pack-compat'
+    $builtHash = (Get-FileHash -LiteralPath $builtJar -Algorithm SHA256).Hash
+    if ($builtHash -cne $reviewedPackCompatSha256) {
+        throw "Reproducible pack-compat differs from the frozen reviewed artifact: $builtHash"
+    }
     foreach ($payloadPath in @(
         (Join-Path $releaseRoot "3. modpack\client\mods\$fileName"),
         (Join-Path $releaseRoot "3. modpack\server\mods\$fileName"),
@@ -144,7 +179,25 @@ function Build-AndVerifyLaunchGuard {
     if (-not (Test-Path -LiteralPath $guardPath -PathType Leaf)) {
         throw "Launch-guard build did not create: $guardPath"
     }
+    $guardArchive = [IO.Compression.ZipFile]::OpenRead($guardPath)
+    try {
+        $manifestEntry = $guardArchive.GetEntry('META-INF/MANIFEST.MF')
+        if (-not $manifestEntry) { throw 'Launch-guard JAR has no META-INF/MANIFEST.MF.' }
+        $manifestReader = [IO.StreamReader]::new($manifestEntry.Open())
+        try { $manifestText = $manifestReader.ReadToEnd() }
+        finally { $manifestReader.Dispose() }
+        if ($manifestText -notmatch "(?m)^Implementation-Version: $([regex]::Escape($expectedLaunchGuardVersion))\r?$") {
+            throw "Launch-guard Implementation-Version must be $expectedLaunchGuardVersion for release $expectedReleaseVersion."
+        }
+    }
+    finally { $guardArchive.Dispose() }
     $actualHash = (Get-FileHash -LiteralPath $guardPath -Algorithm SHA256).Hash
+    if ($actualHash -cne $reviewedLaunchGuardSha256) {
+        throw "Reproducible launch guard differs from the frozen reviewed artifact: $actualHash"
+    }
+    if ($actualHash -ceq $publishedV324LaunchGuardSha256) {
+        throw 'Launch guard 1.1.0 is byte-identical to the published v3.2.4 guard; the migration bridge would be untestable.'
+    }
     $provenance = Get-Content -LiteralPath $toolProvenancePath -Raw
     $section = [regex]::Match(
         $provenance,
@@ -177,7 +230,22 @@ $packCompat = Build-AndVerifyPackCompat
 if ($RefreshModrinth) { & $syncPath -RefreshModrinth }
 else { & $syncPath }
 
+$generatedPack = Get-Content -LiteralPath (Join-Path $siteRoot 'pack.toml') -Raw
+if ($generatedPack -notmatch "(?m)^version = `"$([regex]::Escape($expectedReleaseVersion))`"\r?$") {
+    throw "Generated pack.toml is not release $expectedReleaseVersion."
+}
+$generatedIndex = Get-Content -LiteralPath (Join-Path $siteRoot 'index.toml') -Raw
+$generatedStrictManifest = Get-Content -LiteralPath (Join-Path $siteRoot '.nbidal18\strict-manifest.tsv') -Raw
+if ($generatedIndex -match '(?im)^file = "nbidal18-launch-guard\.jar"\r?$' -or
+        $generatedStrictManifest -match '(?im)\tnbidal18-launch-guard\.jar\r?$' -or
+        (Test-Path -LiteralPath (Join-Path $siteRoot 'nbidal18-launch-guard.jar'))) {
+    throw 'The standalone launch guard entered the Packwiz site; it must remain only in the Prism shell and embedded companion.'
+}
+
 & $guardSmokePath
+if ($LASTEXITCODE -ne 0) {
+    throw "Launch-guard producer smoke left a nonzero native exit code: $LASTEXITCODE"
+}
 
 $sitePackCompat = Join-Path $siteRoot "mods\$($packCompat.FileName)"
 if (-not (Test-Path -LiteralPath $sitePackCompat -PathType Leaf) -or
@@ -185,6 +253,7 @@ if (-not (Test-Path -LiteralPath $sitePackCompat -PathType Leaf) -or
     throw "Generated updater site pack-compat JAR differs from the reproducible build: $sitePackCompat"
 }
 Assert-EmbeddedLaunchGuard $sitePackCompat $guardPath 'Generated updater-site pack-compat'
+Assert-CompanionRelaunchPayload $sitePackCompat 'Generated updater-site pack-compat'
 
 if (-not (Test-Path -LiteralPath $guardPath -PathType Leaf)) {
     throw "Build the reproducible launch guard before packaging: $guardPath"
@@ -256,6 +325,15 @@ try {
     finally { $reader.Dispose() }
     if (-not $instanceCfg.Contains("PreLaunchCommand=`"`$INST_JAVA`" -jar nbidal18-launch-guard.jar $UpdateUrl")) {
         throw 'Final release ZIP does not contain the expected guarded public Packwiz URL.'
+    }
+    foreach ($requiredIdentity in @(
+        'name=nbidal18-client',
+        'ExportName=nbidal18-client',
+        "ExportVersion=$expectedReleaseVersion"
+    )) {
+        if (-not $instanceCfg.Contains($requiredIdentity)) {
+            throw "Final release ZIP instance identity is missing: $requiredIdentity"
+        }
     }
     $guardHash = [Security.Cryptography.SHA256]::Create()
     $guardStream = $guardEntry.Open()

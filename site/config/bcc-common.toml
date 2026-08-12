@@ -7,7 +7,7 @@
 	#The name of the modpack
 	modpackName = "nbidal18's server"
 	#The version of the modpack
-	modpackVersion = "v3.2.4"
+	modpackVersion = "v3.2.5"
 	#Use the metadata.json to determine the modpack version
 	#ONLY ENABLE THIS IF YOU KNOW WHAT YOU ARE DOING
 	useMetadata = false

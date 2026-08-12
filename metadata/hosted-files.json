@@ -6,8 +6,8 @@
       "reason": "Configurable MIT rebuild; the embedded NOTICE and LICENSE_BandagePlus-Xanthian retain the original Copyright (c) 2023 Xanthian MIT attribution for reused art assets and recipe data."
     },
     {
-      "path": "mods/nbidal18-pack-compat-1.1.8+1.21.1.jar",
-      "reason": "First-party clean-room MIT protocol-3 compatibility, bounded sanitized reason reporting, runtime integrity, client title-screen bridge, and guarded-instance launch-guard migration; complete reproducible source and tests are published under source/nbidal18-pack-compat, the exact reviewed guard is embedded with its SHA-256 descriptor for atomic client-only installation on the following Prism launch, generated-cache baselines complete synchronously before clean login status and periodic monitoring can begin, exact protocol-1/protocol-2 client responses remain available to older servers, and the bridge opens Skin Overrides' existing selector without copying Better Compatibility Checker or Skin Overrides classes or assets."
+      "path": "mods/nbidal18-pack-compat-1.1.9+1.21.1.jar",
+      "reason": "First-party clean-room MIT protocol-3 compatibility, bounded sanitized reason reporting, runtime integrity, client title-screen bridge, and guarded-instance launch-guard migration; complete reproducible source and tests are published under source/nbidal18-pack-compat. The exact reviewed guard 1.1.0 is embedded with its SHA-256 descriptor for the controlled v3.2.5 same-instance relaunch bridge and later pre-launch self-handoff. Generated-cache baselines complete synchronously before clean login status and periodic monitoring can begin, exact protocol-1/protocol-2 client responses remain available to older servers, and the bridge opens Skin Overrides' existing selector without copying Better Compatibility Checker or Skin Overrides classes or assets."
     },
     {
       "path": "mods/carryon-slowness-fix-1.0.0+1.21.1.jar",
