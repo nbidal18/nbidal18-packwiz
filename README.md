@@ -9,6 +9,7 @@ Packwiz endpoint: <https://nbidal18.github.io/nbidal18-packwiz/pack.toml>
 ## Behaviour
 
 - The first Play downloads the complete managed client from this repository.
+- The setup ZIP keeps the release version in its filename, while the imported Prism instance and folder use the stable name `nbidal18` so later updates do not leave an old version in the launcher name.
 - Later launches check for a release change, update changed files, and make `mods`, `config`, `datapacks`, `resourcepacks`, and `shaderpacks` match the published source.
 - Unknown files in those loadable roots are moved to the recoverable `.nbidal18-packwiz/removed-local-files` folder before Minecraft starts.
 - Fancy Crops 1.3 and Nature X 12.2 are installed and enabled by default. Fancy Crops has priority over Nature X where both define crop visuals, and the client includes Nature X's required Polytone support.

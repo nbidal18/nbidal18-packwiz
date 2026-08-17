@@ -42,7 +42,7 @@ public final class Nbidal18PackwizSync {
             "https://nbidal18.github.io/nbidal18-packwiz/pack.toml";
     private static final String DEFAULT_MANIFEST_URL =
             "https://nbidal18.github.io/nbidal18-packwiz/sync-manifest.json";
-    private static final String EXPECTED_PACK_VERSION = "4.1.3-packwiz";
+    private static final int[] MINIMUM_PACK_VERSION = {4, 1, 3};
     private static final DateTimeFormatter MOVE_STAMP =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final Pattern FILE_ENTRY = Pattern.compile(
@@ -58,6 +58,7 @@ public final class Nbidal18PackwizSync {
     private final Path stateRoot;
     private final Path lastManifestPath;
     private final Path bootstrapPath;
+    private final Path installerPath;
     private final String packUrl;
     private final String manifestUrl;
     private JFrame updaterWindow;
@@ -71,6 +72,7 @@ public final class Nbidal18PackwizSync {
         stateRoot = minecraftRoot.resolve(".nbidal18-packwiz");
         lastManifestPath = stateRoot.resolve("last-successful-manifest.json");
         bootstrapPath = minecraftRoot.resolve("packwiz-installer-bootstrap.jar");
+        installerPath = minecraftRoot.resolve("packwiz-installer.jar");
         packUrl = envOrDefault("NBIDAL18_PACK_URL", DEFAULT_PACK_URL);
         manifestUrl = envOrDefault("NBIDAL18_MANIFEST_URL", DEFAULT_MANIFEST_URL);
     }
@@ -127,7 +129,7 @@ public final class Nbidal18PackwizSync {
                 Files.move(downloadedManifest, lastManifestPath,
                         StandardCopyOption.REPLACE_EXISTING);
                 downloadedManifest = null;
-                status("The instance matches v4.1.3-packwiz.");
+                status("The instance matches v" + current.packVersion + ".");
                 return 0;
             }
 
@@ -166,6 +168,9 @@ public final class Nbidal18PackwizSync {
         if (!Files.isRegularFile(bootstrapPath)) {
             throw new IOException("Packwiz bootstrap is missing: " + bootstrapPath);
         }
+        if (!Files.isRegularFile(installerPath)) {
+            throw new IOException("Bundled Packwiz installer is missing: " + installerPath);
+        }
 
         // Prism substitutes INST_JAVA in the pre-launch command, but some Prism
         // builds do not export it to the child process. Reuse the Java runtime
@@ -191,8 +196,14 @@ public final class Nbidal18PackwizSync {
         }
 
         status("Checking GitHub for pack updates...");
-        ProcessBuilder processBuilder = new ProcessBuilder(
-                javaPath.toString(), "-jar", bootstrapPath.toString(), "-g", packUrl);
+        List<String> command = new ArrayList<>();
+        command.add(javaPath.toString());
+        command.add("-jar");
+        command.add(bootstrapPath.toString());
+        command.add("--bootstrap-no-update");
+        command.add("-g");
+        command.add(packUrl);
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.directory(minecraftRoot.toFile());
         processBuilder.inheritIO();
         Process process = processBuilder.start();
@@ -225,8 +236,9 @@ public final class Nbidal18PackwizSync {
         Matcher version = Pattern.compile(
                 "\\\"packVersion\\\"\\s*:\\s*\\\"((?:\\\\.|[^\\\"])*)\\\"")
                 .matcher(json);
-        if (!schema.find() || !"1".equals(schema.group(1)) || !version.find()
-                || !EXPECTED_PACK_VERSION.equals(jsonUnescape(version.group(1)))) {
+        String packVersion = version.find() ? jsonUnescape(version.group(1)) : "";
+        if (!schema.find() || !"1".equals(schema.group(1))
+                || !isSupportedPackVersion(packVersion)) {
             throw new IOException("Unsupported sync manifest in " + path);
         }
 
@@ -273,7 +285,29 @@ public final class Nbidal18PackwizSync {
         if (propertyRules.isEmpty()) {
             throw new IOException("The sync manifest contains no property rules: " + path);
         }
-        return new SyncManifest(exactRoots, localAllowed, files, propertyRules);
+        return new SyncManifest(packVersion, exactRoots, localAllowed, files, propertyRules);
+    }
+
+    private static boolean isSupportedPackVersion(String value) {
+        Matcher matcher = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)-packwiz").matcher(value);
+        if (!matcher.matches()) {
+            return false;
+        }
+        try {
+            int[] candidate = {
+                    Integer.parseInt(matcher.group(1)),
+                    Integer.parseInt(matcher.group(2)),
+                    Integer.parseInt(matcher.group(3))
+            };
+            for (int index = 0; index < candidate.length; index++) {
+                if (candidate[index] != MINIMUM_PACK_VERSION[index]) {
+                    return candidate[index] > MINIMUM_PACK_VERSION[index];
+                }
+            }
+            return true;
+        } catch (NumberFormatException ignored) {
+            return false;
+        }
     }
 
     private List<String> findSyncProblems(
@@ -608,16 +642,19 @@ public final class Nbidal18PackwizSync {
     }
 
     private static final class SyncManifest {
+        private final String packVersion;
         private final List<String> exactRoots;
         private final Set<String> localAllowed;
         private final Map<String, FileEntry> files;
         private final List<PropertyRule> propertyRules;
 
         private SyncManifest(
+                String packVersion,
                 List<String> exactRoots,
                 Set<String> localAllowed,
                 Map<String, FileEntry> files,
                 List<PropertyRule> propertyRules) {
+            this.packVersion = packVersion;
             this.exactRoots = List.copyOf(exactRoots);
             this.localAllowed = Set.copyOf(localAllowed);
             this.files = Map.copyOf(files);
