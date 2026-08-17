@@ -21,7 +21,7 @@ function Assert-True([bool] $condition, [string] $message) {
 }
 
 function Invoke-Sync([string] $minecraftRoot) {
-    $env:INST_JAVA = $javaPath
+    Remove-Item Env:INST_JAVA -ErrorAction SilentlyContinue
     $env:INST_MC_DIR = $minecraftRoot
     $env:NBIDAL18_PACK_URL = "http://127.0.0.1:$Port/pack.toml"
     $env:NBIDAL18_MANIFEST_URL = "http://127.0.0.1:$Port/sync-manifest.json"

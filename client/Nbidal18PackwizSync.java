@@ -128,18 +128,18 @@ public final class Nbidal18PackwizSync {
 
             if (!Files.isRegularFile(lastManifestPath)) {
                 throw new IOException(
-                        "GitHub is unavailable and this instance has never completed its first installation.");
+                        "The online update could not complete and this instance has never completed its first installation.");
             }
 
             SyncManifest lastKnown = readSyncManifest(lastManifestPath);
             List<String> offlineProblems = findSyncProblems(lastKnown, true, false);
             if (!offlineProblems.isEmpty()) {
                 throw new IOException(
-                        "GitHub is unavailable and the last installed release is incomplete: "
+                        "The online update could not complete and the last installed release is incomplete: "
                                 + String.join(", ", offlineProblems));
             }
 
-            warning("GitHub is unavailable. Starting the last complete installed release; "
+            warning("The online update could not complete. Starting the last complete installed release; "
                     + "the server will apply its current compatibility policy.");
             return 0;
         } catch (Exception error) {
@@ -161,13 +161,21 @@ public final class Nbidal18PackwizSync {
             throw new IOException("Packwiz bootstrap is missing: " + bootstrapPath);
         }
 
-        String javaValue = System.getenv("INST_JAVA");
-        if (javaValue == null || javaValue.isBlank()) {
-            throw new IOException("Prism did not provide a valid INST_JAVA path.");
+        // Prism substitutes INST_JAVA in the pre-launch command, but some Prism
+        // builds do not export it to the child process. Reuse the Java runtime
+        // that is already running this updater instead.
+        String currentCommand = ProcessHandle.current().info().command().orElse("");
+        Path javaPath;
+        if (!currentCommand.isBlank()) {
+            javaPath = Path.of(currentCommand).toAbsolutePath().normalize();
+        } else {
+            boolean windows = System.getProperty("os.name", "")
+                    .toLowerCase(Locale.ROOT).contains("win");
+            javaPath = Path.of(System.getProperty("java.home"), "bin",
+                    windows ? "java.exe" : "java").toAbsolutePath().normalize();
         }
-        Path javaPath = Path.of(javaValue).toAbsolutePath().normalize();
         if (!Files.isRegularFile(javaPath)) {
-            throw new IOException("Prism did not provide a valid INST_JAVA path: " + javaPath);
+            throw new IOException("The updater could not locate its running Java runtime: " + javaPath);
         }
         if (javaPath.getFileName().toString().equalsIgnoreCase("javaw.exe")) {
             Path consoleJava = javaPath.resolveSibling("java.exe");

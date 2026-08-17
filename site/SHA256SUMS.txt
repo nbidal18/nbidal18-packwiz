@@ -1,2 +1,2 @@
-3cfce994752af04bf3dc58b41d2327f3b5e74e717dba0618f02b06896e0dc28a  nbidal18-client-4.1.2-packwiz.zip
+146671f619551d0d1eb0caf3f1c560673fda6340f4a8bca038cc5f752d974296  nbidal18-client-4.1.2-packwiz.zip
 94b9f72592f9219d7903acac148708c05ce0add690ff3fc821d7ed0d90fa24aa  pack.toml
