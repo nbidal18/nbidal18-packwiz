@@ -132,8 +132,15 @@ try {
         (Join-Path $releaseRoot '4. server\2. online-hosting\config\nbidal18-integrity.properties')
     )) {
         $policy = Get-Content -LiteralPath $policyPath -Raw
-        Assert-True ($policy -match '(?m)^require-helper=false$') "Legacy access is not open in $policyPath"
+        Assert-True ($policy -match '(?m)^require-helper=true$') "The helper requirement is not enabled in $policyPath"
         Assert-True ($policy -match "(?m)^expected-manifest-sha256=$manifestDigest$") "Manifest digest mismatch in $policyPath"
+    }
+    foreach ($bccPath in @(
+        (Join-Path $releaseRoot '3. modpack\server\config\bcc-common.toml'),
+        (Join-Path $releaseRoot '4. server\2. online-hosting\config\bcc-common.toml')
+    )) {
+        $bcc = Get-Content -LiteralPath $bccPath -Raw
+        Assert-True ($bcc -match '(?m)^\s*modpackVersion\s*=\s*"v4\.1\.3-packwiz"\s*$') "The v4.1.3 BCC requirement is not enabled in $bccPath"
     }
 
     $extraMod = Join-Path $minecraft 'mods\player-added-extra-mod.jar'
@@ -179,7 +186,7 @@ try {
     Expand-Archive -LiteralPath $zipPath -DestinationPath $offlineRoot
     Assert-True ((Invoke-Sync (Join-Path $offlineRoot 'minecraft')) -ne 0) 'An incomplete first install incorrectly started offline.'
 
-    Write-Host 'PASS: v4.1.3 install, Jobs+ balance, hidden Jade mob health, optional legacy policy, preserved personal configs and shader quality, glowing-ore field repair, exact-match cleanup, managed-file repair, complete offline fallback, and incomplete offline blocking.'
+    Write-Host 'PASS: v4.1.3 install, Jobs+ balance, hidden Jade mob health, enforced helper and BCC policy, preserved personal configs and shader quality, glowing-ore field repair, exact-match cleanup, managed-file repair, complete offline fallback, and incomplete offline blocking.'
     $testSucceeded = $true
     $global:LASTEXITCODE = 0
 }

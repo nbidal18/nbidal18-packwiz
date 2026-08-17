@@ -310,9 +310,9 @@ hash-format = "sha256"
         )
         Write-Utf8 $policyPath $policyText
     }
-    if ((Get-Content -LiteralPath $canonicalPolicy -Raw) -notmatch '(?m)^require-helper=false$' -or
-            (Get-Content -LiteralPath $hostingPolicy -Raw) -notmatch '(?m)^require-helper=false$') {
-        throw 'The v4.1.3 testing release must keep require-helper=false.'
+    if ((Get-Content -LiteralPath $canonicalPolicy -Raw) -notmatch '(?m)^require-helper=true$' -or
+            (Get-Content -LiteralPath $hostingPolicy -Raw) -notmatch '(?m)^require-helper=true$') {
+        throw 'The enforced v4.1.3 release must keep require-helper=true.'
     }
 
     $siteFiles = @(Get-ChildItem -LiteralPath $stagePath -Recurse -File -Force)
