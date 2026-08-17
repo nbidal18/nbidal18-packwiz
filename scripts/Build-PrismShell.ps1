@@ -26,7 +26,7 @@ $appearanceRoot = Join-Path $ReleaseRoot '2. appearance\support'
 $iconPath = Join-Path $ReleaseRoot '5. development\server-icon.png'
 $bootstrapPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer-bootstrap.jar'
 $installerPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer.jar'
-$syncScript = Join-Path $repoRoot 'client\nbidal18-packwiz-sync.ps1'
+$syncJar = Join-Path $repoRoot 'client\nbidal18-packwiz-sync.jar'
 $sitePath = Join-Path $repoRoot 'site'
 
 foreach ($required in @(
@@ -36,7 +36,7 @@ foreach ($required in @(
     $iconPath,
     $bootstrapPath,
     $installerPath,
-    $syncScript,
+    $syncJar,
     (Join-Path $sitePath 'pack.toml'),
     (Join-Path $sitePath 'sync-manifest.json')
 )) {
@@ -119,7 +119,7 @@ ManagedPack=false
 OverrideJavaLocation=false
 OverrideMemory=false
 OverrideCommands=true
-PreLaunchCommand=powershell.exe -NoProfile -ExecutionPolicy Bypass -File nbidal18-packwiz-sync.ps1
+PreLaunchCommand="$INST_JAVA" -jar nbidal18-packwiz-sync.jar
 UseAccountForInstance=false
 '@
     Write-Utf8 (Join-Path $stagePath 'mmc-pack.json') @'
@@ -137,7 +137,7 @@ UseAccountForInstance=false
     Copy-Item -LiteralPath $iconPath -Destination (Join-Path $stagePath 'server-icon.png')
     Copy-Item -LiteralPath $bootstrapPath -Destination (Join-Path $minecraft 'packwiz-installer-bootstrap.jar')
     Copy-Item -LiteralPath $installerPath -Destination (Join-Path $minecraft 'packwiz-installer.jar')
-    Copy-Item -LiteralPath $syncScript -Destination (Join-Path $minecraft 'nbidal18-packwiz-sync.ps1')
+    Copy-Item -LiteralPath $syncJar -Destination (Join-Path $minecraft 'nbidal18-packwiz-sync.jar')
     Copy-Item -LiteralPath (Join-Path $appearanceRoot 'client-options.txt') -Destination (Join-Path $minecraft 'options.txt')
     Copy-Item -LiteralPath (Join-Path $appearanceRoot 'client-options.amecsapi.txt') -Destination (Join-Path $minecraft 'options.amecsapi.txt')
     Copy-Item -LiteralPath (Join-Path $clientRoot 'servers.dat') -Destination (Join-Path $minecraft 'servers.dat')

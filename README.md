@@ -1,6 +1,6 @@
 # nbidal18 v4.1.2-packwiz
 
-This public repository is the complete GitHub Pages update channel for the updater-enabled Prism edition of nbidal18 4.1.2.
+This public repository is the complete GitHub Pages update channel for the updater-enabled Prism edition of nbidal18 4.1.2. Its Java pre-launch updater works through Prism's selected runtime on Windows, macOS, and Linux.
 
 Player page: <https://nbidal18.github.io/nbidal18-packwiz/>
 

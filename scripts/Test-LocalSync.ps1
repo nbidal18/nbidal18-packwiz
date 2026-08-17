@@ -22,12 +22,13 @@ function Assert-True([bool] $condition, [string] $message) {
 
 function Invoke-Sync([string] $minecraftRoot) {
     $env:INST_JAVA = $javaPath
+    $env:INST_MC_DIR = $minecraftRoot
     $env:NBIDAL18_PACK_URL = "http://127.0.0.1:$Port/pack.toml"
     $env:NBIDAL18_MANIFEST_URL = "http://127.0.0.1:$Port/sync-manifest.json"
     $env:NBIDAL18_HEADLESS_TEST = '1'
     $previousErrorAction = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
-    $syncOutput = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $minecraftRoot 'nbidal18-packwiz-sync.ps1') 2>&1
+    $syncOutput = & $javaPath -jar (Join-Path $minecraftRoot 'nbidal18-packwiz-sync.jar') 2>&1
     $syncExitCode = $LASTEXITCODE
     $ErrorActionPreference = $previousErrorAction
     @($syncOutput | Select-Object -Last 12) | ForEach-Object { Write-Host $_ }
@@ -59,6 +60,9 @@ try {
     $onlineRoot = Join-Path $testRoot 'online'
     Expand-Archive -LiteralPath $zipPath -DestinationPath $onlineRoot
     $minecraft = Join-Path $onlineRoot 'minecraft'
+    $instanceConfig = [IO.File]::ReadAllText((Join-Path $onlineRoot 'instance.cfg'))
+    Assert-True ($instanceConfig.Contains('PreLaunchCommand="$INST_JAVA" -jar nbidal18-packwiz-sync.jar')) 'The Prism command is not cross-platform.'
+    Assert-True (-not $instanceConfig.Contains('powershell')) 'The Prism command still depends on Windows PowerShell.'
     Assert-True ((Invoke-Sync $minecraft) -eq 0) 'First online installation failed.'
     Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 241) 'First install did not produce 241 mod JARs.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\better-compatability-checker-fabric-21.1.8.jar')) 'BCC was not installed.'
@@ -113,7 +117,7 @@ try {
     $global:LASTEXITCODE = 0
 }
 finally {
-    Remove-Item Env:NBIDAL18_PACK_URL,Env:NBIDAL18_MANIFEST_URL,Env:NBIDAL18_HEADLESS_TEST -ErrorAction SilentlyContinue
+    Remove-Item Env:INST_MC_DIR,Env:NBIDAL18_PACK_URL,Env:NBIDAL18_MANIFEST_URL,Env:NBIDAL18_HEADLESS_TEST -ErrorAction SilentlyContinue
     if ($null -ne $server -and -not $server.HasExited) {
         Stop-Process -Id $server.Id -Force
         $server.WaitForExit()
