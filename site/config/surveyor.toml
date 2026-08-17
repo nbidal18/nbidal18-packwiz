@@ -7,7 +7,7 @@ terrain = "DYNAMIC"
 # DISABLED prevents loading, FROZEN loads but prevents updates, DYNAMIC loads with addons or on servers, ENABLED always loads
 # options: DISABLED, FROZEN, DYNAMIC, ENABLED
 # default: DYNAMIC
-structures = "DYNAMIC"
+structures = "DISABLED"
 # Landmark system - a generic record of both player-owned waypoints and server-owned POIs, accessible via API
 # DISABLED prevents loading, FROZEN loads but prevents updates, DYNAMIC loads with addons or on servers, ENABLED always loads
 # options: DISABLED, FROZEN, DYNAMIC, ENABLED
@@ -45,7 +45,7 @@ forceUpdateLandmarks = true
 	# When NONE, clients will never see structures
 	# options: NONE, SOLO, GROUP, SERVER
 	# default: GROUP
-	structures = "GROUP"
+	structures = "NONE"
 	# Which landmarks to sync between client and server
 	# SERVER sync server-known landmarks, GROUP sends group-known landmarks, SOLO sends player-known landmarks, NONE sends no landmarks
 	# options: NONE, SOLO, GROUP, SERVER
@@ -68,7 +68,7 @@ forceUpdateLandmarks = true
 	# [Server] Ticks per terrain region load for batch update - lower is more frequent
 	# range: 1 - 200
 	# default: 20
-	terrainTicks = 20
+	terrainTicks = 100
 	# [Server] Ticks per position update - lower is more frequent
 	# range: 1 - 200
 	# default: 1
@@ -78,11 +78,11 @@ forceUpdateLandmarks = true
 	# Which block entities to preserve data for when creating block landmarks.
 	allowedBlockEntities = ["minecraft:banner"]
 	# Which points of interest to automatically add block landmarks for.
-	poiLandmarks = ["minecraft:lodestone"]
+	poiLandmarks = []
 	# Whether to automatically add specialised nether portal POI landmarks.
 	# Creates one landmark for each nether portal, instead of one per portal block.
 	# default: true
-	netherPortalLandmarks = true
+	netherPortalLandmarks = false
 	# Whether to automatically add player death waypoints
 	# default: true
 	playerDeathWaypoints = true

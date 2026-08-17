@@ -1,0 +1,17 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:redstone"
+        },
+        "title": "Realistic Health",
+        "description": "\u00a77Realistic health mechanics \n\n\u00a78v3.6",
+        "show_toast": false,
+        "announce_to_chat": false
+    },
+    "parent": "global:sygikal",
+    "criteria": {
+        "requirement": {
+            "trigger": "minecraft:tick"
+        }
+    }
+}

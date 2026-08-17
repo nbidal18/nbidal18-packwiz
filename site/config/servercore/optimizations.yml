@@ -1,0 +1,6 @@
+# Conservative nbidal18 baseline: keep optimizations with little or no gameplay impact.
+reduce-sync-loads: true
+cache-ticking-chunks: true
+optimize-command-blocks: false
+fast-biome-lookups: false
+cancel-duplicate-fluid-ticks: false

@@ -47,16 +47,16 @@ fallbackFailHandling = "MISSING"
 emptyHandling = "EMPTY"
 
 [structureMarkers]
-	"minecraft:start/bastion_remnant" = true
-	"minecraft:type/ocean_monument" = true
-	"minecraft:type/woodland_mansion" = true
-	"minecraft:start/village_taiga" = true
-	"minecraft:start/village_desert" = true
+	"minecraft:start/bastion_remnant" = false
+	"minecraft:type/ocean_monument" = false
+	"minecraft:type/woodland_mansion" = false
+	"minecraft:start/village_taiga" = false
+	"minecraft:start/village_desert" = false
 	"minecraft:type/end_city" = false
-	"minecraft:tag/village" = true
-	"minecraft:start/village_snowy" = true
-	"minecraft:start/village_savanna" = true
-	"minecraft:start/village_plains" = true
+	"minecraft:tag/village" = false
+	"minecraft:start/village_snowy" = false
+	"minecraft:start/village_savanna" = false
+	"minecraft:start/village_plains" = false
 
 # Options to adjust map behaviour for custom or modified dimensions.
 [dimensions]

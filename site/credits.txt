@@ -1,11 +1,21 @@
-Credits:
+Credits for the complete nbidal18 v4.1.2 Prism ZIP:
 Vanilla Tweaks: https://vanillatweaks.net/
-Complementary Shaders - Unbound: https://modrinth.com/shader/complementary-unbound (included under the Complementary Agreement; any modpack integration issue is the responsibility of the nbidal18 pack author)
+Complementary Shaders - Unbound: https://modrinth.com/shader/complementary-unbound
 MakeUp - Ultra Fast Shaders: https://modrinth.com/shader/makeup-ultra-fast-shaders
-HT's TreeChop by hammertater: https://modrinth.com/mod/treechop (MIT)
-Bandages Plus+ original assets and recipes by Xanthian: https://www.curseforge.com/minecraft/mc-mods/bandages-plus-fabric (MIT)
-Better Compatibility Checker by Gaz492: https://modrinth.com/mod/better-compatibility-checker (official direct download; ARR)
-Player Emotes: https://modrinth.com/mod/player-emotes (official Modrinth delivery; see notices)
-Vanilla Refresh: https://modrinth.com/mod/vanilla-refresh (author's modpack terms)
-Realistic Health: https://modrinth.com/datapack/realistic-health (official Modrinth download)
-Skin Overrides by rosebud/orifu: https://modrinth.com/mod/skin-overrides (official Modrinth delivery; MPL-2.0)
+HT's TreeChop by hammertater: https://modrinth.com/mod/treechop
+Bandages Plus+ original assets and recipes by Xanthian: https://www.curseforge.com/minecraft/mc-mods/bandages-plus-fabric
+Player Emotes: https://modrinth.com/mod/player-emotes
+Fresh Animations: Emissive by FreshLX: https://www.curseforge.com/minecraft/texture-packs/fresh-animations-emissive
+Fresh Animations: Objects by FreshLX: https://www.curseforge.com/minecraft/texture-packs/fresh-animations-objects
+Vanilla Refresh: https://modrinth.com/mod/vanilla-refresh
+Bombs by Juix: https://modrinth.com/datapack/bombs-by-juix
+Juix Resources: https://modrinth.com/resourcepack/juix-resources
+Realistic Health: https://modrinth.com/datapack/realistic-health
+ServerCore: https://modrinth.com/mod/servercore
+Noisium Forked: https://modrinth.com/mod/noisiumforked
+Skin Overrides by rosebud/orifu: https://modrinth.com/mod/skin-overrides
+Advancement Plaques: https://modrinth.com/mod/advancement-plaques
+Iceberg: https://modrinth.com/mod/iceberg
+What Are They Up To: https://modrinth.com/mod/what-are-they-up-to
+Gacha Addiction original project: https://modrinth.com/mod/gachaaddiction
+Realistic Death Visuals by d3v_c: https://modrinth.com/mod/realistic-death-visuals

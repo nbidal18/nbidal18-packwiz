@@ -1,0 +1,11 @@
+{
+  "pack": {
+    "pack_format": 48,
+    "description": "Realistic Health v3.6 - nbidal18 optimized edition"
+  },
+  "datapackpy": {
+    "name": "Realistic Health - nbidal18 optimized",
+    "id": "rhealth",
+    "version": "v3.6-nbidal18"
+  }
+}

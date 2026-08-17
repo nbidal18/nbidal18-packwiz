@@ -1,0 +1,22 @@
+{
+    "condition": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "equipment": {
+            "feet": {
+                "items": "#minecraft:foot_armor",
+                "predicates": {
+                    "minecraft:enchantments": [
+                        {
+                            "enchantments": "minecraft:feather_falling",
+                            "levels": {
+                                "min": 0,
+                                "max": 255
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

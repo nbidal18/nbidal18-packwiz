@@ -7,7 +7,7 @@
   //       a spread factor above 1 means all structures are rarer
   //       a spread factor below 1 means all structures are more common
   //       a spread factor of 0 disables all structures entirely
-  "spreadFactor": 2,
+  "spreadFactor": 2.75,
 
   // Some structure mods/datapacks do not specify a custom salt or use the same salt for all their structures, which might cause structure overlap.
   // Enabling this is supposed to reduce this phenomenon, as all structure sets will have their own salt, hashed from their id.
@@ -16,10 +16,20 @@
 
   // this is a list of custom spread factors
   "customSpreadFactors": [
-    // example of the mansion being doubled in rarity (the mod's default)
+    // Mansions stay roughly twice as sparse as the global structure pass.
     {
       "structure": "minecraft:mansion",
-      "factor": 2
+      "factor": 5.5
+    },
+    // Open water gives exceptionally long sightlines, so the two small-ocean
+    // settlement structures need more breathing room than the global pass.
+    {
+      "structure": "joshie:village_ocean",
+      "factor": 3.5
+    },
+    {
+      "structure": "tide:fishing_boat",
+      "factor": 4
     },
     // add the structures you want to modify in the format:
     // (don't forget to remove "//", and use dots for decimal numbers)

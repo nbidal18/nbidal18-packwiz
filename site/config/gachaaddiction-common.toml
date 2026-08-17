@@ -1,0 +1,4 @@
+#Chance from 0.0 to 1.0 that a player's first opening of each Lootr chest becomes a gacha reveal.
+# Default: 0.2
+# Range: 0.0 ~ 1.0
+lootr_gacha_chance = 0.2

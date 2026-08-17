@@ -1,6 +1,6 @@
 * text=auto eol=lf
-*.bat text eol=crlf
 *.ps1 text eol=crlf
+*.bat text eol=crlf
 *.cfg text eol=crlf
 *.jar binary
 *.zip binary
@@ -9,5 +9,5 @@
 *.ogg binary
 *.exe binary
 
-# Packwiz hashes the exact published bytes; Git must not normalize or reformat the generated site.
+# Packwiz hashes the exact deployed bytes.
 site/** -text -whitespace

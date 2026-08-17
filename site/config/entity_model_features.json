@@ -7,7 +7,12 @@
   "modelUpdateFrequency": "Average",
   "entityRenderModeOverrides": {},
   "entityVanillaHologramOverrides": {},
-  "modelsNamesDisabled": [],
+  "modelsNamesDisabled": [
+    "chest",
+    "chest_large",
+    "ender_chest",
+    "trapped_chest"
+  ],
   "allowEBEModConfigModify": true,
   "animationLODDistance": 20,
   "retainDetailOnLowFps": true,
@@ -15,7 +20,7 @@
   "animationFrameSkipDuringIrisShadowPass": true,
   "preventFirstPersonHandAnimating": false,
   "onlyClientPlayerModel": false,
-  "doubleChestAnimFix": true,
+  "doubleChestAnimFix": false,
   "enforceOptifineVariationRequiresDefaultModel": false,
   "enforceOptifineVariationRequiresDefaultModel_v2": false,
   "resetPlayerModelEachRender": true,

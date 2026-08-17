@@ -1,1 +1,0 @@
-key_modifiers_key.jei.toggleOverlay:0,0,0

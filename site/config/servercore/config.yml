@@ -1,0 +1,186 @@
+# Conservative nbidal18 ServerCore baseline for Minecraft 1.21.1.
+# Dynamic distance and mob-cap reductions remain disabled so the configured
+# view distance, simulation distance, spawning, farms, and redstone stay predictable.
+features:
+  prevent-moving-into-unloaded-chunks: false
+  autosave-interval-seconds: 300
+  xp-merge-fraction: 40
+  xp-merge-radius: 0.5
+  item-merge-radius: 0.5
+  lobotomize-villagers:
+    enabled: false
+    tick-interval: 20
+
+dynamic:
+  enabled: false
+  target-mspt: 35
+  default-values:
+    MOBCAP_PERCENTAGE: 100
+    CHUNK_TICK_DISTANCE: 8
+  dynamic-settings:
+    - setting: 'CHUNK_TICK_DISTANCE'
+      max: 8
+      min: 6
+      increment: 1
+      interval: 15
+    - setting: 'MOBCAP_PERCENTAGE'
+      max: 100
+      min: 70
+      increment: 10
+      interval: 15
+
+# Only prevents deliberate farms from accumulating more than 64 of one animal
+# type in a 64-block area. Natural spawning and existing animals are untouched.
+breeding-cap:
+  enabled: true
+  villagers:
+    limit: 64
+    range: 64
+    unlimited-height: false
+  animals:
+    limit: 64
+    range: 64
+    unlimited-height: false
+
+# Preserve vanilla mob caps and spawn intervals.
+mob-spawning:
+  zombie-reinforcements:
+    enforce-mobcap: false
+    additional-capacity: 32
+  nether-portal-randomticks:
+    enforce-mobcap: false
+    additional-capacity: 32
+  monster-spawners:
+    enforce-mobcap: false
+    additional-capacity: 32
+  infested:
+    enforce-mobcap: false
+    additional-capacity: 32
+  categories:
+    - category: 'MONSTER'
+      mobcap: 70
+      spawn-interval: 1
+      despawn-distance: 128
+    - category: 'CREATURE'
+      mobcap: 10
+      spawn-interval: 400
+      despawn-distance: 128
+    - category: 'AMBIENT'
+      mobcap: 15
+      spawn-interval: 1
+      despawn-distance: 128
+    - category: 'AXOLOTLS'
+      mobcap: 5
+      spawn-interval: 1
+      despawn-distance: 128
+    - category: 'UNDERGROUND_WATER_CREATURE'
+      mobcap: 5
+      spawn-interval: 1
+      despawn-distance: 128
+    - category: 'WATER_CREATURE'
+      mobcap: 5
+      spawn-interval: 1
+      despawn-distance: 128
+    - category: 'WATER_AMBIENT'
+      mobcap: 20
+      spawn-interval: 1
+      despawn-distance: 64
+
+commands:
+  status-enabled: true
+  mobcaps-enabled: true
+  colors:
+    primary: 'dark_aqua'
+    secondary: 'green'
+    tertiary: 'aqua'
+
+# Distant mobs tick once per second and periodically wake up. Wider-than-default
+# ranges and horizontal-only checks keep nearby combat, farms, and villages normal.
+activation-range:
+  enabled: true
+  tick-new-entities: true
+  use-vertical-range: false
+  skip-non-immune: false
+  villager-tick-panic: true
+  villager-work-immunity-after: 20
+  villager-work-immunity-for: 20
+  excluded-entity-types:
+    - 'minecraft:ghast'
+    - 'minecraft:hopper_minecart'
+    - 'minecraft:warden'
+  default-activation-type:
+    activation-range: 32
+    tick-interval: 20
+    wakeup-interval: 30
+    extra-height-up: false
+    extra-height-down: false
+  custom-activation-types:
+    - name: 'raider'
+      activation-range: 64
+      tick-interval: 20
+      wakeup-interval: 20
+      extra-height-up: true
+      extra-height-down: false
+      entity-matcher:
+        - 'typeof:raider'
+    - name: 'water'
+      activation-range: 32
+      tick-interval: 20
+      wakeup-interval: 60
+      extra-height-up: false
+      extra-height-down: false
+      entity-matcher:
+        - 'typeof:water_animal'
+    - name: 'villager'
+      activation-range: 32
+      tick-interval: 20
+      wakeup-interval: 30
+      extra-height-up: false
+      extra-height-down: false
+      entity-matcher:
+        - 'typeof:villager'
+    - name: 'monster-below'
+      activation-range: 48
+      tick-interval: 20
+      wakeup-interval: 20
+      extra-height-up: true
+      extra-height-down: true
+      entity-matcher:
+        - 'minecraft:creeper'
+        - 'minecraft:slime'
+        - 'minecraft:magma_cube'
+        - 'minecraft:hoglin'
+    - name: 'flying-monster'
+      activation-range: 64
+      tick-interval: 20
+      wakeup-interval: 20
+      extra-height-up: true
+      extra-height-down: false
+      entity-matcher:
+        - 'minecraft:ghast'
+        - 'minecraft:phantom'
+    - name: 'monster'
+      activation-range: 48
+      tick-interval: 20
+      wakeup-interval: 20
+      extra-height-up: true
+      extra-height-down: false
+      entity-matcher:
+        - 'typeof:monster'
+    - name: 'animal'
+      activation-range: 32
+      tick-interval: 20
+      wakeup-interval: 60
+      extra-height-up: false
+      extra-height-down: false
+      entity-matcher:
+        - 'typeof:animal'
+        - 'typeof:ambient'
+    - name: 'creature'
+      activation-range: 32
+      tick-interval: 20
+      wakeup-interval: 30
+      extra-height-up: false
+      extra-height-down: false
+      entity-matcher:
+        - 'typeof:mob'
