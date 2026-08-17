@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
-    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.2-packwiz'))
+    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.3-packwiz'))
 }
 else {
     $ReleaseRoot = [IO.Path]::GetFullPath($ReleaseRoot)
@@ -78,6 +78,8 @@ $preservedConfigPaths = @(
     'config/voicechat/player-volumes.properties',
     'config/voicechat/username-cache.json',
     'config/iris.properties',
+    'shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt',
+    'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
     'config/sodium-options.json',
     'config/sodium-extra-options.json',
     'config/sodium-extra.properties',
@@ -123,7 +125,7 @@ try {
 /.nojekyll
 /.packwizignore
 /index.html
-/nbidal18-client-4.1.2-packwiz.zip
+/nbidal18-client-4.1.3-packwiz.zip
 /SHA256SUMS.txt
 /sync-manifest.json
 /pack.toml
@@ -134,7 +136,7 @@ try {
 
     Write-Utf8 (Join-Path $stagePath 'pack.toml') @'
 name = "nbidal18"
-version = "4.1.2-packwiz"
+version = "4.1.3-packwiz"
 description = "Fabric 1.21.1 adventure modpack with automatic Prism updates"
 pack-format = "packwiz:1.1.0"
 
@@ -213,24 +215,105 @@ hash-format = "sha256"
     }
 
     $clientMods = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter '*.jar')
-    if ($clientMods.Count -ne 241) {
-        throw "The Packwiz client must contain exactly 241 mod JARs; found $($clientMods.Count)."
+    if ($clientMods.Count -ne 244) {
+        throw "The Packwiz client must contain exactly 244 mod JARs; found $($clientMods.Count)."
     }
     $bccJar = Join-Path $stagePath 'mods\better-compatability-checker-fabric-21.1.8.jar'
     $bccConfig = Join-Path $stagePath 'config\bcc-common.toml'
     if (-not (Test-Path -LiteralPath $bccJar -PathType Leaf) -or
-            (Get-Content -LiteralPath $bccConfig -Raw) -notmatch 'modpackVersion\s*=\s*"v4\.1\.2-packwiz"') {
+            (Get-Content -LiteralPath $bccConfig -Raw) -notmatch 'modpackVersion\s*=\s*"v4\.1\.3-packwiz"') {
         throw 'Better Compatibility Checker is missing or has the wrong client identity.'
+    }
+    $integrityJar = Join-Path $stagePath 'mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'
+    if (-not (Test-Path -LiteralPath $integrityJar -PathType Leaf)) {
+        throw 'The v4.1.3 integrity helper is missing from the Packwiz client.'
+    }
+    $clientTweaks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter 'nbidal18-client-tweaks-*.jar')
+    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.1.0+1.21.1.jar') {
+        throw 'The Jobs+ plaque-enabled client-tweaks artifact is missing or duplicated.'
+    }
+    $jobsSuppressor = Join-Path $stagePath 'mods\nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar'
+    if (-not (Test-Path -LiteralPath $jobsSuppressor -PathType Leaf)) {
+        throw 'The Jobs+ compatibility helper is missing from the Packwiz client.'
+    }
+    $polytoneJar = Join-Path $stagePath 'mods\polytone-1.21-3.12.0-fabric.jar'
+    if (-not (Test-Path -LiteralPath $polytoneJar -PathType Leaf)) {
+        throw 'Nature X requires the client-only Polytone dependency.'
+    }
+    $resourcePacks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'resourcepacks') -File -Filter '*.zip')
+    if ($resourcePacks.Count -ne 19 -or
+            -not (Test-Path -LiteralPath (Join-Path $stagePath 'resourcepacks\Fancy Crops v1.3.zip') -PathType Leaf) -or
+            -not (Test-Path -LiteralPath (Join-Path $stagePath 'resourcepacks\Nature X - 12.2 [1.21.1].zip') -PathType Leaf)) {
+        throw 'The 19-pack resource-pack baseline is missing Fancy Crops or Nature X.'
+    }
+    foreach ($jobsConfig in @(
+        (Join-Path $stagePath 'config\jobsplus-common.yaml'),
+        (Join-Path $ReleaseRoot '3. modpack\server\config\jobsplus-common.yaml'),
+        (Join-Path $ReleaseRoot '4. server\2. online-hosting\config\jobsplus-common.yaml')
+    )) {
+        $jobsText = Get-Content -LiteralPath $jobsConfig -Raw
+        if ($jobsText -notmatch '(?m)^\s*show_xp_in_action_bar:\s*false\s*$' -or
+                $jobsText -notmatch '(?m)^\s*broadcast_level_up_messages:\s*false\s*$' -or
+                $jobsText -notmatch '(?m)^\s*amount_of_free_jobs:\s*1\s*$' -or
+                $jobsText -notmatch '(?m)^\s*max_jobs:\s*1\s*$' -or
+                $jobsText -notmatch '(?m)^\s*xp_multiplier:\s*0\.25\s*$' -or
+                $jobsText -notmatch '(?m)^\s*use_decimal_values_for_xp:\s*true\s*$') {
+            throw "Jobs+ notifications or progression balance are wrong in $jobsConfig"
+        }
+    }
+    $jadeClient = Get-Content -LiteralPath (Join-Path $stagePath 'config\jade\plugins.json') -Raw | ConvertFrom-Json
+    if ($jadeClient.minecraft.entity_health -ne $false) {
+        throw 'Jade entity health is still enabled in the Packwiz client.'
+    }
+    foreach ($jadeOverride in @(
+        (Join-Path $ReleaseRoot '3. modpack\server\config\jade\server-plugin-overrides.json'),
+        (Join-Path $ReleaseRoot '4. server\2. online-hosting\config\jade\server-plugin-overrides.json')
+    )) {
+        $jadeServer = Get-Content -LiteralPath $jadeOverride -Raw | ConvertFrom-Json
+        if ($jadeServer.minecraft.entity_health -ne $false) {
+            throw "Jade entity health is not server-enforced as disabled in $jadeOverride"
+        }
     }
 
     $manifest = [ordered]@{
         schema = 1
-        packVersion = '4.1.2-packwiz'
+        packVersion = '4.1.3-packwiz'
         exactRoots = @('mods', 'config', 'datapacks', 'resourcepacks', 'shaderpacks')
         localAllowed = @($preservedConfigPaths)
+        propertyRules = @(
+            [ordered]@{
+                path = 'shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt'
+                key = 'GLOWING_ORE_MASTER'
+                value = '0'
+            }
+        )
         files = @($manifestFiles)
     }
     Write-Utf8 (Join-Path $stagePath 'sync-manifest.json') (($manifest | ConvertTo-Json -Depth 6) + "`n")
+
+    $manifestDigest = Get-Sha256 (Join-Path $stagePath 'sync-manifest.json')
+    $canonicalPolicy = Join-Path $ReleaseRoot '3. modpack\server\config\nbidal18-integrity.properties'
+    $hostingPolicy = Join-Path $ReleaseRoot '4. server\2. online-hosting\config\nbidal18-integrity.properties'
+    foreach ($policyPath in @($canonicalPolicy, $hostingPolicy)) {
+        if (-not (Test-Path -LiteralPath $policyPath -PathType Leaf)) {
+            throw "The server integrity transition policy is missing: $policyPath"
+        }
+        $policyText = [IO.File]::ReadAllText($policyPath, [Text.Encoding]::UTF8)
+        if ($policyText -notmatch '(?m)^require-helper=(true|false)$' -or
+                $policyText -notmatch '(?m)^expected-manifest-sha256=[0-9a-f]{64}$') {
+            throw "The server integrity transition policy is malformed: $policyPath"
+        }
+        $policyText = [regex]::Replace(
+            $policyText,
+            '(?m)^expected-manifest-sha256=[0-9a-f]{64}$',
+            "expected-manifest-sha256=$manifestDigest"
+        )
+        Write-Utf8 $policyPath $policyText
+    }
+    if ((Get-Content -LiteralPath $canonicalPolicy -Raw) -notmatch '(?m)^require-helper=false$' -or
+            (Get-Content -LiteralPath $hostingPolicy -Raw) -notmatch '(?m)^require-helper=false$') {
+        throw 'The v4.1.3 testing release must keep require-helper=false.'
+    }
 
     $siteFiles = @(Get-ChildItem -LiteralPath $stagePath -Recurse -File -Force)
     $siteBytes = ($siteFiles | Measure-Object Length -Sum).Sum

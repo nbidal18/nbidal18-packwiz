@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "dd33b68245659f6403c36c05e66229c0c1fcf7a650ebbc1ec4456b11d34d2df7"
+hash = "45f05b4ee24cc7dfb10d6dbec7823cf167d2ab8c948df7c2b1e9b035d0f3d1ba"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -71,7 +71,7 @@ hash = "5517ad3e06aa1bfeec0a41174677a9ee094b02ee8b58194e39584cc1191cb98b"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "78496a63b348a8500287581e41c472ee7eba5f17c126e58f13918634980c9d1c"
+hash = "45bf8b01286292ef5bdbef95eb7cbd1def1620c6fd45056cadb25349975c512f"
 
 [[files]]
 file = "config/beautify.json"
@@ -565,7 +565,7 @@ hash = "411eb42a58cb0a5e0de5f9b42d3e89609247fcd45947e962c818d954826790f8"
 
 [[files]]
 file = "config/jade/plugins.json"
-hash = "75c14462abb572365150abd2307ccf45b1c23c7bdf6b7ad56f0d4d9a1f6df6c8"
+hash = "498db8b3856b54f75f81872281df54522e5a2f8430b5454aadae33a06eccf828"
 
 [[files]]
 file = "config/jade/sort-order.json"
@@ -617,7 +617,7 @@ hash = "3a0ad1c6bf844e60952867bbb67ebac157ce720a9904362b4a26d6048096a5f8"
 
 [[files]]
 file = "config/jobsplus-common.yaml"
-hash = "05eeacfb2c6bee6761c3988ef6b78b2e8f3497b365e64ef3970b8c73d12a3666"
+hash = "a12db639c85072798d3cfd2f917b665052e41dbf007413e8857e7ce0a4722619"
 
 [[files]]
 file = "config/jumpoverfences.toml"
@@ -1024,7 +1024,7 @@ hash = "121b93764159be6fb7dab523b29a844e2bb78400ce8c48f52135a097e9b0006e"
 
 [[files]]
 file = "credits.txt"
-hash = "20093b45edcd8a885fc288461fa3d4100510889f517bf9f14571c7b37ed91a7c"
+hash = "3ed916a45b2cb20bb8a0232c5b15ce948ee5bd04dd46d34aaad6d63bc1e5016b"
 
 [[files]]
 file = "datapacks/custom_recipes_1.21/LICENSE.txt"
@@ -1983,8 +1983,12 @@ file = "mods/naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar"
 hash = "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
 
 [[files]]
-file = "mods/nbidal18-client-tweaks-1.0.0+1.21.1.jar"
-hash = "60b1ed5b7bef60f43796ae60d7265a982357d7a1e3d28193389775bf3c63b777"
+file = "mods/nbidal18-client-tweaks-1.1.0+1.21.1.jar"
+hash = "5356ffb4f49bb83f824bf8e1393d767c7887905594760d66d80eacf60e479e5b"
+
+[[files]]
+file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
+hash = "2005573488b28eee0c982d4c04929963ae3ef91cbf3e95397c297548fb9b726a"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -1993,6 +1997,10 @@ hash = "e2afa53408bad9fec6c236d732a0b1a4dfcdd4f167fc26cfeae749b3721931db"
 [[files]]
 file = "mods/nbidal18-jei-hidden-default-1.0.0+1.21.1.jar"
 hash = "5aeffa5d9e70178c6c54991e4f769159d6c40fb0ce3455d9acdbd4c3b5e69ab5"
+
+[[files]]
+file = "mods/nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar"
+hash = "7baa275071aa0296ae363169dcfd35589c71a9f30f195505f5eecfc475973e44"
 
 [[files]]
 file = "mods/nbidal18-morevillagers-numismatic-bridge-1.0.0+1.21.1.jar"
@@ -2057,6 +2065,10 @@ hash = "a09e4bb1897ecf0889332354bae9564658bae80b158cddd3abe48293b7aebf68"
 [[files]]
 file = "mods/polymorph-fabric-1.1.0+1.21.1.jar"
 hash = "bc47b33c864b463167998680c296f513e6d06b42de6db03db0f274ae1f2ee671"
+
+[[files]]
+file = "mods/polytone-1.21-3.12.0-fabric.jar"
+hash = "f46b07577b0d31c46c55ea027bb957b4a5d3bcb43b0c7c8997d0d0644e95867e"
 
 [[files]]
 file = "mods/preferred-gamerules-1.1.1+1.19.4.jar"
@@ -2311,12 +2323,20 @@ file = "resourcepacks/FA+Player-v1.1.zip"
 hash = "9ee3ae5b2fe5cd980e4041429dc66d88243f5f2420e2814e5361c746ad937f33"
 
 [[files]]
+file = "resourcepacks/Fancy Crops v1.3.zip"
+hash = "0c26af02ec87d523e195cab9638391febbc0ce39bff3a8978d44b88e28771755"
+
+[[files]]
 file = "resourcepacks/FreshAnimations_v1.10.3.zip"
 hash = "999fbdfe9cddcbadeaaa02827f0583dc3d38d8f264146301cb88395d18df85a9"
 
 [[files]]
 file = "resourcepacks/Juix Resources [1.3] 1.18-1.21.10.zip"
 hash = "f5644c68b042ac44f865495a9fdacda0396d1c486acb16cba511b0c9667353f6"
+
+[[files]]
+file = "resourcepacks/Nature X - 12.2 [1.21.1].zip"
+hash = "2549b2cb83a1fa470ade2ddf3166232bd9dbca00475d07a0159d33288ffa52e5"
 
 [[files]]
 file = "resourcepacks/No Atlas Player Markers.zip"
@@ -2359,12 +2379,18 @@ file = "shaderpacks/ComplementaryUnbound_r5.8.1.zip"
 hash = "bb89b1fc54687d4147a837fb2e3c3f7261a13bee51819761e9b6a91cb7915965"
 
 [[files]]
+file = "shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt"
+hash = "75995e56cbc3e25846d11d5b6704969e5de92bb3461e1945b2cbb72aade39484"
+preserve = true
+
+[[files]]
 file = "shaderpacks/MakeUp-UltraFast-9.5d.zip"
 hash = "b26b8eb9b23fbba41e3b16dc6b8ef4d2c7c645b3f6621aa414cdade68ad48966"
 
 [[files]]
 file = "shaderpacks/MakeUp-UltraFast-9.5d.zip.txt"
 hash = "7a7dced5939e0271e5b5eddb513bf71cf7d237854b2012518c0216a9761c1840"
+preserve = true
 
 [[files]]
 file = "vinurl/executables/ffmpeg.exe"

@@ -42,12 +42,16 @@ public final class Nbidal18PackwizSync {
             "https://nbidal18.github.io/nbidal18-packwiz/pack.toml";
     private static final String DEFAULT_MANIFEST_URL =
             "https://nbidal18.github.io/nbidal18-packwiz/sync-manifest.json";
-    private static final String EXPECTED_PACK_VERSION = "4.1.2-packwiz";
+    private static final String EXPECTED_PACK_VERSION = "4.1.3-packwiz";
     private static final DateTimeFormatter MOVE_STAMP =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final Pattern FILE_ENTRY = Pattern.compile(
             "\\{\\s*\\\"path\\\"\\s*:\\s*\\\"((?:\\\\.|[^\\\"])*)\\\"\\s*,\\s*"
                     + "\\\"sha256\\\"\\s*:\\s*\\\"([a-fA-F0-9]{64})\\\"\\s*}");
+    private static final Pattern PROPERTY_RULE = Pattern.compile(
+            "\\{\\s*\\\"path\\\"\\s*:\\s*\\\"((?:\\\\.|[^\\\"])*)\\\"\\s*,\\s*"
+                    + "\\\"key\\\"\\s*:\\s*\\\"((?:\\\\.|[^\\\"])*)\\\"\\s*,\\s*"
+                    + "\\\"value\\\"\\s*:\\s*\\\"((?:\\\\.|[^\\\"])*)\\\"\\s*}");
     private static final Pattern JSON_STRING = Pattern.compile("\\\"((?:\\\\.|[^\\\"])*)\\\"");
 
     private final Path minecraftRoot;
@@ -103,6 +107,7 @@ public final class Nbidal18PackwizSync {
 
             if (updateSucceeded) {
                 SyncManifest current = readSyncManifest(downloadedManifest);
+                repairPropertyRules(current);
                 List<String> repairProblems = findSyncProblems(current, true, true);
                 boolean needsRepair = repairProblems.stream()
                         .anyMatch(problem -> !problem.startsWith("extra:"));
@@ -122,7 +127,7 @@ public final class Nbidal18PackwizSync {
                 Files.move(downloadedManifest, lastManifestPath,
                         StandardCopyOption.REPLACE_EXISTING);
                 downloadedManifest = null;
-                status("The instance matches v4.1.2-packwiz.");
+                status("The instance matches v4.1.3-packwiz.");
                 return 0;
             }
 
@@ -132,6 +137,7 @@ public final class Nbidal18PackwizSync {
             }
 
             SyncManifest lastKnown = readSyncManifest(lastManifestPath);
+            repairPropertyRules(lastKnown);
             List<String> offlineProblems = findSyncProblems(lastKnown, true, false);
             if (!offlineProblems.isEmpty()) {
                 throw new IOException(
@@ -201,7 +207,7 @@ public final class Nbidal18PackwizSync {
                 .build();
         HttpRequest request = HttpRequest.newBuilder(URI.create(manifestUrl))
                 .timeout(Duration.ofSeconds(30))
-                .header("User-Agent", "nbidal18-packwiz/4.1.2")
+                .header("User-Agent", "nbidal18-packwiz/4.1.3")
                 .GET()
                 .build();
         HttpResponse<byte[]> response = client.send(
@@ -243,7 +249,31 @@ public final class Nbidal18PackwizSync {
         if (files.isEmpty()) {
             throw new IOException("The sync manifest contains no files: " + path);
         }
-        return new SyncManifest(exactRoots, localAllowed, files);
+
+        String propertyRulesArray = extractArray(json, "propertyRules");
+        Matcher propertyRuleMatcher = PROPERTY_RULE.matcher(propertyRulesArray);
+        List<PropertyRule> propertyRules = new ArrayList<>();
+        Set<String> propertyRuleKeys = new HashSet<>();
+        while (propertyRuleMatcher.find()) {
+            String relative = validateRelative(jsonUnescape(propertyRuleMatcher.group(1)));
+            String key = jsonUnescape(propertyRuleMatcher.group(2));
+            String value = jsonUnescape(propertyRuleMatcher.group(3));
+            if (!key.matches("[A-Za-z0-9_.-]+") || value.contains("\n") || value.contains("\r")) {
+                throw new IOException("Invalid property rule for " + relative);
+            }
+            String relativeKey = pathKey(relative);
+            if (!files.containsKey(relativeKey) || !localAllowed.contains(relativeKey)) {
+                throw new IOException("Property rule path must be a preserved managed file: " + relative);
+            }
+            if (!propertyRuleKeys.add(relativeKey + "\u0000" + key)) {
+                throw new IOException("Duplicate property rule: " + relative + "#" + key);
+            }
+            propertyRules.add(new PropertyRule(relative, key, value));
+        }
+        if (propertyRules.isEmpty()) {
+            throw new IOException("The sync manifest contains no property rules: " + path);
+        }
+        return new SyncManifest(exactRoots, localAllowed, files, propertyRules);
     }
 
     private List<String> findSyncProblems(
@@ -264,6 +294,14 @@ public final class Nbidal18PackwizSync {
                 if (prepareRepair) {
                     moveOutOfLoadPath(target, "modified managed file");
                 }
+            }
+        }
+
+        for (PropertyRule rule : manifest.propertyRules) {
+            Path target = resolveRelative(rule.path);
+            if (!Files.isRegularFile(target)
+                    || !rule.value.equals(readPropertyValue(target, rule.key))) {
+                problems.add("property:" + rule.path + "#" + rule.key);
             }
         }
 
@@ -288,6 +326,41 @@ public final class Nbidal18PackwizSync {
             }
         }
         return problems;
+    }
+
+    private void repairPropertyRules(SyncManifest manifest) throws IOException {
+        for (PropertyRule rule : manifest.propertyRules) {
+            Path target = resolveRelative(rule.path);
+            if (!Files.isRegularFile(target)
+                    || rule.value.equals(readPropertyValue(target, rule.key))) {
+                continue;
+            }
+            List<String> original = Files.readAllLines(target, StandardCharsets.UTF_8);
+            Pattern propertyLine = Pattern.compile(
+                    "^\\s*" + Pattern.quote(rule.key) + "\\s*[:=].*$");
+            List<String> repaired = new ArrayList<>();
+            for (String line : original) {
+                if (!propertyLine.matcher(line).matches()) {
+                    repaired.add(line);
+                }
+            }
+            repaired.add(rule.key + "=" + rule.value);
+            Files.write(target, repaired, StandardCharsets.UTF_8);
+            status("Reset protected shader option " + rule.key + " while preserving other settings.");
+        }
+    }
+
+    private static String readPropertyValue(Path path, String key) throws IOException {
+        Pattern propertyLine = Pattern.compile(
+                "^\\s*" + Pattern.quote(key) + "\\s*[:=]\\s*(.*?)\\s*$");
+        String value = null;
+        for (String line : Files.readAllLines(path, StandardCharsets.UTF_8)) {
+            Matcher matcher = propertyLine.matcher(line);
+            if (matcher.matches()) {
+                value = matcher.group(1);
+            }
+        }
+        return value;
     }
 
     private void moveOutOfLoadPath(Path path, String reason) throws IOException {
@@ -522,18 +595,33 @@ public final class Nbidal18PackwizSync {
         }
     }
 
+    private static final class PropertyRule {
+        private final String path;
+        private final String key;
+        private final String value;
+
+        private PropertyRule(String path, String key, String value) {
+            this.path = path;
+            this.key = key;
+            this.value = value;
+        }
+    }
+
     private static final class SyncManifest {
         private final List<String> exactRoots;
         private final Set<String> localAllowed;
         private final Map<String, FileEntry> files;
+        private final List<PropertyRule> propertyRules;
 
         private SyncManifest(
                 List<String> exactRoots,
                 Set<String> localAllowed,
-                Map<String, FileEntry> files) {
+                Map<String, FileEntry> files,
+                List<PropertyRule> propertyRules) {
             this.exactRoots = List.copyOf(exactRoots);
             this.localAllowed = Set.copyOf(localAllowed);
             this.files = Map.copyOf(files);
+            this.propertyRules = List.copyOf(propertyRules);
         }
     }
 }

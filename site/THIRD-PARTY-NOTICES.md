@@ -1,6 +1,14 @@
 # Third-party notices
 
-The complete v4.1.2 Prism ZIP bundles the reviewed third-party client files directly. Project links and retained attributions for notable components follow.
+The v4.1.3 Packwiz release distributes the reviewed third-party client files through its managed update channel. Project links and retained attributions for notable components follow.
+
+## Fancy Crops, Nature X, and Polytone
+
+The byte-exact `(Bee's) Fancy Crops` 1.3 archive from Modrinth project/version `UGEVQ6t9` / `ZJEBZjg6` is bundled and enabled. Project: <https://modrinth.com/resourcepack/fancy-crops>. The project declares All Rights Reserved.
+
+The byte-exact Nature X 12.2 archive for Minecraft 1.21.1 from Modrinth project/version `8d8M3Qoz` / `L1fTfVef` is bundled and enabled below Fancy Crops. Project: <https://modrinth.com/resourcepack/nature-x>. The project declares All Rights Reserved.
+
+Nature X's required client-only `polytone-1.21-3.12.0-fabric.jar` is the byte-exact Modrinth project/version `3qAYkBMB` / `nAbOgJjW` file. Project/source: <https://modrinth.com/mod/polytone> and <https://github.com/MehVahdJukaar/polytone>.
 
 ## Deep Ocean Panorama
 

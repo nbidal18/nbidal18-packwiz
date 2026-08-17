@@ -8,18 +8,24 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
-    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.2-packwiz'))
+    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.3-packwiz'))
 }
 else {
     $ReleaseRoot = [IO.Path]::GetFullPath($ReleaseRoot)
 }
 if ([string]::IsNullOrWhiteSpace($OutputPath)) {
-    $OutputPath = Join-Path $ReleaseRoot '1. setup\nbidal18-client-4.1.2-packwiz.zip'
+    $OutputPath = Join-Path $ReleaseRoot '1. setup\nbidal18-client-4.1.3-packwiz.zip'
 }
 elseif (-not [IO.Path]::IsPathRooted($OutputPath)) {
     $OutputPath = Join-Path $ReleaseRoot $OutputPath
 }
 $OutputPath = [IO.Path]::GetFullPath($OutputPath)
+$legacyOutputPath = [IO.Path]::GetFullPath(
+    (Join-Path $ReleaseRoot '1. setup\nbidal18-client-4.1.2-packwiz.zip'))
+$setupRoot = [IO.Path]::GetFullPath((Join-Path $ReleaseRoot '1. setup')).TrimEnd('\') + '\'
+if (-not $legacyOutputPath.StartsWith($setupRoot, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "Legacy Prism ZIP escaped the setup folder: $legacyOutputPath"
+}
 
 $clientRoot = Join-Path $ReleaseRoot '3. modpack\client'
 $appearanceRoot = Join-Path $ReleaseRoot '2. appearance\support'
@@ -106,13 +112,13 @@ minecraft/vinurl/downloads
     Write-Utf8 (Join-Path $stagePath 'instance.cfg') @'
 [General]
 iconKey=server-icon
-name=nbidal18-client-4.1.2-packwiz
+name=nbidal18-client-4.1.3-packwiz
 AutomaticJava=true
 InstanceType=OneSix
-ExportName=nbidal18-client-4.1.2-packwiz
+ExportName=nbidal18-client-4.1.3-packwiz
 ExportOptionalFiles=true
 ExportSummary=Fabric 1.21.1 adventure modpack with automatic updates
-ExportVersion=4.1.2-packwiz
+ExportVersion=4.1.3-packwiz
 IgnoreJavaCompatibility=false
 JoinServerOnLaunch=false
 ManagedPack=false
@@ -143,6 +149,9 @@ UseAccountForInstance=false
     Copy-Item -LiteralPath (Join-Path $clientRoot 'servers.dat') -Destination (Join-Path $minecraft 'servers.dat')
 
     New-Item -ItemType Directory -Path (Split-Path -Parent $OutputPath) -Force | Out-Null
+    if (Test-Path -LiteralPath $legacyOutputPath -PathType Leaf) {
+        Remove-Item -LiteralPath $legacyOutputPath -Force
+    }
     if (Test-Path -LiteralPath $OutputPath) {
         Remove-Item -LiteralPath $OutputPath -Force
     }
@@ -167,12 +176,12 @@ UseAccountForInstance=false
     if ((Get-Item -LiteralPath $OutputPath).Length -ge 100MB) {
         throw 'The Prism import ZIP is not below 100 MiB.'
     }
-    $publishedZip = Join-Path $sitePath 'nbidal18-client-4.1.2-packwiz.zip'
+    $publishedZip = Join-Path $sitePath 'nbidal18-client-4.1.3-packwiz.zip'
     Copy-Item -LiteralPath $OutputPath -Destination $publishedZip -Force
     $zipHash = Get-Sha256 $OutputPath
     $packHash = Get-Sha256 (Join-Path $sitePath 'pack.toml')
-    Write-Utf8 (Join-Path (Split-Path -Parent $OutputPath) 'SHA256SUMS.txt') "$zipHash  nbidal18-client-4.1.2-packwiz.zip`n"
-    Write-Utf8 (Join-Path $sitePath 'SHA256SUMS.txt') "$zipHash  nbidal18-client-4.1.2-packwiz.zip`n$packHash  pack.toml`n"
+    Write-Utf8 (Join-Path (Split-Path -Parent $OutputPath) 'SHA256SUMS.txt') "$zipHash  nbidal18-client-4.1.3-packwiz.zip`n"
+    Write-Utf8 (Join-Path $sitePath 'SHA256SUMS.txt') "$zipHash  nbidal18-client-4.1.3-packwiz.zip`n$packHash  pack.toml`n"
     Write-Host "Created Prism import: $OutputPath"
     Write-Host "Bytes: $((Get-Item -LiteralPath $OutputPath).Length); SHA-256: $zipHash"
 }

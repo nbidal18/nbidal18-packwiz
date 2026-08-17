@@ -1,4 +1,7 @@
-Credits for the complete nbidal18 v4.1.2 Prism ZIP:
+Credits for the nbidal18 v4.1.3 Packwiz release:
+Fancy Crops by Bee: https://modrinth.com/resourcepack/fancy-crops
+Nature X by hothaifah: https://modrinth.com/resourcepack/nature-x
+Polytone by MehVahdJukaar: https://modrinth.com/mod/polytone
 Vanilla Tweaks: https://vanillatweaks.net/
 Complementary Shaders - Unbound: https://modrinth.com/shader/complementary-unbound
 MakeUp - Ultra Fast Shaders: https://modrinth.com/shader/makeup-ultra-fast-shaders
