@@ -14,7 +14,7 @@ Packwiz endpoint: <https://nbidal18.github.io/nbidal18-packwiz/pack.toml>
 - All shipped config files are managed in this first release.
 - `options.txt`, `options.amecsapi.txt`, and `servers.dat` are supplied by the thin Prism ZIP and then remain player-owned.
 - If GitHub is unavailable, an instance that still matches its last successful manifest may start. A new or incomplete installation remains blocked until it can be repaired.
-- Better Compatibility Checker 21.1.8 uses identity `v4.1.2-packwiz` on client and server and is the final multiplayer version gate.
+- Better Compatibility Checker 21.1.8 gives the Packwiz client identity `v4.1.2-packwiz`. During the migration, the prepared server config deliberately leaves its version empty so 4.1.1, 4.1.2, and 4.1.2-packwiz players can still connect.
 
 There is no launch guard, runtime integrity monitor, attestation, quarantine-based anti-cheat, compatibility companion, or automatic relaunch system.
 
@@ -25,6 +25,6 @@ There is no launch guard, runtime integrity monitor, attestation, quarantine-bas
 3. Review and test the generated `site/` and Prism ZIP.
 4. Commit and push `main`.
 5. Wait for the Pages workflow and verify the public endpoint.
-6. Deploy the matching server files and fully restart the server.
+6. When the migration window ends, set the server BCC version to the matching client identity and fully restart the server.
 
 The hosted archives are direct files in this Git repository. The Packwiz index contains no Modrinth or CurseForge download metadata.

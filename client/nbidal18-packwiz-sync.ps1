@@ -193,21 +193,41 @@ function Invoke-PackwizInstaller {
     }
 
     Write-PackStatus 'Checking GitHub for pack updates...'
-    Push-Location $MinecraftRoot
+    $installerArguments = if ($env:NBIDAL18_HEADLESS_TEST -eq '1') {
+        '-jar "' + $BootstrapPath.Replace('"', '\"') + '" -g "' + $PackUrl.Replace('"', '\"') + '"'
+    }
+    else {
+        '-jar "' + $BootstrapPath.Replace('"', '\"') + '" "' + $PackUrl.Replace('"', '\"') + '"'
+    }
+    $startInfo = [Diagnostics.ProcessStartInfo]::new()
+    $startInfo.FileName = $javaPath
+    $startInfo.Arguments = $installerArguments
+    $startInfo.WorkingDirectory = $MinecraftRoot
+    $startInfo.UseShellExecute = $false
+    $startInfo.CreateNoWindow = $true
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    $installerProcess = [Diagnostics.Process]::new()
+    $installerProcess.StartInfo = $startInfo
+    if (-not $installerProcess.Start()) { throw 'Packwiz could not be started.' }
+    if ($null -eq $installerProcess) { throw 'Packwiz could not be started.' }
     try {
-        if ($env:NBIDAL18_HEADLESS_TEST -eq '1') {
-            & $javaPath -jar $BootstrapPath -g $PackUrl | ForEach-Object { Write-Host $_ }
+        $stdoutTask = $installerProcess.StandardOutput.ReadToEndAsync()
+        $stderrTask = $installerProcess.StandardError.ReadToEndAsync()
+        while (-not $installerProcess.WaitForExit(100)) {
+            if ($null -ne $script:UpdaterForm) {
+                [Windows.Forms.Application]::DoEvents()
+            }
         }
-        else {
-            & $javaPath -jar $BootstrapPath $PackUrl | ForEach-Object { Write-Host $_ }
-        }
-        $installerExitCode = $LASTEXITCODE
+        $standardOutput = $stdoutTask.GetAwaiter().GetResult()
+        $standardError = $stderrTask.GetAwaiter().GetResult()
+        if (-not [string]::IsNullOrWhiteSpace($standardOutput)) { Write-Host $standardOutput.TrimEnd() }
+        if (-not [string]::IsNullOrWhiteSpace($standardError)) { [Console]::Error.WriteLine($standardError.TrimEnd()) }
+        return [int] $installerProcess.ExitCode
     }
     finally {
-        Pop-Location
+        $installerProcess.Dispose()
     }
-    if ($null -eq $installerExitCode) { return 1 }
-    return [int] $installerExitCode
 }
 
 function Download-CurrentManifest([string] $destination) {
@@ -222,7 +242,12 @@ Show-UpdaterWindow
 
 try {
     try {
-        $updateSucceeded = (Invoke-PackwizInstaller) -eq 0
+        $installerResult = Invoke-PackwizInstaller
+        if ($installerResult -ne 0) {
+            Write-PackStatus 'The first update check failed; retrying once...'
+            $installerResult = Invoke-PackwizInstaller
+        }
+        $updateSucceeded = $installerResult -eq 0
         if ($updateSucceeded) {
             Download-CurrentManifest $downloadedManifest
         }
@@ -262,7 +287,7 @@ try {
         throw "GitHub is unavailable and the last installed release is incomplete: $($offlineProblems -join ', ')"
     }
 
-    Write-Warning 'GitHub is unavailable. Starting the last complete installed release; BCC will decide multiplayer compatibility.'
+    Write-Warning 'GitHub is unavailable. Starting the last complete installed release; the server will apply its current compatibility policy.'
     exit 0
 }
 catch {

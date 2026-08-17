@@ -14,6 +14,7 @@ $javaPath = 'C:\Users\nizar\AppData\Roaming\PrismLauncher\java\java-runtime-delt
 $tempBase = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd('\') + '\'
 $testRoot = Join-Path $tempBase ('nbidal18-packwiz-test-' + [guid]::NewGuid().ToString('N'))
 $server = $null
+$testSucceeded = $false
 
 function Assert-True([bool] $condition, [string] $message) {
     if (-not $condition) { throw $message }
@@ -83,6 +84,8 @@ try {
     Assert-True ((Invoke-Sync (Join-Path $offlineRoot 'minecraft')) -ne 0) 'An incomplete first install incorrectly started offline.'
 
     Write-Host 'PASS: first install, exact-match cleanup, managed-file repair, complete offline fallback, and incomplete offline blocking.'
+    $testSucceeded = $true
+    $global:LASTEXITCODE = 0
 }
 finally {
     Remove-Item Env:NBIDAL18_PACK_URL,Env:NBIDAL18_MANIFEST_URL,Env:NBIDAL18_HEADLESS_TEST -ErrorAction SilentlyContinue
@@ -91,8 +94,11 @@ finally {
         $server.WaitForExit()
     }
     $resolvedTestRoot = [IO.Path]::GetFullPath($testRoot)
-    if ($resolvedTestRoot.StartsWith($tempBase, [StringComparison]::OrdinalIgnoreCase) -and
+    if ($testSucceeded -and $resolvedTestRoot.StartsWith($tempBase, [StringComparison]::OrdinalIgnoreCase) -and
             (Test-Path -LiteralPath $resolvedTestRoot)) {
         Remove-Item -LiteralPath $resolvedTestRoot -Recurse -Force
+    }
+    elseif (-not $testSucceeded) {
+        Write-Warning "Failed test files were preserved at $resolvedTestRoot"
     }
 }
