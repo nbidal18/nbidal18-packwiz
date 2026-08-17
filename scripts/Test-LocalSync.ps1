@@ -7,7 +7,7 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $releaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.3-packwiz'))
-$zipPath = Join-Path $releaseRoot '1. setup\nbidal18-client-4.1.3-packwiz.zip'
+$zipPath = Join-Path $releaseRoot '1. setup\nbidal18-client.zip'
 $sitePath = Join-Path $repoRoot 'site'
 $packwizPath = Join-Path $releaseRoot '5. development\tools\packwiz-current\packwiz.exe'
 $javaPath = 'C:\Users\nizar\AppData\Roaming\PrismLauncher\java\java-runtime-delta\bin\java.exe'
@@ -88,6 +88,28 @@ try {
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'resourcepacks\Fancy Crops v1.3.zip')) 'Fancy Crops was not installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'resourcepacks\Nature X - 12.2 [1.21.1].zip')) 'Nature X was not installed.'
     Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $minecraft 'resourcepacks') -File -Filter '*.zip').Count -eq 19) 'First install did not produce 19 resource packs.'
+    foreach ($managedUpdater in @(
+        'nbidal18-packwiz-sync.next.jar',
+        'nbidal18-packwiz-updater.next.jar',
+        'packwiz-installer-bootstrap.next.jar',
+        'packwiz-installer.next.jar',
+        'prism/mmc-pack.json'
+    )) {
+        $installedUpdater = Join-Path $minecraft $managedUpdater
+        $publishedUpdater = Join-Path $sitePath $managedUpdater
+        Assert-True ((Get-Sha256 $installedUpdater) -eq (Get-Sha256 $publishedUpdater)) "Initial install did not stage $managedUpdater."
+    }
+    Assert-True ((Get-Sha256 (Join-Path $minecraft 'nbidal18-packwiz-sync.jar')) -eq
+            (Get-Sha256 (Join-Path $sitePath 'nbidal18-packwiz-sync.next.jar'))) 'The installed stable supervisor does not match the published supervisor.'
+    Assert-True ((Get-Sha256 (Join-Path $minecraft 'nbidal18-packwiz-updater.jar')) -eq
+            (Get-Sha256 (Join-Path $sitePath 'nbidal18-packwiz-updater.next.jar'))) 'The installed update engine does not match the staged engine.'
+    [IO.File]::WriteAllText((Join-Path $minecraft 'nbidal18-packwiz-updater.jar'), 'obsolete update engine')
+    [IO.File]::WriteAllText((Join-Path $minecraft 'packwiz-installer-bootstrap.jar'), 'obsolete bootstrap')
+    Assert-True ((Invoke-Sync $minecraft) -eq 0) 'The supervisor did not promote staged launch tools before allowing Minecraft to start.'
+    Assert-True ((Get-Sha256 (Join-Path $minecraft 'nbidal18-packwiz-updater.jar')) -eq
+            (Get-Sha256 (Join-Path $sitePath 'nbidal18-packwiz-updater.next.jar'))) 'The supervisor did not activate the staged update engine.'
+    Assert-True ((Get-Sha256 (Join-Path $minecraft 'packwiz-installer-bootstrap.jar')) -eq
+            (Get-Sha256 (Join-Path $sitePath 'packwiz-installer-bootstrap.next.jar'))) 'The supervisor did not activate the staged bootstrap.'
     $optionsText = Get-Content -LiteralPath (Join-Path $minecraft 'options.txt') -Raw
     $natureIndex = $optionsText.IndexOf('file/Nature X - 12.2 [1.21.1].zip', [StringComparison]::Ordinal)
     $fancyIndex = $optionsText.IndexOf('file/Fancy Crops v1.3.zip', [StringComparison]::Ordinal)
@@ -109,8 +131,32 @@ try {
     Assert-True ($manifest.schema -eq 1) 'The generated manifest is not backward-compatible with installed updaters.'
     Assert-True (@($manifest.exactRoots).Count -eq 5 -and
             'config' -in @($manifest.exactRoots)) 'Pre-launch exact config repair is missing.'
-    Assert-True (@($manifest.runtimeMutableRoots).Count -eq 1 -and
-            $manifest.runtimeMutableRoots[0] -eq 'config') 'The runtime-mutable config policy is missing.'
+    $expectedRuntimeMutable = @(
+        'config/autohud.json5',
+        'config/voicechat/voicechat-client.properties',
+        'config/voicechat/category-volumes.properties',
+        'config/voicechat/player-volumes.properties',
+        'config/voicechat/username-cache.json',
+        'config/iris.properties',
+        'shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt',
+        'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
+        'config/fzzy_config/keybinds.toml',
+        'config/controlify.json',
+        'config/fabric/indigo-renderer.properties',
+        'config/naturalist-server.properties',
+        'config/crash_assistant',
+        'config/jsonem.properties',
+        'config/resourceful-config-web.json',
+        'config/jade/usernamecache.json',
+        'config/jei/world',
+        'config/invmove/unrecognized.json',
+        'config/spark/tmp'
+    )
+    Assert-True (@($manifest.runtimeMutableRoots).Count -eq $expectedRuntimeMutable.Count) 'The runtime exception list has the wrong size.'
+    foreach ($runtimePath in $expectedRuntimeMutable) {
+        Assert-True ($runtimePath -in @($manifest.runtimeMutableRoots)) "Missing runtime exception: $runtimePath"
+    }
+    Assert-True ('config' -notin @($manifest.runtimeMutableRoots)) 'The complete config directory is still runtime-mutable.'
     $expectedPreserved = @(
         'config/autohud.json5',
         'config/voicechat/voicechat-client.properties',
@@ -120,11 +166,17 @@ try {
         'config/iris.properties',
         'shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt',
         'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
-        'config/sodium-options.json',
-        'config/sodium-extra-options.json',
-        'config/sodium-extra.properties',
         'config/fzzy_config/keybinds.toml',
-        'config/controlify.json'
+        'config/controlify.json',
+        'config/fabric/indigo-renderer.properties',
+        'config/naturalist-server.properties',
+        'config/crash_assistant/modlist.json',
+        'config/jsonem.properties',
+        'config/resourceful-config-web.json',
+        'config/jade/usernamecache.json',
+        'config/jei/world/server/nbidal18_modpack_9c729ef3/lookupHistory.json',
+        'config/invmove/unrecognized.json',
+        'config/spark/tmp/about.txt'
     )
     Assert-True (@($manifest.localAllowed).Count -eq $expectedPreserved.Count) 'The preserved-config allow-list has the wrong size.'
     foreach ($preservedPath in $expectedPreserved) {
@@ -163,6 +215,8 @@ try {
     [IO.File]::WriteAllText($controllerConfig, '{"player":"controller preferences"}')
     $managedConfig = Join-Path $minecraft 'config\bcc-common.toml'
     [IO.File]::WriteAllText($managedConfig, 'player changed this managed config')
+    $managedSodium = Join-Path $minecraft 'config\sodium-extra-options.json'
+    [IO.File]::WriteAllText($managedSodium, '{"extra_settings":{"show_coords":true}}')
     $complementaryOptions = Join-Path $minecraft 'shaderpacks\ComplementaryUnbound_r5.8.1.zip.txt'
     [IO.File]::WriteAllText($complementaryOptions, "QUALITY=VERY_HIGH`nGLOWING_ORE_MASTER=2`n")
     $makeupOptions = Join-Path $minecraft 'shaderpacks\MakeUp-UltraFast-9.5d.zip.txt'
@@ -182,6 +236,9 @@ try {
     $installedConfig = [Convert]::ToBase64String([IO.File]::ReadAllBytes($managedConfig))
     $officialConfig = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $sitePath 'config\bcc-common.toml')))
     Assert-True ($installedConfig -eq $officialConfig) 'The managed config was not restored.'
+    $installedSodium = [Convert]::ToBase64String([IO.File]::ReadAllBytes($managedSodium))
+    $officialSodium = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $sitePath 'config\sodium-extra-options.json')))
+    Assert-True ($installedSodium -eq $officialSodium) 'A gameplay-relevant Sodium config was not restored.'
 
     Stop-Process -Id $server.Id -Force
     $server.WaitForExit()
@@ -196,7 +253,7 @@ try {
     Expand-Archive -LiteralPath $zipPath -DestinationPath $offlineRoot
     Assert-True ((Invoke-Sync (Join-Path $offlineRoot 'minecraft')) -ne 0) 'An incomplete first install incorrectly started offline.'
 
-    Write-Host 'PASS: version-neutral Prism naming, v4.1.3 install, Jobs+ balance, hidden Jade mob health, enforced helper and BCC policy, preserved personal configs and shader quality, glowing-ore field repair, exact-match cleanup, managed-file repair, complete offline fallback, and incomplete offline blocking.'
+    Write-Host 'PASS: version-neutral Prism naming, pre-launch supervisor promotion and validation, updater/bootstrap staging, v4.1.3 install, Jobs+ balance, hidden Jade mob health, narrow runtime config exceptions, enforced helper and BCC policy, preserved personal configs and shader quality, glowing-ore field repair, exact-match cleanup, managed gameplay-config repair, complete offline fallback, and incomplete offline blocking.'
     $testSucceeded = $true
     $global:LASTEXITCODE = 0
 }

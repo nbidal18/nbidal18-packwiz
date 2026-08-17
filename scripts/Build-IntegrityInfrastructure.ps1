@@ -44,24 +44,37 @@ function Get-Sha256([string] $path) {
     finally { $stream.Dispose() }
 }
 
+$supervisorSource = Join-Path $repoRoot 'client\Nbidal18PackwizSupervisor.java'
 $updaterSource = Join-Path $repoRoot 'client\Nbidal18PackwizSync.java'
 $updaterBuild = Join-Path $repoRoot 'client\java-build'
-$updaterJar = Join-Path $repoRoot 'client\nbidal18-packwiz-sync.jar'
+$supervisorJar = Join-Path $repoRoot 'client\nbidal18-packwiz-sync.jar'
+$updaterJar = Join-Path $repoRoot 'client\nbidal18-packwiz-updater.jar'
 if (Test-Path -LiteralPath $updaterBuild) {
     Remove-Item -LiteralPath $updaterBuild -Recurse -Force
 }
 New-Item -ItemType Directory -Path $updaterBuild | Out-Null
-& $javac --release 21 -encoding UTF-8 -d $updaterBuild $updaterSource
+& $javac --release 21 -encoding UTF-8 -d $updaterBuild $supervisorSource $updaterSource
 if ($LASTEXITCODE -ne 0) {
     throw "The Packwiz updater compilation failed with exit code $LASTEXITCODE"
 }
-if (Test-Path -LiteralPath $updaterJar) {
-    Remove-Item -LiteralPath $updaterJar -Force
+foreach ($jar in @($supervisorJar, $updaterJar)) {
+    if (Test-Path -LiteralPath $jar) {
+        Remove-Item -LiteralPath $jar -Force
+    }
+}
+& $jarTool --create --file $supervisorJar --main-class Nbidal18PackwizSupervisor `
+    --date=1980-01-01T00:00:02Z -C $updaterBuild 'Nbidal18PackwizSupervisor.class' `
+    -C $updaterBuild 'Nbidal18PackwizSupervisor$Promotion.class'
+if ($LASTEXITCODE -ne 0) {
+    throw "The Packwiz supervisor JAR build failed with exit code $LASTEXITCODE"
 }
 & $jarTool --create --file $updaterJar --main-class Nbidal18PackwizSync `
-    --date=1980-01-01T00:00:02Z -C $updaterBuild .
+    --date=1980-01-01T00:00:02Z -C $updaterBuild 'Nbidal18PackwizSync.class' `
+    -C $updaterBuild 'Nbidal18PackwizSync$FileEntry.class' `
+    -C $updaterBuild 'Nbidal18PackwizSync$PropertyRule.class' `
+    -C $updaterBuild 'Nbidal18PackwizSync$SyncManifest.class'
 if ($LASTEXITCODE -ne 0) {
-    throw "The Packwiz updater JAR build failed with exit code $LASTEXITCODE"
+    throw "The Packwiz update-engine JAR build failed with exit code $LASTEXITCODE"
 }
 
 $helperRoot = Join-Path $ReleaseRoot '5. development\nbidal18-integrity-helper'
@@ -109,5 +122,6 @@ if ($hashes.Count -ne 1) {
     throw 'The client and server integrity-helper copies are not byte-identical.'
 }
 
-Write-Host "Built Packwiz updater: $updaterJar"
+Write-Host "Built stable Packwiz supervisor: $supervisorJar"
+Write-Host "Built Packwiz update engine: $updaterJar"
 Write-Host "Built and copied integrity helper: $($hashes[0])"

@@ -15,7 +15,8 @@
     "perform_piecewise_check": true,
     "bypass_spawn_protection": true,
     "skip_logging_no_loot_table_at_generation": true,
-    "save_mode": "SMART"
+    "save_mode": "SMART",
+    "tickDelay": 20
   },
   "breaking": {
     "disable_break": false,
@@ -63,6 +64,7 @@
   },
   "client": {
     "vanilla_textures": false,
-    "new_textures": true
+    "new_textures": true,
+    "unopened_particles": true
   }
 }

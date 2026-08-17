@@ -8,10 +8,10 @@
   "entityRenderModeOverrides": {},
   "entityVanillaHologramOverrides": {},
   "modelsNamesDisabled": [
-    "chest",
     "chest_large",
     "ender_chest",
-    "trapped_chest"
+    "trapped_chest",
+    "chest"
   ],
   "allowEBEModConfigModify": true,
   "animationLODDistance": 20,

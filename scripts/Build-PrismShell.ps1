@@ -14,7 +14,7 @@ else {
     $ReleaseRoot = [IO.Path]::GetFullPath($ReleaseRoot)
 }
 if ([string]::IsNullOrWhiteSpace($OutputPath)) {
-    $OutputPath = Join-Path $ReleaseRoot '1. setup\nbidal18-client-4.1.3-packwiz.zip'
+    $OutputPath = Join-Path $ReleaseRoot '1. setup\nbidal18-client.zip'
 }
 elseif (-not [IO.Path]::IsPathRooted($OutputPath)) {
     $OutputPath = Join-Path $ReleaseRoot $OutputPath
@@ -33,7 +33,9 @@ $iconPath = Join-Path $ReleaseRoot '5. development\server-icon.png'
 $bootstrapPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer-bootstrap.jar'
 $installerPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer.jar'
 $syncJar = Join-Path $repoRoot 'client\nbidal18-packwiz-sync.jar'
+$updaterJar = Join-Path $repoRoot 'client\nbidal18-packwiz-updater.jar'
 $sitePath = Join-Path $repoRoot 'site'
+$prismPackTemplate = Join-Path $repoRoot 'templates\mmc-pack.json'
 
 foreach ($required in @(
     (Join-Path $appearanceRoot 'client-options.txt'),
@@ -43,8 +45,15 @@ foreach ($required in @(
     $bootstrapPath,
     $installerPath,
     $syncJar,
+    $updaterJar,
+    $prismPackTemplate,
     (Join-Path $sitePath 'pack.toml'),
-    (Join-Path $sitePath 'sync-manifest.json')
+    (Join-Path $sitePath 'sync-manifest.json'),
+    (Join-Path $sitePath 'nbidal18-packwiz-sync.next.jar'),
+    (Join-Path $sitePath 'nbidal18-packwiz-updater.next.jar'),
+    (Join-Path $sitePath 'packwiz-installer-bootstrap.next.jar'),
+    (Join-Path $sitePath 'packwiz-installer.next.jar'),
+    (Join-Path $sitePath 'prism\mmc-pack.json')
 )) {
     if (-not (Test-Path -LiteralPath $required -PathType Leaf)) {
         throw "Required Prism shell input is missing: $required"
@@ -128,22 +137,23 @@ OverrideCommands=true
 PreLaunchCommand="$INST_JAVA" -jar nbidal18-packwiz-sync.jar
 UseAccountForInstance=false
 '@
-    Write-Utf8 (Join-Path $stagePath 'mmc-pack.json') @'
-{
-  "components": [
-    {"cachedName":"LWJGL 3","cachedVersion":"3.3.3","cachedVolatile":true,"dependencyOnly":true,"uid":"org.lwjgl3","version":"3.3.3"},
-    {"cachedName":"Minecraft","cachedRequires":[{"suggests":"3.3.3","uid":"org.lwjgl3"}],"cachedVersion":"1.21.1","important":true,"uid":"net.minecraft","version":"1.21.1"},
-    {"cachedName":"Intermediary Mappings","cachedRequires":[{"equals":"1.21.1","uid":"net.minecraft"}],"cachedVersion":"1.21.1","cachedVolatile":true,"dependencyOnly":true,"uid":"net.fabricmc.intermediary","version":"1.21.1"},
-    {"cachedName":"Fabric Loader","cachedRequires":[{"uid":"net.fabricmc.intermediary"}],"cachedVersion":"0.19.3","uid":"net.fabricmc.fabric-loader","version":"0.19.3"}
-  ],
-  "formatVersion": 1
-}
-'@
+    Copy-Item -LiteralPath $prismPackTemplate -Destination (Join-Path $stagePath 'mmc-pack.json')
 
     Copy-Item -LiteralPath $iconPath -Destination (Join-Path $stagePath 'server-icon.png')
     Copy-Item -LiteralPath $bootstrapPath -Destination (Join-Path $minecraft 'packwiz-installer-bootstrap.jar')
     Copy-Item -LiteralPath $installerPath -Destination (Join-Path $minecraft 'packwiz-installer.jar')
     Copy-Item -LiteralPath $syncJar -Destination (Join-Path $minecraft 'nbidal18-packwiz-sync.jar')
+    Copy-Item -LiteralPath $updaterJar -Destination (Join-Path $minecraft 'nbidal18-packwiz-updater.jar')
+    foreach ($stagedTool in @(
+        'nbidal18-packwiz-sync.next.jar',
+        'nbidal18-packwiz-updater.next.jar',
+        'packwiz-installer-bootstrap.next.jar',
+        'packwiz-installer.next.jar'
+    )) {
+        Copy-Item -LiteralPath (Join-Path $sitePath $stagedTool) -Destination (Join-Path $minecraft $stagedTool)
+    }
+    New-Item -ItemType Directory -Path (Join-Path $minecraft 'prism') -Force | Out-Null
+    Copy-Item -LiteralPath (Join-Path $sitePath 'prism\mmc-pack.json') -Destination (Join-Path $minecraft 'prism\mmc-pack.json')
     Copy-Item -LiteralPath (Join-Path $appearanceRoot 'client-options.txt') -Destination (Join-Path $minecraft 'options.txt')
     Copy-Item -LiteralPath (Join-Path $appearanceRoot 'client-options.amecsapi.txt') -Destination (Join-Path $minecraft 'options.amecsapi.txt')
     Copy-Item -LiteralPath (Join-Path $clientRoot 'servers.dat') -Destination (Join-Path $minecraft 'servers.dat')
@@ -180,7 +190,7 @@ UseAccountForInstance=false
     Copy-Item -LiteralPath $OutputPath -Destination $publishedZip -Force
     $zipHash = Get-Sha256 $OutputPath
     $packHash = Get-Sha256 (Join-Path $sitePath 'pack.toml')
-    Write-Utf8 (Join-Path (Split-Path -Parent $OutputPath) 'SHA256SUMS.txt') "$zipHash  nbidal18-client-4.1.3-packwiz.zip`n"
+    Write-Utf8 (Join-Path (Split-Path -Parent $OutputPath) 'SHA256SUMS.txt') "$zipHash  nbidal18-client.zip`n"
     Write-Utf8 (Join-Path $sitePath 'SHA256SUMS.txt') "$zipHash  nbidal18-client-4.1.3-packwiz.zip`n$packHash  pack.toml`n"
     Write-Host "Created Prism import: $OutputPath"
     Write-Host "Bytes: $((Get-Item -LiteralPath $OutputPath).Length); SHA-256: $zipHash"

@@ -21,20 +21,24 @@ file = "config/VinURLConfig.json5"
 hash = "8324582340db83883d47bed33b105769c45d75ff5f71ce838207e848f2c5eebc"
 
 [[files]]
+file = "config/advancementplaques.toml"
+hash = "bfc3eae162bd8b3056a3adf5d67b639198c657b7c4782ed0aa522e89ff5d03f4"
+
+[[files]]
 file = "config/alexis_mods/daycounter.json"
 hash = "bbce074f1732a88e68f73675728fe07b906816d3a35b6402268fb8ed4bc7ff14"
 
 [[files]]
 file = "config/amendments-client.json"
-hash = "10ce3faaa314ccbd8decb4f69e395bbb669a0ac3f3ba2ef525f08d8e7a0d3766"
+hash = "3e897adcb7eed4e98c20623a9ee79718617e186ec98bd69c217ec2500d3f4e0b"
 
 [[files]]
 file = "config/amendments-common.json"
-hash = "ea5ee1b40f3dd73b323e399720959fbcc35660f6724465d9755383d8feca68ac"
+hash = "be6ec48c1fcb7e97a611b2d92a3a36e4860aa8dd00061367b9c28cc6cd10473a"
 
 [[files]]
 file = "config/antique-atlas.toml"
-hash = "0f27d8833e4bab910c4135f2d2d78b8eb4eedeb72e0434ec295ec82db0a12d1e"
+hash = "f98d107f30021ddd4d991085d1a943c75008a36d0669910be07893a76b715760"
 
 [[files]]
 file = "config/anvilrepairing.json"
@@ -67,7 +71,7 @@ preserve = true
 
 [[files]]
 file = "config/bandagesplus.json"
-hash = "5517ad3e06aa1bfeec0a41174677a9ee094b02ee8b58194e39584cc1191cb98b"
+hash = "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
 
 [[files]]
 file = "config/bcc-common.toml"
@@ -242,6 +246,18 @@ file = "config/continuity.json"
 hash = "00267a602028cbb037dcb0b5f803db31bed284235ca9c1ea189ad4179311a2f4"
 
 [[files]]
+file = "config/crash_assistant/config.toml"
+hash = "38857faa72455c0ef959c177be9f5e2475516ac5c2be6e35c8f6fe3f8d19d15a"
+
+[[files]]
+file = "config/crash_assistant/crash_assistant_localization_overrides/README.md"
+hash = "52f394cd3754a29a6f236b1fe622bb430fa7e4632bce262eeb0333d71842bb52"
+
+[[files]]
+file = "config/crash_assistant/problematic_mods_config.json"
+hash = "989fb8f797a5a894f0cbf8bf529ac20c88cceee72384bdbeedd6a22d455199a3"
+
+[[files]]
 file = "config/creativecore-client.json"
 hash = "acb6c8c1394d4d6f2d0c98d5c314c5ef8ad34b8a76f0a420fc596733bcbc51ac"
 
@@ -362,6 +378,14 @@ file = "config/cristellib/structory_towers/structure_toggle_config.json5"
 hash = "3c622e85c983d8a073d0b30977d8331f997c988693c14dcaa5ffc6f6f2a7ff80"
 
 [[files]]
+file = "config/cristellib/terralith/structure_placement_config.json5"
+hash = "777e236cc299321f8e51f96238bd01be855699cf72aa7520b30d32ad8edb7367"
+
+[[files]]
+file = "config/cristellib/terralith/structure_toggle_config.json5"
+hash = "b2b1510673394f1558f80f11c479a7619414a91691139a5cc43d5e3b3d233da1"
+
+[[files]]
 file = "config/cristellib/tide/structure_placement_config.json5"
 hash = "775595f8fb356b3498a00ccd90fe57696c59ef8eff48a065967df68709d4fea1"
 
@@ -399,11 +423,11 @@ hash = "7116b95a9b6797af8db84e410a2ca2fdf6f813461e37cd04bff5af933f31567b"
 
 [[files]]
 file = "config/entity_model_features.json"
-hash = "638070c07eacdd80bddc3ad65ca129305ecb4d60412333868f319dbfcdbc70e5"
+hash = "6c55ac3306d8d38e5f81fb8048ccab2d0b7c851c235a1c625074b952299a272a"
 
 [[files]]
 file = "config/entity_texture_features.json"
-hash = "25ae259924f926765d26394b67ec4a6935a2cb2e1ed7513b6da88c3415b9ee60"
+hash = "de82cbd3a118fc809af0606c4ca9238a67bed80716e0cbb0903f750d9a580b26"
 
 [[files]]
 file = "config/epicknights/armor.json5"
@@ -444,6 +468,7 @@ hash = "bba16753a1db0667cc77b3c44a3fdc0f83d60ca0d20afa2bd3a051fd01c1ad93"
 [[files]]
 file = "config/fabric/indigo-renderer.properties"
 hash = "cc80aab197106b0ee0dc041c8d71f0f9a2335ad510023a9f6a8cf384de14f739"
+preserve = true
 
 [[files]]
 file = "config/fallingleaves.json"
@@ -463,7 +488,7 @@ hash = "a2091a291309db8920c8a80e913ed31c24c29687d8cd25ac18076ad85a90ddb8"
 
 [[files]]
 file = "config/firstperson.json"
-hash = "5672d67185e900ebd9c865497e73c9a523e5290ef71cd2f45f5eeb8000c5f2f6"
+hash = "71a197d56c7e16a9dbff955f52c6adc22848c603ef75ac17d21f9825ddf13be3"
 
 [[files]]
 file = "config/fishingreal-common.toml"
@@ -481,6 +506,10 @@ hash = "91f3ccf23e7e550488ab408b179d63cc7927b1b0720997690b2ac2a4ce28b0fe"
 file = "config/fzzy_config/keybinds.toml"
 hash = "26ac5810c9b5dc5c1968827357f0a58c58ac2b6f7b082630960228e16585062f"
 preserve = true
+
+[[files]]
+file = "config/gachaaddiction-client.toml"
+hash = "b014ddf9c660ef5271e77bd0580de7f80c0b4b4c54bbb2a5851da7c80d2cc42b"
 
 [[files]]
 file = "config/gachaaddiction-common.toml"
@@ -533,6 +562,7 @@ hash = "65242c90d0248278a7d2293b4ac8e531ba9d9981255a4c81f938b077b58c79f2"
 [[files]]
 file = "config/invmove/unrecognized.json"
 hash = "d60b13062bac6a3e26e1bcfe5fd02740423f27015d49627f2ef20e624f7218dc"
+preserve = true
 
 [[files]]
 file = "config/invmove/vanilla.json"
@@ -565,11 +595,11 @@ hash = "411eb42a58cb0a5e0de5f9b42d3e89609247fcd45947e962c818d954826790f8"
 
 [[files]]
 file = "config/jade/plugins.json"
-hash = "498db8b3856b54f75f81872281df54522e5a2f8430b5454aadae33a06eccf828"
+hash = "d04e5918ba93cd9d6a2f6335770b75f9fbaad950051d12c1718c5e403d916291"
 
 [[files]]
 file = "config/jade/sort-order.json"
-hash = "7f7044e405a983257bf7292ea704edf950d0607c911c70b5ba28f2e509a5d997"
+hash = "418470b06bb36232730a9d380a50d859363a8e4beab38e854dda80f4af245c04"
 
 [[files]]
 file = "config/jei/blacklist.json"
@@ -641,7 +671,7 @@ hash = "d8a63933ec4757186a594debea59dd35724a0a895fe601b324f96217c28312df"
 
 [[files]]
 file = "config/lootr.json"
-hash = "0fd34f79ca2bfce0b66fce07cbe9e66df1b208d4b61f997d920f615350acd641"
+hash = "07bc89d36df0c153d1e9adae35e8dc3cd4c9b8164d9f7fe35dfdc3386a770ad9"
 
 [[files]]
 file = "config/midnightlib.json"
@@ -657,7 +687,7 @@ hash = "229520040294dd36eb5220f52b3f7a200d48bf73db2b2229ec3eab0351277b14"
 
 [[files]]
 file = "config/modernfix-mixins.properties"
-hash = "c03abaae9129778eea5bb05201ffb5ecd8aaeae8d1eb16255d97caba0b96ca87"
+hash = "5d638483a8b6ce35fcba87578edc963515b6d9d4aa3fa53191e43b9dfd2eabe5"
 
 [[files]]
 file = "config/modmenu.json"
@@ -665,7 +695,7 @@ hash = "f67acccd7a156a8986435cddb4d798b30761b7154ac584eb1b52ced9ec789509"
 
 [[files]]
 file = "config/moonlight-client.json"
-hash = "468730b66703fdbae23f71ee15a9d880f2a79ff8fe67abda746dcbf10f2f06ab"
+hash = "f5e867ec46f10264229677a109675edc795525365bce30cefd2d82a65e680f95"
 
 [[files]]
 file = "config/moonlight-common.json"
@@ -682,10 +712,11 @@ hash = "0669bd0936b4a5969373ff5ad0903484bd27fcfc6c3f898ec40152596e326a39"
 [[files]]
 file = "config/naturalist-server.properties"
 hash = "114416d381787fdc0cc2fb01c2a02cc01879ce1f54d47ffd6baf5216d71ecfa3"
+preserve = true
 
 [[files]]
 file = "config/naturescompass.json"
-hash = "aa7dbfc3e3b26b61e64391b956e3994a69355f6cec4ffed92db8204e22c21959"
+hash = "6532ca516c9b1e8b3069df6464321d6570ce2d7fe04944ae816dfdfc654f7ffb"
 
 [[files]]
 file = "config/niftycarts-client.toml"
@@ -778,12 +809,10 @@ hash = "d15110f71646c8b1e18a78483990691bbda1e9e687d39ac62cff0423375a4076"
 [[files]]
 file = "config/sodium-extra-options.json"
 hash = "ece12f36e24ea85b294b266a230a81d5fd2b9a5ab77b9814f61b329f9d9bc66c"
-preserve = true
 
 [[files]]
 file = "config/sodium-extra.properties"
 hash = "a2f1b47c1eaa119ab34727f1d43c2506cb3d7f17ba8fb4efb49e20c8e0b58e70"
-preserve = true
 
 [[files]]
 file = "config/sodium-fingerprint.json"
@@ -796,7 +825,6 @@ hash = "b627c4456e6fa0bc4b5f85e2f1cd949faedae3cb9afdaf2a5f52e6f3b6ae1f01"
 [[files]]
 file = "config/sodium-options.json"
 hash = "2c5d8d00cf22f45cfb27a31641db46881b94d1b14c10e88e0ecf972b7277fc13"
-preserve = true
 
 [[files]]
 file = "config/sound_physics_remastered/allowed_sounds.properties"
@@ -812,7 +840,7 @@ hash = "e26b00784bb6239988759ed1a64551b9f301dc33c5a855d91e976ee4bf40ac8a"
 
 [[files]]
 file = "config/sound_physics_remastered/sound_rates.properties"
-hash = "7a66c3437f7f2b1540b26243bdd75b8039359fde427c329dfb694928c6ff71cc"
+hash = "f8c27b1213f07f6150a270edd6471d0d19766a07e206f041611b433d96edd22d"
 
 [[files]]
 file = "config/sound_physics_remastered/soundphysics.properties"
@@ -821,6 +849,11 @@ hash = "068ccd6b0985f7ba643fb7ccd6e8149378b4679891a90aa2c787f8ba278330c6"
 [[files]]
 file = "config/spark/config.json"
 hash = "992ba9f3a4a7ce3de112eb95575328956fdc3ce6781c455ebce7b23db7e7da42"
+
+[[files]]
+file = "config/spark/tmp/about.txt"
+hash = "d7514c0ddb6ae8611a281527bf04ca6cbcea1fa21758534fdcd08ed0f51c19c0"
+preserve = true
 
 [[files]]
 file = "config/sparsestructures.json5"
@@ -856,11 +889,11 @@ hash = "8e091b4c5d52f8eafb4ee55a551d05f41d42a33a6c559920dbe0c1a1d324c55e"
 
 [[files]]
 file = "config/surveyor.toml"
-hash = "c4ee214c79a3f27b294489c0a8cc27e4df99865a5ab34e2562447624b74163a6"
+hash = "f4385ffdf4579742b031a622c1529c100383389828a4d941f15af464fe244fc1"
 
 [[files]]
 file = "config/tectonic.json"
-hash = "f39a5e417416292df1a9c8850629769607598e0124a70de7ea30910a9885bdc5"
+hash = "46eb3844811623c53d21e68bfad5864213abe5e054e97e189070e57bb4ebbb72"
 
 [[files]]
 file = "config/terrain_slabs.json"
@@ -868,7 +901,7 @@ hash = "91683595865557b8abfae1d8d7f957f50d9af49a577ef9cb7cb691c505a3754c"
 
 [[files]]
 file = "config/terralith.json"
-hash = "0fdcc6967febb241eefa64fe154b1996c52d063d6fe48c9193c80edab6187f1e"
+hash = "41509809dc45c2b2c225ad711f4446a209c0270e3a8c6c09c1c9baaf1565e32c"
 
 [[files]]
 file = "config/thermoo-patches.json"
@@ -924,11 +957,11 @@ hash = "0a282f3623f7f9443a1d10b5768865f69e58b74e000dcfb4f40399626b7a6124"
 
 [[files]]
 file = "config/trmt-client.json"
-hash = "fb1b6c6fea350c7489e0b559fc7747878eabb7b1c47cce8524129858d60901e3"
+hash = "3f05a62ecf2b307ec62e5bf24f645121685bde1bb8ceae1c0fc375a121dac8c8"
 
 [[files]]
 file = "config/trmt.json"
-hash = "ae8daed8c2e161a862751557dc79b87ae00e6e6c8b26b41ea212a18024aedfad"
+hash = "dc616de5844f627b0196f517f4ba92a9a4866a9c2d84a9ca97f4291aa90ac731"
 
 [[files]]
 file = "config/universalbonemeal-server.toml"
@@ -951,8 +984,12 @@ file = "config/vcinteraction/vcinteraction.properties"
 hash = "7c0358b873133c8ce0882c5b1971ecba655a7996e6d0e53ef9ab313e33181d53"
 
 [[files]]
+file = "config/veinmining-client.toml"
+hash = "50b993fef626c336c8b8b7f320da0c2df68c09d247d30939904ce13bd80ab6ed"
+
+[[files]]
 file = "config/veinmining-server.toml"
-hash = "9fad022d7fc3981aa6f442c80a675bbe9420e2791b9442c410e3bf959dd55e12"
+hash = "95cf0542b70e0d7d8d20558910b8f98cd43686f8a5159df13695e3012537b5fd"
 
 [[files]]
 file = "config/voicechat/category-volumes.properties"
@@ -980,7 +1017,7 @@ preserve = true
 
 [[files]]
 file = "config/voicechat/voicechat-server.properties"
-hash = "7db636a6736fb5bbc8edb4d4b65aad91cb6b373c0a3631a0ad8263e961fc820a"
+hash = "5d8df2d054480d39208ecb66a3cb7fa67fb27604446bbc6aecb0ec55d7fb34de"
 
 [[files]]
 file = "config/walk-jog-run-client.json"
@@ -1988,7 +2025,7 @@ hash = "5356ffb4f49bb83f824bf8e1393d767c7887905594760d66d80eacf60e479e5b"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "a016bf7926d3b9a88efcbdf63eb3a837d5b10ee0e81f2089900716d4f8d89147"
+hash = "4c6bd3fd8bf92379972619996f752715d7dbd31f534d6ca35a009a3c70b73b0f"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -2297,6 +2334,26 @@ hash = "cf574300b03584577d267cf376022936ea19260b3a7420465b59817811dd8d80"
 [[files]]
 file = "mods/yet_another_config_lib_v3-3.8.1+1.21.1-fabric.jar"
 hash = "413d7710f4f2b08fc188e205c3dfe542785da577d949cae28b5c0fc37ae75336"
+
+[[files]]
+file = "nbidal18-packwiz-sync.next.jar"
+hash = "3978c0dc75b138aaa0d8610467624ab49fecdadfaf160e2f66705870cadcb94d"
+
+[[files]]
+file = "nbidal18-packwiz-updater.next.jar"
+hash = "644fac739649dabd8cdfb3304dca33e9f5c0e5ff1b73cd9e9bb5e75e3e0ea8f0"
+
+[[files]]
+file = "packwiz-installer-bootstrap.next.jar"
+hash = "a8fbb24dc604278e97f4688e82d3d91a318b98efc08d5dbfcbcbcab6443d116c"
+
+[[files]]
+file = "packwiz-installer.next.jar"
+hash = "c9f646908d340d84773948a9a7d98bc1dae250d35e1016dc6e2b8459760b5598"
+
+[[files]]
+file = "prism/mmc-pack.json"
+hash = "b9cac6ff5647631f6e8ca91fab43899fffed35e3fabe47219a890828d3d997b1"
 
 [[files]]
 file = "resourcepacks/Better+Lanterns+v1.2(mc-1.21).zip"

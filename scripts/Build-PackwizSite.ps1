@@ -23,6 +23,11 @@ $SitePath = [IO.Path]::GetFullPath($SitePath)
 
 $clientRoot = Join-Path $ReleaseRoot '3. modpack\client'
 $packwizPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-current\packwiz.exe'
+$syncSupervisorPath = Join-Path $repoRoot 'client\nbidal18-packwiz-sync.jar'
+$updateEnginePath = Join-Path $repoRoot 'client\nbidal18-packwiz-updater.jar'
+$bootstrapPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer-bootstrap.jar'
+$installerPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer.jar'
+$prismPackTemplate = Join-Path $repoRoot 'templates\mmc-pack.json'
 $landingPage = Join-Path $repoRoot 'templates\index.html'
 $stagePath = Join-Path $repoRoot ('.site-staging-' + [guid]::NewGuid().ToString('N'))
 $utf8NoBom = [Text.UTF8Encoding]::new($false)
@@ -35,6 +40,11 @@ foreach ($required in @(
     (Join-Path $clientRoot 'resourcepacks'),
     (Join-Path $clientRoot 'shaderpacks'),
     $packwizPath,
+    $syncSupervisorPath,
+    $updateEnginePath,
+    $bootstrapPath,
+    $installerPath,
+    $prismPackTemplate,
     $landingPage
 )) {
     if (-not (Test-Path -LiteralPath $required)) {
@@ -71,7 +81,7 @@ function Get-Sha256([string] $path) {
     finally { $stream.Dispose() }
 }
 
-$preservedConfigPaths = @(
+$playerMutablePaths = @(
     'config/autohud.json5',
     'config/voicechat/voicechat-client.properties',
     'config/voicechat/category-volumes.properties',
@@ -80,12 +90,40 @@ $preservedConfigPaths = @(
     'config/iris.properties',
     'shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt',
     'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
-    'config/sodium-options.json',
-    'config/sodium-extra-options.json',
-    'config/sodium-extra.properties',
     'config/fzzy_config/keybinds.toml',
     'config/controlify.json'
 )
+
+# These paths contain timestamps, caches, detected hardware/users, or other support state.
+# They cannot affect the server's gameplay policy and are expected to change while Minecraft runs.
+$runtimeSupportPaths = @(
+    'config/fabric/indigo-renderer.properties',
+    'config/naturalist-server.properties',
+    'config/crash_assistant',
+    'config/jsonem.properties',
+    'config/resourceful-config-web.json',
+    'config/jade/usernamecache.json',
+    'config/jei/world',
+    'config/invmove/unrecognized.json',
+    'config/spark/tmp'
+)
+
+$runtimeMutablePaths = @($playerMutablePaths + $runtimeSupportPaths)
+
+# Exact known mutable files are also preserved by the pre-launch updater. Directory-prefix
+# exceptions are understood by the runtime helper, while the legacy updater remains exact-path
+# based and may recoverably clean newly generated files before a later launch.
+$preservedConfigPaths = @($playerMutablePaths + @(
+    'config/fabric/indigo-renderer.properties',
+    'config/naturalist-server.properties',
+    'config/crash_assistant/modlist.json',
+    'config/jsonem.properties',
+    'config/resourceful-config-web.json',
+    'config/jade/usernamecache.json',
+    'config/jei/world/server/nbidal18_modpack_9c729ef3/lookupHistory.json',
+    'config/invmove/unrecognized.json',
+    'config/spark/tmp/about.txt'
+))
 
 $excludedPatterns = @(
     'servers.dat',
@@ -120,6 +158,15 @@ try {
         New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
         Copy-Item -LiteralPath $file.FullName -Destination $destination
     }
+
+    # Packwiz downloads staged launch tools. Once the old updater process has exited, the client
+    # helper atomically promotes them over the live copies; Windows will not replace a running JAR.
+    Copy-Item -LiteralPath $syncSupervisorPath -Destination (Join-Path $stagePath 'nbidal18-packwiz-sync.next.jar')
+    Copy-Item -LiteralPath $updateEnginePath -Destination (Join-Path $stagePath 'nbidal18-packwiz-updater.next.jar')
+    Copy-Item -LiteralPath $bootstrapPath -Destination (Join-Path $stagePath 'packwiz-installer-bootstrap.next.jar')
+    Copy-Item -LiteralPath $installerPath -Destination (Join-Path $stagePath 'packwiz-installer.next.jar')
+    New-Item -ItemType Directory -Path (Join-Path $stagePath 'prism') -Force | Out-Null
+    Copy-Item -LiteralPath $prismPackTemplate -Destination (Join-Path $stagePath 'prism\mmc-pack.json')
 
     Write-Utf8 (Join-Path $stagePath '.packwizignore') @'
 /.nojekyll
@@ -167,7 +214,9 @@ hash-format = "sha256"
     $indexPath = Join-Path $stagePath 'index.toml'
     $packPath = Join-Path $stagePath 'pack.toml'
     $indexText = [IO.File]::ReadAllText($indexPath, [Text.Encoding]::UTF8)
-    foreach ($preservedPath in @($preservedConfigPaths | Where-Object { $_ -ne 'config/controlify.json' })) {
+    foreach ($preservedPath in @($preservedConfigPaths | Where-Object {
+        Test-Path -LiteralPath (Join-Path $stagePath $_) -PathType Leaf
+    })) {
         $pattern = '(?ms)(^\[\[files\]\]\r?\nfile = "' + [regex]::Escape($preservedPath) + '"\r?\nhash = "[0-9a-fA-F]{64}")(\r?\n)'
         $match = [regex]::Match($indexText, $pattern)
         if (-not $match.Success) {
@@ -211,6 +260,17 @@ hash-format = "sha256"
     foreach ($forbidden in @('options.txt', 'options.amecsapi.txt', 'servers.dat')) {
         if (@($manifestFiles | Where-Object path -eq $forbidden).Count -ne 0) {
             throw "$forbidden must be installed once by the Prism shell, not managed by Packwiz."
+        }
+    }
+    foreach ($managedUpdater in @(
+        'nbidal18-packwiz-sync.next.jar',
+        'nbidal18-packwiz-updater.next.jar',
+        'packwiz-installer-bootstrap.next.jar',
+        'packwiz-installer.next.jar',
+        'prism/mmc-pack.json'
+    )) {
+        if (@($manifestFiles | Where-Object path -eq $managedUpdater).Count -ne 1) {
+            throw "The auto-updatable launch chain is missing $managedUpdater from the manifest."
         }
     }
 
@@ -279,7 +339,7 @@ hash-format = "sha256"
         schema = 1
         packVersion = '4.1.3-packwiz'
         exactRoots = @('mods', 'config', 'datapacks', 'resourcepacks', 'shaderpacks')
-        runtimeMutableRoots = @('config')
+        runtimeMutableRoots = @($runtimeMutablePaths)
         localAllowed = @($preservedConfigPaths)
         propertyRules = @(
             [ordered]@{
