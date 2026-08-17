@@ -193,12 +193,9 @@ function Invoke-PackwizInstaller {
     }
 
     Write-PackStatus 'Checking GitHub for pack updates...'
-    $installerArguments = if ($env:NBIDAL18_HEADLESS_TEST -eq '1') {
-        '-jar "' + $BootstrapPath.Replace('"', '\"') + '" -g "' + $PackUrl.Replace('"', '\"') + '"'
-    }
-    else {
-        '-jar "' + $BootstrapPath.Replace('"', '\"') + '" "' + $PackUrl.Replace('"', '\"') + '"'
-    }
+    # Use Packwiz's officially supported bootstrap in non-GUI mode. The ZIP also
+    # contains a tested installer JAR, so a failed self-update check can fall back.
+    $installerArguments = '-jar "' + $BootstrapPath.Replace('"', '\"') + '" -g "' + $PackUrl.Replace('"', '\"') + '"'
     $startInfo = [Diagnostics.ProcessStartInfo]::new()
     $startInfo.FileName = $javaPath
     $startInfo.Arguments = $installerArguments

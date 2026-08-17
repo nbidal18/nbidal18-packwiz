@@ -25,6 +25,7 @@ $clientRoot = Join-Path $ReleaseRoot '3. modpack\client'
 $appearanceRoot = Join-Path $ReleaseRoot '2. appearance\support'
 $iconPath = Join-Path $ReleaseRoot '5. development\server-icon.png'
 $bootstrapPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer-bootstrap.jar'
+$installerPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer.jar'
 $syncScript = Join-Path $repoRoot 'client\nbidal18-packwiz-sync.ps1'
 $sitePath = Join-Path $repoRoot 'site'
 
@@ -34,6 +35,7 @@ foreach ($required in @(
     (Join-Path $clientRoot 'servers.dat'),
     $iconPath,
     $bootstrapPath,
+    $installerPath,
     $syncScript,
     (Join-Path $sitePath 'pack.toml'),
     (Join-Path $sitePath 'sync-manifest.json')
@@ -58,6 +60,10 @@ function Get-Sha256([string] $path) {
 if ((Get-Sha256 $bootstrapPath) -ne
         'A8FBB24DC604278E97F4688E82D3D91A318B98EFC08D5DBFCBCBCAB6443D116C') {
     throw 'The Packwiz bootstrap does not match reviewed upstream v0.0.3.'
+}
+if ((Get-Sha256 $installerPath) -ne
+        'C9F646908D340D84773948A9A7D98BC1DAE250D35E1016DC6E2B8459760B5598') {
+    throw 'The bundled Packwiz installer does not match the tested installer JAR.'
 }
 
 Add-Type -AssemblyName System.IO.Compression
@@ -130,6 +136,7 @@ UseAccountForInstance=false
 
     Copy-Item -LiteralPath $iconPath -Destination (Join-Path $stagePath 'server-icon.png')
     Copy-Item -LiteralPath $bootstrapPath -Destination (Join-Path $minecraft 'packwiz-installer-bootstrap.jar')
+    Copy-Item -LiteralPath $installerPath -Destination (Join-Path $minecraft 'packwiz-installer.jar')
     Copy-Item -LiteralPath $syncScript -Destination (Join-Path $minecraft 'nbidal18-packwiz-sync.ps1')
     Copy-Item -LiteralPath (Join-Path $appearanceRoot 'client-options.txt') -Destination (Join-Path $minecraft 'options.txt')
     Copy-Item -LiteralPath (Join-Path $appearanceRoot 'client-options.amecsapi.txt') -Destination (Join-Path $minecraft 'options.amecsapi.txt')
