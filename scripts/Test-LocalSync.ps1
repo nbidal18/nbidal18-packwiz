@@ -106,6 +106,11 @@ try {
 
     $manifest = Get-Content -LiteralPath (Join-Path $sitePath 'sync-manifest.json') -Raw | ConvertFrom-Json
     Assert-True ($manifest.packVersion -eq '4.1.3-packwiz') 'The generated manifest has the wrong pack version.'
+    Assert-True ($manifest.schema -eq 1) 'The generated manifest is not backward-compatible with installed updaters.'
+    Assert-True (@($manifest.exactRoots).Count -eq 5 -and
+            'config' -in @($manifest.exactRoots)) 'Pre-launch exact config repair is missing.'
+    Assert-True (@($manifest.runtimeMutableRoots).Count -eq 1 -and
+            $manifest.runtimeMutableRoots[0] -eq 'config') 'The runtime-mutable config policy is missing.'
     $expectedPreserved = @(
         'config/autohud.json5',
         'config/voicechat/voicechat-client.properties',
@@ -132,11 +137,13 @@ try {
     $manifestDigest = Get-Sha256 (Join-Path $sitePath 'sync-manifest.json')
     foreach ($policyPath in @(
         (Join-Path $releaseRoot '3. modpack\server\config\nbidal18-integrity.properties'),
-        (Join-Path $releaseRoot '4. server\2. online-hosting\config\nbidal18-integrity.properties')
+        (Join-Path $releaseRoot '4. server\2. online-hosting\config\nbidal18-integrity.properties'),
+        (Join-Path $releaseRoot '4. server\4.1.3-transition-overlay\config\nbidal18-integrity.properties')
     )) {
         $policy = Get-Content -LiteralPath $policyPath -Raw
         Assert-True ($policy -match '(?m)^require-helper=true$') "The helper requirement is not enabled in $policyPath"
         Assert-True ($policy -match "(?m)^expected-manifest-sha256=$manifestDigest$") "Manifest digest mismatch in $policyPath"
+        Assert-True ($policy -match '(?m)^accepted-manifest-sha256=.*9515a09d1ce3d751e69da097ff6f3aee9856de3662fa35a69b6422fb845f3b41') "The previous release digest is not accepted during rollout in $policyPath"
     }
     foreach ($bccPath in @(
         (Join-Path $releaseRoot '3. modpack\server\config\bcc-common.toml'),

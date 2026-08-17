@@ -96,7 +96,8 @@ if (-not (Test-Path -LiteralPath $helperJar -PathType Leaf)) {
 $destinations = @(
     (Join-Path $ReleaseRoot '3. modpack\client\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'),
     (Join-Path $ReleaseRoot '3. modpack\server\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'),
-    (Join-Path $ReleaseRoot '4. server\2. online-hosting\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')
+    (Join-Path $ReleaseRoot '4. server\2. online-hosting\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'),
+    (Join-Path $ReleaseRoot '4. server\4.1.3-transition-overlay\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')
 )
 foreach ($destination in $destinations) {
     Copy-Item -LiteralPath $helperJar -Destination $destination -Force

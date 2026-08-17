@@ -279,6 +279,7 @@ hash-format = "sha256"
         schema = 1
         packVersion = '4.1.3-packwiz'
         exactRoots = @('mods', 'config', 'datapacks', 'resourcepacks', 'shaderpacks')
+        runtimeMutableRoots = @('config')
         localAllowed = @($preservedConfigPaths)
         propertyRules = @(
             [ordered]@{
@@ -292,9 +293,11 @@ hash-format = "sha256"
     Write-Utf8 (Join-Path $stagePath 'sync-manifest.json') (($manifest | ConvertTo-Json -Depth 6) + "`n")
 
     $manifestDigest = Get-Sha256 (Join-Path $stagePath 'sync-manifest.json')
+    $releaseBaselineDigest = '9515a09d1ce3d751e69da097ff6f3aee9856de3662fa35a69b6422fb845f3b41'
     $canonicalPolicy = Join-Path $ReleaseRoot '3. modpack\server\config\nbidal18-integrity.properties'
     $hostingPolicy = Join-Path $ReleaseRoot '4. server\2. online-hosting\config\nbidal18-integrity.properties'
-    foreach ($policyPath in @($canonicalPolicy, $hostingPolicy)) {
+    $overlayPolicy = Join-Path $ReleaseRoot '4. server\4.1.3-transition-overlay\config\nbidal18-integrity.properties'
+    foreach ($policyPath in @($canonicalPolicy, $hostingPolicy, $overlayPolicy)) {
         if (-not (Test-Path -LiteralPath $policyPath -PathType Leaf)) {
             throw "The server integrity transition policy is missing: $policyPath"
         }
@@ -303,15 +306,42 @@ hash-format = "sha256"
                 $policyText -notmatch '(?m)^expected-manifest-sha256=[0-9a-f]{64}$') {
             throw "The server integrity transition policy is malformed: $policyPath"
         }
+        $existingExpected = [regex]::Match(
+            $policyText,
+            '(?m)^expected-manifest-sha256=([0-9a-f]{64})$'
+        ).Groups[1].Value
+        $rollingDigests = @($releaseBaselineDigest, $existingExpected)
+        $existingAccepted = [regex]::Match(
+            $policyText,
+            '(?m)^accepted-manifest-sha256=([0-9a-f]{64}(?:,[0-9a-f]{64})*)$'
+        )
+        if ($existingAccepted.Success) {
+            $rollingDigests += $existingAccepted.Groups[1].Value.Split(',')
+        }
+        $rollingDigests = @($rollingDigests | Where-Object {
+            $_ -ne $manifestDigest
+        } | Select-Object -Unique)
         $policyText = [regex]::Replace(
             $policyText,
             '(?m)^expected-manifest-sha256=[0-9a-f]{64}$',
             "expected-manifest-sha256=$manifestDigest"
         )
+        $acceptedLine = 'accepted-manifest-sha256=' + ($rollingDigests -join ',')
+        if ($policyText -match '(?m)^accepted-manifest-sha256=') {
+            $policyText = [regex]::Replace(
+                $policyText,
+                '(?m)^accepted-manifest-sha256=.*$',
+                $acceptedLine
+            )
+        }
+        else {
+            $policyText = $policyText.TrimEnd("`r", "`n") + "`n$acceptedLine`n"
+        }
         Write-Utf8 $policyPath $policyText
     }
     if ((Get-Content -LiteralPath $canonicalPolicy -Raw) -notmatch '(?m)^require-helper=true$' -or
-            (Get-Content -LiteralPath $hostingPolicy -Raw) -notmatch '(?m)^require-helper=true$') {
+            (Get-Content -LiteralPath $hostingPolicy -Raw) -notmatch '(?m)^require-helper=true$' -or
+            (Get-Content -LiteralPath $overlayPolicy -Raw) -notmatch '(?m)^require-helper=true$') {
         throw 'The enforced v4.1.3 release must keep require-helper=true.'
     }
 
