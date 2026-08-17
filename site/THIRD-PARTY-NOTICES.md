@@ -2,6 +2,10 @@
 
 The complete v4.1.2 Prism ZIP bundles the reviewed third-party client files directly. Project links and retained attributions for notable components follow.
 
+## Deep Ocean Panorama
+
+The exact panorama image assets from Deep Ocean Panorama 1.0 (Modrinth project/version `5kprjmWo` / `jJgxY4Ke`) are incorporated into the already-enabled `No Atlas Player Markers.zip` nbidal18 override pack so existing updater installations receive and activate the new title-screen background without replacing player-owned `options.txt`. Project: <https://modrinth.com/resourcepack/deep-ocean-panorama>. The upstream project declares All Rights Reserved.
+
 ## Skin Overrides
 
 The byte-exact `skin_overrides-2.6.0+1.21.1.jar` from Modrinth project/version `GON0Fdk5` / `Z99ddIuX` is bundled on both client and server so its multiplayer skin-update receiver is available. Project/source: <https://modrinth.com/mod/skin-overrides> and <https://codeberg.org/rose_bush/skin-overrides>.

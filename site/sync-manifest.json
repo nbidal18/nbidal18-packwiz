@@ -24,7 +24,7 @@
   "files": [
     {
       "path": "THIRD-PARTY-NOTICES.md",
-      "sha256": "8b92ad74d52f5c2ca113bda01c6d011b0ac3d847a97d761c6bd8fcc388c2c6bc"
+      "sha256": "dd33b68245659f6403c36c05e66229c0c1fcf7a650ebbc1ec4456b11d34d2df7"
     },
     {
       "path": "config/CoroUtil/General.toml",
@@ -2332,7 +2332,7 @@
     },
     {
       "path": "resourcepacks/No Atlas Player Markers.zip",
-      "sha256": "90692acbba2b109f4a8e84cf2646f9d370c83772eee2767ee7615c2ea547383f"
+      "sha256": "861af06bd5b70afc2a90c8604aa54543c3958204a2be809c582dcfef3fc50362"
     },
     {
       "path": "resourcepacks/No Potion Particles.zip",
