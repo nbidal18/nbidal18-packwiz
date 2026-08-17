@@ -8,7 +8,19 @@
     "resourcepacks",
     "shaderpacks"
   ],
-  "localAllowed": [],
+  "localAllowed": [
+    "config/autohud.json5",
+    "config/voicechat/voicechat-client.properties",
+    "config/voicechat/category-volumes.properties",
+    "config/voicechat/player-volumes.properties",
+    "config/voicechat/username-cache.json",
+    "config/iris.properties",
+    "config/sodium-options.json",
+    "config/sodium-extra-options.json",
+    "config/sodium-extra.properties",
+    "config/fzzy_config/keybinds.toml",
+    "config/controlify.json"
+  ],
   "files": [
     {
       "path": "THIRD-PARTY-NOTICES.md",

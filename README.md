@@ -11,7 +11,7 @@ Packwiz endpoint: <https://nbidal18.github.io/nbidal18-packwiz/pack.toml>
 - The first Play downloads the complete managed client from this repository.
 - Later launches check for a release change, update changed files, and make `mods`, `config`, `datapacks`, `resourcepacks`, and `shaderpacks` match the published source.
 - Unknown files in those loadable roots are moved to the recoverable `.nbidal18-packwiz/removed-local-files` folder before Minecraft starts.
-- All shipped config files are managed in this first release.
+- Gameplay and compatibility configs remain managed. Auto HUD, personal Voice Chat state, Iris shader selection, Sodium preferences, mod keybinds, and Controlify controller preferences are installed with defaults when available and then preserved.
 - `options.txt`, `options.amecsapi.txt`, and `servers.dat` are supplied by the thin Prism ZIP and then remain player-owned.
 - If GitHub is unavailable, an instance that still matches its last successful manifest may start. A new or incomplete installation remains blocked until it can be repaired.
 - Better Compatibility Checker 21.1.8 gives the Packwiz client identity `v4.1.2-packwiz`. During the migration, the prepared server config deliberately leaves its version empty so 4.1.1, 4.1.2, and 4.1.2-packwiz players can still connect.

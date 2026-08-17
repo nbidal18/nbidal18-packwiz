@@ -63,6 +63,7 @@ hash = "4ad2b5325a9ddd32792b0cca532ab88914ae0c85aef8f5f56db8f5e75609bc28"
 [[files]]
 file = "config/autohud.json5"
 hash = "6009d09dee160134ee2ab8e0ebd2ee55bf250c4db3113a7dbee26a39962f6bc2"
+preserve = true
 
 [[files]]
 file = "config/bandagesplus.json"
@@ -479,6 +480,7 @@ hash = "91f3ccf23e7e550488ab408b179d63cc7927b1b0720997690b2ac2a4ce28b0fe"
 [[files]]
 file = "config/fzzy_config/keybinds.toml"
 hash = "26ac5810c9b5dc5c1968827357f0a58c58ac2b6f7b082630960228e16585062f"
+preserve = true
 
 [[files]]
 file = "config/gachaaddiction-common.toml"
@@ -543,6 +545,7 @@ hash = "4d3264b58c502afaeca3f44e8d2db0843c54b8ba957afd21a2d450fe10dafefb"
 [[files]]
 file = "config/iris.properties"
 hash = "5a64014f581f5f3eefc327f16f5a53410467c4647fe1f773b8172581e9f2c2cb"
+preserve = true
 
 [[files]]
 file = "config/item-restrictions-common.yaml"
@@ -775,10 +778,12 @@ hash = "d15110f71646c8b1e18a78483990691bbda1e9e687d39ac62cff0423375a4076"
 [[files]]
 file = "config/sodium-extra-options.json"
 hash = "ece12f36e24ea85b294b266a230a81d5fd2b9a5ab77b9814f61b329f9d9bc66c"
+preserve = true
 
 [[files]]
 file = "config/sodium-extra.properties"
 hash = "a2f1b47c1eaa119ab34727f1d43c2506cb3d7f17ba8fb4efb49e20c8e0b58e70"
+preserve = true
 
 [[files]]
 file = "config/sodium-fingerprint.json"
@@ -791,6 +796,7 @@ hash = "b627c4456e6fa0bc4b5f85e2f1cd949faedae3cb9afdaf2a5f52e6f3b6ae1f01"
 [[files]]
 file = "config/sodium-options.json"
 hash = "2c5d8d00cf22f45cfb27a31641db46881b94d1b14c10e88e0ecf972b7277fc13"
+preserve = true
 
 [[files]]
 file = "config/sound_physics_remastered/allowed_sounds.properties"
@@ -951,10 +957,12 @@ hash = "9fad022d7fc3981aa6f442c80a675bbe9420e2791b9442c410e3bf959dd55e12"
 [[files]]
 file = "config/voicechat/category-volumes.properties"
 hash = "94c1c4f70e5b995fbd71e86d4fa646030437fecae0685875b560a55fbd0d0e56"
+preserve = true
 
 [[files]]
 file = "config/voicechat/player-volumes.properties"
 hash = "0332261861a5ace96f503e85b0d48a8df74ea6c2f3545cd229543a6afb55ad96"
+preserve = true
 
 [[files]]
 file = "config/voicechat/translations.properties"
@@ -963,10 +971,12 @@ hash = "693643b1d393cbb3ea7f062afc4474fcd66e4036c4f8d7c056434979cbf512d1"
 [[files]]
 file = "config/voicechat/username-cache.json"
 hash = "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+preserve = true
 
 [[files]]
 file = "config/voicechat/voicechat-client.properties"
 hash = "d346362ecb097b892ce9ae5da0f0322fe0a7b0e2b85c38aca057d24260f115dc"
+preserve = true
 
 [[files]]
 file = "config/voicechat/voicechat-server.properties"

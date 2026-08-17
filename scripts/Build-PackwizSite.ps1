@@ -59,6 +59,32 @@ function Get-RelativePath([string] $basePath, [string] $fullPath) {
     return $full.Substring($base.Length).Replace('\', '/')
 }
 
+function Get-Sha256([string] $path) {
+    $stream = [IO.File]::OpenRead($path)
+    try {
+        $algorithm = [Security.Cryptography.SHA256]::Create()
+        try {
+            return ([BitConverter]::ToString($algorithm.ComputeHash($stream))).Replace('-', '').ToLowerInvariant()
+        }
+        finally { $algorithm.Dispose() }
+    }
+    finally { $stream.Dispose() }
+}
+
+$preservedConfigPaths = @(
+    'config/autohud.json5',
+    'config/voicechat/voicechat-client.properties',
+    'config/voicechat/category-volumes.properties',
+    'config/voicechat/player-volumes.properties',
+    'config/voicechat/username-cache.json',
+    'config/iris.properties',
+    'config/sodium-options.json',
+    'config/sodium-extra-options.json',
+    'config/sodium-extra.properties',
+    'config/fzzy_config/keybinds.toml',
+    'config/controlify.json'
+)
+
 $excludedPatterns = @(
     'servers.dat',
     'vinurl/downloads/*',
@@ -136,11 +162,31 @@ hash-format = "sha256"
         Pop-Location
     }
 
-    $packText = [IO.File]::ReadAllText((Join-Path $stagePath 'pack.toml'), [Text.Encoding]::UTF8)
+    $indexPath = Join-Path $stagePath 'index.toml'
+    $packPath = Join-Path $stagePath 'pack.toml'
+    $indexText = [IO.File]::ReadAllText($indexPath, [Text.Encoding]::UTF8)
+    foreach ($preservedPath in @($preservedConfigPaths | Where-Object { $_ -ne 'config/controlify.json' })) {
+        $pattern = '(?ms)(^\[\[files\]\]\r?\nfile = "' + [regex]::Escape($preservedPath) + '"\r?\nhash = "[0-9a-fA-F]{64}")(\r?\n)'
+        $match = [regex]::Match($indexText, $pattern)
+        if (-not $match.Success) {
+            throw "Preserved config is missing from the Packwiz index: $preservedPath"
+        }
+        $replacement = $match.Groups[1].Value + "`npreserve = true" + $match.Groups[2].Value
+        $indexText = $indexText.Substring(0, $match.Index) + $replacement + $indexText.Substring($match.Index + $match.Length)
+    }
+    Write-Utf8 $indexPath $indexText
+
+    $packText = [IO.File]::ReadAllText($packPath, [Text.Encoding]::UTF8)
+    $indexHash = Get-Sha256 $indexPath
+    $hashPattern = '(?m)^(hash = ")[0-9a-fA-F]{64}("\s*)$'
+    $packText = [regex]::Replace($packText, $hashPattern, {
+        param($match)
+        $match.Groups[1].Value + $indexHash + $match.Groups[2].Value
+    }, 1)
+    Write-Utf8 $packPath $packText
     if ($packText -match 'hash = "0{64}"') {
         throw 'Packwiz did not refresh the index hash.'
     }
-    $indexText = [IO.File]::ReadAllText((Join-Path $stagePath 'index.toml'), [Text.Encoding]::UTF8)
     if ($indexText -match '(?i)\.pw\.toml|modrinth|curseforge|https?://') {
         throw 'The Packwiz index contains external metadata or download URLs.'
     }
@@ -181,7 +227,7 @@ hash-format = "sha256"
         schema = 1
         packVersion = '4.1.2-packwiz'
         exactRoots = @('mods', 'config', 'datapacks', 'resourcepacks', 'shaderpacks')
-        localAllowed = @()
+        localAllowed = @($preservedConfigPaths)
         files = @($manifestFiles)
     }
     Write-Utf8 (Join-Path $stagePath 'sync-manifest.json') (($manifest | ConvertTo-Json -Depth 6) + "`n")

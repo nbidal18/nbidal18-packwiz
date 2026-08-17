@@ -63,15 +63,40 @@ try {
     Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 241) 'First install did not produce 241 mod JARs.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\better-compatability-checker-fabric-21.1.8.jar')) 'BCC was not installed.'
 
+    $manifest = Get-Content -LiteralPath (Join-Path $sitePath 'sync-manifest.json') -Raw | ConvertFrom-Json
+    $expectedPreserved = @(
+        'config/autohud.json5',
+        'config/voicechat/voicechat-client.properties',
+        'config/voicechat/category-volumes.properties',
+        'config/voicechat/player-volumes.properties',
+        'config/voicechat/username-cache.json',
+        'config/iris.properties',
+        'config/sodium-options.json',
+        'config/sodium-extra-options.json',
+        'config/sodium-extra.properties',
+        'config/fzzy_config/keybinds.toml',
+        'config/controlify.json'
+    )
+    Assert-True (@($manifest.localAllowed).Count -eq $expectedPreserved.Count) 'The preserved-config allow-list has the wrong size.'
+    foreach ($preservedPath in $expectedPreserved) {
+        Assert-True ($preservedPath -in @($manifest.localAllowed)) "Missing preserved-config rule: $preservedPath"
+    }
+
     $extraMod = Join-Path $minecraft 'mods\player-added-extra-mod.jar'
     [IO.File]::WriteAllText($extraMod, 'not an official mod')
-    $managedConfig = Join-Path $minecraft 'config\autohud.json5'
+    $preservedConfig = Join-Path $minecraft 'config\autohud.json5'
+    [IO.File]::WriteAllText($preservedConfig, 'player customized Auto HUD')
+    $controllerConfig = Join-Path $minecraft 'config\controlify.json'
+    [IO.File]::WriteAllText($controllerConfig, '{"player":"controller preferences"}')
+    $managedConfig = Join-Path $minecraft 'config\bcc-common.toml'
     [IO.File]::WriteAllText($managedConfig, 'player changed this managed config')
     Assert-True ((Invoke-Sync $minecraft) -eq 0) 'Online repair run failed.'
     Assert-True (-not (Test-Path -LiteralPath $extraMod)) 'The extra mod remained loadable.'
     Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $minecraft '.nbidal18-packwiz\removed-local-files') -Recurse -File | Where-Object Name -eq 'player-added-extra-mod.jar').Count -eq 1) 'The extra mod was not recoverably moved.'
+    Assert-True ([IO.File]::ReadAllText($preservedConfig) -eq 'player customized Auto HUD') 'The player Auto HUD config was overwritten.'
+    Assert-True (Test-Path -LiteralPath $controllerConfig -PathType Leaf) 'The generated controller config was removed.'
     $installedConfig = [Convert]::ToBase64String([IO.File]::ReadAllBytes($managedConfig))
-    $officialConfig = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $sitePath 'config\autohud.json5')))
+    $officialConfig = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $sitePath 'config\bcc-common.toml')))
     Assert-True ($installedConfig -eq $officialConfig) 'The managed config was not restored.'
 
     Stop-Process -Id $server.Id -Force
@@ -83,7 +108,7 @@ try {
     Expand-Archive -LiteralPath $zipPath -DestinationPath $offlineRoot
     Assert-True ((Invoke-Sync (Join-Path $offlineRoot 'minecraft')) -ne 0) 'An incomplete first install incorrectly started offline.'
 
-    Write-Host 'PASS: first install, exact-match cleanup, managed-file repair, complete offline fallback, and incomplete offline blocking.'
+    Write-Host 'PASS: first install, preserved personal configs, exact-match cleanup, managed-file repair, complete offline fallback, and incomplete offline blocking.'
     $testSucceeded = $true
     $global:LASTEXITCODE = 0
 }

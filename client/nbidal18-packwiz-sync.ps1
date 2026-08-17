@@ -147,6 +147,7 @@ function Find-SyncProblems(
 
     foreach ($entry in $map.GetEnumerator()) {
         $relative = $entry.Key
+        if (Test-LocalAllowed $relative $manifest) { continue }
         $target = Join-Path $MinecraftRoot $relative.Replace('/', '\')
         if (-not (Test-Path -LiteralPath $target -PathType Leaf)) {
             $problems.Add("missing:$relative")
