@@ -75,8 +75,8 @@ try {
     $instanceConfig = [IO.File]::ReadAllText((Join-Path $onlineRoot 'instance.cfg'))
     Assert-True ($instanceConfig.Contains('PreLaunchCommand="$INST_JAVA" -jar nbidal18-packwiz-sync.jar')) 'The Prism command is not cross-platform.'
     Assert-True (-not $instanceConfig.Contains('powershell')) 'The Prism command still depends on Windows PowerShell.'
-    Assert-True ($instanceConfig.Contains("name=nbidal18`n")) 'The Prism display name is not version-neutral.'
-    Assert-True ($instanceConfig.Contains("ExportName=nbidal18`n")) 'The Prism export name is not version-neutral.'
+    Assert-True ($instanceConfig.Contains("name=nbidal18-client`n")) 'The Prism display name is not the stable client name.'
+    Assert-True ($instanceConfig.Contains("ExportName=nbidal18-client`n")) 'The Prism export name is not the stable client name.'
     Assert-True (-not $instanceConfig.Contains('name=nbidal18-client-4.1.3-packwiz')) 'The Prism display name still contains a release version.'
     Assert-True ((Invoke-Sync $minecraft) -eq 0) 'First online installation failed.'
     Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 244) 'First install did not produce 244 mod JARs.'

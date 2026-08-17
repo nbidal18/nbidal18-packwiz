@@ -112,10 +112,10 @@ minecraft/vinurl/downloads
     Write-Utf8 (Join-Path $stagePath 'instance.cfg') @'
 [General]
 iconKey=server-icon
-name=nbidal18
+name=nbidal18-client
 AutomaticJava=true
 InstanceType=OneSix
-ExportName=nbidal18
+ExportName=nbidal18-client
 ExportOptionalFiles=true
 ExportSummary=Fabric 1.21.1 adventure modpack with automatic updates
 ExportVersion=4.1.3-packwiz
