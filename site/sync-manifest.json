@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "packVersion":  "4.2.1-packwiz",
+    "packVersion":  "4.2.2-packwiz",
     "exactRoots":  [
                        "mods",
                        "config",
@@ -226,7 +226,7 @@
                                 },
                                 {
                                     "path":  "config/bcc-common.toml",
-                                    "sha256":  "ca7f6aac98506dc08e30d9c6a2979dc5e015858c0b1fd7e007179ca83ed88b29"
+                                    "sha256":  "289f6e03b948fbbce5a3a1cc217f300ca7c90922bf603d9e0426a1adc7b3176c"
                                 },
                                 {
                                     "path":  "config/beautify.json",
@@ -1280,7 +1280,7 @@
                   },
                   {
                       "path":  "config/bcc-common.toml",
-                      "sha256":  "ca7f6aac98506dc08e30d9c6a2979dc5e015858c0b1fd7e007179ca83ed88b29"
+                      "sha256":  "289f6e03b948fbbce5a3a1cc217f300ca7c90922bf603d9e0426a1adc7b3176c"
                   },
                   {
                       "path":  "config/beautify.json",
@@ -3247,12 +3247,12 @@
                       "sha256":  "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
                   },
                   {
-                      "path":  "mods/nbidal18-client-tweaks-1.3.7+1.21.1.jar",
-                      "sha256":  "05ad674f86873f3f1f4844c99d4f8edf1fa65eea21e51d78460cdbfc4767d656"
+                      "path":  "mods/nbidal18-client-tweaks-1.3.8+1.21.1.jar",
+                      "sha256":  "fd942490b1451db2a623ce63368b71a70a792e77879fb2c430e025f7d28ace2b"
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "e6d2527f4e83d8a9a3c87f361527b55198f6c51ecb313e76887f4078fd107847"
+                      "sha256":  "46e2efaa7bb76c78b9f87ea11e42d397a790a76b85cf00f883a14afe713cbb0f"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",
@@ -3564,7 +3564,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "c823a5c9e255d1c0d1818afb03687abfc5c6847fd204f7995488f626e6097b97"
+                      "sha256":  "e9d68008030616a709da810eff81fc26aefa49d8763f7098681d914c4cee21b4"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",

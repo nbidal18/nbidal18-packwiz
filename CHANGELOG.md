@@ -34,9 +34,31 @@ Record:
 
 ---
 
+## v4.2.2-packwiz
+
+Current release. Live digest `74a0c27938bc8b72…`. 620 managed files, 244 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-18 | `pending` | `74a0c27938bc8b72` | 620 | 244 | **Placing a block now reveals the HUD.** It never did. The 4.2.0 request was to reveal while placing and breaking, and both were wired to Auto HUD triggers — but its two interaction events are "breaking a block" and "holding a usable item", and the second covers food, a drawn bow or a raised shield rather than placing. Breaking always worked; placing was never implemented, and the pair was reported as delivered. Placement now reveals the hotbar and, through it, the rest of the hotbar group, exactly as breaking does. Gated so that only a real placement counts: opening a chest or pressing a button leaves the HUD hidden, and placing from the off-hand still reveals. Auditing the rest of the HUD model against the code found nothing else wrong — armour, the experience bar and the mount jump bar stay hidden, the air bar still reveals alone, and Immersive Machinery vehicles were already covered because they extend the Immersive Aircraft engine vehicle. Client tweaks 1.3.7 to 1.3.8. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version and `server.properties`
+is not hot-reloadable. Deployed the integrity policy, the helper JAR, `bcc-common.toml` and the MOTD
+line of `server.properties` — one line of sixty-four, leaving ports, whitelist, world name and every
+provider setting untouched. Backups under `Z:\.nbidal18-deploy-backups\2026-08-18-v4.2.2-packwiz\`.
+
+A backup verified as stale during this deployment: copying `server.properties` across the SFTP
+mount returned content from before the server had last rewritten it, at the correct byte length. The
+deploy script now reads the bytes itself and verifies the backup against those, rather than trusting
+the copy. Worth remembering for anything else that reads `Z:`.
+
 ## v4.2.1-packwiz
 
-Current release. Live digest `5745945329aeb210…`. 620 managed files, 244 mods.
+Superseded by v4.2.2. Final digest `5745945329aeb210…`. 620 managed files, 244 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 

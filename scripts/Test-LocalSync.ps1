@@ -142,6 +142,7 @@ try {
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.4+1.21.1.jar'))) 'The pre-stuck-attack-guard client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.5+1.21.1.jar'))) 'The client-tweaks artifact with the misplaced Trinkets popup was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.6+1.21.1.jar'))) 'The pre-hotbar-group client-tweaks artifact was still installed.'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.7+1.21.1.jar'))) 'The client-tweaks artifact without the block-placement reveal was still installed.'
     $jobsConfigText = Get-Content -LiteralPath (Join-Path $minecraft 'config\jobsplus-common.yaml') -Raw
     Assert-True ($jobsConfigText -match '(?m)^\s*show_xp_in_action_bar:\s*false\s*$') 'Jobs+ XP action-bar messages remain enabled.'
     Assert-True ($jobsConfigText -match '(?m)^\s*broadcast_level_up_messages:\s*false\s*$') 'Jobs+ chat level-up broadcasts remain enabled.'
