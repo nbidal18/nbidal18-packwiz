@@ -27,7 +27,7 @@ if ([string]::IsNullOrWhiteSpace($javaHome)) {
 $sourceRoot = Join-Path $ReleaseRoot '5. development\nbidal18-client-tweaks'
 $gradle = Join-Path $sourceRoot 'gradlew.bat'
 $clientMods = [IO.Path]::GetFullPath((Join-Path $ReleaseRoot '3. modpack\client\mods'))
-$artifact = Join-Path $sourceRoot 'build\libs\nbidal18-client-tweaks-1.2.4+1.21.1.jar'
+$artifact = Join-Path $sourceRoot 'build\libs\nbidal18-client-tweaks-1.2.5+1.21.1.jar'
 
 $previousJavaHome = $env:JAVA_HOME
 try {
@@ -62,11 +62,11 @@ foreach ($oldArtifact in Get-ChildItem -LiteralPath $clientMods -File -Filter 'n
     }
     Remove-Item -LiteralPath $resolvedOld -Force
 }
-$destination = Join-Path $clientMods 'nbidal18-client-tweaks-1.2.4+1.21.1.jar'
+$destination = Join-Path $clientMods 'nbidal18-client-tweaks-1.2.5+1.21.1.jar'
 Copy-Item -LiteralPath $artifact -Destination $destination
 
 $installed = @(Get-ChildItem -LiteralPath $clientMods -File -Filter 'nbidal18-client-tweaks-*.jar')
-if ($installed.Count -ne 1 -or $installed[0].Name -ne 'nbidal18-client-tweaks-1.2.4+1.21.1.jar') {
+if ($installed.Count -ne 1 -or $installed[0].Name -ne 'nbidal18-client-tweaks-1.2.5+1.21.1.jar') {
     throw 'The canonical client does not contain exactly the expected client-tweaks artifact.'
 }
 Write-Host "Built and installed client tweaks: $destination"
