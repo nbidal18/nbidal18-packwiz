@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "packVersion":  "4.2.3-packwiz",
+    "packVersion":  "4.2.4-packwiz",
     "exactRoots":  [
                        "mods",
                        "config",
@@ -226,7 +226,7 @@
                                 },
                                 {
                                     "path":  "config/bcc-common.toml",
-                                    "sha256":  "eb86fe398d7902646e3f5f5340b3e3cda96de3309516549c46b16e7c5e12bd39"
+                                    "sha256":  "d9e78974708b0a99f7ffba1dcaecd3d1bf865cdffa16c77ac848b0548a0b2745"
                                 },
                                 {
                                     "path":  "config/beautify.json",
@@ -1280,7 +1280,7 @@
                   },
                   {
                       "path":  "config/bcc-common.toml",
-                      "sha256":  "eb86fe398d7902646e3f5f5340b3e3cda96de3309516549c46b16e7c5e12bd39"
+                      "sha256":  "d9e78974708b0a99f7ffba1dcaecd3d1bf865cdffa16c77ac848b0548a0b2745"
                   },
                   {
                       "path":  "config/beautify.json",
@@ -3252,7 +3252,7 @@
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "7d6aeaaded099506d77a6ad873070256eb440e415b7733946949c2d070cfb135"
+                      "sha256":  "158c08fa06235fae6c309acc8f456c7e6859fd33509b146fb5e0c91af70cf355"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",
@@ -3271,8 +3271,8 @@
                       "sha256":  "27bad58778d72c0784db854b8da6803a5a5465c89a38833cf88333f36800702c"
                   },
                   {
-                      "path":  "mods/nbidal18-playeremotes-fa-bridge-1.2.0+1.21.1.jar",
-                      "sha256":  "3b266584b09c984d6c2a4e2d8ea3f4ef6d36dcb37d14b129b0fff9c9e3df1266"
+                      "path":  "mods/nbidal18-playeremotes-fa-bridge-1.2.1+1.21.1.jar",
+                      "sha256":  "6963710ba2274d3180344afce2f56a30e607c26cae3ff35c28bca0c0ca739878"
                   },
                   {
                       "path":  "mods/niftycarts-21.1.1.jar",
@@ -3564,7 +3564,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "0798557f6cfa04062e7b60b7667d30ab474ee4b947d68251b800126b9b843ac7"
+                      "sha256":  "8c4050083f97b6b8a0f8d22944ff5bea331cbfb475445abe63026307551c07ac"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",

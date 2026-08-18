@@ -430,7 +430,11 @@ hash-format = "sha256"
     }
     # The server MOTD advertises which client version is required, so it is part of the release
     # identity. It sat at v4.1.3 through the whole of 4.2.0 because nothing checked it.
+    # All three copies, not just the two that get deployed. The setup copy is the one a player
+    # reads when they self-host, and because nothing checked it, it sat at v4.1.3 while the other
+    # two moved with every release.
     foreach ($propertiesPath in @(
+        (Join-Path $ReleaseRoot '1. setup\server.properties'),
         (Join-Path $ReleaseRoot '3. modpack\server\server.properties'),
         (Join-Path $ReleaseRoot '4. server\2. online-hosting\server.properties')
     )) {

@@ -34,9 +34,28 @@ Record:
 
 ---
 
+## v4.2.4-packwiz
+
+Current release. Live digest `5bf5bfb4c70a2e23…`. 620 managed files, 244 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-18 | `PENDING` | `5bf5bfb4c70a2e23` | 620 | 244 | **Fresh Animations stops silently switching itself off, and boats get their rowing arms back.** A player whose animations had died could not fix it by any amount of resource-pack reordering, and only a full restart of Minecraft cleared it. The cause was ours. EMF pauses animations through a process-global set of player UUIDs that nothing ever empties — not even EMF's own reset — so whoever pauses a player owns resuming them for the rest of the session. Our Player Emotes / Carry On bridge paused on an emote or a carried block and resumed only when it *saw* the state flip back, which is exactly the moment it cannot see: disconnect while carrying and the world goes away before the carry ends, so the resume never happens and Fresh Animations stays off for that player until the game is restarted. Somebody walking out of your tracking range mid-carry did the same to them, from your side of the screen. The bridge now converges on the state a player should be in every tick instead of reacting to changes, and forgets what it applied when a world ends, so anyone it can no longer reach is asserted afresh — resumed included — the moment they reappear. Riding a boat now pauses EMF too, so vanilla's rowing animation shows while you paddle; being a single subclass check, that covers chest boats, rafts, boats added by wood mods and every Small Ships vessel, whose ships extend the vanilla boat. Piloted machines are left alone on purpose — Immersive Aircraft and the Immersive Machinery vehicles built on it draw their own pilot pose and are not rowed. Maintainer-facing: the server MOTD is corrected everywhere. The copy under `1. setup`, the one a self-hoster actually reads, had sat at `v4.1.3-packwiz required` ever since that release, because the build only checked the two copies that get deployed; all three now read `v4.2.4 - @nbidal18 on Discord` and all three are checked. Player emotes bridge 1.2.0 to 1.2.1. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version and `server.properties`
+is not hot-reloadable. The owner confirmed the shutdown and a status ping refused the connection
+before and after every write. Deployed the integrity policy, the helper JAR, `bcc-common.toml` and
+the MOTD line of `server.properties` — one line of sixty-four, leaving ports, whitelist, world name
+and every provider setting untouched. Backups under
+`Z:\.nbidal18-deploy-backups\2026-08-18-v4.2.4-packwiz\`.
+
 ## v4.2.3-packwiz
 
-Current release. Live digest `58719703d3e8042d…`. 620 managed files, 244 mods.
+Superseded by v4.2.4. Final digest `58719703d3e8042d…`. 620 managed files, 244 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 
