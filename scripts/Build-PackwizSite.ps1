@@ -320,22 +320,25 @@ hash-format = "sha256"
         throw 'The v4.1.3 integrity helper is missing from the Packwiz client.'
     }
     $clientTweaks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter 'nbidal18-client-tweaks-*.jar')
-    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.1.0+1.21.1.jar') {
-        throw 'The Jobs+ plaque-enabled client-tweaks artifact is missing or duplicated.'
+    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.2.0+1.21.1.jar') {
+        throw 'The Inmis OLED and Jobs+ plaque-enabled client-tweaks artifact is missing or duplicated.'
     }
     $jobsSuppressor = Join-Path $stagePath 'mods\nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar'
     if (-not (Test-Path -LiteralPath $jobsSuppressor -PathType Leaf)) {
         throw 'The Jobs+ compatibility helper is missing from the Packwiz client.'
     }
-    $polytoneJar = Join-Path $stagePath 'mods\polytone-1.21-3.12.0-fabric.jar'
-    if (-not (Test-Path -LiteralPath $polytoneJar -PathType Leaf)) {
-        throw 'Nature X requires the client-only Polytone dependency.'
+    $optiGuiJar = Join-Path $stagePath 'mods\optigui-2.3.0-beta.9+1.21.jar'
+    if (-not (Test-Path -LiteralPath $optiGuiJar -PathType Leaf)) {
+        throw 'Colourful Containers OLED requires the client-only OptiGUI dependency.'
     }
     $resourcePacks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'resourcepacks') -File -Filter '*.zip')
+    $oledBase = @($resourcePacks | Where-Object { $_.Name -like '*OLED*Colourful Containers*.zip' })
+    $inmisOledAddon = @($resourcePacks | Where-Object { $_.Name -like '*OLED*Inmis Backpacks Addon*.zip' })
     if ($resourcePacks.Count -ne 19 -or
             -not (Test-Path -LiteralPath (Join-Path $stagePath 'resourcepacks\Fancy Crops v1.3.zip') -PathType Leaf) -or
-            -not (Test-Path -LiteralPath (Join-Path $stagePath 'resourcepacks\Nature X - 12.2 [1.21.1].zip') -PathType Leaf)) {
-        throw 'The 19-pack resource-pack baseline is missing Fancy Crops or Nature X.'
+            -not (Test-Path -LiteralPath (Join-Path $stagePath 'resourcepacks\Enhanced Grass V1_4.zip') -PathType Leaf) -or
+            $oledBase.Count -ne 1 -or $inmisOledAddon.Count -ne 1) {
+        throw 'The 19-pack resource-pack baseline is missing Fancy Crops, Enhanced Grass, Colourful Containers OLED, or its Inmis add-on.'
     }
     foreach ($jobsConfig in @(
         (Join-Path $stagePath 'config\jobsplus-common.yaml'),

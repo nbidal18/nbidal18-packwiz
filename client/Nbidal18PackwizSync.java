@@ -8,7 +8,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
@@ -53,6 +55,16 @@ public final class Nbidal18PackwizSync {
                     + "\\\"key\\\"\\s*:\\s*\\\"((?:\\\\.|[^\\\"])*)\\\"\\s*,\\s*"
                     + "\\\"value\\\"\\s*:\\s*\\\"((?:\\\\.|[^\\\"])*)\\\"\\s*}");
     private static final Pattern JSON_STRING = Pattern.compile("\\\"((?:\\\\.|[^\\\"])*)\\\"");
+    private static final String NATURE_X_PACK = "file/Nature X - 12.2 [1.21.1].zip";
+    private static final String ENHANCED_GRASS_PACK = "file/Enhanced Grass V1_4.zip";
+    private static final String OLD_DARK_CONTAINERS_PACK =
+            "file/\u00a78\u00a7lDarkmode \u00a7f\u00a7lColourful Containers\u00a78.zip";
+    private static final String OLD_MODDED_CONTAINERS_PACK =
+            "file/\u00a75\u00a7lModded \u00a7f\u00a7lContainers \u00a78\u00a7lDark\u00a78.zip";
+    private static final String OLED_CONTAINERS_PACK =
+            "file/\u00a70\u00a7lOLED \u00a7f\u00a7lColourful Containers\u00a78.zip";
+    private static final String INMIS_OLED_ADDON_PACK =
+            "file/\u00a70\u00a7lOLED \u00a7f\u00a7lInmis Backpacks Addon\u00a78.zip";
 
     private final Path minecraftRoot;
     private final Path stateRoot;
@@ -126,6 +138,7 @@ public final class Nbidal18PackwizSync {
                             + String.join(", ", remaining));
                 }
 
+                tryMigratePlayerOptions();
                 Files.move(downloadedManifest, lastManifestPath,
                         StandardCopyOption.REPLACE_EXISTING);
                 downloadedManifest = null;
@@ -147,6 +160,7 @@ public final class Nbidal18PackwizSync {
                                 + String.join(", ", offlineProblems));
             }
 
+            tryMigratePlayerOptions();
             warning("The online update could not complete. Starting the last complete installed release; "
                     + "the server will apply its current compatibility policy.");
             return 0;
@@ -395,6 +409,192 @@ public final class Nbidal18PackwizSync {
             }
         }
         return value;
+    }
+
+    private void tryMigratePlayerOptions() {
+        try {
+            if (migratePlayerOptions()) {
+                status("Updated the enabled resource-pack list while preserving personal options.");
+            }
+        } catch (Exception error) {
+            warning("Could not migrate the enabled resource-pack list; personal options were left unchanged: "
+                    + messageOf(error));
+        }
+    }
+
+    private boolean migratePlayerOptions() throws IOException {
+        Path options = minecraftRoot.resolve("options.txt").normalize();
+        if (!options.getParent().equals(minecraftRoot)
+                || !Files.isRegularFile(options, LinkOption.NOFOLLOW_LINKS)
+                || Files.isSymbolicLink(options)) {
+            return false;
+        }
+        if (Files.size(options) > 16L * 1024L * 1024L) {
+            throw new IOException("options.txt is unexpectedly large");
+        }
+
+        String original = Files.readString(options, StandardCharsets.UTF_8);
+        String migrated = migrateOptionArrayLine(original, "resourcePacks", true);
+        migrated = migrateOptionArrayLine(migrated, "incompatibleResourcePacks", false);
+        if (migrated.equals(original)) {
+            return false;
+        }
+
+        Path temporary = options.resolveSibling(
+                "options.txt.nbidal18-" + UUID.randomUUID() + ".tmp");
+        try {
+            Files.writeString(temporary, migrated, StandardCharsets.UTF_8);
+            try {
+                Files.move(temporary, options, StandardCopyOption.ATOMIC_MOVE,
+                        StandardCopyOption.REPLACE_EXISTING);
+            } catch (AtomicMoveNotSupportedException ignored) {
+                Files.move(temporary, options, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } finally {
+            Files.deleteIfExists(temporary);
+        }
+        return true;
+    }
+
+    private static String migrateOptionArrayLine(
+            String options, String key, boolean enabledPacks) throws IOException {
+        Pattern linePattern = Pattern.compile("(?m)^(" + Pattern.quote(key) + ":)([^\\r\\n]*)");
+        Matcher lineMatcher = linePattern.matcher(options);
+        if (!lineMatcher.find()) {
+            return options;
+        }
+
+        List<String> values = parseJsonStringArray(lineMatcher.group(2));
+        List<String> migrated = enabledPacks
+                ? migrateEnabledResourcePacks(values)
+                : migrateIncompatibleResourcePacks(values);
+        String replacement = lineMatcher.group(1) + encodeJsonStringArray(migrated);
+        return options.substring(0, lineMatcher.start()) + replacement
+                + options.substring(lineMatcher.end());
+    }
+
+    private static List<String> migrateEnabledResourcePacks(List<String> original) {
+        List<String> result = new ArrayList<>();
+        int containerIndex = -1;
+        for (String value : original) {
+            if (value.equals(OLD_DARK_CONTAINERS_PACK)
+                    || value.equals(OLD_MODDED_CONTAINERS_PACK)
+                    || value.equals(OLED_CONTAINERS_PACK)
+                    || value.equals(INMIS_OLED_ADDON_PACK)) {
+                if (containerIndex < 0) {
+                    containerIndex = result.size();
+                }
+                continue;
+            }
+            String migrated = value.equals(NATURE_X_PACK) ? ENHANCED_GRASS_PACK : value;
+            if (!result.contains(migrated)) {
+                result.add(migrated);
+            }
+        }
+
+        if (!result.contains(ENHANCED_GRASS_PACK)) {
+            int grassIndex = result.indexOf("file/Fancy Crops v1.3.zip");
+            result.add(grassIndex >= 0 ? grassIndex : result.size(), ENHANCED_GRASS_PACK);
+        }
+        if (containerIndex < 0) {
+            containerIndex = result.size();
+        } else {
+            containerIndex = Math.min(containerIndex, result.size());
+        }
+        result.add(containerIndex, OLED_CONTAINERS_PACK);
+        result.add(containerIndex + 1, INMIS_OLED_ADDON_PACK);
+        return result;
+    }
+
+    private static List<String> migrateIncompatibleResourcePacks(List<String> original) {
+        List<String> result = new ArrayList<>();
+        for (String value : original) {
+            if (value.equals(NATURE_X_PACK)
+                    || value.equals(OLD_DARK_CONTAINERS_PACK)
+                    || value.equals(OLD_MODDED_CONTAINERS_PACK)
+                    || value.equals(OLED_CONTAINERS_PACK)
+                    || value.equals(INMIS_OLED_ADDON_PACK)) {
+                continue;
+            }
+            if (!result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
+    private static List<String> parseJsonStringArray(String text) throws IOException {
+        String value = text.strip();
+        if (value.length() < 2 || value.charAt(0) != '['
+                || value.charAt(value.length() - 1) != ']') {
+            throw new IOException("invalid " + "resource-pack option array");
+        }
+        List<String> result = new ArrayList<>();
+        int index = 1;
+        while (true) {
+            while (index < value.length() - 1 && Character.isWhitespace(value.charAt(index))) {
+                index++;
+            }
+            if (index == value.length() - 1) {
+                return result;
+            }
+            if (value.charAt(index) != '"') {
+                throw new IOException("invalid resource-pack option entry");
+            }
+            int start = ++index;
+            boolean escaped = false;
+            while (index < value.length() - 1) {
+                char current = value.charAt(index);
+                if (!escaped && current == '"') {
+                    break;
+                }
+                escaped = !escaped && current == '\\';
+                if (current != '\\') {
+                    escaped = false;
+                }
+                index++;
+            }
+            if (index >= value.length() - 1) {
+                throw new IOException("unterminated resource-pack option entry");
+            }
+            result.add(jsonUnescape(value.substring(start, index)));
+            index++;
+            while (index < value.length() - 1 && Character.isWhitespace(value.charAt(index))) {
+                index++;
+            }
+            if (index < value.length() - 1 && value.charAt(index) == ',') {
+                index++;
+                continue;
+            }
+            if (index != value.length() - 1) {
+                throw new IOException("invalid resource-pack option separator");
+            }
+        }
+    }
+
+    private static String encodeJsonStringArray(List<String> values) {
+        StringBuilder result = new StringBuilder("[");
+        for (int index = 0; index < values.size(); index++) {
+            if (index > 0) {
+                result.append(',');
+            }
+            result.append('"');
+            for (int character = 0; character < values.get(index).length(); character++) {
+                char current = values.get(index).charAt(character);
+                switch (current) {
+                    case '"' -> result.append("\\\"");
+                    case '\\' -> result.append("\\\\");
+                    case '\b' -> result.append("\\b");
+                    case '\f' -> result.append("\\f");
+                    case '\n' -> result.append("\\n");
+                    case '\r' -> result.append("\\r");
+                    case '\t' -> result.append("\\t");
+                    default -> result.append(current);
+                }
+            }
+            result.append('"');
+        }
+        return result.append(']').toString();
     }
 
     private void moveOutOfLoadPath(Path path, String reason) throws IOException {

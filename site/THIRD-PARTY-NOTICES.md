@@ -2,13 +2,19 @@
 
 The v4.1.3 Packwiz release distributes the reviewed third-party client files through its managed update channel. Project links and retained attributions for notable components follow.
 
-## Fancy Crops, Nature X, and Polytone
+## Fancy Crops and Enhanced Grass
 
 The byte-exact `(Bee's) Fancy Crops` 1.3 archive from Modrinth project/version `UGEVQ6t9` / `ZJEBZjg6` is bundled and enabled. Project: <https://modrinth.com/resourcepack/fancy-crops>. The project declares All Rights Reserved.
 
-The byte-exact Nature X 12.2 archive for Minecraft 1.21.1 from Modrinth project/version `8d8M3Qoz` / `L1fTfVef` is bundled and enabled below Fancy Crops. Project: <https://modrinth.com/resourcepack/nature-x>. The project declares All Rights Reserved.
+The byte-exact Enhanced Grass V1.4 archive from Modrinth project/version `alsKcwM3` / `y5tAorFa` is bundled and enabled. It changes only short/tall grass blockstates and models. Project: <https://modrinth.com/resourcepack/enhanced-grass>. The project declares All Rights Reserved.
 
-Nature X's required client-only `polytone-1.21-3.12.0-fabric.jar` is the byte-exact Modrinth project/version `3qAYkBMB` / `nAbOgJjW` file. Project/source: <https://modrinth.com/mod/polytone> and <https://github.com/MehVahdJukaar/polytone>.
+## Colourful Containers OLED and OptiGUI
+
+The byte-exact Colourful Containers OLED 26.1.2 archive from Modrinth project/version `77JGzwHJ` / `nziDeFWl` is bundled and enabled. Project: <https://modrinth.com/resourcepack/colourful-containers-oled-gui>. The project declares All Rights Reserved. The previous Darkmode Colourful Containers and Modded Containers Dark archives are not active.
+
+The byte-exact client-only `optigui-2.3.0-beta.9+1.21.jar` from Modrinth project/version `JuksLGBQ` / `npnKNaoI` enables the pack's conditional GUI resources. Project/source: <https://modrinth.com/mod/optigui> and <https://github.com/opekope2/OptiGUI>. The bundled artifact's `fabric.mod.json` and embedded license declare MIT; its license is retained at `licenses/OptiGUI-MIT.txt`.
+
+`§0§lOLED §f§lInmis Backpacks Addon§8.zip` is a separate first-party nbidal18 add-on. It contains original deterministic pixel assets and no Colourful Containers textures; the client integration references the enabled official OLED `generic_54.png` at runtime for its exact player-inventory lip and for safe standard-layout modded-container fallback.
 
 ## Deep Ocean Panorama
 

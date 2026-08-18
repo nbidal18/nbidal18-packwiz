@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "45f05b4ee24cc7dfb10d6dbec7823cf167d2ab8c948df7c2b1e9b035d0f3d1ba"
+hash = "2892e4060a50e8156f3ed19525205aa483c6d529af1a648a0338cf228ad9c715"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -1064,7 +1064,7 @@ hash = "121b93764159be6fb7dab523b29a844e2bb78400ce8c48f52135a097e9b0006e"
 
 [[files]]
 file = "credits.txt"
-hash = "3ed916a45b2cb20bb8a0232c5b15ce948ee5bd04dd46d34aaad6d63bc1e5016b"
+hash = "4723b39ba8086c5c30626942b2aea7d3ca78dcc5f180c66419cc96196e8232a9"
 
 [[files]]
 file = "datapacks/custom_recipes_1.21/LICENSE.txt"
@@ -1341,6 +1341,10 @@ hash = "9ebdd84016a781e37f60ba35863b98d55307829ef7f03980fbccd402799f8844"
 [[files]]
 file = "licenses/MoreVillagers-Numismatic-Bridge-MIT.txt"
 hash = "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
+
+[[files]]
+file = "licenses/OptiGUI-MIT.txt"
+hash = "49f12e277c9321bedc8ff490c4cd570f708a49b2171592652d9db62cebf6a2bd"
 
 [[files]]
 file = "licenses/Player-Emotes-Apache-2.0.txt"
@@ -2023,8 +2027,8 @@ file = "mods/naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar"
 hash = "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
 
 [[files]]
-file = "mods/nbidal18-client-tweaks-1.1.0+1.21.1.jar"
-hash = "5356ffb4f49bb83f824bf8e1393d767c7887905594760d66d80eacf60e479e5b"
+file = "mods/nbidal18-client-tweaks-1.2.0+1.21.1.jar"
+hash = "1ca6a2bd3af268945814884e2e1ea51bf6742a66686123a281f2d50833cf6af5"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
@@ -2075,6 +2079,10 @@ file = "mods/oceansdelight-fdrf-fabric-1.0.2-1.21.jar"
 hash = "9cc69ecc65c3628152d1a00b4adffa4e1b8dea9887c965629ae1adaa97d517d1"
 
 [[files]]
+file = "mods/optigui-2.3.0-beta.9+1.21.jar"
+hash = "5ba9a9349b038a3219e0b1fad48571e5f690633ed0e7c4c308b42317d7fef11f"
+
+[[files]]
 file = "mods/owo-lib-0.12.15.4+1.21.jar"
 hash = "825180ce17bc012fb450653b14df9f32479dcdd073fc3f133bb47462f5a63cec"
 
@@ -2105,10 +2113,6 @@ hash = "a09e4bb1897ecf0889332354bae9564658bae80b158cddd3abe48293b7aebf68"
 [[files]]
 file = "mods/polymorph-fabric-1.1.0+1.21.1.jar"
 hash = "bc47b33c864b463167998680c296f513e6d06b42de6db03db0f274ae1f2ee671"
-
-[[files]]
-file = "mods/polytone-1.21-3.12.0-fabric.jar"
-hash = "f46b07577b0d31c46c55ea027bb957b4a5d3bcb43b0c7c8997d0d0644e95867e"
 
 [[files]]
 file = "mods/preferred-gamerules-1.1.1+1.19.4.jar"
@@ -2344,7 +2348,7 @@ hash = "3978c0dc75b138aaa0d8610467624ab49fecdadfaf160e2f66705870cadcb94d"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "644fac739649dabd8cdfb3304dca33e9f5c0e5ff1b73cd9e9bb5e75e3e0ea8f0"
+hash = "5a6858489be1c12714a41702db6fa01d085dd54e02e1fd1125c89ec627d570c0"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"
@@ -2371,6 +2375,10 @@ file = "resourcepacks/EnchantedCovers.zip"
 hash = "c165479881e388ba03bba152c09aebdf957b22ccbc4f575885b42b42cd3da514"
 
 [[files]]
+file = "resourcepacks/Enhanced Grass V1_4.zip"
+hash = "442296cc2d0841b4048207a3bdfd2c736c5b0ef4cca3fb8798046c095ad9c17a"
+
+[[files]]
 file = "resourcepacks/FA+Emissive-v1.6.zip"
 hash = "4da38e4f1580da77e308a551b5bb3bf9d8926c14fd0b4bb9275c90f9c3f6b609"
 
@@ -2395,10 +2403,6 @@ file = "resourcepacks/Juix Resources [1.3] 1.18-1.21.10.zip"
 hash = "f5644c68b042ac44f865495a9fdacda0396d1c486acb16cba511b0c9667353f6"
 
 [[files]]
-file = "resourcepacks/Nature X - 12.2 [1.21.1].zip"
-hash = "2549b2cb83a1fa470ade2ddf3166232bd9dbca00475d07a0159d33288ffa52e5"
-
-[[files]]
 file = "resourcepacks/No Atlas Player Markers.zip"
 hash = "861af06bd5b70afc2a90c8604aa54543c3958204a2be809c582dcfef3fc50362"
 
@@ -2415,6 +2419,14 @@ file = "resourcepacks/VanillaTweaks_r695951_MC1.21.x.zip"
 hash = "ad15d2899b02e6a333647f00fd617c69de1491ba317eee8bd9b9abe93e380420"
 
 [[files]]
+file = "resourcepacks/§0§lOLED §f§lColourful Containers§8.zip"
+hash = "ef2eef14f30f81d915c69066d6a18caea62141a8b0778da972b26e0857e0ef4b"
+
+[[files]]
+file = "resourcepacks/§0§lOLED §f§lInmis Backpacks Addon§8.zip"
+hash = "45f67d286af0ba53927ad00c5cb812ea60c881f6271b8877b5bb2334dec34923"
+
+[[files]]
 file = "resourcepacks/§3Fresh §bFlower Pots Rotated.zip"
 hash = "8240ce33137e8a02a29766d3beb111c6a585008d3084d03b5c556a00590f3b58"
 
@@ -2423,16 +2435,8 @@ file = "resourcepacks/§3Fresh §bFlower Pots.zip"
 hash = "d86043bfc7e31df9e2a227802be8af103f9446efe06c619ef6154966a5d358be"
 
 [[files]]
-file = "resourcepacks/§5§lModded §f§lContainers §8§lDark§8.zip"
-hash = "ee11b48376da55640c007911d93f018ea36297075218c93b5b26a931117e8712"
-
-[[files]]
 file = "resourcepacks/§6No Enchant Glint 1.21.zip"
 hash = "a7d4cc4f4b00c3e9bf50c4cb97b9f4a5707bbf77bc1830e0a4ee5ab4b18b6b9f"
-
-[[files]]
-file = "resourcepacks/§8§lDarkmode §f§lColourful Containers§8.zip"
-hash = "664eaf1f9d6ff76410fc513dea14f51dc7d3050e49868229808a7ce64b4c93e6"
 
 [[files]]
 file = "shaderpacks/ComplementaryUnbound_r5.8.1.zip"
