@@ -19,6 +19,7 @@
                                 "shaderpacks/MakeUp-UltraFast-9.5d.zip.txt",
                                 "config/fzzy_config/keybinds.toml",
                                 "config/controlify.json",
+                                "config/sodium-options.json",
                                 "config/fabric/indigo-renderer.properties",
                                 "config/naturalist-server.properties",
                                 "config/crash_assistant",
@@ -30,7 +31,8 @@
                                 "config/jei/recipe-category-sort-order.ini",
                                 "config/jei/world",
                                 "config/invmove/unrecognized.json",
-                                "config/spark/tmp"
+                                "config/spark/tmp",
+                                "config/sodium-fingerprint.json"
                             ],
     "localAllowed":  [
                          "config/autohud.json5",
@@ -43,6 +45,7 @@
                          "shaderpacks/MakeUp-UltraFast-9.5d.zip.txt",
                          "config/fzzy_config/keybinds.toml",
                          "config/controlify.json",
+                         "config/sodium-options.json",
                          "config/fabric/indigo-renderer.properties",
                          "config/naturalist-server.properties",
                          "config/crash_assistant/modlist.json",
@@ -54,7 +57,8 @@
                          "config/jei/recipe-category-sort-order.ini",
                          "config/jei/world/server/nbidal18_modpack_9c729ef3/lookupHistory.json",
                          "config/invmove/unrecognized.json",
-                         "config/spark/tmp/about.txt"
+                         "config/spark/tmp/about.txt",
+                         "config/sodium-fingerprint.json"
                      ],
     "propertyRules":  [
                           {
@@ -867,10 +871,6 @@
                                 {
                                     "path":  "config/sodium-extra.properties",
                                     "sha256":  "a2f1b47c1eaa119ab34727f1d43c2506cb3d7f17ba8fb4efb49e20c8e0b58e70"
-                                },
-                                {
-                                    "path":  "config/sodium-fingerprint.json",
-                                    "sha256":  "5fad74dc4b1a1bc5ffcdddc9b4d7aee6e3048275d5d05ddbac3e0ef80ce61ffa"
                                 },
                                 {
                                     "path":  "config/sodium-mixins.properties",
@@ -1917,10 +1917,6 @@
                   {
                       "path":  "config/sodium-extra.properties",
                       "sha256":  "a2f1b47c1eaa119ab34727f1d43c2506cb3d7f17ba8fb4efb49e20c8e0b58e70"
-                  },
-                  {
-                      "path":  "config/sodium-fingerprint.json",
-                      "sha256":  "5fad74dc4b1a1bc5ffcdddc9b4d7aee6e3048275d5d05ddbac3e0ef80ce61ffa"
                   },
                   {
                       "path":  "config/sodium-mixins.properties",

@@ -818,16 +818,13 @@ file = "config/sodium-extra.properties"
 hash = "a2f1b47c1eaa119ab34727f1d43c2506cb3d7f17ba8fb4efb49e20c8e0b58e70"
 
 [[files]]
-file = "config/sodium-fingerprint.json"
-hash = "5fad74dc4b1a1bc5ffcdddc9b4d7aee6e3048275d5d05ddbac3e0ef80ce61ffa"
-
-[[files]]
 file = "config/sodium-mixins.properties"
 hash = "b627c4456e6fa0bc4b5f85e2f1cd949faedae3cb9afdaf2a5f52e6f3b6ae1f01"
 
 [[files]]
 file = "config/sodium-options.json"
 hash = "2c5d8d00cf22f45cfb27a31641db46881b94d1b14c10e88e0ecf972b7277fc13"
+preserve = true
 
 [[files]]
 file = "config/sound_physics_remastered/allowed_sounds.properties"

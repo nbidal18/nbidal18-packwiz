@@ -102,7 +102,8 @@ $playerMutablePaths = @(
     'shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt',
     'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
     'config/fzzy_config/keybinds.toml',
-    'config/controlify.json'
+    'config/controlify.json',
+    'config/sodium-options.json'
 )
 
 # These paths contain timestamps, caches, detected hardware/users, or other support state.
@@ -119,7 +120,8 @@ $runtimeSupportPaths = @(
     'config/jei/recipe-category-sort-order.ini',
     'config/jei/world',
     'config/invmove/unrecognized.json',
-    'config/spark/tmp'
+    'config/spark/tmp',
+    'config/sodium-fingerprint.json'
 )
 
 $runtimeMutablePaths = @($playerMutablePaths + $runtimeSupportPaths)
@@ -139,11 +141,13 @@ $preservedConfigPaths = @($playerMutablePaths + @(
     'config/jei/recipe-category-sort-order.ini',
     'config/jei/world/server/nbidal18_modpack_9c729ef3/lookupHistory.json',
     'config/invmove/unrecognized.json',
-    'config/spark/tmp/about.txt'
+    'config/spark/tmp/about.txt',
+    'config/sodium-fingerprint.json'
 ))
 
 $excludedPatterns = @(
     'servers.dat',
+    'config/sodium-fingerprint.json',
     'vinurl/downloads/*',
     '.nbidal18/*',
     'packwiz.json',

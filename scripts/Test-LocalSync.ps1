@@ -157,6 +157,7 @@ try {
         'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
         'config/fzzy_config/keybinds.toml',
         'config/controlify.json',
+        'config/sodium-options.json',
         'config/fabric/indigo-renderer.properties',
         'config/naturalist-server.properties',
         'config/crash_assistant',
@@ -168,13 +169,16 @@ try {
         'config/jei/recipe-category-sort-order.ini',
         'config/jei/world',
         'config/invmove/unrecognized.json',
-        'config/spark/tmp'
+        'config/spark/tmp',
+        'config/sodium-fingerprint.json'
     )
     Assert-True (@($manifest.runtimeMutableRoots).Count -eq $expectedRuntimeMutable.Count) 'The runtime exception list has the wrong size.'
     foreach ($runtimePath in $expectedRuntimeMutable) {
         Assert-True ($runtimePath -in @($manifest.runtimeMutableRoots)) "Missing runtime exception: $runtimePath"
     }
     Assert-True ('config' -notin @($manifest.runtimeMutableRoots)) 'The complete config directory is still runtime-mutable.'
+    Assert-True (@($manifest.files | Where-Object path -eq 'config/sodium-options.json').Count -eq 1) 'The fresh-install Sodium defaults are missing.'
+    Assert-True (@($manifest.files | Where-Object path -eq 'config/sodium-fingerprint.json').Count -eq 0) 'A build-machine Sodium fingerprint was published.'
     $managedConfigCount = @($manifest.files | Where-Object path -like 'config/*').Count
     Assert-True (@($manifest.normalizedTextFiles).Count -eq $managedConfigCount) 'Not every managed config has a cross-platform normalized text hash.'
     $expectedPreserved = @(
@@ -188,6 +192,7 @@ try {
         'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
         'config/fzzy_config/keybinds.toml',
         'config/controlify.json',
+        'config/sodium-options.json',
         'config/fabric/indigo-renderer.properties',
         'config/naturalist-server.properties',
         'config/crash_assistant/modlist.json',
@@ -199,7 +204,8 @@ try {
         'config/jei/recipe-category-sort-order.ini',
         'config/jei/world/server/nbidal18_modpack_9c729ef3/lookupHistory.json',
         'config/invmove/unrecognized.json',
-        'config/spark/tmp/about.txt'
+        'config/spark/tmp/about.txt',
+        'config/sodium-fingerprint.json'
     )
     Assert-True (@($manifest.localAllowed).Count -eq $expectedPreserved.Count) 'The preserved-config allow-list has the wrong size.'
     foreach ($preservedPath in $expectedPreserved) {
@@ -248,6 +254,12 @@ try {
     [IO.File]::WriteAllText($preservedConfig, 'player customized Auto HUD')
     $controllerConfig = Join-Path $minecraft 'config\controlify.json'
     [IO.File]::WriteAllText($controllerConfig, '{"player":"controller preferences"}')
+    $sodiumOptions = Join-Path $minecraft 'config\sodium-options.json'
+    $playerSodiumOptions = '{"quality":{"cloud_quality":"FAST"},"advanced":{"cpu_render_ahead_limit":1}}'
+    [IO.File]::WriteAllText($sodiumOptions, $playerSodiumOptions)
+    $sodiumFingerprint = Join-Path $minecraft 'config\sodium-fingerprint.json'
+    $playerSodiumFingerprint = '{"v":1,"s":"different-machine","u":"different-user","p":"different-profile","t":1893456000}'
+    [IO.File]::WriteAllText($sodiumFingerprint, $playerSodiumFingerprint)
     $managedConfig = Join-Path $minecraft 'config\bcc-common.toml'
     [IO.File]::WriteAllText($managedConfig, 'player changed this managed config')
     $managedSodium = Join-Path $minecraft 'config\sodium-extra-options.json'
@@ -275,6 +287,8 @@ try {
     Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $minecraft '.nbidal18-packwiz\removed-local-files') -Recurse -File | Where-Object Name -eq 'xray-test.zip').Count -eq 1) 'The extra resource pack was not recoverably moved.'
     Assert-True ([IO.File]::ReadAllText($preservedConfig) -eq 'player customized Auto HUD') 'The player Auto HUD config was overwritten.'
     Assert-True (Test-Path -LiteralPath $controllerConfig -PathType Leaf) 'The generated controller config was removed.'
+    Assert-True ([IO.File]::ReadAllText($sodiumOptions) -eq $playerSodiumOptions) 'The player Sodium preferences were overwritten.'
+    Assert-True ([IO.File]::ReadAllText($sodiumFingerprint) -eq $playerSodiumFingerprint) 'The machine-generated Sodium fingerprint was removed or overwritten.'
     $shaderOptionsText = [IO.File]::ReadAllText($complementaryOptions)
     Assert-True ($shaderOptionsText -match '(?m)^QUALITY=VERY_HIGH\r?$') 'A permitted shader-quality setting was overwritten.'
     Assert-True ($shaderOptionsText -match '(?m)^GLOWING_ORE_MASTER=0\r?$' -and
