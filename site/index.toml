@@ -2027,8 +2027,8 @@ file = "mods/naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar"
 hash = "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
 
 [[files]]
-file = "mods/nbidal18-client-tweaks-1.2.2+1.21.1.jar"
-hash = "fc565c830433564d04acaaa7b52a582299f49c3ccba2ac9e5aa7cb6f056d8faa"
+file = "mods/nbidal18-client-tweaks-1.2.3+1.21.1.jar"
+hash = "120a3e3456ef0e1f7120ac29b35ba933e022863d0c87e5c3b7c3680e87ad9cd2"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
@@ -2424,7 +2424,7 @@ hash = "ef2eef14f30f81d915c69066d6a18caea62141a8b0778da972b26e0857e0ef4b"
 
 [[files]]
 file = "resourcepacks/§0§lOLED §f§lInmis Backpacks Addon§8.zip"
-hash = "fd752fb257d55bf46659988cc7f29f9cb2ea169f60bb1c2a6b65db040b6b6ccc"
+hash = "ea82977f34b5fadd24bb961ed12873d7d728da6bec7098b2cee79d480cb9cf25"
 
 [[files]]
 file = "resourcepacks/§3Fresh §bFlower Pots Rotated.zip"
