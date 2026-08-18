@@ -331,7 +331,7 @@ hash-format = "sha256"
         throw 'The v4.1.3 integrity helper is missing from the Packwiz client.'
     }
     $clientTweaks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter 'nbidal18-client-tweaks-*.jar')
-    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.2.7+1.21.1.jar') {
+    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.2.8+1.21.1.jar') {
         throw 'The Inmis OLED and Jobs+ plaque-enabled client-tweaks artifact is missing or duplicated.'
     }
     $expectedDyeableBackpacks = @(
