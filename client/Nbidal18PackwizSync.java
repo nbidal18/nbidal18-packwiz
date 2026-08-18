@@ -47,9 +47,9 @@ public final class Nbidal18PackwizSync {
     /**
      * Lowest pack version this updater will accept from the channel. Raising it with each release
      * stops a rolled-back or spoofed channel downgrading an instance: once a client runs this
-     * build, publishing anything below 4.2.2 would be refused rather than installed.
+     * build, publishing anything below 4.2.3 would be refused rather than installed.
      */
-    private static final int[] MINIMUM_PACK_VERSION = {4, 2, 2};
+    private static final int[] MINIMUM_PACK_VERSION = {4, 2, 3};
     private static final DateTimeFormatter MOVE_STAMP =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final Pattern FILE_ENTRY = Pattern.compile(
@@ -333,8 +333,19 @@ public final class Nbidal18PackwizSync {
                 packVersion, exactRoots, extraTolerantRoots, localAllowed, files, propertyRules);
     }
 
+    /**
+     * Accepts both {@code 4.2.3-packwiz} and the bare {@code 4.3.0}.
+     *
+     * <p>The suffix is being retired: packwiz is a known part of the pack, so the number alone says
+     * everything. It cannot be dropped in one release, because whichever updater a player already
+     * has is the one that validates the next manifest — an updater that demanded the suffix would
+     * reject the first suffix-less release outright, abandon the update and silently leave that
+     * player on their installed build forever. This release teaches the updater both forms so a
+     * later one can stop writing the suffix. Keep accepting both: some client will always be a
+     * release or two behind.
+     */
     private static boolean isSupportedPackVersion(String value) {
-        Matcher matcher = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)-packwiz").matcher(value);
+        Matcher matcher = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(?:-packwiz)?").matcher(value);
         if (!matcher.matches()) {
             return false;
         }

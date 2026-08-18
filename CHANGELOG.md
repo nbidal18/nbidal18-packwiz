@@ -34,9 +34,28 @@ Record:
 
 ---
 
+## v4.2.3-packwiz
+
+Current release. Live digest `58719703d3e8042d…`. 620 managed files, 244 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-18 | `PENDING` | `58719703d3e8042d` | 620 | 244 | **The accessory slots are laid out properly, and the version is being prepared to lose its `-packwiz` suffix.** In the inventory, the vanilla off-hand slot now sits in the middle of the accessory row, with the two hand accessories to its right and the two rings to its left; the ring slots had been drawing as bare transparent holes and now carry the same grey slot backing as every other slot. Trinkets' hover popup stays anchored to the off-hand where it belongs — the 4.2.0 attempt moved the popup's rectangle, which is the same rectangle as its hover target, so it opened over the character's feet instead. Maintainer-facing, and the real reason this release exists: the updater now accepts a version with **or** without the `-packwiz` suffix. Packwiz is a known part of the pack and the number alone says enough, but the suffix cannot simply be dropped — the updater a player already has is the one that validates the next release, and every installed build so far demands the suffix. Publishing a bare `4.3.0` today would have been rejected as an unsupported manifest, the update abandoned, and that player left silently on their old build forever. This release teaches both forms so a later one can stop writing the suffix; both stay accepted permanently, since some client is always a release or two behind. The build's MOTD check was tied to the same literal string and now matches the release number instead, which frees the MOTD to be player-facing wording: it reads `v4.2.3 - @nbidal18 on Discord`. The lowest channel version the updater will install rises to 4.2.3. Client tweaks 1.3.8 to 1.3.9. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version and `server.properties`
+is not hot-reloadable. The owner confirmed the shutdown and a status ping refused the connection
+before and after every write. Deployed the integrity policy, the helper JAR, `bcc-common.toml` and
+the MOTD line of `server.properties` — one line of sixty-four, leaving ports, whitelist, world name
+and every provider setting untouched. Backups under
+`Z:\.nbidal18-deploy-backups\2026-08-18-v4.2.3-packwiz\`.
+
 ## v4.2.2-packwiz
 
-Current release. Live digest `74a0c27938bc8b72…`. 620 managed files, 244 mods.
+Superseded by v4.2.3. Final digest `74a0c27938bc8b72…`. 620 managed files, 244 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 

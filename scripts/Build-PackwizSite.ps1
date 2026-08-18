@@ -439,9 +439,13 @@ hash-format = "sha256"
         if ($motd.Count -ne 1) {
             throw "Expected exactly one motd line in $propertiesPath, found $($motd.Count)."
         }
-        if ($motd[0] -notlike "*v$packVersion*") {
+        # Match the release number, not the whole version string. The MOTD is player-facing text and
+        # its wording is free -- the guard exists to catch it going stale, not to dictate phrasing,
+        # and the "-packwiz" suffix is being retired from the version anyway.
+        $releaseNumber = ($packVersion -replace '-packwiz$', '')
+        if ($motd[0] -notlike "*$releaseNumber*") {
             throw ("The server MOTD does not advertise this release: $propertiesPath holds " +
-                   "'$($motd[0])' but the pack is v$packVersion.")
+                   "'$($motd[0])' but the pack is $releaseNumber.")
         }
     }
     $integrityJar = Join-Path $stagePath 'mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'
