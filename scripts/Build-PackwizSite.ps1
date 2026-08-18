@@ -81,6 +81,18 @@ function Get-Sha256([string] $path) {
     finally { $stream.Dispose() }
 }
 
+function Get-NormalizedTextSha256([string] $path) {
+    $strictUtf8 = [Text.UTF8Encoding]::new($false, $true)
+    $text = $strictUtf8.GetString([IO.File]::ReadAllBytes($path))
+    $normalized = $text.Replace("`r`n", "`n").Replace("`r", "`n")
+    $bytes = [Text.Encoding]::UTF8.GetBytes($normalized)
+    $algorithm = [Security.Cryptography.SHA256]::Create()
+    try {
+        return ([BitConverter]::ToString($algorithm.ComputeHash($bytes))).Replace('-', '').ToLowerInvariant()
+    }
+    finally { $algorithm.Dispose() }
+}
+
 $playerMutablePaths = @(
     'config/autohud.json5',
     'config/voicechat/voicechat-client.properties',
@@ -262,6 +274,19 @@ hash-format = "sha256"
             sha256 = $match.Groups[2].Value.ToLowerInvariant()
         })
     }
+    $normalizedTextFiles = [Collections.Generic.List[object]]::new()
+    foreach ($managedFile in $manifestFiles) {
+        if ($managedFile.path -notlike 'config/*') {
+            continue
+        }
+        $normalizedTextFiles.Add([ordered]@{
+            path = $managedFile.path
+            sha256 = Get-NormalizedTextSha256 (Join-Path $stagePath $managedFile.path)
+        })
+    }
+    if ($normalizedTextFiles.Count -eq 0) {
+        throw 'No managed config files received cross-platform normalized text hashes.'
+    }
 
     foreach ($forbidden in @('options.txt', 'options.amecsapi.txt', 'servers.dat')) {
         if (@($manifestFiles | Where-Object path -eq $forbidden).Count -ne 0) {
@@ -354,6 +379,7 @@ hash-format = "sha256"
                 value = '0'
             }
         )
+        normalizedTextFiles = @($normalizedTextFiles)
         files = @($manifestFiles)
     }
     Write-Utf8 (Join-Path $stagePath 'sync-manifest.json') (($manifest | ConvertTo-Json -Depth 6) + "`n")

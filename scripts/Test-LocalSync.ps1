@@ -160,6 +160,8 @@ try {
         Assert-True ($runtimePath -in @($manifest.runtimeMutableRoots)) "Missing runtime exception: $runtimePath"
     }
     Assert-True ('config' -notin @($manifest.runtimeMutableRoots)) 'The complete config directory is still runtime-mutable.'
+    $managedConfigCount = @($manifest.files | Where-Object path -like 'config/*').Count
+    Assert-True (@($manifest.normalizedTextFiles).Count -eq $managedConfigCount) 'Not every managed config has a cross-platform normalized text hash.'
     $expectedPreserved = @(
         'config/autohud.json5',
         'config/voicechat/voicechat-client.properties',

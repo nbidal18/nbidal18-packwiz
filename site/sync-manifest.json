@@ -63,6 +63,1052 @@
                               "value":  "0"
                           }
                       ],
+    "normalizedTextFiles":  [
+                                {
+                                    "path":  "config/CoroUtil/General.toml",
+                                    "sha256":  "6003299fd97cb6b383ca3df88a2a676c565585799b1e14bb2987617ee189c7c2"
+                                },
+                                {
+                                    "path":  "config/MouseTweaks.cfg",
+                                    "sha256":  "4069ce1a439d8c37453c1b1e9f2037e0942674c7e48723a39b37eab245792ad4"
+                                },
+                                {
+                                    "path":  "config/SittingPlusConfig.json",
+                                    "sha256":  "8de3a0f0b4d7b17757fed8f1338909b0cb6cdf851604616a5698c36f95011e1d"
+                                },
+                                {
+                                    "path":  "config/VinURLConfig.json5",
+                                    "sha256":  "8324582340db83883d47bed33b105769c45d75ff5f71ce838207e848f2c5eebc"
+                                },
+                                {
+                                    "path":  "config/advancementplaques.toml",
+                                    "sha256":  "fd8b3cc688adde0ef4523196157af46ecf43fb26c3140fcc56cf5aa2df8d9a53"
+                                },
+                                {
+                                    "path":  "config/alexis_mods/daycounter.json",
+                                    "sha256":  "bbce074f1732a88e68f73675728fe07b906816d3a35b6402268fb8ed4bc7ff14"
+                                },
+                                {
+                                    "path":  "config/amendments-client.json",
+                                    "sha256":  "3e897adcb7eed4e98c20623a9ee79718617e186ec98bd69c217ec2500d3f4e0b"
+                                },
+                                {
+                                    "path":  "config/amendments-common.json",
+                                    "sha256":  "be6ec48c1fcb7e97a611b2d92a3a36e4860aa8dd00061367b9c28cc6cd10473a"
+                                },
+                                {
+                                    "path":  "config/antique-atlas.toml",
+                                    "sha256":  "e94ca8c14f59569370ec559b9680a76aa6b834a323049b05868853bc019b2051"
+                                },
+                                {
+                                    "path":  "config/anvilrepairing.json",
+                                    "sha256":  "9feb8863ae2123661e8bd675892c01c1095ce0bb12325bc776ff33a399bc05d4"
+                                },
+                                {
+                                    "path":  "config/arc-common.yaml",
+                                    "sha256":  "d360edbaf7bde9698f79c2b3fd885700250856eac6a1111b6d381b9b3a697566"
+                                },
+                                {
+                                    "path":  "config/armoroftheages.json",
+                                    "sha256":  "f2dbf451aeee6ce337c1ccd1b48c0e4ef9683e5b9d9900409559780470429b07"
+                                },
+                                {
+                                    "path":  "config/artifacts/client.toml",
+                                    "sha256":  "fea09c9256febaf3cc2dc9f09a44624d9a2896ed7b0ea7766c02dd597d964c74"
+                                },
+                                {
+                                    "path":  "config/artifacts/general.toml",
+                                    "sha256":  "c4fe73b5dab90dcf441d29c4af7d452e24be33fe05b4cd2cee25971e465adbd1"
+                                },
+                                {
+                                    "path":  "config/artifacts/items.toml",
+                                    "sha256":  "0d4971e2356a4ceabc4c4b2d69c81c2d3fbcf4b46e384423098f3856dcd2689c"
+                                },
+                                {
+                                    "path":  "config/autohud.json5",
+                                    "sha256":  "6009d09dee160134ee2ab8e0ebd2ee55bf250c4db3113a7dbee26a39962f6bc2"
+                                },
+                                {
+                                    "path":  "config/bandagesplus.json",
+                                    "sha256":  "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
+                                },
+                                {
+                                    "path":  "config/bcc-common.toml",
+                                    "sha256":  "93e147d6a2b650180221e8258f61b8687dacba3d67481ee5594ba2a26573f6d6"
+                                },
+                                {
+                                    "path":  "config/beautify.json",
+                                    "sha256":  "285f55d00f7e50b3e6191e22fc02083dd3648e1fe717da6a20a59bfc84044fab"
+                                },
+                                {
+                                    "path":  "config/betteradvancements.json",
+                                    "sha256":  "82ffaabd04cb676394314ad57bacb68b9160d2d8fec5109f1f106115e71417af"
+                                },
+                                {
+                                    "path":  "config/betterarcheology.jsonc",
+                                    "sha256":  "d79f3120a5a4d7185074d3e791574efefa5c5b6c2db034e0c625ca372fe8804f"
+                                },
+                                {
+                                    "path":  "config/betterdays-client.toml",
+                                    "sha256":  "dd3e49deea5c219be53a3e1d76c681ef18cf76790caf2fdb5445007d54665c83"
+                                },
+                                {
+                                    "path":  "config/betterdays-common.toml",
+                                    "sha256":  "a959129ca33135af6cf1e329184af6881582f0f58429520f1a8a8175bc2d7ae5"
+                                },
+                                {
+                                    "path":  "config/betterdeserttemples-fabric-1_21.toml",
+                                    "sha256":  "06a1b8b7774df6bef4dc9b82e140a4211d41c93178ee0d9d25105d05a6c20566"
+                                },
+                                {
+                                    "path":  "config/betterdeserttemples/README.txt",
+                                    "sha256":  "65f27b868cd42591c8c0be68c73f95490a409e90c3005baa809c4b907a6a03c3"
+                                },
+                                {
+                                    "path":  "config/betterdeserttemples/fabric-1_21/README.txt",
+                                    "sha256":  "80ba474fdd1912739a1dc3326de6539ccfceb9d5c97f540131b567e295a7b112"
+                                },
+                                {
+                                    "path":  "config/betterdeserttemples/fabric-1_21/armorstands.json",
+                                    "sha256":  "8fd9cb2fa94f25217c224d55cf97aae3b87f1f8c4796a161be7750d86b7d353b"
+                                },
+                                {
+                                    "path":  "config/betterdeserttemples/fabric-1_21/itemframes.json",
+                                    "sha256":  "03a1a56086750f5a3e491911b5f261299e6e7376688093c12aff9c87e78f439c"
+                                },
+                                {
+                                    "path":  "config/betterdungeons-fabric-1_21.toml",
+                                    "sha256":  "c0809814af173f138d83495d36aabcccda93ba2f2a49ec5b7e1c87a201efee77"
+                                },
+                                {
+                                    "path":  "config/betterendisland-fabric-1_21.toml",
+                                    "sha256":  "6469ab87a66387d64bfc51ffe2fb1365fcda9a28121a8fa9227626430c0c3505"
+                                },
+                                {
+                                    "path":  "config/betterf3.json",
+                                    "sha256":  "9950093a035d77ee814eb874091907e0f67d916b3a25d5e37edc99640ebc6487"
+                                },
+                                {
+                                    "path":  "config/betterfortresses-fabric-1_21.toml",
+                                    "sha256":  "c6f718e24389dd618b788ea1ef0c64d3689e9408fd9a482e67ecece0dc392ece"
+                                },
+                                {
+                                    "path":  "config/betterfortresses/README.txt",
+                                    "sha256":  "3efc54726c0702d0a4d4a91eb6436acdd3842598460e5781ffe365353ee36cc2"
+                                },
+                                {
+                                    "path":  "config/betterfortresses/fabric-1_21/README.txt",
+                                    "sha256":  "1175dbf9cd2e7c91b1c852a51e3c0203c68484917e877465b283e2370ad62864"
+                                },
+                                {
+                                    "path":  "config/betterfortresses/fabric-1_21/itemframes.json",
+                                    "sha256":  "7eb9ecd39186cadaac17207b8877cfd25eb6e3876cd8dfa348a84e7018ea52f1"
+                                },
+                                {
+                                    "path":  "config/betterjungletemples-fabric-1_21.toml",
+                                    "sha256":  "69a3aa51ef5a881f01a6515f72a57a10b8df7c7b93588f424fc07c864a0933e1"
+                                },
+                                {
+                                    "path":  "config/bettermineshafts-fabric-1_21.toml",
+                                    "sha256":  "d486f4672659b59f9a855d9ebce345d8a983c504d24b99613ce280db657c40f5"
+                                },
+                                {
+                                    "path":  "config/betteroceanmonuments-fabric-1_21.toml",
+                                    "sha256":  "dbba9af53d8bfb9f46cb4c9ab525a72026ad0a13c36e8dd8efe7398a767c3187"
+                                },
+                                {
+                                    "path":  "config/betterstrongholds-fabric-1_21.toml",
+                                    "sha256":  "6884b0d763e06d77fe7a2e8e9acbc201014fc8135c7dcba47be30fab9a634a11"
+                                },
+                                {
+                                    "path":  "config/betterstrongholds/README.txt",
+                                    "sha256":  "80929d21617faef8983985d92096ad903602a6d82106b5e845562814872da6c7"
+                                },
+                                {
+                                    "path":  "config/betterstrongholds/fabric-1_21/README.txt",
+                                    "sha256":  "c857bda54ab01ca5db21cfe085dc75dcbb13d26054463cf301c74023783612fc"
+                                },
+                                {
+                                    "path":  "config/betterstrongholds/fabric-1_21/armorstands.json",
+                                    "sha256":  "a73fe19cb098812d81c20fb4131e1b4dc56f353bda95c1e0ffaf106fd28151d1"
+                                },
+                                {
+                                    "path":  "config/betterstrongholds/fabric-1_21/itemframes.json",
+                                    "sha256":  "48869b5b2ff49afd2e38e2be85da3e26ba4aa92c2ed080fa715ed6b7e5a61470"
+                                },
+                                {
+                                    "path":  "config/betterstrongholds/fabric-1_21/ores.json",
+                                    "sha256":  "6ca01d8e3f78226e239de1283d936027d369c233575d2063aba6ca16cbfdc63b"
+                                },
+                                {
+                                    "path":  "config/betterstrongholds/fabric-1_21/rareblocks.json",
+                                    "sha256":  "279bed05cfb80a01dae5f7c2463af944587870624374b74976ba6d3ab7a96896"
+                                },
+                                {
+                                    "path":  "config/betterthirdperson.json5",
+                                    "sha256":  "a08f97002e75fbe4e2933cbb6137c8bcb33d1cd36e947e54829b8fa8ab3caa7c"
+                                },
+                                {
+                                    "path":  "config/betterwitchhuts-fabric-1_21.toml",
+                                    "sha256":  "063ce4f60934ab166dade45375ef5518df74be2c6c1e1f1a52ec181013803197"
+                                },
+                                {
+                                    "path":  "config/bountiful/bountiful.json",
+                                    "sha256":  "eeead79d2c51bca73a1174aeadd2cef9c12feea8ae8083121c15e47b0563ebc0"
+                                },
+                                {
+                                    "path":  "config/burninthesun.toml",
+                                    "sha256":  "2050994b93b7523b743b1fc9b5b79dcba6631e8f4c47b3a64377e6d1e2fa625c"
+                                },
+                                {
+                                    "path":  "config/cameraoverhaul.toml",
+                                    "sha256":  "099f93589e34d22e279ba2851036cf5cdc1a43ea19b4ada76412c9c608a3db05"
+                                },
+                                {
+                                    "path":  "config/cardinal-components-api.properties",
+                                    "sha256":  "8d3ae8c9240fc60475fbb98a87b7e2e0874703b173a449fb346fb0857ada7bba"
+                                },
+                                {
+                                    "path":  "config/carryon-client.json",
+                                    "sha256":  "b66da6824b6141acca353406c20654ebf599c814d50da37006b2bf51009b4f2a"
+                                },
+                                {
+                                    "path":  "config/carryon-common.json",
+                                    "sha256":  "0ad4986eb8991fd1d6aea4ceb2abaeb47fd39acb7fadd9291499f2c27522e81f"
+                                },
+                                {
+                                    "path":  "config/cavedust.json",
+                                    "sha256":  "09bde08790aa64dadfcc3b31447901faf0539dd1dc01e0244ed94a5cabf8f1a0"
+                                },
+                                {
+                                    "path":  "config/chatanimation.json",
+                                    "sha256":  "de5bb1061dcd48c3378f6849658940a465c3e094e5d6c342c5f73ea984da2a8b"
+                                },
+                                {
+                                    "path":  "config/collective.json5",
+                                    "sha256":  "b6243b955bf123f86c947510d9f8f3a4b5f7b8fe3775d834f458d60a3223847f"
+                                },
+                                {
+                                    "path":  "config/comforts-common.toml",
+                                    "sha256":  "d1ff6e8f5aa2b77d6708b9d4a566d2de96e6f1ec594139742162b1dfdf92c476"
+                                },
+                                {
+                                    "path":  "config/comforts-server.toml",
+                                    "sha256":  "e616306cfc054644fd643c220ceeca69b46fc3169e8260d96f81a6c724b86b7d"
+                                },
+                                {
+                                    "path":  "config/connectiblechains.toml",
+                                    "sha256":  "0e90f3e1102154437f7caaafaf84b26b8538ab8e304a9a7f0ce3f13e7979533f"
+                                },
+                                {
+                                    "path":  "config/continuity.json",
+                                    "sha256":  "00267a602028cbb037dcb0b5f803db31bed284235ca9c1ea189ad4179311a2f4"
+                                },
+                                {
+                                    "path":  "config/crash_assistant/config.toml",
+                                    "sha256":  "c6aa535d0d0055be86aaa4d3fd9303282ab9c2d459acc38c4c363ce18e38fef3"
+                                },
+                                {
+                                    "path":  "config/crash_assistant/crash_assistant_localization_overrides/README.md",
+                                    "sha256":  "943e1c3672b8a03f27519b357091133205119c7b3db2fcc4c25b597cabf8926d"
+                                },
+                                {
+                                    "path":  "config/crash_assistant/problematic_mods_config.json",
+                                    "sha256":  "ac39420512ece55a61087db09fe6c4375aa8bd02966b78716c3e3e404938f693"
+                                },
+                                {
+                                    "path":  "config/creativecore-client.json",
+                                    "sha256":  "acb6c8c1394d4d6f2d0c98d5c314c5ef8ad34b8a76f0a420fc596733bcbc51ac"
+                                },
+                                {
+                                    "path":  "config/creativecore.json",
+                                    "sha256":  "5f08d0878d7f89c6b4c947a49dce368d7738255d44fecf9aad59ec6ae8a4fcef"
+                                },
+                                {
+                                    "path":  "config/cristellib/auto_config_settings.json5",
+                                    "sha256":  "799173b66094a241753f41af672ddf22921ca206cb88f1966d31960c89c3f99a"
+                                },
+                                {
+                                    "path":  "config/cristellib/betterarcheology/structure_placement_config.json5",
+                                    "sha256":  "42183988005ae8222716a8884818b0967c9716c880cb0da17ad44abe3ab12cb6"
+                                },
+                                {
+                                    "path":  "config/cristellib/betterarcheology/structure_toggle_config.json5",
+                                    "sha256":  "f07ac4346c33935b9b6aacb183c76e4b658a5e3c8e7280f2ef0ae75350aa94e4"
+                                },
+                                {
+                                    "path":  "config/cristellib/betterdeserttemples/structure_toggle_config.json5",
+                                    "sha256":  "2015676b60427ff402b3af72186acb044c6df75006168182c927e1b32e3a53b3"
+                                },
+                                {
+                                    "path":  "config/cristellib/betterdungeons/structure_placement_config.json5",
+                                    "sha256":  "4717b7c90d57966c9c15a1ce3365d7ff51c16852ea424135b27dadd753f638da"
+                                },
+                                {
+                                    "path":  "config/cristellib/betterdungeons/structure_toggle_config.json5",
+                                    "sha256":  "cfbbfdc4e8298b509b638cc1dcf19db0ddad2998f2e51d608012a092db182019"
+                                },
+                                {
+                                    "path":  "config/cristellib/betterfortresses/structure_toggle_config.json5",
+                                    "sha256":  "476e7c1f8d373b4ade74bbe411df17e65cd23371df0331195d3343d2a1add770"
+                                },
+                                {
+                                    "path":  "config/cristellib/betterjungletemples/structure_toggle_config.json5",
+                                    "sha256":  "0d5244a29df08a5d636d4aed87531a32216c6461381a2373acfb6d52274d98e2"
+                                },
+                                {
+                                    "path":  "config/cristellib/bettermineshafts/structure_placement_config.json5",
+                                    "sha256":  "457f04949d15e9159468953610a61e54a79d43c9f4e506939a41cf6eba1389bb"
+                                },
+                                {
+                                    "path":  "config/cristellib/bettermineshafts/structure_toggle_config.json5",
+                                    "sha256":  "b1f120b276340d388ee444d9c1ab1974d2e1f30c6bbfe9dda6d81a280d3460cf"
+                                },
+                                {
+                                    "path":  "config/cristellib/betteroceanmonuments/structure_placement_config.json5",
+                                    "sha256":  "6fd24ee068912d64b8f358b86ccba1f508877609b13c9e9f10c06517d8a3c1dc"
+                                },
+                                {
+                                    "path":  "config/cristellib/betteroceanmonuments/structure_toggle_config.json5",
+                                    "sha256":  "bebe3f4afdeed46372fa150cda8409c270c7444d5f7fa44448ef11ca86901aa2"
+                                },
+                                {
+                                    "path":  "config/cristellib/betterstrongholds/structure_toggle_config.json5",
+                                    "sha256":  "c5ed4f2692d0f263cd2c77efe4ee5b419ffac9d4ba4d8973dd53a5b7df3ebd45"
+                                },
+                                {
+                                    "path":  "config/cristellib/betterwitchhuts/structure_placement_config.json5",
+                                    "sha256":  "1699f8928403aa00319164ffa3ffda5bac0e94c55823180acaafc2761b47c82e"
+                                },
+                                {
+                                    "path":  "config/cristellib/betterwitchhuts/structure_toggle_config.json5",
+                                    "sha256":  "fc70281d363679d4e401468518de6f815a6d48301cbdb39d5d744bc6b7a63b46"
+                                },
+                                {
+                                    "path":  "config/cristellib/built_in_packs.json5",
+                                    "sha256":  "f1be3df3751749fc4f475c886553f4b6b998c1a9f68f7ec33ddebe6909bffb14"
+                                },
+                                {
+                                    "path":  "config/cristellib/frostiful/structure_placement_config.json5",
+                                    "sha256":  "f8d4776d2a64551aa492c1d2bec11d435540de6c71bcdf47cd9dee3683ceeeff"
+                                },
+                                {
+                                    "path":  "config/cristellib/frostiful/structure_toggle_config.json5",
+                                    "sha256":  "bd50972589ba158d502d751b8d144666806f2545b9d04d017a2329b0a5150968"
+                                },
+                                {
+                                    "path":  "config/cristellib/incendium/structure_placement_config.json5",
+                                    "sha256":  "86d418f04cb5e14edb95568833f9ce421b50493a9445b0fa018c74475b48e701"
+                                },
+                                {
+                                    "path":  "config/cristellib/incendium/structure_toggle_config.json5",
+                                    "sha256":  "ce93df2b6e4d3a0ed2e456e83c08fc04bae832400e32e0639d957da5e46987b5"
+                                },
+                                {
+                                    "path":  "config/cristellib/mr_tidal_towns/structure_placement_config.json5",
+                                    "sha256":  "f3dc418ffb2c1a11570e0368e69cde2fc91505d008be91d74250ec277894bd46"
+                                },
+                                {
+                                    "path":  "config/cristellib/mr_tidal_towns/structure_toggle_config.json5",
+                                    "sha256":  "62b1205df5e50d83906c36dfc72b6483935c947b41d3c1d53cf59cac703855ac"
+                                },
+                                {
+                                    "path":  "config/cristellib/scorchful/structure_placement_config.json5",
+                                    "sha256":  "c8bbc38b20405db3d120026d38ee33fad580370997bdba74b582033dd1f9c525"
+                                },
+                                {
+                                    "path":  "config/cristellib/scorchful/structure_toggle_config.json5",
+                                    "sha256":  "27a416e62919ed187813e29abfa96af17b897f4f3d17cdebfbb007c8ef166dd6"
+                                },
+                                {
+                                    "path":  "config/cristellib/structory/structure_placement_config.json5",
+                                    "sha256":  "0eab3d6c98dd4eedbe4dce5a4fc4596d1d060876bc20bbe60e069ab5ae61df0c"
+                                },
+                                {
+                                    "path":  "config/cristellib/structory/structure_toggle_config.json5",
+                                    "sha256":  "a33903592feb8a1e1fd0a4fe0adf4ef72efbb4832330c9500db0fb2910abd287"
+                                },
+                                {
+                                    "path":  "config/cristellib/structory_towers/structure_placement_config.json5",
+                                    "sha256":  "2f51f789d696e96af6fbaf368bfe2e64e406c616ceda253ec4e4798ab85aa648"
+                                },
+                                {
+                                    "path":  "config/cristellib/structory_towers/structure_toggle_config.json5",
+                                    "sha256":  "3c622e85c983d8a073d0b30977d8331f997c988693c14dcaa5ffc6f6f2a7ff80"
+                                },
+                                {
+                                    "path":  "config/cristellib/terralith/structure_placement_config.json5",
+                                    "sha256":  "777e236cc299321f8e51f96238bd01be855699cf72aa7520b30d32ad8edb7367"
+                                },
+                                {
+                                    "path":  "config/cristellib/terralith/structure_toggle_config.json5",
+                                    "sha256":  "b2b1510673394f1558f80f11c479a7619414a91691139a5cc43d5e3b3d233da1"
+                                },
+                                {
+                                    "path":  "config/cristellib/tide/structure_placement_config.json5",
+                                    "sha256":  "775595f8fb356b3498a00ccd90fe57696c59ef8eff48a065967df68709d4fea1"
+                                },
+                                {
+                                    "path":  "config/cristellib/tide/structure_toggle_config.json5",
+                                    "sha256":  "cba3f882296daea0d577c8494bf105db7aa33dcf1536eebad92509c9f516dd3d"
+                                },
+                                {
+                                    "path":  "config/critical_strike/client_config.json",
+                                    "sha256":  "6589bb503ffc95574ae1cdf96c7f4099dac444b3a5e3274da4e773c04a03fe49"
+                                },
+                                {
+                                    "path":  "config/critical_strike/server_config.json",
+                                    "sha256":  "5368b56e65d2346a167c4bb521f389544b6714dfe8192ed529121e1a79f11b64"
+                                },
+                                {
+                                    "path":  "config/crittersandcompanions-common.toml",
+                                    "sha256":  "b41faec1c7b047a92f50c24dd0a03e8255974974440ad0442e0c6bcc5d33e252"
+                                },
+                                {
+                                    "path":  "config/ctov.json",
+                                    "sha256":  "e21a989b0de21fce76a0dda063a195224c38f69083ddd962d3f7166c79c2f069"
+                                },
+                                {
+                                    "path":  "config/data-loader.json",
+                                    "sha256":  "c1005da65e062a24fa2bda13e4a8b40716bbc15f5218a4d9e461346abd2315ea"
+                                },
+                                {
+                                    "path":  "config/dehydration.json5",
+                                    "sha256":  "f801972d4f5de53b6625a20c7ddbdc7eb607bf46f03e672bde51b5c519008ce4"
+                                },
+                                {
+                                    "path":  "config/enchdesc.json",
+                                    "sha256":  "7116b95a9b6797af8db84e410a2ca2fdf6f813461e37cd04bff5af933f31567b"
+                                },
+                                {
+                                    "path":  "config/entity_model_features.json",
+                                    "sha256":  "6c55ac3306d8d38e5f81fb8048ccab2d0b7c851c235a1c625074b952299a272a"
+                                },
+                                {
+                                    "path":  "config/entity_texture_features.json",
+                                    "sha256":  "de82cbd3a118fc809af0606c4ca9238a67bed80716e0cbb0903f750d9a580b26"
+                                },
+                                {
+                                    "path":  "config/epicknights/armor.json5",
+                                    "sha256":  "0ff17ebd10c2d1b1b21fa8f6e5667eed9c08b226f60805bc586e2bb06f058961"
+                                },
+                                {
+                                    "path":  "config/epicknights/general.json5",
+                                    "sha256":  "d3dec561a9b4985cb6407bc18bc1d8507e5bd7e6e916de32a0bdae0e8b2998ba"
+                                },
+                                {
+                                    "path":  "config/epicknights/mobs_equipment.json5",
+                                    "sha256":  "35bf1bc34160e9a890814f08e0e9a69c3d7e21bf6991ace6548ef759e4cd8524"
+                                },
+                                {
+                                    "path":  "config/epicknights/shields.json5",
+                                    "sha256":  "ece9f2ec662c26d829d7439c0138717d9fe83dc606d055b64dab37799f209f3e"
+                                },
+                                {
+                                    "path":  "config/epicknights/weapons.json5",
+                                    "sha256":  "134eca5eafff0ffe0d52cf8774dd02fb247a6e2f6ca617f0acac396c9565ebd6"
+                                },
+                                {
+                                    "path":  "config/etf_warnings.json",
+                                    "sha256":  "a5ba22e63061c1fb67f0f895f17681351eaeccc225faef966c29ee630593275e"
+                                },
+                                {
+                                    "path":  "config/exposure-client.toml",
+                                    "sha256":  "0dc61228d59f64bc42e705ccfd3c9d633f805d836a9cacd669b39ade3be5a1e2"
+                                },
+                                {
+                                    "path":  "config/exposure-common.toml",
+                                    "sha256":  "f2f309a4876192ac4b04d8f8f745d680ab8f368b6802acbd42d05748b986971d"
+                                },
+                                {
+                                    "path":  "config/exposure_polaroid-client.toml",
+                                    "sha256":  "bba16753a1db0667cc77b3c44a3fdc0f83d60ca0d20afa2bd3a051fd01c1ad93"
+                                },
+                                {
+                                    "path":  "config/fabric/indigo-renderer.properties",
+                                    "sha256":  "11a377a3f46f996d199e55b71c4793619e8129fcaff2c8d7cf03bb28bc6dddcc"
+                                },
+                                {
+                                    "path":  "config/fallingleaves.json",
+                                    "sha256":  "d3b1d95d9f4e7304d79202b0b26f51e5d33f461e1416ecda25cb9a2bc8effbe3"
+                                },
+                                {
+                                    "path":  "config/farmersdelight-client.json",
+                                    "sha256":  "7bec8842d77a579d39b420fcae94ba4860e2d26752cc2a3749c458add0009107"
+                                },
+                                {
+                                    "path":  "config/farmersdelight-common.json",
+                                    "sha256":  "2d90cd31dd6c755661098846eb184220514b156324e952519f05d96c892ce718"
+                                },
+                                {
+                                    "path":  "config/ferritecore.mixin.properties",
+                                    "sha256":  "3cc3011619f098fda6ad213a7c4d1468802ff827591a5917c2b7bf3150bfb2ea"
+                                },
+                                {
+                                    "path":  "config/firstperson.json",
+                                    "sha256":  "71a197d56c7e16a9dbff955f52c6adc22848c603ef75ac17d21f9825ddf13be3"
+                                },
+                                {
+                                    "path":  "config/fishingreal-common.toml",
+                                    "sha256":  "a2deca8477e093dbc24366be73a32ddd44811433999214450f86afac6b9b8ef9"
+                                },
+                                {
+                                    "path":  "config/forgeconfigapiport.toml",
+                                    "sha256":  "647ad92f7bdc5e0ccef37d6e7386b08f2a19715b77742202f2f9048fb14e0dec"
+                                },
+                                {
+                                    "path":  "config/frostiful.json",
+                                    "sha256":  "91f3ccf23e7e550488ab408b179d63cc7927b1b0720997690b2ac2a4ce28b0fe"
+                                },
+                                {
+                                    "path":  "config/fzzy_config/keybinds.toml",
+                                    "sha256":  "26ac5810c9b5dc5c1968827357f0a58c58ac2b6f7b082630960228e16585062f"
+                                },
+                                {
+                                    "path":  "config/gachaaddiction-client.toml",
+                                    "sha256":  "7bbcc573e25094f60ebd633675a7294b72129dd8ace03a23180f0fe83933b9bc"
+                                },
+                                {
+                                    "path":  "config/gachaaddiction-common.toml",
+                                    "sha256":  "815283d7fbf5984dbc70b1aa90f0137aa1fdb63e73a9e20da931800c8be4630a"
+                                },
+                                {
+                                    "path":  "config/gravestones.json",
+                                    "sha256":  "f0f05d69c343ffc459e8ea59039261660eb77be6a71c75e704ae43ad19226088"
+                                },
+                                {
+                                    "path":  "config/guardvillagers.json",
+                                    "sha256":  "ac52c006fd20536a658ec69a0aa52348973520e4df1da4d3fb0cdf44e31a0215"
+                                },
+                                {
+                                    "path":  "config/herdspanic.json",
+                                    "sha256":  "3b125849b756099da2483be5d34517cb2c2cb8532e7405db08dbbacf093e48a5"
+                                },
+                                {
+                                    "path":  "config/immersive_aircraft.json",
+                                    "sha256":  "07e71816fa21e87aecde559a8a3d51875b1c87281ddb8106cbdbd4cde2342c8c"
+                                },
+                                {
+                                    "path":  "config/immersive_machinery.json",
+                                    "sha256":  "ca24e50fabfae0ba63e50ed786ec5674d725db94f8ee064cef53f0db49153d69"
+                                },
+                                {
+                                    "path":  "config/immersive_paintings/client_config.toml",
+                                    "sha256":  "ef52ef3709b14b7804af7fb18f8b233b13a517b8733c902610656b88779b55ea"
+                                },
+                                {
+                                    "path":  "config/immersive_paintings/common_config.toml",
+                                    "sha256":  "c469cb44079c62710879813e422a64a302fa7a58498a8ce56e5e8b0ebf86c6b5"
+                                },
+                                {
+                                    "path":  "config/inmis.json",
+                                    "sha256":  "f21270f50e6bf09fae08dee01bf7660f833bc4b7daa9151635c3a95f3304455c"
+                                },
+                                {
+                                    "path":  "config/invmove.json",
+                                    "sha256":  "b4306cfc19619ad78fad885566aabd12e642956c1bd8a11b533b5f37cd451621"
+                                },
+                                {
+                                    "path":  "config/invmove/cloth-config.json",
+                                    "sha256":  "65242c90d0248278a7d2293b4ac8e531ba9d9981255a4c81f938b077b58c79f2"
+                                },
+                                {
+                                    "path":  "config/invmove/jei.json",
+                                    "sha256":  "65242c90d0248278a7d2293b4ac8e531ba9d9981255a4c81f938b077b58c79f2"
+                                },
+                                {
+                                    "path":  "config/invmove/unrecognized.json",
+                                    "sha256":  "d60b13062bac6a3e26e1bcfe5fd02740423f27015d49627f2ef20e624f7218dc"
+                                },
+                                {
+                                    "path":  "config/invmove/vanilla.json",
+                                    "sha256":  "d1151ee0b7aa54a262ade99ba45014b32bf8774a90040f0b65c733d9ab9e2258"
+                                },
+                                {
+                                    "path":  "config/iris-excluded.json",
+                                    "sha256":  "4d3264b58c502afaeca3f44e8d2db0843c54b8ba957afd21a2d450fe10dafefb"
+                                },
+                                {
+                                    "path":  "config/iris.properties",
+                                    "sha256":  "d1431a8526f711564fb1c6d249602116e5c806992be52cc1d29d86cff38dac8b"
+                                },
+                                {
+                                    "path":  "config/item-restrictions-common.yaml",
+                                    "sha256":  "c0c191c7f3eeb2c19b0df753581deabb72744f5fd23a398da92c8268774cff88"
+                                },
+                                {
+                                    "path":  "config/jade/hide-blocks.json",
+                                    "sha256":  "309df4ae96864c19eae41b646d58497c85a73b1fc3c584e772ef4d5822794baa"
+                                },
+                                {
+                                    "path":  "config/jade/hide-entities.json",
+                                    "sha256":  "3741bb54a4535fb5a00fb0ee1f4386f3dd17834aebdf9e89c21fcd3307109709"
+                                },
+                                {
+                                    "path":  "config/jade/jade.json",
+                                    "sha256":  "411eb42a58cb0a5e0de5f9b42d3e89609247fcd45947e962c818d954826790f8"
+                                },
+                                {
+                                    "path":  "config/jade/plugins.json",
+                                    "sha256":  "d04e5918ba93cd9d6a2f6335770b75f9fbaad950051d12c1718c5e403d916291"
+                                },
+                                {
+                                    "path":  "config/jade/sort-order.json",
+                                    "sha256":  "418470b06bb36232730a9d380a50d859363a8e4beab38e854dda80f4af245c04"
+                                },
+                                {
+                                    "path":  "config/jei/blacklist.json",
+                                    "sha256":  "b4174dc6e985aa90be5002c14e94b956d8d586683c44b7b6710c44d08fb13648"
+                                },
+                                {
+                                    "path":  "config/jei/ingredient-list-mod-sort-order.ini",
+                                    "sha256":  "faf1d6d1884a21e64ae97162fbed41890b6f93faef18b3df5e4ece4b7c77cda2"
+                                },
+                                {
+                                    "path":  "config/jei/ingredient-list-type-sort-order.ini",
+                                    "sha256":  "f6faa8cf111795b26bb59fe7618381fba1879ddc35dbac176297f57941496ff6"
+                                },
+                                {
+                                    "path":  "config/jei/jei-client.ini",
+                                    "sha256":  "4b14260af2c1e90a90c3024a28097cbb4ca3eabbd78ee440cf843f62d4af5846"
+                                },
+                                {
+                                    "path":  "config/jei/jei-colors.ini",
+                                    "sha256":  "e4bc0c5fce5a7536bce14c94b30e30482e65d63792b29db0ad59d4fa9eb4d1a5"
+                                },
+                                {
+                                    "path":  "config/jei/jei-debug.ini",
+                                    "sha256":  "16bada81bf6ab44c1aa2b60e995833d4c3d6044faf1da7d56fee3c866d0f41ca"
+                                },
+                                {
+                                    "path":  "config/jei/jei-mod-id-format.ini",
+                                    "sha256":  "4eb3a3eb280558bdd2665fb4792d32551cb6dddc468776e66afc1c3ea981781e"
+                                },
+                                {
+                                    "path":  "config/jei/recipe-category-sort-order.ini",
+                                    "sha256":  "2ec9fbf0b564c3262529ea8c2f62fa645805cc5ecc6b40f0647ac2dac8263ddc"
+                                },
+                                {
+                                    "path":  "config/jewelry/fabric_compatibility.json",
+                                    "sha256":  "db62a25feb5657dd78b9ee9a1de7fb0d781a81115ac11821fecad44af07a62e1"
+                                },
+                                {
+                                    "path":  "config/jewelry/items_v8.json",
+                                    "sha256":  "e26fbee2d2144a8258bb05c48cd3ae00578dd5ab0772aa33fc1cd2b08ee4bf26"
+                                },
+                                {
+                                    "path":  "config/jewelry/villages.json",
+                                    "sha256":  "3a0ad1c6bf844e60952867bbb67ebac157ce720a9904362b4a26d6048096a5f8"
+                                },
+                                {
+                                    "path":  "config/jobsplus-common.yaml",
+                                    "sha256":  "a12db639c85072798d3cfd2f917b665052e41dbf007413e8857e7ce0a4722619"
+                                },
+                                {
+                                    "path":  "config/jumpoverfences.toml",
+                                    "sha256":  "c5b1ab6e46ec8963c229f5474195af4ed263740032d58c19157bf9e81ba84e4e"
+                                },
+                                {
+                                    "path":  "config/lambdynlights.toml",
+                                    "sha256":  "25259b4e74cfd7460205c36f419bfb54569d1b726168ba6d811f7d36b54e83cd"
+                                },
+                                {
+                                    "path":  "config/leahs-immersive-thunder.toml",
+                                    "sha256":  "a120d448e40dbd9f63f660539b0cefb7ab3519a49a89c88e6be615fdaa363d36"
+                                },
+                                {
+                                    "path":  "config/lithium.properties",
+                                    "sha256":  "6cf6f83720071fd1657c8e79b357caf68d40f410ae123e5f922483eb1d1d25be"
+                                },
+                                {
+                                    "path":  "config/lithostitched.json",
+                                    "sha256":  "d8a63933ec4757186a594debea59dd35724a0a895fe601b324f96217c28312df"
+                                },
+                                {
+                                    "path":  "config/lootr.json",
+                                    "sha256":  "07bc89d36df0c153d1e9adae35e8dc3cd4c9b8164d9f7fe35dfdc3386a770ad9"
+                                },
+                                {
+                                    "path":  "config/midnightlib.json",
+                                    "sha256":  "9bcdd9f5ae6c9fecc3a0dfee7507bf17c56702f14e40db9cdde90148f1d3b387"
+                                },
+                                {
+                                    "path":  "config/minecraft-cursor.json",
+                                    "sha256":  "c8258bef50291e61bb219351d4e55f0cbe96d5331bb66f788a488aa71252f241"
+                                },
+                                {
+                                    "path":  "config/mmode.json",
+                                    "sha256":  "229520040294dd36eb5220f52b3f7a200d48bf73db2b2229ec3eab0351277b14"
+                                },
+                                {
+                                    "path":  "config/modernfix-mixins.properties",
+                                    "sha256":  "5d638483a8b6ce35fcba87578edc963515b6d9d4aa3fa53191e43b9dfd2eabe5"
+                                },
+                                {
+                                    "path":  "config/modmenu.json",
+                                    "sha256":  "f67acccd7a156a8986435cddb4d798b30761b7154ac584eb1b52ced9ec789509"
+                                },
+                                {
+                                    "path":  "config/moonlight-client.json",
+                                    "sha256":  "f5e867ec46f10264229677a109675edc795525365bce30cefd2d82a65e680f95"
+                                },
+                                {
+                                    "path":  "config/moonlight-common.json",
+                                    "sha256":  "aaf781e3fa20511c5e61965ea107e7ff7cabd41df7cefd0fbb9f122351e54720"
+                                },
+                                {
+                                    "path":  "config/morevillagers.json",
+                                    "sha256":  "832818b27a76df025a408d353f3aada9195a0a6f0eed5269ddb795d65501078a"
+                                },
+                                {
+                                    "path":  "config/mousewheelie.hjson",
+                                    "sha256":  "0669bd0936b4a5969373ff5ad0903484bd27fcfc6c3f898ec40152596e326a39"
+                                },
+                                {
+                                    "path":  "config/naturalist-server.properties",
+                                    "sha256":  "114416d381787fdc0cc2fb01c2a02cc01879ce1f54d47ffd6baf5216d71ecfa3"
+                                },
+                                {
+                                    "path":  "config/naturescompass.json",
+                                    "sha256":  "6532ca516c9b1e8b3069df6464321d6570ce2d7fe04944ae816dfdfc654f7ffb"
+                                },
+                                {
+                                    "path":  "config/niftycarts-client.toml",
+                                    "sha256":  "637064cd683edad7c79801b740b64daaa730b134770fd005b52f61a3462f977f"
+                                },
+                                {
+                                    "path":  "config/niftycarts-common.toml",
+                                    "sha256":  "fffc5cd149fa791d86317c118c53e2918fbc45e079dcafec15e6517845863686"
+                                },
+                                {
+                                    "path":  "config/notenoughanimations.json",
+                                    "sha256":  "ab0149158835d79dbc65a32034dac8bfbf140a52a79c23cecf085e0c07a5aa16"
+                                },
+                                {
+                                    "path":  "config/numismatic-overhaul.json5",
+                                    "sha256":  "7c32904774776b87cb958be20ddde01182430c27bbc58dbb4fb92f7b97b5fa35"
+                                },
+                                {
+                                    "path":  "config/playeremotes-wheel-fix.json",
+                                    "sha256":  "acfa68f01cb7ade88c939a08375aeeb87cffd4a8431377b33f39a39cc1fd181d"
+                                },
+                                {
+                                    "path":  "config/playeremotes.json",
+                                    "sha256":  "19dbcdd40772df5cda41f923e31f2ff4201968a5e15459e85fbd6500df3fdacc"
+                                },
+                                {
+                                    "path":  "config/preferred-gamerules.properties",
+                                    "sha256":  "93255b62cb1f46d32648ce87889940fc1dacaa11d3950e2092061576a6a114cc"
+                                },
+                                {
+                                    "path":  "config/presencefootsteps/updater.json",
+                                    "sha256":  "1e7c61df09c105e1eeca8cf3dcbdfeb976700e9904bcb3983fc7791adb7fad2e"
+                                },
+                                {
+                                    "path":  "config/presencefootsteps/userconfig.json",
+                                    "sha256":  "8cf6192eda81b3a27737440cfdedc05c40a8c1b552583114c1aa6fb2673ca907"
+                                },
+                                {
+                                    "path":  "config/sawmill-common.json",
+                                    "sha256":  "d08a36a2bc6a6246bcb7eab67f1357931bdce347e434f22ca79ca170b4b02d49"
+                                },
+                                {
+                                    "path":  "config/scorchful.json",
+                                    "sha256":  "1c123c73ac01ad4e61c1c29b9b370ddda01cf36b3efb28e58051df9a56d5ae97"
+                                },
+                                {
+                                    "path":  "config/sereneseasons/fertility.toml",
+                                    "sha256":  "722f7545a5a592f0aed25ae8dd0a4f53f7abaf0bb53da96417d87e9096e75631"
+                                },
+                                {
+                                    "path":  "config/sereneseasons/seasons.toml",
+                                    "sha256":  "a736a8c4342cc31f12865b59f25e6850170c154419d8a185dd31ec01047745d0"
+                                },
+                                {
+                                    "path":  "config/servercore/config.yml",
+                                    "sha256":  "6484e9f393508af5380400be843b98105b777f70f9afb45caf7f242cc34d3091"
+                                },
+                                {
+                                    "path":  "config/servercore/optimizations.yml",
+                                    "sha256":  "daee4631e334e913ffbad0f6b9e6e896923b0ba1f1b2fa605aa44cacc1261886"
+                                },
+                                {
+                                    "path":  "config/skinlayers.json",
+                                    "sha256":  "45162f45aa2db525a0edc483959f35b6d958ba2e54066a4f87e7f3c3f0f99166"
+                                },
+                                {
+                                    "path":  "config/slabstoblocks.json",
+                                    "sha256":  "3a68ab51f57691913f73b6ef733a7899716d52b7987563b9aad9b7aa1502689d"
+                                },
+                                {
+                                    "path":  "config/smallships-client.toml",
+                                    "sha256":  "7803419154dd67af06bd95843b50875848f3e4b6f786e13fc66aa29eea83c8b9"
+                                },
+                                {
+                                    "path":  "config/smallships-common.toml",
+                                    "sha256":  "0e491e204c34161b788ba9cfc4955a0d68c941f25d9f8d6809e7755afc8ef9dd"
+                                },
+                                {
+                                    "path":  "config/smoothgui.json",
+                                    "sha256":  "8a7a7774bd7e590beef25c25944044c769a45e5a110cb8975a54b2558e1d4534"
+                                },
+                                {
+                                    "path":  "config/smoothscroll.json",
+                                    "sha256":  "12672919c7637eddf10cae6eb1a5ee8496e70520518168e96cdd36a0b8715193"
+                                },
+                                {
+                                    "path":  "config/smoothswapping.json",
+                                    "sha256":  "d15110f71646c8b1e18a78483990691bbda1e9e687d39ac62cff0423375a4076"
+                                },
+                                {
+                                    "path":  "config/sodium-extra-options.json",
+                                    "sha256":  "ece12f36e24ea85b294b266a230a81d5fd2b9a5ab77b9814f61b329f9d9bc66c"
+                                },
+                                {
+                                    "path":  "config/sodium-extra.properties",
+                                    "sha256":  "a2f1b47c1eaa119ab34727f1d43c2506cb3d7f17ba8fb4efb49e20c8e0b58e70"
+                                },
+                                {
+                                    "path":  "config/sodium-fingerprint.json",
+                                    "sha256":  "5fad74dc4b1a1bc5ffcdddc9b4d7aee6e3048275d5d05ddbac3e0ef80ce61ffa"
+                                },
+                                {
+                                    "path":  "config/sodium-mixins.properties",
+                                    "sha256":  "b627c4456e6fa0bc4b5f85e2f1cd949faedae3cb9afdaf2a5f52e6f3b6ae1f01"
+                                },
+                                {
+                                    "path":  "config/sodium-options.json",
+                                    "sha256":  "2c5d8d00cf22f45cfb27a31641db46881b94d1b14c10e88e0ecf972b7277fc13"
+                                },
+                                {
+                                    "path":  "config/sound_physics_remastered/allowed_sounds.properties",
+                                    "sha256":  "9a9707434caab2981dae0c3b22b4ca8804ab12498ddd564a8a9ab7a6e0ac19f6"
+                                },
+                                {
+                                    "path":  "config/sound_physics_remastered/occlusion.properties",
+                                    "sha256":  "cb08fad009eefaaf888bb4324c351ac426a49fb0db7cb75c4fddbcdcf8d8f414"
+                                },
+                                {
+                                    "path":  "config/sound_physics_remastered/reflectivity.properties",
+                                    "sha256":  "bc029afc200ba2fba522a27245d65c8e5db0f20cd0eddd5873a316054d962923"
+                                },
+                                {
+                                    "path":  "config/sound_physics_remastered/sound_rates.properties",
+                                    "sha256":  "f0682089573beb3f7902df5d9115ff7d176ae3dceb22dd4ca34fa3477e79716a"
+                                },
+                                {
+                                    "path":  "config/sound_physics_remastered/soundphysics.properties",
+                                    "sha256":  "368cfc853e44c77ebd1f6f43484ae1264f393f0e927391cb04ae9c0916b6e90c"
+                                },
+                                {
+                                    "path":  "config/spark/config.json",
+                                    "sha256":  "992ba9f3a4a7ce3de112eb95575328956fdc3ce6781c455ebce7b23db7e7da42"
+                                },
+                                {
+                                    "path":  "config/spark/tmp/about.txt",
+                                    "sha256":  "8057ccf4540ea269b0fc332225859f44d8f3a55d891fa2e7a3447b6202658d2a"
+                                },
+                                {
+                                    "path":  "config/sparsestructures.json5",
+                                    "sha256":  "04a15e7726128381b517e8856f2e56a5ebbc478256bd4d399e10b76359095ae5"
+                                },
+                                {
+                                    "path":  "config/spawncontrol.json",
+                                    "sha256":  "ba5b957d107a11c153597cd14263f6ed17e23ff45bb3cea3009b5c98c524c22e"
+                                },
+                                {
+                                    "path":  "config/spell_power/attributes.json",
+                                    "sha256":  "a027f8bb5b55291878216d97bb7e059e8aa542255dc23153dc207cd1e7469b27"
+                                },
+                                {
+                                    "path":  "config/subtle_effects/blocks.toml",
+                                    "sha256":  "c64d5034ec8e8ebea55daabbf03f836c3dc3a9ab4dfe107ff0f9af89187d7cc0"
+                                },
+                                {
+                                    "path":  "config/subtle_effects/entities.toml",
+                                    "sha256":  "b6f46477001fa03075e10118cfe00176ddaf6005c49f82c92bf1a6c879888bbf"
+                                },
+                                {
+                                    "path":  "config/subtle_effects/environment.toml",
+                                    "sha256":  "5305e834ee7c6acb19c9c1ec48bd50148e386b6f70e840fcaa1fa4d2d92d7e81"
+                                },
+                                {
+                                    "path":  "config/subtle_effects/general.toml",
+                                    "sha256":  "cabc3198650182b8d282c08091acbe4f5d3fecab03d2484aefb88f1eb6112d0e"
+                                },
+                                {
+                                    "path":  "config/subtle_effects/items.toml",
+                                    "sha256":  "8e091b4c5d52f8eafb4ee55a551d05f41d42a33a6c559920dbe0c1a1d324c55e"
+                                },
+                                {
+                                    "path":  "config/surveyor.toml",
+                                    "sha256":  "cbcf56c535e40ac56fc522cc185372ff131629ea7f0994229730b2709ea33413"
+                                },
+                                {
+                                    "path":  "config/tectonic.json",
+                                    "sha256":  "46eb3844811623c53d21e68bfad5864213abe5e054e97e189070e57bb4ebbb72"
+                                },
+                                {
+                                    "path":  "config/terrain_slabs.json",
+                                    "sha256":  "91683595865557b8abfae1d8d7f957f50d9af49a577ef9cb7cb691c505a3754c"
+                                },
+                                {
+                                    "path":  "config/terralith.json",
+                                    "sha256":  "41509809dc45c2b2c225ad711f4446a209c0270e3a8c6c09c1c9baaf1565e32c"
+                                },
+                                {
+                                    "path":  "config/thermoo-patches.json",
+                                    "sha256":  "07a2b3a588b96dc3164a7bf6af53e825032e42094a853aae546a02c1ca3fe4e2"
+                                },
+                                {
+                                    "path":  "config/thermoo.properties",
+                                    "sha256":  "1fab6529190f68d509f2120e9fe1f5d855bc4afffa1b37381529f92fcf2812b5"
+                                },
+                                {
+                                    "path":  "config/thief-client.toml",
+                                    "sha256":  "1886477cba220e27e8af653bf02bd385af0c8915d5c7b8d3d3fa8790a0a2199d"
+                                },
+                                {
+                                    "path":  "config/thief-server.toml",
+                                    "sha256":  "beaa48da6a2b0bcd52a4d9d8b308257a5e462eee43aaedded119788ad76f7044"
+                                },
+                                {
+                                    "path":  "config/tia.json",
+                                    "sha256":  "ac66e81f4172c8398fcfd2024394518286abead79613e9df41631f409e0a45bc"
+                                },
+                                {
+                                    "path":  "config/tide.toml",
+                                    "sha256":  "f482296350eb7bbe7cb5c54d7a8523c24d67d55ce83d9addbdcaa99586ab1ccc"
+                                },
+                                {
+                                    "path":  "config/timestamp_chat.toml",
+                                    "sha256":  "ede285f49fe4c954d9732336ec4446cd72aaf880ffbcff48839d666e0bac3ea5"
+                                },
+                                {
+                                    "path":  "config/towns_and_towers/structure_enable_or_disable_new.json5",
+                                    "sha256":  "7c70e7df82d014a87dcb2defcf45d9654a22362283c7efe1f81f3b3c04290709"
+                                },
+                                {
+                                    "path":  "config/towns_and_towers/structure_rarity_new.json5",
+                                    "sha256":  "fe4ca0974aca38b27c94e3f1dc092f1688b54f27d9eaa728d61c6ccae4ca1313"
+                                },
+                                {
+                                    "path":  "config/transition.json",
+                                    "sha256":  "6c0060c7301372bbc414f86a139b383e34fb620f0621badd71bb19efc3f26767"
+                                },
+                                {
+                                    "path":  "config/treechop-client.toml",
+                                    "sha256":  "71d467c170c878d7e576f38d8d03b35f4959fb997f679ec4418e1478afab37de"
+                                },
+                                {
+                                    "path":  "config/treechop-common.toml",
+                                    "sha256":  "eee5b8280cb641017a5ac61f54a57c8715ce9728947df9f0bc340fe40937565c"
+                                },
+                                {
+                                    "path":  "config/trender.json",
+                                    "sha256":  "0a282f3623f7f9443a1d10b5768865f69e58b74e000dcfb4f40399626b7a6124"
+                                },
+                                {
+                                    "path":  "config/trmt-client.json",
+                                    "sha256":  "3f05a62ecf2b307ec62e5bf24f645121685bde1bb8ceae1c0fc375a121dac8c8"
+                                },
+                                {
+                                    "path":  "config/trmt.json",
+                                    "sha256":  "dc616de5844f627b0196f517f4ba92a9a4866a9c2d84a9ca97f4291aa90ac731"
+                                },
+                                {
+                                    "path":  "config/universalbonemeal-server.toml",
+                                    "sha256":  "c03c7cd5dfd9d5a6de719eac255d201e98440ade866d4beb8c42f8d23fe3c8e8"
+                                },
+                                {
+                                    "path":  "config/vanilla-refresh-defaults.json",
+                                    "sha256":  "7786caadf51479a48a6417fc5f6843b59451383c418be5a0b6b41c6636e40b00"
+                                },
+                                {
+                                    "path":  "config/vanilla_structures/placement_structure_config.json5",
+                                    "sha256":  "1f069468e438ae66f65ee41732603c895741b063add626a9e56ef7d0040ac4e6"
+                                },
+                                {
+                                    "path":  "config/vanilla_structures/toggle_structure_config.json5",
+                                    "sha256":  "c4fb220488de3c1afc569f4b8a89d8e97f8b5504eeb59d9700b491f29718d2f9"
+                                },
+                                {
+                                    "path":  "config/vcinteraction/vcinteraction.properties",
+                                    "sha256":  "b428c07faaed97d3bee29aa748bb8a1773f5145008435c08d9b5aed5151da3ad"
+                                },
+                                {
+                                    "path":  "config/veinmining-client.toml",
+                                    "sha256":  "6fedc782177b208adbe6f7004ab89721b2c1f3c97f9eddf8f93671d22e09bb48"
+                                },
+                                {
+                                    "path":  "config/veinmining-server.toml",
+                                    "sha256":  "9fad022d7fc3981aa6f442c80a675bbe9420e2791b9442c410e3bf959dd55e12"
+                                },
+                                {
+                                    "path":  "config/voicechat/category-volumes.properties",
+                                    "sha256":  "3747c48bcb3a60834f88f056ee9b3a025153b11f6ca88652b4bddebb77cea009"
+                                },
+                                {
+                                    "path":  "config/voicechat/player-volumes.properties",
+                                    "sha256":  "cd385ca1eeda4df612631e2713cc6d503793157ef8bd5518d736429e6c1ae474"
+                                },
+                                {
+                                    "path":  "config/voicechat/translations.properties",
+                                    "sha256":  "b258a94a5ed60fbf93b66c452c3d6e36b044f630741f90e5b13852a4805b235e"
+                                },
+                                {
+                                    "path":  "config/voicechat/username-cache.json",
+                                    "sha256":  "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+                                },
+                                {
+                                    "path":  "config/voicechat/voicechat-client.properties",
+                                    "sha256":  "1556618bd15e2d9b34e218770a9b740b21b0ed9153e17678822698d2347b6566"
+                                },
+                                {
+                                    "path":  "config/voicechat/voicechat-server.properties",
+                                    "sha256":  "661792577e11cb998728037fb24471d8211888a7a4c4f2ac1af457a2dfb99afd"
+                                },
+                                {
+                                    "path":  "config/walk-jog-run-client.json",
+                                    "sha256":  "fe1b0780c3b8a855a6ab46570ee0bc35e988e30a130d9e2481be3a1c31d61ee6"
+                                },
+                                {
+                                    "path":  "config/walk-jog-run.json",
+                                    "sha256":  "c9579fde0a4ac81d4e8b24327830261875fc59dc186abd0b1ad43195ffb97564"
+                                },
+                                {
+                                    "path":  "config/watut-client.toml",
+                                    "sha256":  "98fa0dda3c06f769a31a9517598d006c482d221234e17ea588ac3352670f9ebf"
+                                },
+                                {
+                                    "path":  "config/watut-common.toml",
+                                    "sha256":  "8b982a13bd0d8b4b557b1fcd3621a2bc362443b561679be23e4ecfa215581152"
+                                },
+                                {
+                                    "path":  "config/watut-item-arm-adjustments.json",
+                                    "sha256":  "1a9c14b6b73255eecac2baac776c7afa276c9e907dfddb68f1b405a3ab05a12b"
+                                },
+                                {
+                                    "path":  "config/watut-server.toml",
+                                    "sha256":  "e53b682dbd8b0ce47b033c13723d0ddcf7b052ac987128b1863a1eba66bf0825"
+                                },
+                                {
+                                    "path":  "config/whitenoise-client.toml",
+                                    "sha256":  "86061aeaa531953c4bbdd96610bca2c54d41c5cba9c8b91e67ce77b340071c1e"
+                                },
+                                {
+                                    "path":  "config/wildernature.json",
+                                    "sha256":  "7bea6cc8cc83a66e1482764774661611c5c15bc276684a2eea660204a3bd86c9"
+                                },
+                                {
+                                    "path":  "config/worldplaytime/config.json",
+                                    "sha256":  "50057a63c98167f7b05727906f17ae6fb182a5eb40bcdb3314d1a8a325c4eec8"
+                                },
+                                {
+                                    "path":  "config/yacl.json5",
+                                    "sha256":  "121b93764159be6fb7dab523b29a844e2bb78400ce8c48f52135a097e9b0006e"
+                                }
+                            ],
     "files":  [
                   {
                       "path":  "THIRD-PARTY-NOTICES.md",
@@ -2078,7 +3124,7 @@
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "747a9ed9054cdd6329c2be12340f13f59157d0dc5b28b1aaffbbe849b5d9c0db"
+                      "sha256":  "18ffa02f6d8ee3117def8bbd7f47bf64a1af3e88c0056c70c2bd7928466db6d3"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",
