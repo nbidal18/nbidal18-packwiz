@@ -602,7 +602,7 @@
                                 },
                                 {
                                     "path":  "config/inmis.json",
-                                    "sha256":  "62936f4264f5cbd039367f9345e566157320b172f278d75b5604acf5edb11b46"
+                                    "sha256":  "ea80e28c1338a286eb2c63c2d2a22c3dd3598c307964f33949d72ea0ec9ebdfc"
                                 },
                                 {
                                     "path":  "config/invmove.json",
@@ -1652,7 +1652,7 @@
                   },
                   {
                       "path":  "config/inmis.json",
-                      "sha256":  "62936f4264f5cbd039367f9345e566157320b172f278d75b5604acf5edb11b46"
+                      "sha256":  "ea80e28c1338a286eb2c63c2d2a22c3dd3598c307964f33949d72ea0ec9ebdfc"
                   },
                   {
                       "path":  "config/invmove.json",

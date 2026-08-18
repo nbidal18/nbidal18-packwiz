@@ -83,6 +83,8 @@ try {
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\better-compatability-checker-fabric-21.1.8.jar')) 'BCC was not installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')) 'The integrity helper was not installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.2.4+1.21.1.jar')) 'The chest-free Inmis OLED transition, corrected slots, grouped Trinkets offhand slots, and Jobs+ plaque-enabled client tweaks were not installed.'
+    $installedInmisConfig = [IO.File]::ReadAllText((Join-Path $minecraft 'config\inmis.json'), [Text.Encoding]::UTF8)
+    Assert-True (-not $installedInmisConfig.EndsWith("`n")) 'Inmis config must use AutoConfig''s stable no-final-newline serialization.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar')) 'The Jobs+ compatibility helper was not installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\polytone-1.21-3.12.0-fabric.jar'))) 'Retired Nature X Polytone support was still installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\optigui-2.3.0-beta.9+1.21.jar')) 'Colourful Containers OLED OptiGUI support was not installed.'

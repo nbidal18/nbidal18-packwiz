@@ -177,6 +177,17 @@ try {
         Copy-Item -LiteralPath $file.FullName -Destination $destination
     }
 
+    # AutoConfig serializes Inmis without a trailing line break at game startup.
+    # Publish that exact stable representation so the integrity helper does not
+    # mistake the serializer's one-byte rewrite for a gameplay config change.
+    $stagedInmisConfig = Join-Path $stagePath 'config\inmis.json'
+    $stagedInmisText = [IO.File]::ReadAllText($stagedInmisConfig, [Text.Encoding]::UTF8)
+    [IO.File]::WriteAllText(
+        $stagedInmisConfig,
+        $stagedInmisText.TrimEnd("`r", "`n"),
+        $utf8NoBom
+    )
+
     # Packwiz downloads staged launch tools. Once the old updater process has exited, the client
     # helper atomically promotes them over the live copies; Windows will not replace a running JAR.
     Copy-Item -LiteralPath $syncSupervisorPath -Destination (Join-Path $stagePath 'nbidal18-packwiz-sync.next.jar')
