@@ -92,59 +92,101 @@ function Get-NormalizedTextSha256([string] $path) {
     finally { $algorithm.Dispose() }
 }
 
+# Which published files the integrity system enforces is decided by an explicit classification
+# rather than by "everything under config/ unless someone remembered to allowlist it". See
+# scripts\config-classification.json for the classes and the reasoning behind each entry.
+$classificationPath = Join-Path $PSScriptRoot 'config-classification.json'
+if (-not (Test-Path -LiteralPath $classificationPath -PathType Leaf)) {
+    throw "The config classification is missing: $classificationPath"
+}
+$classification = [IO.File]::ReadAllText($classificationPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
+$classificationRules = @($classification.rules + $classification.outsideConfig)
+foreach ($rule in $classificationRules) {
+    if ($rule.class -notin @('gameplay', 'support', 'player')) {
+        throw "Unknown classification '$($rule.class)' for $($rule.match)"
+    }
+    if ([string]::IsNullOrWhiteSpace($rule.reason)) {
+        throw "The classification for $($rule.match) has no reason recorded."
+    }
+}
+$duplicateMatches = @($classificationRules | Group-Object match | Where-Object Count -gt 1)
+if ($duplicateMatches.Count -ne 0) {
+    throw "The config classification lists a path twice: $($duplicateMatches[0].Name)"
+}
+
+# Longest matching rule wins; a rule ending in / matches the whole subtree.
+function Resolve-ConfigClass([string] $relative) {
+    $best = $null
+    foreach ($rule in $classificationRules) {
+        $matched = if ($rule.match.EndsWith('/')) {
+            $relative.StartsWith($rule.match, [StringComparison]::Ordinal)
+        }
+        else {
+            $relative -ceq $rule.match
+        }
+        if ($matched -and ($null -eq $best -or $rule.match.Length -gt $best.match.Length)) {
+            $best = $rule
+        }
+    }
+    return $best
+}
+
 $playerMutablePaths = @(
-    'config/autohud.json5',
-    'config/voicechat/voicechat-client.properties',
-    'config/voicechat/category-volumes.properties',
-    'config/voicechat/player-volumes.properties',
-    'config/voicechat/username-cache.json',
-    'config/iris.properties',
-    'shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt',
-    'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
-    'config/fzzy_config/keybinds.toml',
-    'config/controlify.json',
-    'config/sodium-options.json',
-    'config/cryonicconfig.json'
+    $classificationRules | Where-Object { $_.class -eq 'player' } | ForEach-Object { $_.match }
+)
+if ($playerMutablePaths.Count -eq 0) {
+    throw 'The config classification defines no player-owned paths.'
+}
+
+# support-class files are library, performance, rendering, UI, input or diagnostic state. They are
+# not in-game content, so the runtime helper ignores them: editing one can no longer refuse a
+# login. The pre-launch updater still restores the published copy, so content stays deterministic.
+$supportPaths = @(
+    $classificationRules | Where-Object { $_.class -eq 'support' } |
+        ForEach-Object { $_.match.TrimEnd('/') }
 )
 
-# These paths contain timestamps, caches, detected hardware/users, or other support state.
-# They cannot affect the server's gameplay policy and are expected to change while Minecraft runs.
-$runtimeSupportPaths = @(
-    'config/fabric/indigo-renderer.properties',
-    'config/naturalist-server.properties',
-    'config/crash_assistant',
-    'config/jsonem.properties',
-    'config/resourceful-config-web.json',
-    'config/jade/usernamecache.json',
-    'config/jei/ingredient-list-mod-sort-order.ini',
-    'config/jei/jei-client.ini',
-    'config/jei/recipe-category-sort-order.ini',
-    'config/jei/world',
-    'config/invmove/unrecognized.json',
-    'config/spark/tmp',
-    'config/sodium-fingerprint.json'
+# Gameplay config stays fully enforced, including the files their own mod rewrites at startup.
+# Those rewrites are byte-identical - the mod serialises exactly what we published - so enforcing
+# them costs nothing and keeps the second line of defence for a client that skips the updater
+# entirely. Exempting them would have traded real protection for a hypothetical.
+#
+# modWritesAtRuntime is therefore a watch list, not an exemption: it records that the mod rewrites
+# the file, so the file must be published in the exact form the mod writes back. If a mod update
+# ever changes that serialisation, Test-ConfigStability.ps1 catches the drift on a played instance
+# before release, rather than every player discovering it as a login refusal.
+$modWrittenPaths = @(
+    $classificationRules |
+        Where-Object {
+            $_.class -eq 'gameplay' -and
+            ($_.PSObject.Properties.Name -contains 'modWritesAtRuntime') -and
+            $_.modWritesAtRuntime
+        } |
+        ForEach-Object { $_.match.TrimEnd('/') }
 )
+if ($modWrittenPaths.Count -eq 0) {
+    throw 'No gameplay config is marked modWritesAtRuntime; the classification did not load.'
+}
+$runtimeMutablePaths = @($playerMutablePaths + $supportPaths)
 
-$runtimeMutablePaths = @($playerMutablePaths + $runtimeSupportPaths)
+# Preserved in the Packwiz index: never overwritten once installed. Player-owned settings, plus
+# the support files their own mod rewrites while Minecraft runs - without this the updater would
+# quarantine and redownload those every single launch.
+foreach ($rewritten in $classification.rewrittenAtRuntime) {
+    $rewrittenRule = Resolve-ConfigClass $rewritten
+    if ($null -eq $rewrittenRule -or $rewrittenRule.class -ne 'support') {
+        throw "rewrittenAtRuntime lists a path that is not classified as support: $rewritten"
+    }
+}
+$preservedConfigPaths = @($playerMutablePaths + $classification.rewrittenAtRuntime)
 
-# Exact known mutable files are also preserved by the pre-launch updater. Directory-prefix
-# exceptions are understood by the runtime helper, while the legacy updater remains exact-path
-# based and may recoverably clean newly generated files before a later launch.
-$preservedConfigPaths = @($playerMutablePaths + @(
-    'config/fabric/indigo-renderer.properties',
-    'config/naturalist-server.properties',
-    'config/crash_assistant/modlist.json',
-    'config/jsonem.properties',
-    'config/resourceful-config-web.json',
-    'config/jade/usernamecache.json',
-    'config/jei/ingredient-list-mod-sort-order.ini',
-    'config/jei/jei-client.ini',
-    'config/jei/recipe-category-sort-order.ini',
-    'config/jei/world/server/nbidal18_modpack_9c729ef3/lookupHistory.json',
-    'config/invmove/unrecognized.json',
-    'config/spark/tmp/about.txt',
-    'config/sodium-fingerprint.json'
-))
+# Unmanaged extra files under these roots are tolerated instead of refusing the login. Config
+# libraries create their own files during mod init, which the updater cannot delete permanently:
+# it removes them, the game recreates them at startup, and the player is locked out for good.
+$extraTolerantRoots = @($classification.extraTolerantRoots | ForEach-Object { $_.prefix })
+if ($extraTolerantRoots.Count -eq 0) {
+    throw 'The config classification defines no extra-tolerant roots.'
+}
 
 $excludedPatterns = @(
     'servers.dat',
@@ -289,6 +331,42 @@ hash-format = "sha256"
             sha256 = $match.Groups[2].Value.ToLowerInvariant()
         })
     }
+    # Every published config file must carry a deliberate classification. Adding a mod therefore
+    # fails the build here instead of silently inheriting hash enforcement - or, worse, shipping a
+    # config the mod rewrites at startup and locking every player out at login.
+    $unclassified = @(
+        $manifestFiles | Where-Object { $_.path -like 'config/*' } |
+            Where-Object { $null -eq (Resolve-ConfigClass $_.path) } |
+            ForEach-Object { $_.path }
+    )
+    if ($unclassified.Count -ne 0) {
+        throw ("These published config files are not classified in scripts\config-classification.json: " +
+               ($unclassified -join ', ') +
+               ". Classify each as gameplay, support or player before releasing.")
+    }
+    # A rule that no longer matches anything is stale; it hides the fact that a mod was removed.
+    # player-class paths and rewritten-at-runtime paths are exempt: several are never published at
+    # all, they only exist so the updater leaves the copy the game creates on first run alone.
+    $stale = @(
+        $classificationRules | Where-Object { $_.match -like 'config/*' } |
+            Where-Object { $_.class -ne 'player' } |
+            Where-Object { $_.match -notin $classification.rewrittenAtRuntime } |
+            Where-Object {
+                $rule = $_
+                $hit = $manifestFiles | Where-Object {
+                    if ($rule.match.EndsWith('/')) {
+                        $_.path.StartsWith($rule.match, [StringComparison]::Ordinal)
+                    }
+                    else { $_.path -ceq $rule.match }
+                }
+                @($hit).Count -eq 0
+            } | ForEach-Object { $_.match }
+    )
+    if ($stale.Count -ne 0) {
+        throw ("These classification rules match no published file and should be removed: " +
+               ($stale -join ', '))
+    }
+
     $normalizedTextFiles = [Collections.Generic.List[object]]::new()
     foreach ($managedFile in $manifestFiles) {
         if ($managedFile.path -notlike 'config/*') {
@@ -416,6 +494,7 @@ hash-format = "sha256"
         schema = 1
         packVersion = '4.2.0-packwiz'
         exactRoots = @('mods', 'config', 'datapacks', 'resourcepacks', 'shaderpacks')
+        extraTolerantRoots = @($extraTolerantRoots)
         runtimeMutableRoots = @($runtimeMutablePaths)
         localAllowed = @($preservedConfigPaths)
         propertyRules = @(

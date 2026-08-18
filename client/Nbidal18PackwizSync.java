@@ -279,6 +279,14 @@ public final class Nbidal18PackwizSync {
         }
 
         List<String> exactRoots = parseStringArray(json, "exactRoots");
+        // Optional: this also parses the manifest the player already had, which predates the field.
+        // A manifest without it tolerates nothing, which is exactly the previous behaviour.
+        List<String> extraTolerantRoots = new ArrayList<>();
+        if (json.contains("\"extraTolerantRoots\"")) {
+            for (String tolerant : parseStringArray(json, "extraTolerantRoots")) {
+                extraTolerantRoots.add(validateRelative(tolerant));
+            }
+        }
         Set<String> localAllowed = new HashSet<>();
         for (String allowed : parseStringArray(json, "localAllowed")) {
             localAllowed.add(pathKey(validateRelative(allowed)));
@@ -321,7 +329,8 @@ public final class Nbidal18PackwizSync {
         if (propertyRules.isEmpty()) {
             throw new IOException("The sync manifest contains no property rules: " + path);
         }
-        return new SyncManifest(packVersion, exactRoots, localAllowed, files, propertyRules);
+        return new SyncManifest(
+                packVersion, exactRoots, extraTolerantRoots, localAllowed, files, propertyRules);
     }
 
     private static boolean isSupportedPackVersion(String value) {
@@ -385,7 +394,8 @@ public final class Nbidal18PackwizSync {
                 for (Path file : paths.filter(Files::isRegularFile).toList()) {
                     String relative = getRelativePath(file);
                     String key = pathKey(relative);
-                    if (manifest.files.containsKey(key) || manifest.localAllowed.contains(key)) {
+                    if (manifest.files.containsKey(key) || manifest.localAllowed.contains(key)
+                            || manifest.isExtraTolerant(relative)) {
                         continue;
                     }
                     problems.add("extra:" + relative);
@@ -892,6 +902,7 @@ public final class Nbidal18PackwizSync {
     private static final class SyncManifest {
         private final String packVersion;
         private final List<String> exactRoots;
+        private final List<String> extraTolerantRoots;
         private final Set<String> localAllowed;
         private final Map<String, FileEntry> files;
         private final List<PropertyRule> propertyRules;
@@ -899,14 +910,33 @@ public final class Nbidal18PackwizSync {
         private SyncManifest(
                 String packVersion,
                 List<String> exactRoots,
+                List<String> extraTolerantRoots,
                 Set<String> localAllowed,
                 Map<String, FileEntry> files,
                 List<PropertyRule> propertyRules) {
             this.packVersion = packVersion;
             this.exactRoots = List.copyOf(exactRoots);
+            this.extraTolerantRoots = List.copyOf(extraTolerantRoots);
             this.localAllowed = Set.copyOf(localAllowed);
             this.files = Map.copyOf(files);
             this.propertyRules = List.copyOf(propertyRules);
+        }
+
+        /**
+         * Whether an unmanaged file at this path may simply be left alone. Config libraries write
+         * their own files while Minecraft starts, so cleaning one here achieves nothing: the game
+         * recreates it during mod init and the integrity check then refuses the login, every
+         * launch, with no way for the player to clear it.
+         */
+        private boolean isExtraTolerant(String relative) {
+            String key = pathKey(relative);
+            for (String root : extraTolerantRoots) {
+                String rootKey = pathKey(root);
+                if (key.equals(rootKey) || key.startsWith(rootKey + "/")) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

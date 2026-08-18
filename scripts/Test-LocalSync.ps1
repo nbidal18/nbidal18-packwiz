@@ -149,72 +149,59 @@ try {
     Assert-True ($manifest.schema -eq 1) 'The generated manifest is not backward-compatible with installed updaters.'
     Assert-True (@($manifest.exactRoots).Count -eq 5 -and
             'config' -in @($manifest.exactRoots)) 'Pre-launch exact config repair is missing.'
-    $expectedRuntimeMutable = @(
-        'config/autohud.json5',
-        'config/voicechat/voicechat-client.properties',
-        'config/voicechat/category-volumes.properties',
-        'config/voicechat/player-volumes.properties',
-        'config/voicechat/username-cache.json',
-        'config/iris.properties',
-        'shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt',
-        'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
-        'config/fzzy_config/keybinds.toml',
-        'config/controlify.json',
-        'config/sodium-options.json',
-        'config/cryonicconfig.json',
-        'config/fabric/indigo-renderer.properties',
-        'config/naturalist-server.properties',
-        'config/crash_assistant',
-        'config/jsonem.properties',
-        'config/resourceful-config-web.json',
-        'config/jade/usernamecache.json',
-        'config/jei/ingredient-list-mod-sort-order.ini',
-        'config/jei/jei-client.ini',
-        'config/jei/recipe-category-sort-order.ini',
-        'config/jei/world',
-        'config/invmove/unrecognized.json',
-        'config/spark/tmp',
-        'config/sodium-fingerprint.json'
-    )
+    # The exception lists are derived from scripts\config-classification.json, so assert the
+    # derivation rather than a frozen copy of its output - a frozen list just has to be edited by
+    # hand every time a mod is added, which is how these lists drifted out of date before.
+    $classification = [IO.File]::ReadAllText(
+        (Join-Path $PSScriptRoot 'config-classification.json'), [Text.Encoding]::UTF8) | ConvertFrom-Json
+    $classRules = @($classification.rules + $classification.outsideConfig)
+    $playerPaths = @($classRules | Where-Object { $_.class -eq 'player' } | ForEach-Object { $_.match })
+    $supportPaths = @($classRules | Where-Object { $_.class -eq 'support' } | ForEach-Object { $_.match.TrimEnd('/') })
+    $modWritten = @($classRules | Where-Object {
+        $_.class -eq 'gameplay' -and
+        ($_.PSObject.Properties.Name -contains 'modWritesAtRuntime') -and $_.modWritesAtRuntime
+    } | ForEach-Object { $_.match.TrimEnd('/') })
+    # Every gameplay config is enforced, including the ones flagged as rewritten at startup: those
+    # rewrites are byte-identical, so the flag is a watch list rather than an exemption.
+    $enforced = @($classRules | Where-Object { $_.class -eq 'gameplay' } |
+        ForEach-Object { $_.match.TrimEnd('/') })
+
+    $expectedRuntimeMutable = @($playerPaths + $supportPaths)
     Assert-True (@($manifest.runtimeMutableRoots).Count -eq $expectedRuntimeMutable.Count) 'The runtime exception list has the wrong size.'
     foreach ($runtimePath in $expectedRuntimeMutable) {
         Assert-True ($runtimePath -in @($manifest.runtimeMutableRoots)) "Missing runtime exception: $runtimePath"
     }
+    # Gameplay config the game leaves alone must stay enforced; that is the whole point of the split.
+    foreach ($enforcedPath in $enforced) {
+        Assert-True ($enforcedPath -notin @($manifest.runtimeMutableRoots)) "Enforced gameplay config was exempted: $enforcedPath"
+    }
+    Assert-True ($modWritten.Count -gt 0) 'The mod-rewrite watch list is empty; the classification did not load.'
+    foreach ($watched in $modWritten) {
+        Assert-True ($watched -notin @($manifest.runtimeMutableRoots)) "A watched gameplay config was exempted instead of enforced: $watched"
+    }
     Assert-True ('config' -notin @($manifest.runtimeMutableRoots)) 'The complete config directory is still runtime-mutable.'
+
+    # Extra tolerance is deliberately separate from content enforcement: an unmanaged file appearing
+    # under config/ is ignored, while every managed file there is still hash-checked by its class.
+    Assert-True ('config' -in @($manifest.extraTolerantRoots)) 'Generated config files are not tolerated.'
+    foreach ($loadable in @('mods', 'datapacks', 'resourcepacks', 'shaderpacks')) {
+        Assert-True ($loadable -notin @($manifest.extraTolerantRoots)) "A loadable-content root tolerates extras: $loadable"
+    }
+
     Assert-True (@($manifest.files | Where-Object path -eq 'config/sodium-options.json').Count -eq 1) 'The fresh-install Sodium defaults are missing.'
     Assert-True (@($manifest.files | Where-Object path -eq 'config/sodium-fingerprint.json').Count -eq 0) 'A build-machine Sodium fingerprint was published.'
     $managedConfigCount = @($manifest.files | Where-Object path -like 'config/*').Count
     Assert-True (@($manifest.normalizedTextFiles).Count -eq $managedConfigCount) 'Not every managed config has a cross-platform normalized text hash.'
-    $expectedPreserved = @(
-        'config/autohud.json5',
-        'config/voicechat/voicechat-client.properties',
-        'config/voicechat/category-volumes.properties',
-        'config/voicechat/player-volumes.properties',
-        'config/voicechat/username-cache.json',
-        'config/iris.properties',
-        'shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt',
-        'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
-        'config/fzzy_config/keybinds.toml',
-        'config/controlify.json',
-        'config/cryonicconfig.json',
-        'config/sodium-options.json',
-        'config/fabric/indigo-renderer.properties',
-        'config/naturalist-server.properties',
-        'config/crash_assistant/modlist.json',
-        'config/jsonem.properties',
-        'config/resourceful-config-web.json',
-        'config/jade/usernamecache.json',
-        'config/jei/ingredient-list-mod-sort-order.ini',
-        'config/jei/jei-client.ini',
-        'config/jei/recipe-category-sort-order.ini',
-        'config/jei/world/server/nbidal18_modpack_9c729ef3/lookupHistory.json',
-        'config/invmove/unrecognized.json',
-        'config/spark/tmp/about.txt',
-        'config/sodium-fingerprint.json'
-    )
+
+    $expectedPreserved = @($playerPaths + $classification.rewrittenAtRuntime)
     Assert-True (@($manifest.localAllowed).Count -eq $expectedPreserved.Count) 'The preserved-config allow-list has the wrong size.'
     foreach ($preservedPath in $expectedPreserved) {
         Assert-True ($preservedPath -in @($manifest.localAllowed)) "Missing preserved-config rule: $preservedPath"
+    }
+    # Preserving a gameplay config would mean we could never update it again on an existing install.
+    foreach ($preservedPath in @($manifest.localAllowed)) {
+        $preservedRule = $classRules | Where-Object { $_.match -ceq $preservedPath }
+        Assert-True ($null -eq $preservedRule -or $preservedRule.class -ne 'gameplay') "Gameplay config must not be preserved: $preservedPath"
     }
     Assert-True (@($manifest.propertyRules).Count -eq 1) 'The protected shader-property rule is missing.'
     Assert-True ($manifest.propertyRules[0].path -eq 'shaderpacks/ComplementaryUnbound_r5.8.1.zip.txt' -and

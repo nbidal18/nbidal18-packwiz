@@ -354,6 +354,14 @@ file = "config/cristellib/mr_tidal_towns/structure_toggle_config.json5"
 hash = "62b1205df5e50d83906c36dfc72b6483935c947b41d3c1d53cf59cac703855ac"
 
 [[files]]
+file = "config/cristellib/nullscape/structure_placement_config.json5"
+hash = "7de079178b9125685d78b1897aae3cb430dee4f3d72f44ffff235ea885d639e6"
+
+[[files]]
+file = "config/cristellib/nullscape/structure_toggle_config.json5"
+hash = "d12e2a741dc0ab4336291c1a7c396d19a312223e3cf382d202f32178b0bf0c46"
+
+[[files]]
 file = "config/cristellib/scorchful/structure_placement_config.json5"
 hash = "c8bbc38b20405db3d120026d38ee33fad580370997bdba74b582033dd1f9c525"
 
@@ -2053,7 +2061,7 @@ hash = "25d682ca6263f16e594c49012fe695181adcca5dd834c4a497c808670404b8a8"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "7f86acaca5dcba0d44ac63c65a833d09a3c406aacb38551a0ea509a09dac26ac"
+hash = "f14f4458217b2f11ed70bc4cd62479f8eaf2a7031404af600ff662b0b4857921"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -2365,7 +2373,7 @@ hash = "3978c0dc75b138aaa0d8610467624ab49fecdadfaf160e2f66705870cadcb94d"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "76cd0b8ce39c1cd26a18a041a3ea70c643a10fb0c6e43220fbbb372e74cb78d2"
+hash = "4ac880b80b7ce3a55e4deeb976bfdbffa4c45284adfe1d577c91b89ed039b134"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"
