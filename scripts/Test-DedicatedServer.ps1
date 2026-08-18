@@ -7,7 +7,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$releaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.3-packwiz'))
+$releaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
 $sourceRoot = Join-Path $releaseRoot '3. modpack\server'
 $launcher = Join-Path $releaseRoot '4. server\1. self-host\support\runtime\fabric-server-launch.jar'
 $javaPath = 'C:\Users\nizar\AppData\Roaming\PrismLauncher\java\java-runtime-delta\bin\java.exe'

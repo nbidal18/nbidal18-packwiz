@@ -1,6 +1,6 @@
 # Third-party notices
 
-The v4.1.3 Packwiz release distributes the reviewed third-party client files through its managed update channel. Project links and retained attributions for notable components follow.
+The v4.2.0 Packwiz release distributes the reviewed third-party client files through its managed update channel. Project links and retained attributions for notable components follow.
 
 ## Fancy Crops and Enhanced Grass
 
@@ -53,6 +53,10 @@ The byte-exact `noisium-fabric-2.7.0+mc1.21-1.21.1.jar` from Modrinth project/ve
 ## Terralith, Tectonic, and Lithostitched
 
 The byte-exact `Terralith_1.21.x_v2.6.2.jar` from Modrinth project/version `8oi3bsk5` / `eWDLFabb`, `tectonic-3.0.22-fabric-21.1.jar` from `lWDHr9jE` / `cXSQRWNy`, and `lithostitched-1.7.13-fabric-21.1.jar` from `XaDC71GB` / `JWtSqSeY` are bundled on both client and server. Projects/sources: <https://modrinth.com/mod/terralith>, <https://github.com/Stardust-Labs-MC/Terralith>, <https://modrinth.com/mod/tectonic>, <https://github.com/Apollounknowndev/tectonic>, <https://modrinth.com/mod/lithostitched>, and <https://github.com/Apollounknowndev/lithostitched>. The bundled mod metadata declares MIT licensing.
+
+## Nullscape, Incendium, and Structory
+
+The byte-exact `Nullscape_1.21.x_v1.2.14.jar` from Modrinth project/version `LPjGiSO4` / `3fv8O3xX`, `Incendium_1.21.x_v5.4.4.jar` from `ZVzW5oNS` / `7mVvV9Th`, `Structory_1.21.x_v1.3.14.jar` from `aKCwCJlY` / `MXU49bpN`, and `Structory_Towers_1.21.x_v1.0.15.jar` from `j3FONRYr` / `lefqbuOP` are bundled unmodified on both client and server. All four are created by Stardust Labs. Projects: <https://modrinth.com/mod/nullscape>, <https://modrinth.com/mod/incendium>, <https://modrinth.com/mod/structory>, and <https://modrinth.com/mod/structory-towers>; author site: <https://www.stardustlabs.net/>. The bundled mod metadata declares the Stardust Labs License, which permits inclusion in a publicly distributed modpack provided the mods are used whole and unmodified and Stardust Labs is credited with a link to each project. Terralith is also a Stardust Labs project but declares MIT and is covered above.
 
 ## Terrain Slabs
 

@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
-    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.3-packwiz'))
+    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
 }
 else {
     $ReleaseRoot = [IO.Path]::GetFullPath($ReleaseRoot)
@@ -127,7 +127,7 @@ InstanceType=OneSix
 ExportName=nbidal18-client
 ExportOptionalFiles=true
 ExportSummary=Fabric 1.21.1 adventure modpack with automatic updates
-ExportVersion=4.1.3-packwiz
+ExportVersion=4.2.0-packwiz
 IgnoreJavaCompatibility=false
 JoinServerOnLaunch=false
 ManagedPack=false
@@ -186,12 +186,12 @@ UseAccountForInstance=false
     if ((Get-Item -LiteralPath $OutputPath).Length -ge 100MB) {
         throw 'The Prism import ZIP is not below 100 MiB.'
     }
-    $publishedZip = Join-Path $sitePath 'nbidal18-client-4.1.3-packwiz.zip'
+    $publishedZip = Join-Path $sitePath 'nbidal18-client-4.2.0-packwiz.zip'
     Copy-Item -LiteralPath $OutputPath -Destination $publishedZip -Force
     $zipHash = Get-Sha256 $OutputPath
     $packHash = Get-Sha256 (Join-Path $sitePath 'pack.toml')
     Write-Utf8 (Join-Path (Split-Path -Parent $OutputPath) 'SHA256SUMS.txt') "$zipHash  nbidal18-client.zip`n"
-    Write-Utf8 (Join-Path $sitePath 'SHA256SUMS.txt') "$zipHash  nbidal18-client-4.1.3-packwiz.zip`n$packHash  pack.toml`n"
+    Write-Utf8 (Join-Path $sitePath 'SHA256SUMS.txt') "$zipHash  nbidal18-client-4.2.0-packwiz.zip`n$packHash  pack.toml`n"
     Write-Host "Created Prism import: $OutputPath"
     Write-Host "Bytes: $((Get-Item -LiteralPath $OutputPath).Length); SHA-256: $zipHash"
 }

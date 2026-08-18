@@ -7,7 +7,7 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
-    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.3-packwiz'))
+    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
 }
 else {
     $ReleaseRoot = [IO.Path]::GetFullPath($ReleaseRoot)
@@ -110,7 +110,7 @@ $destinations = @(
     (Join-Path $ReleaseRoot '3. modpack\client\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'),
     (Join-Path $ReleaseRoot '3. modpack\server\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'),
     (Join-Path $ReleaseRoot '4. server\2. online-hosting\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'),
-    (Join-Path $ReleaseRoot '4. server\4.1.3-transition-overlay\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')
+    (Join-Path $ReleaseRoot '4. server\4.2.0-transition-overlay\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')
 )
 foreach ($destination in $destinations) {
     Copy-Item -LiteralPath $helperJar -Destination $destination -Force

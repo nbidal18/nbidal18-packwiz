@@ -7,7 +7,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
-    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.3-packwiz'))
+    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
 }
 else {
     $ReleaseRoot = [IO.Path]::GetFullPath($ReleaseRoot)
@@ -103,7 +103,8 @@ $playerMutablePaths = @(
     'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
     'config/fzzy_config/keybinds.toml',
     'config/controlify.json',
-    'config/sodium-options.json'
+    'config/sodium-options.json',
+    'config/cryonicconfig.json'
 )
 
 # These paths contain timestamps, caches, detected hardware/users, or other support state.
@@ -204,7 +205,7 @@ try {
 /.nojekyll
 /.packwizignore
 /index.html
-/nbidal18-client-4.1.3-packwiz.zip
+/nbidal18-client-4.2.0-packwiz.zip
 /SHA256SUMS.txt
 /sync-manifest.json
 /pack.toml
@@ -215,7 +216,7 @@ try {
 
     Write-Utf8 (Join-Path $stagePath 'pack.toml') @'
 name = "nbidal18"
-version = "4.1.3-packwiz"
+version = "4.2.0-packwiz"
 description = "Fabric 1.21.1 adventure modpack with automatic Prism updates"
 pack-format = "packwiz:1.1.0"
 
@@ -320,21 +321,21 @@ hash-format = "sha256"
     }
 
     $clientMods = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter '*.jar')
-    if ($clientMods.Count -ne 243) {
-        throw "The Packwiz client must contain exactly 243 mod JARs; found $($clientMods.Count)."
+    if ($clientMods.Count -ne 244) {
+        throw "The Packwiz client must contain exactly 244 mod JARs; found $($clientMods.Count)."
     }
     $bccJar = Join-Path $stagePath 'mods\better-compatability-checker-fabric-21.1.8.jar'
     $bccConfig = Join-Path $stagePath 'config\bcc-common.toml'
     if (-not (Test-Path -LiteralPath $bccJar -PathType Leaf) -or
-            (Get-Content -LiteralPath $bccConfig -Raw) -notmatch 'modpackVersion\s*=\s*"v4\.1\.3-packwiz"') {
+            (Get-Content -LiteralPath $bccConfig -Raw) -notmatch 'modpackVersion\s*=\s*"v4.2.0-packwiz"') {
         throw 'Better Compatibility Checker is missing or has the wrong client identity.'
     }
     $integrityJar = Join-Path $stagePath 'mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'
     if (-not (Test-Path -LiteralPath $integrityJar -PathType Leaf)) {
-        throw 'The v4.1.3 integrity helper is missing from the Packwiz client.'
+        throw 'The v4.2.0 integrity helper is missing from the Packwiz client.'
     }
     $clientTweaks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter 'nbidal18-client-tweaks-*.jar')
-    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.3.2+1.21.1.jar') {
+    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.3.5+1.21.1.jar') {
         throw 'The Inmis dye, Trinkets grouping, and Jobs+ plaque-enabled client-tweaks artifact is missing or duplicated.'
     }
     $expectedDyeableBackpacks = @(
@@ -413,7 +414,7 @@ hash-format = "sha256"
 
     $manifest = [ordered]@{
         schema = 1
-        packVersion = '4.1.3-packwiz'
+        packVersion = '4.2.0-packwiz'
         exactRoots = @('mods', 'config', 'datapacks', 'resourcepacks', 'shaderpacks')
         runtimeMutableRoots = @($runtimeMutablePaths)
         localAllowed = @($preservedConfigPaths)
@@ -433,7 +434,7 @@ hash-format = "sha256"
     $releaseBaselineDigest = '9515a09d1ce3d751e69da097ff6f3aee9856de3662fa35a69b6422fb845f3b41'
     $canonicalPolicy = Join-Path $ReleaseRoot '3. modpack\server\config\nbidal18-integrity.properties'
     $hostingPolicy = Join-Path $ReleaseRoot '4. server\2. online-hosting\config\nbidal18-integrity.properties'
-    $overlayPolicy = Join-Path $ReleaseRoot '4. server\4.1.3-transition-overlay\config\nbidal18-integrity.properties'
+    $overlayPolicy = Join-Path $ReleaseRoot '4. server\4.2.0-transition-overlay\config\nbidal18-integrity.properties'
     foreach ($policyPath in @($canonicalPolicy, $hostingPolicy, $overlayPolicy)) {
         if (-not (Test-Path -LiteralPath $policyPath -PathType Leaf)) {
             throw "The server integrity transition policy is missing: $policyPath"
@@ -479,7 +480,7 @@ hash-format = "sha256"
     if ((Get-Content -LiteralPath $canonicalPolicy -Raw) -notmatch '(?m)^require-helper=true$' -or
             (Get-Content -LiteralPath $hostingPolicy -Raw) -notmatch '(?m)^require-helper=true$' -or
             (Get-Content -LiteralPath $overlayPolicy -Raw) -notmatch '(?m)^require-helper=true$') {
-        throw 'The enforced v4.1.3 release must keep require-helper=true.'
+        throw 'The enforced v4.2.0 release must keep require-helper=true.'
     }
 
     $siteFiles = @(Get-ChildItem -LiteralPath $stagePath -Recurse -File -Force)

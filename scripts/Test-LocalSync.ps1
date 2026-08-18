@@ -6,7 +6,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$releaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.3-packwiz'))
+$releaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
 $zipPath = Join-Path $releaseRoot '1. setup\nbidal18-client.zip'
 $sitePath = Join-Path $repoRoot 'site'
 $packwizPath = Join-Path $releaseRoot '5. modpack source\auto-updater tools\packwiz.exe'
@@ -77,12 +77,12 @@ try {
     Assert-True (-not $instanceConfig.Contains('powershell')) 'The Prism command still depends on Windows PowerShell.'
     Assert-True ($instanceConfig.Contains("name=nbidal18-client`n")) 'The Prism display name is not the stable client name.'
     Assert-True ($instanceConfig.Contains("ExportName=nbidal18-client`n")) 'The Prism export name is not the stable client name.'
-    Assert-True (-not $instanceConfig.Contains('name=nbidal18-client-4.1.3-packwiz')) 'The Prism display name still contains a release version.'
+    Assert-True (-not $instanceConfig.Contains('name=nbidal18-client-4.2.0-packwiz')) 'The Prism display name still contains a release version.'
     Assert-True ((Invoke-Sync $minecraft) -eq 0) 'First online installation failed.'
-    Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 243) 'First install did not produce 243 mod JARs.'
+    Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 244) 'First install did not produce 244 mod JARs.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\better-compatability-checker-fabric-21.1.8.jar')) 'BCC was not installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')) 'The integrity helper was not installed.'
-    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.2+1.21.1.jar')) 'The Inmis dye rendering, grouped Trinkets slots, Auto HUD, and Jobs+ plaque-enabled client tweaks were not installed.'
+    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.5+1.21.1.jar')) 'The Inmis dye rendering, grouped Trinkets slots, Auto HUD, and Jobs+ plaque-enabled client tweaks were not installed.'
     $installedInmisConfig = [IO.File]::ReadAllText((Join-Path $minecraft 'config\inmis.json'), [Text.Encoding]::UTF8)
     Assert-True (-not $installedInmisConfig.EndsWith("`n")) 'Inmis config must use AutoConfig''s stable no-final-newline serialization.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar')) 'The Jobs+ compatibility helper was not installed.'
@@ -131,6 +131,9 @@ try {
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.1.0+1.21.1.jar'))) 'The pre-Inmis-OLED client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.2.0+1.21.1.jar'))) 'The detached-OLED-panel client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.2.1+1.21.1.jar'))) 'The chest-seamed Inmis OLED client-tweaks artifact was still installed.'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.2+1.21.1.jar'))) 'The pre-offhand-backing client-tweaks artifact was still installed.'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.3+1.21.1.jar'))) 'The pre-vehicle-perspective client-tweaks artifact was still installed.'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.4+1.21.1.jar'))) 'The pre-stuck-attack-guard client-tweaks artifact was still installed.'
     $jobsConfigText = Get-Content -LiteralPath (Join-Path $minecraft 'config\jobsplus-common.yaml') -Raw
     Assert-True ($jobsConfigText -match '(?m)^\s*show_xp_in_action_bar:\s*false\s*$') 'Jobs+ XP action-bar messages remain enabled.'
     Assert-True ($jobsConfigText -match '(?m)^\s*broadcast_level_up_messages:\s*false\s*$') 'Jobs+ chat level-up broadcasts remain enabled.'
@@ -142,7 +145,7 @@ try {
     Assert-True ($jadePlugins.minecraft.entity_health -eq $false) 'Jade entity health remains enabled in the client.'
 
     $manifest = Get-Content -LiteralPath (Join-Path $sitePath 'sync-manifest.json') -Raw | ConvertFrom-Json
-    Assert-True ($manifest.packVersion -eq '4.1.3-packwiz') 'The generated manifest has the wrong pack version.'
+    Assert-True ($manifest.packVersion -eq '4.2.0-packwiz') 'The generated manifest has the wrong pack version.'
     Assert-True ($manifest.schema -eq 1) 'The generated manifest is not backward-compatible with installed updaters.'
     Assert-True (@($manifest.exactRoots).Count -eq 5 -and
             'config' -in @($manifest.exactRoots)) 'Pre-launch exact config repair is missing.'
@@ -158,6 +161,7 @@ try {
         'config/fzzy_config/keybinds.toml',
         'config/controlify.json',
         'config/sodium-options.json',
+        'config/cryonicconfig.json',
         'config/fabric/indigo-renderer.properties',
         'config/naturalist-server.properties',
         'config/crash_assistant',
@@ -192,6 +196,7 @@ try {
         'shaderpacks/MakeUp-UltraFast-9.5d.zip.txt',
         'config/fzzy_config/keybinds.toml',
         'config/controlify.json',
+        'config/cryonicconfig.json',
         'config/sodium-options.json',
         'config/fabric/indigo-renderer.properties',
         'config/naturalist-server.properties',
@@ -219,7 +224,7 @@ try {
     foreach ($policyPath in @(
         (Join-Path $releaseRoot '3. modpack\server\config\nbidal18-integrity.properties'),
         (Join-Path $releaseRoot '4. server\2. online-hosting\config\nbidal18-integrity.properties'),
-        (Join-Path $releaseRoot '4. server\4.1.3-transition-overlay\config\nbidal18-integrity.properties')
+        (Join-Path $releaseRoot '4. server\4.2.0-transition-overlay\config\nbidal18-integrity.properties')
     )) {
         $policy = Get-Content -LiteralPath $policyPath -Raw
         Assert-True ($policy -match '(?m)^require-helper=true$') "The helper requirement is not enabled in $policyPath"
@@ -231,7 +236,7 @@ try {
         (Join-Path $releaseRoot '4. server\2. online-hosting\config\bcc-common.toml')
     )) {
         $bcc = Get-Content -LiteralPath $bccPath -Raw
-        Assert-True ($bcc -match '(?m)^\s*modpackVersion\s*=\s*"v4\.1\.3-packwiz"\s*$') "The v4.1.3 BCC requirement is not enabled in $bccPath"
+        Assert-True ($bcc -match '(?m)^\s*modpackVersion\s*=\s*"v4\.2\.0-packwiz"\s*$') "The v4.2.0 BCC requirement is not enabled in $bccPath"
     }
 
     $optionsPath = Join-Path $minecraft 'options.txt'
@@ -314,7 +319,7 @@ try {
     Expand-Archive -LiteralPath $zipPath -DestinationPath $offlineRoot
     Assert-True ((Invoke-Sync (Join-Path $offlineRoot 'minecraft')) -ne 0) 'An incomplete first install incorrectly started offline.'
 
-    Write-Host 'PASS: version-neutral Prism naming, pre-launch supervisor promotion and validation, updater/bootstrap staging, existing-instance resource-pack migration, v4.1.3 install, Jobs+ balance, hidden Jade mob health, narrow runtime config exceptions, enforced helper and BCC policy, preserved personal configs and shader quality, glowing-ore field repair, exact-match cleanup, managed gameplay-config repair, complete offline fallback, and incomplete offline blocking.'
+    Write-Host 'PASS: version-neutral Prism naming, pre-launch supervisor promotion and validation, updater/bootstrap staging, existing-instance resource-pack migration, v4.2.0 install, Jobs+ balance, hidden Jade mob health, narrow runtime config exceptions, enforced helper and BCC policy, preserved personal configs and shader quality, glowing-ore field repair, exact-match cleanup, managed gameplay-config repair, complete offline fallback, and incomplete offline blocking.'
     $testSucceeded = $true
     $global:LASTEXITCODE = 0
 }

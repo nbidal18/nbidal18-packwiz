@@ -18,8 +18,8 @@
 		"onPauseScreen": "Nothing",
 		"onSneaking": "Nothing",
 		"onFlying": "Nothing",
-		"onUsingItem": false,
-		"onMining": false,
+		"onUsingItem": true,
+		"onMining": true,
 		"onSwinging": false,
 		"onAttacking": false
 	},
@@ -56,7 +56,7 @@
 		"onChange": false
 	},
 	"mountHealth": {
-		"policy": "Disabled"
+		"policy": "Changing"
 	},
 	"statusEffects": {
 		"active": true,

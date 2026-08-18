@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "packVersion":  "4.1.3-packwiz",
+    "packVersion":  "4.2.0-packwiz",
     "exactRoots":  [
                        "mods",
                        "config",
@@ -20,6 +20,7 @@
                                 "config/fzzy_config/keybinds.toml",
                                 "config/controlify.json",
                                 "config/sodium-options.json",
+                                "config/cryonicconfig.json",
                                 "config/fabric/indigo-renderer.properties",
                                 "config/naturalist-server.properties",
                                 "config/crash_assistant",
@@ -46,6 +47,7 @@
                          "config/fzzy_config/keybinds.toml",
                          "config/controlify.json",
                          "config/sodium-options.json",
+                         "config/cryonicconfig.json",
                          "config/fabric/indigo-renderer.properties",
                          "config/naturalist-server.properties",
                          "config/crash_assistant/modlist.json",
@@ -130,7 +132,7 @@
                                 },
                                 {
                                     "path":  "config/autohud.json5",
-                                    "sha256":  "6009d09dee160134ee2ab8e0ebd2ee55bf250c4db3113a7dbee26a39962f6bc2"
+                                    "sha256":  "33d5bcfd741b107d5019323f17bed16a5b0b04f50c03b86ca4dc5922f8015c23"
                                 },
                                 {
                                     "path":  "config/bandagesplus.json",
@@ -138,7 +140,7 @@
                                 },
                                 {
                                     "path":  "config/bcc-common.toml",
-                                    "sha256":  "93e147d6a2b650180221e8258f61b8687dacba3d67481ee5594ba2a26573f6d6"
+                                    "sha256":  "5b8ba216f3e0218fa780b15ea19da9ac9986bc1e025ae8713c0d77f9150c684a"
                                 },
                                 {
                                     "path":  "config/beautify.json",
@@ -842,7 +844,7 @@
                                 },
                                 {
                                     "path":  "config/slabstoblocks.json",
-                                    "sha256":  "3a68ab51f57691913f73b6ef733a7899716d52b7987563b9aad9b7aa1502689d"
+                                    "sha256":  "42ddb280f7305e37f4d3e5f380d39254bd2326ed8db188755680fa02fbff38ee"
                                 },
                                 {
                                     "path":  "config/smallships-client.toml",
@@ -1112,7 +1114,7 @@
     "files":  [
                   {
                       "path":  "THIRD-PARTY-NOTICES.md",
-                      "sha256":  "5da9c9190221798964eac82b3da68033b94d3a94e075c0883cc8725a800ef98a"
+                      "sha256":  "1643825e863a4988f4ba9a6aaf5d7c784291eb507c0a28a132bb2d5c4d993a91"
                   },
                   {
                       "path":  "config/CoroUtil/General.toml",
@@ -1176,7 +1178,7 @@
                   },
                   {
                       "path":  "config/autohud.json5",
-                      "sha256":  "6009d09dee160134ee2ab8e0ebd2ee55bf250c4db3113a7dbee26a39962f6bc2"
+                      "sha256":  "33d5bcfd741b107d5019323f17bed16a5b0b04f50c03b86ca4dc5922f8015c23"
                   },
                   {
                       "path":  "config/bandagesplus.json",
@@ -1184,7 +1186,7 @@
                   },
                   {
                       "path":  "config/bcc-common.toml",
-                      "sha256":  "45bf8b01286292ef5bdbef95eb7cbd1def1620c6fd45056cadb25349975c512f"
+                      "sha256":  "5b8ba216f3e0218fa780b15ea19da9ac9986bc1e025ae8713c0d77f9150c684a"
                   },
                   {
                       "path":  "config/beautify.json",
@@ -1888,7 +1890,7 @@
                   },
                   {
                       "path":  "config/slabstoblocks.json",
-                      "sha256":  "3a68ab51f57691913f73b6ef733a7899716d52b7987563b9aad9b7aa1502689d"
+                      "sha256":  "42ddb280f7305e37f4d3e5f380d39254bd2326ed8db188755680fa02fbff38ee"
                   },
                   {
                       "path":  "config/smallships-client.toml",
@@ -2209,6 +2211,26 @@
                   {
                       "path":  "datapacks/nbidal18_bombs_by_juix_v1.1_power60.zip",
                       "sha256":  "00979ee858227aa09b77236300e0bef88059ed7c280bbf35dad3ddddac8a5828"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_campfire_rest/data/minecraft/tags/function/load.json",
+                      "sha256":  "c11672e9e214e6b82f11197e145b9970eab69f0fa8c5d10693e81f2136050e00"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_campfire_rest/data/nbidal18_campfire_rest/function/detect.mcfunction",
+                      "sha256":  "9a5281886d411b8eff988acc3975bd6030cee66b1841d87faea0bf61431d32a0"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_campfire_rest/data/nbidal18_campfire_rest/function/load.mcfunction",
+                      "sha256":  "3b289cf3c4c21e9bbf59b02927718266ca107b6774579c0c4fcff6034116f7c8"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_campfire_rest/data/nbidal18_campfire_rest/function/loop.mcfunction",
+                      "sha256":  "861396d47739d3013269e5c4a3a048b0084a4e56025394bc91d6d19a6e16d81b"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_campfire_rest/pack.mcmeta",
+                      "sha256":  "431d5e1430ca11091850ad6f78e77e2a2aa4d1d75d84017e6d24462012ab5510"
                   },
                   {
                       "path":  "datapacks/nbidal18_guide/data/nbidal18/advancement/first_join.json",
@@ -2569,6 +2591,10 @@
                   {
                       "path":  "mods/NoHurtFlash-1.0.1.jar",
                       "sha256":  "8bdda0a5d33cf139c3e9ccd8ab96bb7217e1b93d8bbc7723bacb852747e9721d"
+                  },
+                  {
+                      "path":  "mods/Nullscape_1.21.x_v1.2.14.jar",
+                      "sha256":  "8749c6fdda659335e50116c18e012cdf8699b3789859c82559af2c6f425c93ae"
                   },
                   {
                       "path":  "mods/PresenceFootsteps-1.11.1+1.21.jar",
@@ -3119,8 +3145,8 @@
                       "sha256":  "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
                   },
                   {
-                      "path":  "mods/nbidal18-client-tweaks-1.3.2+1.21.1.jar",
-                      "sha256":  "1c97943d3072a73a8e52b1656f3ea6b7456e3076e8bdd93a5935cd2c9f2fbc41"
+                      "path":  "mods/nbidal18-client-tweaks-1.3.5+1.21.1.jar",
+                      "sha256":  "25d682ca6263f16e594c49012fe695181adcca5dd834c4a497c808670404b8a8"
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
@@ -3436,7 +3462,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "ab549873167d8c675bf36817fb4f4126367c2330fce1bf4639475bbb141e392d"
+                      "sha256":  "2f6446de53dbae03fe27fbb7ae10b44a9bb101af3b771c6d6454fd86bb4325ff"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",

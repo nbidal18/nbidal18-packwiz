@@ -7,7 +7,7 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
-    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.3-packwiz'))
+    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
 }
 else {
     $ReleaseRoot = [IO.Path]::GetFullPath($ReleaseRoot)
@@ -27,7 +27,16 @@ if ([string]::IsNullOrWhiteSpace($javaHome)) {
 $sourceRoot = Join-Path $ReleaseRoot '5. modpack source\custom mods\nbidal18-client-tweaks'
 $gradle = Join-Path $sourceRoot 'gradlew.bat'
 $clientMods = [IO.Path]::GetFullPath((Join-Path $ReleaseRoot '3. modpack\client\mods'))
-$artifact = Join-Path $sourceRoot 'build\libs\nbidal18-client-tweaks-1.3.2+1.21.1.jar'
+# Derive the artifact name from gradle.properties so a version bump cannot desynchronise this script.
+$props = @{}
+foreach ($line in Get-Content -LiteralPath (Join-Path $sourceRoot 'gradle.properties')) {
+    if ($line -match '^\s*([A-Za-z0-9_.]+)\s*=\s*(.+?)\s*$') { $props[$Matches[1]] = $Matches[2] }
+}
+foreach ($key in 'archives_base_name', 'mod_version') {
+    if (-not $props.ContainsKey($key)) { throw "gradle.properties is missing '$key' for client-tweaks." }
+}
+$artifactName = "$($props['archives_base_name'])-$($props['mod_version']).jar"
+$artifact = Join-Path $sourceRoot "build\libs\$artifactName"
 
 $previousJavaHome = $env:JAVA_HOME
 try {
@@ -55,18 +64,22 @@ finally {
 if (-not (Test-Path -LiteralPath $artifact -PathType Leaf)) {
     throw "The client-tweaks artifact is missing: $artifact"
 }
+# Copy the new artifact in before retiring older ones, so a failure here cannot leave the
+# client with no client-tweaks JAR at all.
+$destination = Join-Path $clientMods $artifactName
+Copy-Item -LiteralPath $artifact -Destination $destination -Force
 foreach ($oldArtifact in Get-ChildItem -LiteralPath $clientMods -File -Filter 'nbidal18-client-tweaks-*.jar') {
     $resolvedOld = [IO.Path]::GetFullPath($oldArtifact.FullName)
     if (-not $resolvedOld.StartsWith($clientMods + '\', [StringComparison]::OrdinalIgnoreCase)) {
         throw "Client-tweaks cleanup escaped the client mods directory: $resolvedOld"
     }
-    Remove-Item -LiteralPath $resolvedOld -Force
+    if ($resolvedOld -ne [IO.Path]::GetFullPath($destination)) {
+        Remove-Item -LiteralPath $resolvedOld -Force
+    }
 }
-$destination = Join-Path $clientMods 'nbidal18-client-tweaks-1.3.2+1.21.1.jar'
-Copy-Item -LiteralPath $artifact -Destination $destination
 
 $installed = @(Get-ChildItem -LiteralPath $clientMods -File -Filter 'nbidal18-client-tweaks-*.jar')
-if ($installed.Count -ne 1 -or $installed[0].Name -ne 'nbidal18-client-tweaks-1.3.2+1.21.1.jar') {
+if ($installed.Count -ne 1 -or $installed[0].Name -ne $artifactName) {
     throw 'The canonical client does not contain exactly the expected client-tweaks artifact.'
 }
 Write-Host "Built and installed client tweaks: $destination"

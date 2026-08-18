@@ -66,9 +66,21 @@ public final class Nbidal18PackwizSync {
     private static final String INMIS_OLED_ADDON_PACK =
             "file/\u00a70\u00a7lOLED \u00a7f\u00a7lInmis Backpacks Addon\u00a78.zip";
 
+    /**
+     * config/autohud.json5 is a first-install default that becomes player-owned, so a changed
+     * default never reaches an existing instance. This release deliberately republishes it once:
+     * the local copy is removed before the sync so packwiz restores the shipped file, the marker
+     * below records that it happened, and the file is player-owned again from then on. Bump the
+     * token only when a future release genuinely needs to reissue the defaults again.
+     */
+    private static final String AUTOHUD_DEFAULT_TOKEN = "autohud-place-break-v1";
+
     private final Path minecraftRoot;
     private final Path stateRoot;
     private final Path lastManifestPath;
+    private final Path autoHudConfigPath;
+    private final Path autoHudRestorePath;
+    private final Path autoHudDefaultMarker;
     private final Path bootstrapPath;
     private final Path installerPath;
     private final String packUrl;
@@ -83,6 +95,9 @@ public final class Nbidal18PackwizSync {
                 .toAbsolutePath().normalize();
         stateRoot = minecraftRoot.resolve(".nbidal18-packwiz");
         lastManifestPath = stateRoot.resolve("last-successful-manifest.json");
+        autoHudConfigPath = minecraftRoot.resolve("config").resolve("autohud.json5");
+        autoHudRestorePath = stateRoot.resolve("autohud.json5.restore");
+        autoHudDefaultMarker = stateRoot.resolve("applied-" + AUTOHUD_DEFAULT_TOKEN);
         bootstrapPath = minecraftRoot.resolve("packwiz-installer-bootstrap.jar");
         installerPath = minecraftRoot.resolve("packwiz-installer.jar");
         packUrl = envOrDefault("NBIDAL18_PACK_URL", DEFAULT_PACK_URL);
@@ -103,6 +118,7 @@ public final class Nbidal18PackwizSync {
             Files.createDirectories(stateRoot);
             downloadedManifest = Files.createTempFile(stateRoot, "manifest-", ".tmp");
             boolean updateSucceeded = false;
+            boolean autoHudStaged = stageForcedAutoHudDefault();
 
             try {
                 int installerResult = invokePackwizInstaller();
@@ -118,6 +134,7 @@ public final class Nbidal18PackwizSync {
                 warning("The online update check failed: " + messageOf(error));
                 updateSucceeded = false;
             }
+            finishForcedAutoHudDefault(autoHudStaged, updateSucceeded);
 
             if (updateSucceeded) {
                 SyncManifest current = readSyncManifest(downloadedManifest);
@@ -409,6 +426,43 @@ public final class Nbidal18PackwizSync {
             }
         }
         return value;
+    }
+
+    /**
+     * Removes the player's Auto HUD config once so the sync restores this release's defaults.
+     * The old file is kept aside and put back if the update does not complete, so a failed or
+     * offline launch never leaves the instance without it. Returns true when a copy was staged.
+     */
+    private boolean stageForcedAutoHudDefault() {
+        try {
+            if (Files.exists(autoHudDefaultMarker) || !Files.isRegularFile(autoHudConfigPath)) {
+                return false;
+            }
+            Files.copy(autoHudConfigPath, autoHudRestorePath, StandardCopyOption.REPLACE_EXISTING);
+            Files.delete(autoHudConfigPath);
+            status("Reissuing the Auto HUD defaults once; other personal settings are untouched.");
+            return true;
+        } catch (IOException error) {
+            warning("Could not reissue the Auto HUD defaults; the existing settings were kept: "
+                    + messageOf(error));
+            return false;
+        }
+    }
+
+    private void finishForcedAutoHudDefault(boolean staged, boolean updateSucceeded) {
+        try {
+            if (updateSucceeded) {
+                // Marked even when nothing was staged, so a fresh install does not reissue later.
+                Files.deleteIfExists(autoHudRestorePath);
+                Files.writeString(autoHudDefaultMarker, AUTOHUD_DEFAULT_TOKEN + System.lineSeparator(),
+                        StandardCharsets.UTF_8);
+            } else if (staged && Files.isRegularFile(autoHudRestorePath)) {
+                Files.createDirectories(autoHudConfigPath.getParent());
+                Files.move(autoHudRestorePath, autoHudConfigPath, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException error) {
+            warning("Could not finish reissuing the Auto HUD defaults: " + messageOf(error));
+        }
     }
 
     private void tryMigratePlayerOptions() {
