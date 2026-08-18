@@ -34,9 +34,34 @@ Record:
 
 ---
 
+## v4.2.5-packwiz
+
+Current release. Live digest `7e2d943c9a750e0f…`. 620 managed files, 244 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-18 | `PENDING` | `7e2d943c9a750e0f` | 620 | 244 | **Fixes a crash on launch that made v4.2.3 and v4.2.4 unplayable.** The game stopped during startup with a mixin error naming `nbidal18-client-tweaks`, before the window ever opened, on every machine. The ring-slot backings added in 4.2.3 read the inventory's top-left corner through a `@Shadow` on `InventoryScreen`, but `leftPos` and `topPos` are declared one class up on `AbstractContainerScreen`. Mixin resolves an inherited *method* for an `@Inject` — which is why the neighbouring `render` injection has worked since 4.0 — but a shadowed *field* must be declared on the target class itself. It was not, so the mixin failed to apply, and a mixin that fails to apply takes the game down rather than switching itself off. The corner now comes from an accessor on the class that declares it. Nothing else changed: the accessory row, the ring backings and the Fresh Animations fix from 4.2.4 all behave as described. Client tweaks 1.3.9 to 1.3.10. Maintainer-facing, and the reason this shipped twice: no test started a client. `Test-LocalSync` syncs files and `Test-DedicatedServer` starts a server, so a client-only mixin was checked by neither, and nobody launched a client between the two releases. This fix was verified by launching a real client against a throwaway game directory and confirming every first-party mixin applied. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version and `server.properties`
+is not hot-reloadable. The owner confirmed the shutdown and a status ping refused the connection
+before and after every write. Deployed the integrity policy, the helper JAR, `bcc-common.toml` and
+the MOTD line of `server.properties` — one line of sixty-four, leaving ports, whitelist, world name
+and every provider setting untouched. Backups under
+`Z:\.nbidal18-deploy-backups\2026-08-18-v4.2.5-packwiz\`.
+
+The status-ping helper was corrected during this release. It read only the first 4 KB of the reply
+and matched on keys that this server's long base64 favicon pushes past that window, so a running
+server scored AMBIGUOUS rather than UP. Nothing was written — the deploy script proceeds only on an
+explicit DOWN — but the one answer that tool must never produce by accident is a wrong one, so it
+now reads the whole reply.
+
 ## v4.2.4-packwiz
 
-Current release. Live digest `5bf5bfb4c70a2e23…`. 620 managed files, 244 mods.
+Superseded by v4.2.5. Final digest `5bf5bfb4c70a2e23…`. 620 managed files, 244 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 
