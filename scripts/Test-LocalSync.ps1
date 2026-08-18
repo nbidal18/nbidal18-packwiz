@@ -82,7 +82,7 @@ try {
     Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 244) 'First install did not produce 244 mod JARs.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\better-compatability-checker-fabric-21.1.8.jar')) 'BCC was not installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')) 'The integrity helper was not installed.'
-    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.2.1+1.21.1.jar')) 'The corrected Inmis OLED and Jobs+ plaque-enabled client tweaks were not installed.'
+    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.2.2+1.21.1.jar')) 'The palette-seamed Inmis OLED and Jobs+ plaque-enabled client tweaks were not installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar')) 'The Jobs+ compatibility helper was not installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\polytone-1.21-3.12.0-fabric.jar'))) 'Retired Nature X Polytone support was still installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\optigui-2.3.0-beta.9+1.21.jar')) 'Colourful Containers OLED OptiGUI support was not installed.'
@@ -129,6 +129,7 @@ try {
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.0.0+1.21.1.jar'))) 'The retired client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.1.0+1.21.1.jar'))) 'The pre-Inmis-OLED client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.2.0+1.21.1.jar'))) 'The detached-OLED-panel client-tweaks artifact was still installed.'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.2.1+1.21.1.jar'))) 'The chest-seamed Inmis OLED client-tweaks artifact was still installed.'
     $jobsConfigText = Get-Content -LiteralPath (Join-Path $minecraft 'config\jobsplus-common.yaml') -Raw
     Assert-True ($jobsConfigText -match '(?m)^\s*show_xp_in_action_bar:\s*false\s*$') 'Jobs+ XP action-bar messages remain enabled.'
     Assert-True ($jobsConfigText -match '(?m)^\s*broadcast_level_up_messages:\s*false\s*$') 'Jobs+ chat level-up broadcasts remain enabled.'
