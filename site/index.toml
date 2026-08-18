@@ -545,7 +545,7 @@ hash = "c469cb44079c62710879813e422a64a302fa7a58498a8ce56e5e8b0ebf86c6b5"
 
 [[files]]
 file = "config/inmis.json"
-hash = "f21270f50e6bf09fae08dee01bf7660f833bc4b7daa9151635c3a95f3304455c"
+hash = "62936f4264f5cbd039367f9345e566157320b172f278d75b5604acf5edb11b46"
 
 [[files]]
 file = "config/invmove.json"
@@ -1101,6 +1101,10 @@ hash = "b118ecd71a6ccc3f5a2e0c88adf20e8d4d820933fba1cc0c28e33601a204038d"
 [[files]]
 file = "datapacks/custom_recipes_1.21/data/crafting/recipe/string_wool.json"
 hash = "64df05c6d3785e570202c9f16e44503401f2453bb1cad042aa718aaa48f77235"
+
+[[files]]
+file = "datapacks/custom_recipes_1.21/data/minecraft/tags/item/dyeable.json"
+hash = "1a0e33733cb6f2975e8ff7ee43246153001c9748713acec31b28b37de0aeb0c6"
 
 [[files]]
 file = "datapacks/custom_recipes_1.21/pack.mcmeta"
@@ -2027,8 +2031,8 @@ file = "mods/naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar"
 hash = "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
 
 [[files]]
-file = "mods/nbidal18-client-tweaks-1.2.3+1.21.1.jar"
-hash = "120a3e3456ef0e1f7120ac29b35ba933e022863d0c87e5c3b7c3680e87ad9cd2"
+file = "mods/nbidal18-client-tweaks-1.2.4+1.21.1.jar"
+hash = "646d52524027e6b1c81c44e9d222b67869a344530f7d67ebebc4826fd9fb8b9d"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
@@ -2424,7 +2428,7 @@ hash = "ef2eef14f30f81d915c69066d6a18caea62141a8b0778da972b26e0857e0ef4b"
 
 [[files]]
 file = "resourcepacks/§0§lOLED §f§lInmis Backpacks Addon§8.zip"
-hash = "ea82977f34b5fadd24bb961ed12873d7d728da6bec7098b2cee79d480cb9cf25"
+hash = "4cc102f00c404dbb518d60cad2295450c9fa69fd763330013275da4d2194ab8b"
 
 [[files]]
 file = "resourcepacks/§3Fresh §bFlower Pots Rotated.zip"

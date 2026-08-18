@@ -5,7 +5,7 @@
       "rowWidth": 3,
       "numberOfRows": 1,
       "isFireImmune": false,
-      "dyeable": false,
+      "dyeable": true,
       "openSound": "minecraft:item.armor.equip_leather"
     },
     {
@@ -21,7 +21,7 @@
       "rowWidth": 9,
       "numberOfRows": 2,
       "isFireImmune": false,
-      "dyeable": false,
+      "dyeable": true,
       "openSound": "minecraft:item.armor.equip_iron"
     },
     {
@@ -29,7 +29,7 @@
       "rowWidth": 9,
       "numberOfRows": 3,
       "isFireImmune": false,
-      "dyeable": false,
+      "dyeable": true,
       "openSound": "minecraft:item.armor.equip_gold"
     },
     {
@@ -37,7 +37,7 @@
       "rowWidth": 9,
       "numberOfRows": 5,
       "isFireImmune": false,
-      "dyeable": false,
+      "dyeable": true,
       "openSound": "minecraft:item.armor.equip_diamond"
     },
     {
@@ -45,7 +45,7 @@
       "rowWidth": 9,
       "numberOfRows": 6,
       "isFireImmune": true,
-      "dyeable": false,
+      "dyeable": true,
       "openSound": "minecraft:item.armor.equip_leather"
     },
     {
@@ -53,7 +53,7 @@
       "rowWidth": 11,
       "numberOfRows": 6,
       "isFireImmune": false,
-      "dyeable": false,
+      "dyeable": true,
       "openSound": "minecraft:item.armor.equip_leather"
     },
     {
@@ -61,7 +61,7 @@
       "rowWidth": 15,
       "numberOfRows": 6,
       "isFireImmune": false,
-      "dyeable": false,
+      "dyeable": true,
       "openSound": "minecraft:item.armor.equip_leather"
     }
   ],

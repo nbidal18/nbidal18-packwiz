@@ -320,8 +320,40 @@ hash-format = "sha256"
         throw 'The v4.1.3 integrity helper is missing from the Packwiz client.'
     }
     $clientTweaks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter 'nbidal18-client-tweaks-*.jar')
-    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.2.3+1.21.1.jar') {
+    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.2.4+1.21.1.jar') {
         throw 'The Inmis OLED and Jobs+ plaque-enabled client-tweaks artifact is missing or duplicated.'
+    }
+    $expectedDyeableBackpacks = @(
+        'inmis:baby_backpack',
+        'inmis:frayed_backpack',
+        'inmis:plated_backpack',
+        'inmis:gilded_backpack',
+        'inmis:bejeweled_backpack',
+        'inmis:blazing_backpack',
+        'inmis:withered_backpack',
+        'inmis:endless_backpack'
+    )
+    foreach ($dyeableTagPath in @(
+        (Join-Path $stagePath 'datapacks\custom_recipes_1.21\data\minecraft\tags\item\dyeable.json'),
+        (Join-Path $ReleaseRoot '3. modpack\server\datapacks\custom_recipes_1.21\data\minecraft\tags\item\dyeable.json'),
+        (Join-Path $ReleaseRoot '4. server\2. online-hosting\datapacks\custom_recipes_1.21\data\minecraft\tags\item\dyeable.json')
+    )) {
+        $dyeableTag = Get-Content -LiteralPath $dyeableTagPath -Raw | ConvertFrom-Json
+        if ($dyeableTag.replace -ne $false -or
+                @(Compare-Object $expectedDyeableBackpacks @($dyeableTag.values)).Count -ne 0) {
+            throw "The complete Inmis dyeable item tag is missing or malformed in $dyeableTagPath"
+        }
+    }
+    foreach ($inmisConfigPath in @(
+        (Join-Path $stagePath 'config\inmis.json'),
+        (Join-Path $ReleaseRoot '3. modpack\server\config\inmis.json'),
+        (Join-Path $ReleaseRoot '4. server\2. online-hosting\config\inmis.json')
+    )) {
+        $inmisConfig = Get-Content -LiteralPath $inmisConfigPath -Raw | ConvertFrom-Json
+        if (@($inmisConfig.backpacks).Count -ne 8 -or
+                @($inmisConfig.backpacks | Where-Object { $_.dyeable -ne $true }).Count -ne 0) {
+            throw "All eight Inmis backpack tiers must be dyeable in $inmisConfigPath"
+        }
     }
     $jobsSuppressor = Join-Path $stagePath 'mods\nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar'
     if (-not (Test-Path -LiteralPath $jobsSuppressor -PathType Leaf)) {
