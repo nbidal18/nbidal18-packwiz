@@ -2027,8 +2027,8 @@ file = "mods/naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar"
 hash = "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
 
 [[files]]
-file = "mods/nbidal18-client-tweaks-1.2.0+1.21.1.jar"
-hash = "1ca6a2bd3af268945814884e2e1ea51bf6742a66686123a281f2d50833cf6af5"
+file = "mods/nbidal18-client-tweaks-1.2.1+1.21.1.jar"
+hash = "d056fcaf5fc3a84ca8bfb81e544bb61da246347e305fec42a1c1e34c013570ff"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
