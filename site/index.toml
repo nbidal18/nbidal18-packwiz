@@ -2036,8 +2036,8 @@ file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
 hash = "e2afa53408bad9fec6c236d732a0b1a4dfcdd4f167fc26cfeae749b3721931db"
 
 [[files]]
-file = "mods/nbidal18-jei-hidden-default-1.0.0+1.21.1.jar"
-hash = "5aeffa5d9e70178c6c54991e4f769159d6c40fb0ce3455d9acdbd4c3b5e69ab5"
+file = "mods/nbidal18-jei-hidden-default-1.1.0+1.21.1.jar"
+hash = "a101345e9e113fd3991d88f8dfb1d7bae3829b7b8654c7f803daf4409af69817"
 
 [[files]]
 file = "mods/nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar"

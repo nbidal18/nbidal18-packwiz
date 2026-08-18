@@ -10,6 +10,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-Play
 if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-MoreVillagersBridge.ps1"
 if errorlevel 1 exit /b %errorlevel%
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-JeiHiddenDefault.ps1"
+if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-IntegrityInfrastructure.ps1"
 if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-PackwizSite.ps1"
