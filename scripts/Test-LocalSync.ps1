@@ -82,7 +82,11 @@ try {
     Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 244) 'First install did not produce 244 mod JARs.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\better-compatability-checker-fabric-21.1.8.jar')) 'BCC was not installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')) 'The integrity helper was not installed.'
-    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.5+1.21.1.jar')) 'The Inmis dye rendering, grouped Trinkets slots, Auto HUD, and Jobs+ plaque-enabled client tweaks were not installed.'
+    # Version-derived, not hardcoded: this assertion used to fail on every client-tweaks bump.
+    $tweaksProperties = Join-Path $releaseRoot '5. modpack source\custom mods\nbidal18-client-tweaks\gradle.properties'
+    Assert-True ([IO.File]::ReadAllText($tweaksProperties, [Text.Encoding]::UTF8) -match '(?m)^mod_version=(.+?)\s*$') 'Could not read the client-tweaks mod version.'
+    $expectedTweaksJar = "nbidal18-client-tweaks-$($Matches[1]).jar"
+    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft (Join-Path 'mods' $expectedTweaksJar))) "The Inmis dye rendering, grouped Trinkets slots, Auto HUD, and Jobs+ plaque-enabled client tweaks were not installed ($expectedTweaksJar)."
     $installedInmisConfig = [IO.File]::ReadAllText((Join-Path $minecraft 'config\inmis.json'), [Text.Encoding]::UTF8)
     Assert-True (-not $installedInmisConfig.EndsWith("`n")) 'Inmis config must use AutoConfig''s stable no-final-newline serialization.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar')) 'The Jobs+ compatibility helper was not installed.'
@@ -134,6 +138,7 @@ try {
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.2+1.21.1.jar'))) 'The pre-offhand-backing client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.3+1.21.1.jar'))) 'The pre-vehicle-perspective client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.4+1.21.1.jar'))) 'The pre-stuck-attack-guard client-tweaks artifact was still installed.'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.5+1.21.1.jar'))) 'The client-tweaks artifact with the misplaced Trinkets popup was still installed.'
     $jobsConfigText = Get-Content -LiteralPath (Join-Path $minecraft 'config\jobsplus-common.yaml') -Raw
     Assert-True ($jobsConfigText -match '(?m)^\s*show_xp_in_action_bar:\s*false\s*$') 'Jobs+ XP action-bar messages remain enabled.'
     Assert-True ($jobsConfigText -match '(?m)^\s*broadcast_level_up_messages:\s*false\s*$') 'Jobs+ chat level-up broadcasts remain enabled.'

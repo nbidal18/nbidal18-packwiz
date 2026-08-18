@@ -412,9 +412,17 @@ hash-format = "sha256"
     if (-not (Test-Path -LiteralPath $integrityJar -PathType Leaf)) {
         throw 'The v4.2.0 integrity helper is missing from the Packwiz client.'
     }
+    # Derived from the mod's own gradle.properties: a hardcoded version here has broken the build
+    # at every client-tweaks bump, which teaches people to edit the assertion rather than read it.
+    $tweaksProperties = Join-Path $ReleaseRoot (Join-Path '5. modpack source' (Join-Path 'custom mods' (Join-Path 'nbidal18-client-tweaks' 'gradle.properties')))
+    if ([IO.File]::ReadAllText($tweaksProperties, [Text.Encoding]::UTF8) -notmatch '(?m)^mod_version=(.+?)\s*$') {
+        throw "Could not read mod_version from $tweaksProperties"
+    }
+    $expectedTweaksJar = "nbidal18-client-tweaks-$($Matches[1]).jar"
     $clientTweaks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter 'nbidal18-client-tweaks-*.jar')
-    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.3.5+1.21.1.jar') {
-        throw 'The Inmis dye, Trinkets grouping, and Jobs+ plaque-enabled client-tweaks artifact is missing or duplicated.'
+    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne $expectedTweaksJar) {
+        throw ("The client-tweaks artifact is missing or duplicated: expected exactly one " +
+               "$expectedTweaksJar, found $($clientTweaks.Count) ($($clientTweaks.Name -join ', ')).")
     }
     $expectedDyeableBackpacks = @(
         'inmis:baby_backpack',
