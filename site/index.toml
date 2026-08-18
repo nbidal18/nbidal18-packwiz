@@ -75,7 +75,7 @@ hash = "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "6a3a19382aadafc94e5965befaf28bb1d93263be473dc759d1e9da8fdca55183"
+hash = "1f2acd3d06f7bba1651f13c2db131c4fd2a171643862b5e90f21fe502123999c"
 
 [[files]]
 file = "config/beautify.json"
@@ -1360,6 +1360,14 @@ file = "datapacks/nbidal18_terralith_structure_compat/pack.mcmeta"
 hash = "39a25a9296dc1a3105c718cab89e77a7ef4f870bd95750c843c484752ac91479"
 
 [[files]]
+file = "datapacks/nbidal18_trinket_slots/data/trinkets/entities/nbidal18_rings.json"
+hash = "0001fdda26bdd359ff5566a578de5a161131014f8df63d0db42f5a808e542f54"
+
+[[files]]
+file = "datapacks/nbidal18_trinket_slots/pack.mcmeta"
+hash = "4c9135f10739b1331dde9af6b08923ec875c3b912f5848379436537a5d784d5a"
+
+[[files]]
 file = "licenses/BandagePlus-Xanthian-MIT.txt"
 hash = "845979ebc5e5d7f08a9133cf94ec97a2fc15464594283860ecc37d50432e169a"
 
@@ -2056,12 +2064,12 @@ file = "mods/naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar"
 hash = "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
 
 [[files]]
-file = "mods/nbidal18-client-tweaks-1.3.10+1.21.1.jar"
-hash = "23c4f6ab97b76549e6be47cffd1d5f2e0ef2c3ff53828ca76e8221cec6ddba91"
+file = "mods/nbidal18-client-tweaks-1.3.11+1.21.1.jar"
+hash = "1e9c2f5d7e8a7f529747493208e0d276d166acbf7db27cc527a85037e0afa8c5"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "d64897a7bcc632481f53b5e758968b43a3122908e217d9716dea8a53f7928bc1"
+hash = "699ab257f7f9e80982615fd710d4dc862a7ff8e341f03865a27eb75e114efe8f"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -2373,7 +2381,7 @@ hash = "3978c0dc75b138aaa0d8610467624ab49fecdadfaf160e2f66705870cadcb94d"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "de7a419a639908d84103afd94186e39054d7136d322ba459baf33733dbfa235e"
+hash = "26c393536a30be88d71937c50729ec044603fd5781d44d1aea3c54a74f1a4c4b"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"

@@ -34,9 +34,33 @@ Record:
 
 ---
 
+## v4.2.6-packwiz
+
+Current release. Live digest `d046b0fac40da0d8…`. 622 managed files, 244 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-19 | `PENDING` | `d046b0fac40da0d8` | 622 | 244 | **Rings can be worn.** They never could. Jewelry ships 26 rings — copper through netherite plus ten unique ones — and tags every one of them for Trinkets' `hand/ring` and `offhand/ring` slots, but nothing in the pack ever gave the player those slots. The only datapack granting the player anything was Artifacts', which hands out hat, necklace, belt, both gloves and shoes and no ring. So the rings were craftable, lootable, tradeable and completely unequippable, and they are not trinkets in the decorative sense: they carry extra hearts, attack damage, ranged damage and spell power. A new datapack grants both ring slots, one per hand, so two rings can be worn at once as the mod intends. **This is a real power increase** — two sapphire rings is four extra hearts — and the values live in `config/jewelry/items_v8.json` if they need pulling back later. **Also removes the stray see-through cell** on the end of the accessory row, which was mine: the off-hand popup was hardcoded three cells wide, assuming two accessories to the right of the vanilla off-hand slot when the player had one, so Trinkets painted an empty cell with nothing behind it. The width is now counted from the slots actually present. With rings enabled the row reads `[ring][ring][off-hand][glove][glove]` — rings together on the left, gloves together on the right — and the two ring slots carry proper backings drawn from the vanilla inventory sheet, so they follow whichever resource pack is active. The popup still opens from the vanilla off-hand slot. Client tweaks 1.3.10 to 1.3.11. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version, `server.properties` is
+not hot-reloadable, and a datapack is only read at startup. The owner confirmed the shutdown and a
+status ping refused the connection before and after every write. Deployed the integrity policy, the
+helper JAR, `bcc-common.toml`, the MOTD line of `server.properties` — one line of sixty-four — and
+the new `datapacks\nbidal18_trinket_slots`, which is what actually grants the ring slots in
+multiplayer. The datapack folder was new, so nothing was overwritten; both files were verified by
+hash against the managed-host copy. Ports, whitelist, world name and every provider setting were
+left untouched. Backups under `Z:\.nbidal18-deploy-backups\2026-08-19-v4.2.6-packwiz\`.
+
+Note for any future release that touches slots: **granting a Trinkets slot is safe, removing one is
+not.** New slots arrive empty, but taking a slot away drops or loses whatever was worn in it.
+
 ## v4.2.5-packwiz
 
-Current release. Live digest `7e2d943c9a750e0f…`. 620 managed files, 244 mods.
+Superseded by v4.2.6. Final digest `7e2d943c9a750e0f…`. 620 managed files, 244 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 
