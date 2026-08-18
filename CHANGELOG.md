@@ -36,13 +36,14 @@ Record:
 
 ## v4.2.0-packwiz
 
-Current release. Live digest `6b068efa6ce8b9ca…`. 618 managed files, 244 mods.
+Current release. Live digest `e9744a20519aa5ac…`. 618 managed files, 244 mods.
 
 The first release since 4.1.3 to add gameplay content, and the version identity moves with it.
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 
 | Date | Commit | Digest | Files | Mods | Change |
 | --- | --- | --- | --- | --- | --- |
+| 2026-08-18 | *pending* | `e9744a20519aa5ac` | 618 | 244 | **Hotfix: every player was locked out at login.** The integrity helper hardcodes the pack version it will accept and still said `4.1.3-packwiz`, so after the version cut it refused to parse its own `last-successful-manifest.json` and the server rejected the attestation with "Modpack integrity change detected". Only the client parses that file, so no server restart was needed. `Build-IntegrityInfrastructure.ps1` now derives the expected version from the release folder and fails the build if the helper disagrees, so a future version cut cannot repeat this. |
 | 2026-08-18 | `a056546` | `6b068efa6ce8b9ca` | 618 | 244 | Raised the updater's minimum accepted pack version from 4.1.3 to 4.2.0. It is a floor on what the updater will install from the channel, so once a client runs this build, publishing anything below 4.2.0 is refused rather than installed. Raise it with each release. |
 | 2026-08-18 | `3e32af4` | `d324ed2f2302285d` | 618 | 244 | **Released v4.2.0-packwiz.** Nullscape reshapes the End, installed before any End chunk had generated so no terrain is lost; YUNG's Better End Island keeps the central island and dragon fight, and the two share no files. Resting within 3 blocks of a lit campfire restores health. 58 modded slab families can be crafted back into blocks, including dirt slabs — Frostiful's cut-ice slabs are deliberately excluded because their stonecutter path would have allowed a 4× duplication. Auto HUD reveals while placing and breaking blocks and shows vehicle health only while changing, reissued once to existing instances. Fixes a chisel integrity false positive that was kicking players, restores the missing grey backing behind the ring accessory slots, and stops Immersive Aircraft and Machinery forcing a camera perspective when boarding. Adds a temporary diagnostic guard for the intermittent stuck-attack fault. Credits Nullscape, Incendium, Structory and Structory: Towers under the Stardust Labs licence, which the pack had been omitting. |
 

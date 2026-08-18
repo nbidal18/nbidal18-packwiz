@@ -79,6 +79,26 @@ if ($LASTEXITCODE -ne 0) {
 
 $helperRoot = Join-Path $ReleaseRoot '5. modpack source\custom mods\nbidal18-integrity-helper'
 $gradle = Join-Path $helperRoot 'gradlew.bat'
+
+# The client refuses to parse a manifest whose packVersion differs from the helper's compiled
+# PACK_VERSION, so a version bump that misses this constant locks every player out at login with
+# "Modpack integrity change detected". That happened on the 4.1.3 -> 4.2.0 cut; assert it here.
+$constantsPath = Join-Path $helperRoot 'src\main\java\dev\nbidal18\integrity\IntegrityConstants.java'
+$constantsText = [IO.File]::ReadAllText($constantsPath)
+if ($constantsText -notmatch '(?m)^\s*static final String PACK_VERSION = "([^"]+)";') {
+    throw "Could not read PACK_VERSION from $constantsPath"
+}
+$helperPackVersion = $Matches[1]
+# Derived from the release folder so it follows a version cut automatically.
+if ((Split-Path $ReleaseRoot -Leaf) -notmatch '^nbidal18 v(.+)$') {
+    throw "Could not derive the pack version from the release folder name: $ReleaseRoot"
+}
+$sitePackVersion = $Matches[1]
+if ($helperPackVersion -ne $sitePackVersion) {
+    throw ("The integrity helper is compiled for pack version '$helperPackVersion' but this release " +
+           "publishes '$sitePackVersion'. Update PACK_VERSION in IntegrityConstants.java; leaving it " +
+           'behind rejects every client at login.')
+}
 $previousJavaHome = $env:JAVA_HOME
 try {
     $env:JAVA_HOME = $javaHome
