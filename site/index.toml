@@ -608,6 +608,7 @@ hash = "b4174dc6e985aa90be5002c14e94b956d8d586683c44b7b6710c44d08fb13648"
 [[files]]
 file = "config/jei/ingredient-list-mod-sort-order.ini"
 hash = "f398d8f9543e0f6b96620cb7b2bfb87e17ce653656469720a03719493af6be8b"
+preserve = true
 
 [[files]]
 file = "config/jei/ingredient-list-type-sort-order.ini"
@@ -616,6 +617,7 @@ hash = "5064fb08f3a4af3321de4746ac60fe83ac464732b684a38c68d97ad2c4bce440"
 [[files]]
 file = "config/jei/jei-client.ini"
 hash = "1b2d2fa53fecae403112c5a0d793d5721173b5ba2a14a3ef0b9b3b000b16d7c2"
+preserve = true
 
 [[files]]
 file = "config/jei/jei-colors.ini"
@@ -632,6 +634,7 @@ hash = "6a91c09d1cabc1980d90ab102a03ec58c0551213ab16a459b599d768b334d054"
 [[files]]
 file = "config/jei/recipe-category-sort-order.ini"
 hash = "15ec33f42ddba217b47d7896af2b6d19cd7c1b3357baef2837efb8ba8f55f19e"
+preserve = true
 
 [[files]]
 file = "config/jewelry/fabric_compatibility.json"
@@ -2025,7 +2028,7 @@ hash = "5356ffb4f49bb83f824bf8e1393d767c7887905594760d66d80eacf60e479e5b"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "4c6bd3fd8bf92379972619996f752715d7dbd31f534d6ca35a009a3c70b73b0f"
+hash = "747a9ed9054cdd6329c2be12340f13f59157d0dc5b28b1aaffbbe849b5d9c0db"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"

@@ -25,6 +25,9 @@
                                 "config/jsonem.properties",
                                 "config/resourceful-config-web.json",
                                 "config/jade/usernamecache.json",
+                                "config/jei/ingredient-list-mod-sort-order.ini",
+                                "config/jei/jei-client.ini",
+                                "config/jei/recipe-category-sort-order.ini",
                                 "config/jei/world",
                                 "config/invmove/unrecognized.json",
                                 "config/spark/tmp"
@@ -46,6 +49,9 @@
                          "config/jsonem.properties",
                          "config/resourceful-config-web.json",
                          "config/jade/usernamecache.json",
+                         "config/jei/ingredient-list-mod-sort-order.ini",
+                         "config/jei/jei-client.ini",
+                         "config/jei/recipe-category-sort-order.ini",
                          "config/jei/world/server/nbidal18_modpack_9c729ef3/lookupHistory.json",
                          "config/invmove/unrecognized.json",
                          "config/spark/tmp/about.txt"
@@ -2072,7 +2078,7 @@
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "4c6bd3fd8bf92379972619996f752715d7dbd31f534d6ca35a009a3c70b73b0f"
+                      "sha256":  "747a9ed9054cdd6329c2be12340f13f59157d0dc5b28b1aaffbbe849b5d9c0db"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",

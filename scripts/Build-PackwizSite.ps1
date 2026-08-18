@@ -103,6 +103,9 @@ $runtimeSupportPaths = @(
     'config/jsonem.properties',
     'config/resourceful-config-web.json',
     'config/jade/usernamecache.json',
+    'config/jei/ingredient-list-mod-sort-order.ini',
+    'config/jei/jei-client.ini',
+    'config/jei/recipe-category-sort-order.ini',
     'config/jei/world',
     'config/invmove/unrecognized.json',
     'config/spark/tmp'
@@ -120,6 +123,9 @@ $preservedConfigPaths = @($playerMutablePaths + @(
     'config/jsonem.properties',
     'config/resourceful-config-web.json',
     'config/jade/usernamecache.json',
+    'config/jei/ingredient-list-mod-sort-order.ini',
+    'config/jei/jei-client.ini',
+    'config/jei/recipe-category-sort-order.ini',
     'config/jei/world/server/nbidal18_modpack_9c729ef3/lookupHistory.json',
     'config/invmove/unrecognized.json',
     'config/spark/tmp/about.txt'
