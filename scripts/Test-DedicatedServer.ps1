@@ -19,6 +19,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'PackVersion.ps1')
 
 # The server keeps latest.log open while it runs, so a plain read fails with a sharing violation.
 function Read-SharedText([string] $path) {
@@ -34,7 +35,7 @@ function Read-SharedText([string] $path) {
 }
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$releaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
+$releaseRoot = Get-ReleaseRoot $repoRoot
 $sourceRoot = Join-Path $releaseRoot '3. modpack\server'
 $launcher = Join-Path $releaseRoot '4. server\1. self-host\support\runtime\fabric-server-launch.jar'
 $javaPath = 'C:\Users\nizar\AppData\Roaming\PrismLauncher\java\java-runtime-delta\bin\java.exe'

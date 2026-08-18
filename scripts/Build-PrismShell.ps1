@@ -5,10 +5,11 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'PackVersion.ps1')
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
-    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
+    $ReleaseRoot = Get-ReleaseRoot $repoRoot
 }
 else {
     $ReleaseRoot = [IO.Path]::GetFullPath($ReleaseRoot)
@@ -84,6 +85,7 @@ if ((Get-Sha256 $installerPath) -ne
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $utf8NoBom = [Text.UTF8Encoding]::new($false)
+$packVersion = Get-PackVersion $repoRoot
 $fixedTimestamp = [DateTimeOffset]::new(1980, 1, 1, 0, 0, 0, [TimeSpan]::Zero)
 $stagePath = Join-Path ([IO.Path]::GetTempPath()) ('nbidal18-packwiz-shell-' + [guid]::NewGuid().ToString('N'))
 
@@ -127,7 +129,7 @@ InstanceType=OneSix
 ExportName=nbidal18-client
 ExportOptionalFiles=true
 ExportSummary=Fabric 1.21.1 adventure modpack with automatic updates
-ExportVersion=4.2.0-packwiz
+ExportVersion=__PACK_VERSION__
 IgnoreJavaCompatibility=false
 JoinServerOnLaunch=false
 ManagedPack=false
@@ -186,12 +188,12 @@ UseAccountForInstance=false
     if ((Get-Item -LiteralPath $OutputPath).Length -ge 100MB) {
         throw 'The Prism import ZIP is not below 100 MiB.'
     }
-    $publishedZip = Join-Path $sitePath 'nbidal18-client-4.2.0-packwiz.zip'
+    $publishedZip = Join-Path $sitePath 'nbidal18-client.zip'
     Copy-Item -LiteralPath $OutputPath -Destination $publishedZip -Force
     $zipHash = Get-Sha256 $OutputPath
     $packHash = Get-Sha256 (Join-Path $sitePath 'pack.toml')
     Write-Utf8 (Join-Path (Split-Path -Parent $OutputPath) 'SHA256SUMS.txt') "$zipHash  nbidal18-client.zip`n"
-    Write-Utf8 (Join-Path $sitePath 'SHA256SUMS.txt') "$zipHash  nbidal18-client-4.2.0-packwiz.zip`n$packHash  pack.toml`n"
+    Write-Utf8 (Join-Path $sitePath 'SHA256SUMS.txt') "$zipHash  nbidal18-client.zip`n$packHash  pack.toml`n"
     Write-Host "Created Prism import: $OutputPath"
     Write-Host "Bytes: $((Get-Item -LiteralPath $OutputPath).Length); SHA-256: $zipHash"
 }

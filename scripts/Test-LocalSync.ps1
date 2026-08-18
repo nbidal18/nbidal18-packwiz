@@ -4,9 +4,11 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'PackVersion.ps1')
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$releaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
+$releaseRoot = Get-ReleaseRoot $repoRoot
+$packVersion = Get-PackVersion $repoRoot
 $zipPath = Join-Path $releaseRoot '1. setup\nbidal18-client.zip'
 $sitePath = Join-Path $repoRoot 'site'
 $packwizPath = Join-Path $releaseRoot '5. modpack source\auto-updater tools\packwiz.exe'
@@ -77,7 +79,7 @@ try {
     Assert-True (-not $instanceConfig.Contains('powershell')) 'The Prism command still depends on Windows PowerShell.'
     Assert-True ($instanceConfig.Contains("name=nbidal18-client`n")) 'The Prism display name is not the stable client name.'
     Assert-True ($instanceConfig.Contains("ExportName=nbidal18-client`n")) 'The Prism export name is not the stable client name.'
-    Assert-True (-not $instanceConfig.Contains('name=nbidal18-client-4.2.0-packwiz')) 'The Prism display name still contains a release version.'
+    Assert-True (-not $instanceConfig.Contains("name=nbidal18-client-$packVersion")) 'The Prism display name still contains a release version.'
     Assert-True ((Invoke-Sync $minecraft) -eq 0) 'First online installation failed.'
     Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 244) 'First install did not produce 244 mod JARs.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\better-compatability-checker-fabric-21.1.8.jar')) 'BCC was not installed.'
@@ -139,6 +141,7 @@ try {
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.3+1.21.1.jar'))) 'The pre-vehicle-perspective client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.4+1.21.1.jar'))) 'The pre-stuck-attack-guard client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.5+1.21.1.jar'))) 'The client-tweaks artifact with the misplaced Trinkets popup was still installed.'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.6+1.21.1.jar'))) 'The pre-hotbar-group client-tweaks artifact was still installed.'
     $jobsConfigText = Get-Content -LiteralPath (Join-Path $minecraft 'config\jobsplus-common.yaml') -Raw
     Assert-True ($jobsConfigText -match '(?m)^\s*show_xp_in_action_bar:\s*false\s*$') 'Jobs+ XP action-bar messages remain enabled.'
     Assert-True ($jobsConfigText -match '(?m)^\s*broadcast_level_up_messages:\s*false\s*$') 'Jobs+ chat level-up broadcasts remain enabled.'
@@ -150,7 +153,7 @@ try {
     Assert-True ($jadePlugins.minecraft.entity_health -eq $false) 'Jade entity health remains enabled in the client.'
 
     $manifest = Get-Content -LiteralPath (Join-Path $sitePath 'sync-manifest.json') -Raw | ConvertFrom-Json
-    Assert-True ($manifest.packVersion -eq '4.2.0-packwiz') 'The generated manifest has the wrong pack version.'
+    Assert-True ($manifest.packVersion -eq $packVersion) "The generated manifest is not $packVersion."
     Assert-True ($manifest.schema -eq 1) 'The generated manifest is not backward-compatible with installed updaters.'
     Assert-True (@($manifest.exactRoots).Count -eq 5 -and
             'config' -in @($manifest.exactRoots)) 'Pre-launch exact config repair is missing.'
@@ -216,7 +219,7 @@ try {
     foreach ($policyPath in @(
         (Join-Path $releaseRoot '3. modpack\server\config\nbidal18-integrity.properties'),
         (Join-Path $releaseRoot '4. server\2. online-hosting\config\nbidal18-integrity.properties'),
-        (Join-Path $releaseRoot '4. server\4.2.0-transition-overlay\config\nbidal18-integrity.properties')
+        (Join-Path $releaseRoot '4. server\transition-overlay\config\nbidal18-integrity.properties')
     )) {
         $policy = Get-Content -LiteralPath $policyPath -Raw
         Assert-True ($policy -match '(?m)^require-helper=true$') "The helper requirement is not enabled in $policyPath"
@@ -228,7 +231,7 @@ try {
         (Join-Path $releaseRoot '4. server\2. online-hosting\config\bcc-common.toml')
     )) {
         $bcc = Get-Content -LiteralPath $bccPath -Raw
-        Assert-True ($bcc -match '(?m)^\s*modpackVersion\s*=\s*"v4\.2\.0-packwiz"\s*$') "The v4.2.0 BCC requirement is not enabled in $bccPath"
+        Assert-True ($bcc -match ('(?m)^\s*modpackVersion\s*=\s*"' + [regex]::Escape("v$packVersion") + '"\s*$')) "The v$packVersion BCC requirement is not enabled in $bccPath"
     }
 
     $optionsPath = Join-Path $minecraft 'options.txt'
@@ -311,7 +314,7 @@ try {
     Expand-Archive -LiteralPath $zipPath -DestinationPath $offlineRoot
     Assert-True ((Invoke-Sync (Join-Path $offlineRoot 'minecraft')) -ne 0) 'An incomplete first install incorrectly started offline.'
 
-    Write-Host 'PASS: version-neutral Prism naming, pre-launch supervisor promotion and validation, updater/bootstrap staging, existing-instance resource-pack migration, v4.2.0 install, Jobs+ balance, hidden Jade mob health, narrow runtime config exceptions, enforced helper and BCC policy, preserved personal configs and shader quality, glowing-ore field repair, exact-match cleanup, managed gameplay-config repair, complete offline fallback, and incomplete offline blocking.'
+    Write-Host "PASS: version-neutral Prism naming, pre-launch supervisor promotion and validation, updater/bootstrap staging, existing-instance resource-pack migration, v$packVersion install, Jobs+ balance, hidden Jade mob health, narrow runtime config exceptions, enforced helper and BCC policy, preserved personal configs and shader quality, glowing-ore field repair, exact-match cleanup, managed gameplay-config repair, complete offline fallback, and incomplete offline blocking."
     $testSucceeded = $true
     $global:LASTEXITCODE = 0
 }

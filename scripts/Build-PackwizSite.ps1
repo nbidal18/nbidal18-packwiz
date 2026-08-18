@@ -5,12 +5,14 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'PackVersion.ps1')
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
-    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
+    $ReleaseRoot = Get-ReleaseRoot $repoRoot
 }
 else {
     $ReleaseRoot = [IO.Path]::GetFullPath($ReleaseRoot)
+    Assert-ReleaseRootMatchesVersion $repoRoot $ReleaseRoot
 }
 if ([string]::IsNullOrWhiteSpace($SitePath)) {
     $SitePath = Join-Path $repoRoot 'site'
@@ -30,6 +32,24 @@ $prismPackTemplate = Join-Path $repoRoot 'templates\mmc-pack.json'
 $landingPage = Join-Path $repoRoot 'templates\index.html'
 $stagePath = Join-Path $repoRoot ('.site-staging-' + [guid]::NewGuid().ToString('N'))
 $utf8NoBom = [Text.UTF8Encoding]::new($false)
+$packVersion = Get-PackVersion $repoRoot
+# The version is declared once, in PACK-VERSION.txt. It used to be written out by hand in about
+# twenty-five places, and missing one of them at the 4.1.3 cut locked every player out at login.
+# Fail the build if any script spells the current version out again, so it cannot silently regrow.
+$versionLiterals = @(
+    Get-ChildItem -LiteralPath $PSScriptRoot -Filter '*.ps1' -File |
+        Where-Object Name -ne 'PackVersion.ps1' |
+        ForEach-Object {
+            $script = $_
+            [IO.File]::ReadAllLines($script.FullName, [Text.Encoding]::UTF8) |
+                Where-Object { $_ -like "*$packVersion*" -and $_.TrimStart() -notlike '#*' } |
+                ForEach-Object { "$($script.Name): $($_.Trim())" }
+        }
+)
+if ($versionLiterals.Count -ne 0) {
+    throw ("These scripts hardcode the pack version instead of reading PACK-VERSION.txt:`n" +
+           ($versionLiterals -join "`n"))
+}
 
 foreach ($required in @(
     $clientRoot,
@@ -247,7 +267,7 @@ try {
 /.nojekyll
 /.packwizignore
 /index.html
-/nbidal18-client-4.2.0-packwiz.zip
+/nbidal18-client.zip
 /SHA256SUMS.txt
 /sync-manifest.json
 /pack.toml
@@ -256,9 +276,9 @@ try {
     New-Item -ItemType File -Path (Join-Path $stagePath '.nojekyll') | Out-Null
     Copy-Item -LiteralPath $landingPage -Destination (Join-Path $stagePath 'index.html')
 
-    Write-Utf8 (Join-Path $stagePath 'pack.toml') @'
+    Write-Utf8 (Join-Path $stagePath 'pack.toml') (@'
 name = "nbidal18"
-version = "4.2.0-packwiz"
+version = "__PACK_VERSION__"
 description = "Fabric 1.21.1 adventure modpack with automatic Prism updates"
 pack-format = "packwiz:1.1.0"
 
@@ -270,7 +290,7 @@ hash = "0000000000000000000000000000000000000000000000000000000000000000"
 [versions]
 fabric = "0.19.3"
 minecraft = "1.21.1"
-'@
+'@).Replace('__PACK_VERSION__', $packVersion)
     Write-Utf8 (Join-Path $stagePath 'index.toml') @'
 hash-format = "sha256"
 '@
@@ -405,12 +425,28 @@ hash-format = "sha256"
     $bccJar = Join-Path $stagePath 'mods\better-compatability-checker-fabric-21.1.8.jar'
     $bccConfig = Join-Path $stagePath 'config\bcc-common.toml'
     if (-not (Test-Path -LiteralPath $bccJar -PathType Leaf) -or
-            (Get-Content -LiteralPath $bccConfig -Raw) -notmatch 'modpackVersion\s*=\s*"v4.2.0-packwiz"') {
+            (Get-Content -LiteralPath $bccConfig -Raw) -notmatch ('modpackVersion\s*=\s*"' + [regex]::Escape("v$packVersion") + '"')) {
         throw 'Better Compatibility Checker is missing or has the wrong client identity.'
+    }
+    # The server MOTD advertises which client version is required, so it is part of the release
+    # identity. It sat at v4.1.3 through the whole of 4.2.0 because nothing checked it.
+    foreach ($propertiesPath in @(
+        (Join-Path $ReleaseRoot '3. modpack\server\server.properties'),
+        (Join-Path $ReleaseRoot '4. server\2. online-hosting\server.properties')
+    )) {
+        $motd = @([IO.File]::ReadAllLines($propertiesPath, [Text.Encoding]::UTF8) |
+            Where-Object { $_ -like 'motd=*' })
+        if ($motd.Count -ne 1) {
+            throw "Expected exactly one motd line in $propertiesPath, found $($motd.Count)."
+        }
+        if ($motd[0] -notlike "*v$packVersion*") {
+            throw ("The server MOTD does not advertise this release: $propertiesPath holds " +
+                   "'$($motd[0])' but the pack is v$packVersion.")
+        }
     }
     $integrityJar = Join-Path $stagePath 'mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'
     if (-not (Test-Path -LiteralPath $integrityJar -PathType Leaf)) {
-        throw 'The v4.2.0 integrity helper is missing from the Packwiz client.'
+        throw "The v$packVersion integrity helper is missing from the Packwiz client."
     }
     # Derived from the mod's own gradle.properties: a hardcoded version here has broken the build
     # at every client-tweaks bump, which teaches people to edit the assertion rather than read it.
@@ -500,7 +536,7 @@ hash-format = "sha256"
 
     $manifest = [ordered]@{
         schema = 1
-        packVersion = '4.2.0-packwiz'
+        packVersion = $packVersion
         exactRoots = @('mods', 'config', 'datapacks', 'resourcepacks', 'shaderpacks')
         extraTolerantRoots = @($extraTolerantRoots)
         runtimeMutableRoots = @($runtimeMutablePaths)
@@ -521,7 +557,7 @@ hash-format = "sha256"
     $releaseBaselineDigest = '9515a09d1ce3d751e69da097ff6f3aee9856de3662fa35a69b6422fb845f3b41'
     $canonicalPolicy = Join-Path $ReleaseRoot '3. modpack\server\config\nbidal18-integrity.properties'
     $hostingPolicy = Join-Path $ReleaseRoot '4. server\2. online-hosting\config\nbidal18-integrity.properties'
-    $overlayPolicy = Join-Path $ReleaseRoot '4. server\4.2.0-transition-overlay\config\nbidal18-integrity.properties'
+    $overlayPolicy = Join-Path $ReleaseRoot '4. server\transition-overlay\config\nbidal18-integrity.properties'
     foreach ($policyPath in @($canonicalPolicy, $hostingPolicy, $overlayPolicy)) {
         if (-not (Test-Path -LiteralPath $policyPath -PathType Leaf)) {
             throw "The server integrity transition policy is missing: $policyPath"
@@ -567,7 +603,7 @@ hash-format = "sha256"
     if ((Get-Content -LiteralPath $canonicalPolicy -Raw) -notmatch '(?m)^require-helper=true$' -or
             (Get-Content -LiteralPath $hostingPolicy -Raw) -notmatch '(?m)^require-helper=true$' -or
             (Get-Content -LiteralPath $overlayPolicy -Raw) -notmatch '(?m)^require-helper=true$') {
-        throw 'The enforced v4.2.0 release must keep require-helper=true.'
+        throw "The enforced v$packVersion release must keep require-helper=true."
     }
 
     $siteFiles = @(Get-ChildItem -LiteralPath $stagePath -Recurse -File -Force)

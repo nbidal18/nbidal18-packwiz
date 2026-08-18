@@ -4,6 +4,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'PackVersion.ps1')
 
 function Get-Sha256([string] $path) {
     $stream = [IO.File]::OpenRead($path)
@@ -19,7 +20,7 @@ function Get-Sha256([string] $path) {
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
-    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
+    $ReleaseRoot = Get-ReleaseRoot $repoRoot
 }
 else {
     $ReleaseRoot = [IO.Path]::GetFullPath($ReleaseRoot)

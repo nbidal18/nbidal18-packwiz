@@ -4,10 +4,11 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'PackVersion.ps1')
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
-    $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.2.0-packwiz'))
+    $ReleaseRoot = Get-ReleaseRoot $repoRoot
 }
 else {
     $ReleaseRoot = [IO.Path]::GetFullPath($ReleaseRoot)
@@ -89,11 +90,9 @@ if ($constantsText -notmatch '(?m)^\s*static final String PACK_VERSION = "([^"]+
     throw "Could not read PACK_VERSION from $constantsPath"
 }
 $helperPackVersion = $Matches[1]
-# Derived from the release folder so it follows a version cut automatically.
-if ((Split-Path $ReleaseRoot -Leaf) -notmatch '^nbidal18 v(.+)$') {
-    throw "Could not derive the pack version from the release folder name: $ReleaseRoot"
-}
-$sitePackVersion = $Matches[1]
+# Read from PACK-VERSION.txt, the single declaration every script follows.
+$sitePackVersion = Get-PackVersion $repoRoot
+Assert-ReleaseRootMatchesVersion $repoRoot $ReleaseRoot
 if ($helperPackVersion -ne $sitePackVersion) {
     throw ("The integrity helper is compiled for pack version '$helperPackVersion' but this release " +
            "publishes '$sitePackVersion'. Update PACK_VERSION in IntegrityConstants.java; leaving it " +
@@ -130,7 +129,7 @@ $destinations = @(
     (Join-Path $ReleaseRoot '3. modpack\client\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'),
     (Join-Path $ReleaseRoot '3. modpack\server\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'),
     (Join-Path $ReleaseRoot '4. server\2. online-hosting\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar'),
-    (Join-Path $ReleaseRoot '4. server\4.2.0-transition-overlay\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')
+    (Join-Path $ReleaseRoot '4. server\transition-overlay\mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')
 )
 foreach ($destination in $destinations) {
     Copy-Item -LiteralPath $helperJar -Destination $destination -Force

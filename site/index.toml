@@ -75,7 +75,7 @@ hash = "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "5b8ba216f3e0218fa780b15ea19da9ac9986bc1e025ae8713c0d77f9150c684a"
+hash = "ca7f6aac98506dc08e30d9c6a2979dc5e015858c0b1fd7e007179ca83ed88b29"
 
 [[files]]
 file = "config/beautify.json"
@@ -2056,12 +2056,12 @@ file = "mods/naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar"
 hash = "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
 
 [[files]]
-file = "mods/nbidal18-client-tweaks-1.3.6+1.21.1.jar"
-hash = "b91b4c6776e5ca12167109060119a2e21f679872c084e27787f9975f0e39fd3f"
+file = "mods/nbidal18-client-tweaks-1.3.7+1.21.1.jar"
+hash = "05ad674f86873f3f1f4844c99d4f8edf1fa65eea21e51d78460cdbfc4767d656"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "f14f4458217b2f11ed70bc4cd62479f8eaf2a7031404af600ff662b0b4857921"
+hash = "e6d2527f4e83d8a9a3c87f361527b55198f6c51ecb313e76887f4078fd107847"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -2373,7 +2373,7 @@ hash = "3978c0dc75b138aaa0d8610467624ab49fecdadfaf160e2f66705870cadcb94d"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "4ac880b80b7ce3a55e4deeb976bfdbffa4c45284adfe1d577c91b89ed039b134"
+hash = "c823a5c9e255d1c0d1818afb03687abfc5c6847fd204f7995488f626e6097b97"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"

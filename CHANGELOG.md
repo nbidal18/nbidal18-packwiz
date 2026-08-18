@@ -34,9 +34,33 @@ Record:
 
 ---
 
+## v4.2.1-packwiz
+
+Current release. Live digest `5745945329aeb210…`. 620 managed files, 244 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-18 | `pending` | `5745945329aeb210` | 620 | 244 | **First release under one-version-per-publish.** Fixes the HUD showing things it should not. Auto HUD's screen-wide reveal ignores each component's own policy, so breaking a block revealed the armour bar, the experience bar and the mount jump bar along with the hotbar. It now reveals the hotbar group instead of the whole HUD, and those three carry an explicit never-show guard. Saddle health joined the group, so it appears with the hotbar rather than alone. Temperature stopped pinning the HUD open: the overlay revealed the hearts on every tick any temperature effect was active, so standing somewhere cold held the whole group on screen indefinitely — it now reveals only when the reading moves by at least half a heart. The server MOTD advertised `v4.1.3` for the whole of 4.2.0 and now tracks the release, checked by the build. Maintainer-facing: the pack version was written by hand in about twenty-five places across eleven scripts, which is how the 4.1.3 cut shipped a client whose integrity helper rejected its own manifest; it now lives only in `PACK-VERSION.txt` and the build fails if any script spells it out again. The published setup archive lost its version suffix and is simply `nbidal18-client.zip`, so the download link no longer changes each release. `Test-ConfigStability.ps1` now compares an instance against the manifest it actually installed rather than the newest build, which would otherwise have reported drift at every version cut. Client tweaks 1.3.6 to 1.3.7. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version, and `server.properties`
+is not hot-reloadable. Deployed the integrity policy, the helper JAR, `bcc-common.toml` and the MOTD
+line of `server.properties` — only that one line of sixty-four, leaving ports, whitelist, world name
+and every provider setting untouched. Previous copies are backed up under
+`Z:\.nbidal18-deploy-backups\2026-08-18-v4.2.1\`.
+
+### A note on 4.2.0
+
+v4.2.0 was published five times: the original cut and four fixes, all reusing the same version.
+That is why its section below has several rows sharing one heading. From v4.2.1 onward a version
+number is published once and never reused, so a post-release fix is a version bump.
+
 ## v4.2.0-packwiz
 
-Current release. Live digest `a5d5229243d6b922…`. 620 managed files, 244 mods.
+Superseded by v4.2.1. Final digest `a5d5229243d6b922…`. 620 managed files, 244 mods.
 
 The first release since 4.1.3 to add gameplay content, and the version identity moves with it.
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.

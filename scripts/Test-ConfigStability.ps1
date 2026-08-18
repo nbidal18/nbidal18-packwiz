@@ -52,7 +52,12 @@ if (-not (Test-Path -LiteralPath $syncStamp -PathType Leaf)) {
 # Two seconds of slack: the updater writes the stamp and the repaired files in the same pass.
 $syncedAt = (Get-Item -LiteralPath $syncStamp).LastWriteTimeUtc.AddSeconds(2)
 
-$manifest = [IO.File]::ReadAllText($manifestPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
+# Compare the instance against the manifest it actually installed, not against the current build.
+# The question this answers is "did the game modify anything after syncing", which is about that
+# instance and that sync. Using the freshly built manifest made every version cut look like drift,
+# because a played instance is by definition still on the previous release.
+$manifest = [IO.File]::ReadAllText($syncStamp, [Text.Encoding]::UTF8) | ConvertFrom-Json
+$buildManifest = [IO.File]::ReadAllText($manifestPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
 $classification = [IO.File]::ReadAllText($classificationPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
 $rules = @($classification.rules + $classification.outsideConfig)
 
@@ -129,6 +134,10 @@ foreach ($root in $manifest.exactRoots) {
 
 Write-Host "Instance : $InstancePath"
 Write-Host "Synced   : $syncedAt UTC"
+Write-Host "Version  : instance $($manifest.packVersion), build $($buildManifest.packVersion)"
+if ($manifest.packVersion -ne $buildManifest.packVersion) {
+    Write-Host "           the instance is a release behind, so this checks it against its own manifest."
+}
 Write-Host ''
 Write-Host "Rewritten after the sync: $($touched.Count)"
 foreach ($item in $touched | Sort-Object Class, Path) {
