@@ -44,7 +44,12 @@ public final class Nbidal18PackwizSync {
             "https://nbidal18.github.io/nbidal18-packwiz/pack.toml";
     private static final String DEFAULT_MANIFEST_URL =
             "https://nbidal18.github.io/nbidal18-packwiz/sync-manifest.json";
-    private static final int[] MINIMUM_PACK_VERSION = {4, 1, 3};
+    /**
+     * Lowest pack version this updater will accept from the channel. Raising it with each release
+     * stops a rolled-back or spoofed channel downgrading an instance: once a client runs this
+     * build, publishing anything below 4.2.0 would be refused rather than installed.
+     */
+    private static final int[] MINIMUM_PACK_VERSION = {4, 2, 0};
     private static final DateTimeFormatter MOVE_STAMP =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final Pattern FILE_ENTRY = Pattern.compile(
