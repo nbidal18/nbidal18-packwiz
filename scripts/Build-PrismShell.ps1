@@ -29,9 +29,9 @@ if (-not $legacyOutputPath.StartsWith($setupRoot, [StringComparison]::OrdinalIgn
 
 $clientRoot = Join-Path $ReleaseRoot '3. modpack\client'
 $appearanceRoot = Join-Path $ReleaseRoot '2. appearance\support'
-$iconPath = Join-Path $ReleaseRoot '5. development\server-icon.png'
-$bootstrapPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer-bootstrap.jar'
-$installerPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer.jar'
+$iconPath = Join-Path $ReleaseRoot '5. modpack source\auto-updater tools\server-icon.png'
+$bootstrapPath = Join-Path $ReleaseRoot '5. modpack source\auto-updater tools\packwiz-installer-bootstrap.jar'
+$installerPath = Join-Path $ReleaseRoot '5. modpack source\auto-updater tools\packwiz-installer.jar'
 $syncJar = Join-Path $repoRoot 'client\nbidal18-packwiz-sync.jar'
 $updaterJar = Join-Path $repoRoot 'client\nbidal18-packwiz-updater.jar'
 $sitePath = Join-Path $repoRoot 'site'

@@ -36,8 +36,8 @@ if ([string]::IsNullOrWhiteSpace($javaHome)) {
     throw 'Java 21 JDK was not found. Set JAVA_HOME before building.'
 }
 
-$sourceRoot = Join-Path $ReleaseRoot '5. development\nbidal18-jobs-chat-suppressor'
-$gradle = Join-Path $ReleaseRoot '5. development\nbidal18-client-tweaks\gradlew.bat'
+$sourceRoot = Join-Path $ReleaseRoot '5. modpack source\custom mods\nbidal18-jobs-chat-suppressor'
+$gradle = Join-Path $ReleaseRoot '5. modpack source\custom mods\nbidal18-client-tweaks\gradlew.bat'
 $artifact = Join-Path $sourceRoot 'build\libs\nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar'
 $previousJavaHome = $env:JAVA_HOME
 try {

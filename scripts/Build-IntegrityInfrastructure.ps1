@@ -77,7 +77,7 @@ if ($LASTEXITCODE -ne 0) {
     throw "The Packwiz update-engine JAR build failed with exit code $LASTEXITCODE"
 }
 
-$helperRoot = Join-Path $ReleaseRoot '5. development\nbidal18-integrity-helper'
+$helperRoot = Join-Path $ReleaseRoot '5. modpack source\custom mods\nbidal18-integrity-helper'
 $gradle = Join-Path $helperRoot 'gradlew.bat'
 $previousJavaHome = $env:JAVA_HOME
 try {

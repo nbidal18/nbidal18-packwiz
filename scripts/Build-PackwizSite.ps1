@@ -21,11 +21,11 @@ elseif (-not [IO.Path]::IsPathRooted($SitePath)) {
 $SitePath = [IO.Path]::GetFullPath($SitePath)
 
 $clientRoot = Join-Path $ReleaseRoot '3. modpack\client'
-$packwizPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-current\packwiz.exe'
+$packwizPath = Join-Path $ReleaseRoot '5. modpack source\auto-updater tools\packwiz.exe'
 $syncSupervisorPath = Join-Path $repoRoot 'client\nbidal18-packwiz-sync.jar'
 $updateEnginePath = Join-Path $repoRoot 'client\nbidal18-packwiz-updater.jar'
-$bootstrapPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer-bootstrap.jar'
-$installerPath = Join-Path $ReleaseRoot '5. development\tools\packwiz-installer.jar'
+$bootstrapPath = Join-Path $ReleaseRoot '5. modpack source\auto-updater tools\packwiz-installer-bootstrap.jar'
+$installerPath = Join-Path $ReleaseRoot '5. modpack source\auto-updater tools\packwiz-installer.jar'
 $prismPackTemplate = Join-Path $repoRoot 'templates\mmc-pack.json'
 $landingPage = Join-Path $repoRoot 'templates\index.html'
 $stagePath = Join-Path $repoRoot ('.site-staging-' + [guid]::NewGuid().ToString('N'))

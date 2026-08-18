@@ -24,7 +24,7 @@ if ([string]::IsNullOrWhiteSpace($javaHome)) {
     throw 'Java 21 JDK was not found. Set JAVA_HOME before building.'
 }
 
-$sourceRoot = Join-Path $ReleaseRoot '5. development\nbidal18-client-tweaks'
+$sourceRoot = Join-Path $ReleaseRoot '5. modpack source\custom mods\nbidal18-client-tweaks'
 $gradle = Join-Path $sourceRoot 'gradlew.bat'
 $clientMods = [IO.Path]::GetFullPath((Join-Path $ReleaseRoot '3. modpack\client\mods'))
 $artifact = Join-Path $sourceRoot 'build\libs\nbidal18-client-tweaks-1.3.2+1.21.1.jar'

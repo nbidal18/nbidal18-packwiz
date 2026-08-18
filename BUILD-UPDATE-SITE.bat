@@ -4,6 +4,12 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-Clie
 if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-JobsNotifications.ps1"
 if errorlevel 1 exit /b %errorlevel%
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-JeiCoverageBridge.ps1"
+if errorlevel 1 exit /b %errorlevel%
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-PlayerEmotesBridge.ps1"
+if errorlevel 1 exit /b %errorlevel%
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-MoreVillagersBridge.ps1"
+if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-IntegrityInfrastructure.ps1"
 if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-PackwizSite.ps1"

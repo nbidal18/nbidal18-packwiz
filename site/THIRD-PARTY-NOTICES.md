@@ -24,9 +24,9 @@ The byte-exact `playeremotes-fabric-1.21.1-0.1.0.jar` from Modrinth project/vers
 
 ## More Villagers / Numismatic compatibility
 
-`nbidal18-morevillagers-numismatic-bridge-1.0.0+1.21.1.jar` is a source-retained nbidal18 compatibility component. It converts More Villagers' late-registered emerald offers to Numismatic Overhaul currency at 125 coin value per emerald. Its MIT license is retained at `licenses/MoreVillagers-Numismatic-Bridge-MIT.txt`, and complete source is retained under `5. development/nbidal18-morevillagers-numismatic-bridge` in the organized release folder.
+`nbidal18-morevillagers-numismatic-bridge-1.0.0+1.21.1.jar` is a source-retained nbidal18 compatibility component. It converts More Villagers' late-registered emerald offers to Numismatic Overhaul currency at 125 coin value per emerald. Its MIT license is retained at `licenses/MoreVillagers-Numismatic-Bridge-MIT.txt`, and complete source is retained under `5. modpack source/custom mods/nbidal18-morevillagers-numismatic-bridge` in the organized release folder.
 
-`nbidal18-playeremotes-fa-bridge-1.2.0+1.21.1.jar` is a source-retained nbidal18 client compatibility component. It coordinates Player Emotes and Carry On with EMF/Fresh Animations so emotes and Carry On's raised-arm pose are not overwritten, and it pauses custom animation only for reconstructed carried-entity UUIDs to prevent their jitter. Its MIT license is retained at `licenses/PlayerEmotes-FA-CarryOn-Bridge-MIT.txt`, and its complete source is retained under `5. development/nbidal18-playeremotes-fa-bridge` in the organized release folder.
+`nbidal18-playeremotes-fa-bridge-1.2.0+1.21.1.jar` is a source-retained nbidal18 client compatibility component. It coordinates Player Emotes and Carry On with EMF/Fresh Animations so emotes and Carry On's raised-arm pose are not overwritten, and it pauses custom animation only for reconstructed carried-entity UUIDs to prevent their jitter. Its MIT license is retained at `licenses/PlayerEmotes-FA-CarryOn-Bridge-MIT.txt`, and its complete source is retained under `5. modpack source/custom mods/nbidal18-playeremotes-fa-bridge` in the organized release folder.
 
 ## Vanilla Refresh
 
@@ -36,7 +36,7 @@ The byte-exact `vanilla-refresh-1.4.26_1.21.jar` from Modrinth project/version `
 
 ## Bombs by Juix and Juix Resources
 
-`nbidal18_bombs_by_juix_v1.1_power60.zip` is a modified distribution based on Bombs by Juix 1.1 from Modrinth project/version `4xpND0VK` / `D8mk5eLK`. It changes the Atomic Bomb's explosion power and displayed lore from 20 to 60; complete modified source and an in-pack modification notice are retained under `5. development/datapacks`. The unmodified upstream datapack is not bundled separately. The historically matching, byte-exact `Juix Resources [1.3] 1.18-1.21.10.zip` from `E8IgiHZK` / `P246CAqt` remains bundled and enabled. Projects: <https://modrinth.com/datapack/bombs-by-juix> and <https://modrinth.com/resourcepack/juix-resources>. Both projects declare CC0-1.0.
+`nbidal18_bombs_by_juix_v1.1_power60.zip` is a modified distribution based on Bombs by Juix 1.1 from Modrinth project/version `4xpND0VK` / `D8mk5eLK`. It changes the Atomic Bomb's explosion power and displayed lore from 20 to 60; complete modified source and an in-pack modification notice are retained under `5. modpack source/reference/datapack source`. The unmodified upstream datapack is not bundled separately. The historically matching, byte-exact `Juix Resources [1.3] 1.18-1.21.10.zip` from `E8IgiHZK` / `P246CAqt` remains bundled and enabled. Projects: <https://modrinth.com/datapack/bombs-by-juix> and <https://modrinth.com/resourcepack/juix-resources>. Both projects declare CC0-1.0.
 
 ## Realistic Health
 
@@ -72,7 +72,7 @@ The byte-exact `automobility-0.5.0.h+1.21.1-fabric.jar` from Modrinth project/ve
 
 ## Nature's Compass - nbidal18 Minimal Fork
 
-`naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar` is an adapted build based on the official Nature's Compass `fabric-1.21.1` source commit `0342b1900f6230b8ecba11253404fe584dcd2b3d` and upstream version 1.21.1-2.6.0. Upstream project/source: <https://modrinth.com/mod/natures-compass> and <https://github.com/MattCzyr/NaturesCompass>. The complete adapted source, build files, original attribution, and license are retained in `5. development/forks/natures-compass-minimal`. License: CC BY-NC-SA 4.0.
+`naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar` is an adapted build based on the official Nature's Compass `fabric-1.21.1` source commit `0342b1900f6230b8ecba11253404fe584dcd2b3d` and upstream version 1.21.1-2.6.0. Upstream project/source: <https://modrinth.com/mod/natures-compass> and <https://github.com/MattCzyr/NaturesCompass>. The complete adapted source, build files, original attribution, and license are retained in `5. modpack source/custom mods/natures-compass-minimal`. License: CC BY-NC-SA 4.0.
 
 ## HT's TreeChop
 
@@ -108,8 +108,8 @@ The byte-exact Jewelry 2.3.3 (`sNJAIjUm` / `U02aRsgR`) is bundled with Spell Pow
 
 ## Gacha Addiction - Fabric Lootr edition
 
-`gachaaddiction-fabric-1.1.4+fabric.1.21.1-nbidal18.4.jar` is an adapted Fabric build based on Gacha Addiction source commit `d6a74631b8bbdc289f65d1ce4cfd28772757f3bf` from <https://github.com/Wang-Xiao-Jing/GachaAddiction>. The adaptation retains the original slot-machine presentation, targets Lootr on Fabric 1.21.1, and changes first-open handling to one server-authoritative 20% roll per player/container with safe reward transfer. Complete adapted source is retained under `5. development/forks/gacha-addiction-fabric`. License: LGPL-3.0-or-later; the license is bundled at `licenses/GachaAddiction-LGPL-3.0.txt`.
+`gachaaddiction-fabric-1.1.4+fabric.1.21.1-nbidal18.4.jar` is an adapted Fabric build based on Gacha Addiction source commit `d6a74631b8bbdc289f65d1ce4cfd28772757f3bf` from <https://github.com/Wang-Xiao-Jing/GachaAddiction>. The adaptation retains the original slot-machine presentation, targets Lootr on Fabric 1.21.1, and changes first-open handling to one server-authoritative 20% roll per player/container with safe reward transfer. Complete adapted source is retained under `5. modpack source/custom mods/gacha-addiction-fabric`. License: LGPL-3.0-or-later; the license is bundled at `licenses/GachaAddiction-LGPL-3.0.txt`.
 
 ## Realistic Death Visuals
 
-`realistic-death-visuals-1.0.2+mc1.21.1-nbidal18.2.jar` is an Apache-2.0 source reconstruction and Minecraft 1.21.1 backport of the official Fabric 1.21.11 release (`iCCdpXAR` / `r0Oxib4E`) from <https://modrinth.com/mod/realistic-death-visuals>. Upstream did not publish a source repository URL. This revision holds the screen black for 10 seconds before respawn. The complete adapted source and pinned provenance are retained under `5. development/forks/realistic-death-visuals-mc1211`; the license is bundled at `licenses/Realistic-Death-Visuals-Apache-2.0.txt`.
+`realistic-death-visuals-1.0.2+mc1.21.1-nbidal18.2.jar` is an Apache-2.0 source reconstruction and Minecraft 1.21.1 backport of the official Fabric 1.21.11 release (`iCCdpXAR` / `r0Oxib4E`) from <https://modrinth.com/mod/realistic-death-visuals>. Upstream did not publish a source repository URL. This revision holds the screen black for 10 seconds before respawn. The complete adapted source and pinned provenance are retained under `5. modpack source/custom mods/realistic-death-visuals-mc1211`; the license is bundled at `licenses/Realistic-Death-Visuals-Apache-2.0.txt`.
