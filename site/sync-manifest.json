@@ -3127,8 +3127,8 @@
                       "sha256":  "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
                   },
                   {
-                      "path":  "mods/nbidal18-client-tweaks-1.2.9+1.21.1.jar",
-                      "sha256":  "a5897486300fba11f7fa725263544a45b19f5f17909490818250da42a112b3cb"
+                      "path":  "mods/nbidal18-client-tweaks-1.3.0+1.21.1.jar",
+                      "sha256":  "e1c9ab34182d0c38fdabed8e842c20be1ffdbc1dc46520ddb70cce7bc2506354"
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
@@ -3524,7 +3524,7 @@
                   },
                   {
                       "path":  "resourcepacks/§0§lOLED §f§lInmis Backpacks Addon§8.zip",
-                      "sha256":  "abab30876c21aa034cd78f587827d3fab5b5c7ea7754f6f6209375764cd7b2fd"
+                      "sha256":  "3f39582a357ab7c6986f0a92f98b980378a96a058ed6a5ffdafcc4711fd98a6d"
                   },
                   {
                       "path":  "resourcepacks/§3Fresh §bFlower Pots Rotated.zip",

@@ -5,6 +5,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
@@ -331,8 +332,8 @@ hash-format = "sha256"
         throw 'The v4.1.3 integrity helper is missing from the Packwiz client.'
     }
     $clientTweaks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter 'nbidal18-client-tweaks-*.jar')
-    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.2.9+1.21.1.jar') {
-        throw 'The Inmis OLED and Jobs+ plaque-enabled client-tweaks artifact is missing or duplicated.'
+    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.3.0+1.21.1.jar') {
+        throw 'The Inmis/Immersive Vehicles OLED and Jobs+ plaque-enabled client-tweaks artifact is missing or duplicated.'
     }
     $expectedDyeableBackpacks = @(
         'inmis:baby_backpack',
@@ -382,6 +383,22 @@ hash-format = "sha256"
             -not (Test-Path -LiteralPath (Join-Path $stagePath 'resourcepacks\Enhanced Grass V1_4.zip') -PathType Leaf) -or
             $oledBase.Count -ne 1 -or $inmisOledAddon.Count -ne 1) {
         throw 'The 19-pack resource-pack baseline is missing Fancy Crops, Enhanced Grass, Colourful Containers OLED, or its Inmis add-on.'
+    }
+    $inmisArchive = [System.IO.Compression.ZipFile]::OpenRead($inmisOledAddon[0].FullName)
+    try {
+        $inmisEntries = @($inmisArchive.Entries | ForEach-Object FullName)
+        foreach ($requiredEntry in @(
+            'assets/nbidal18_inmis_oled/textures/gui/vehicle_inventory_lip.png',
+            'assets/immersive_aircraft/textures/gui/container/inventory.png',
+            'assets/immersive_machinery/textures/gui/container/inventory.png'
+        )) {
+            if ($requiredEntry -notin $inmisEntries) {
+                throw "The OLED add-on is missing Immersive Aircraft/Machinery support: $requiredEntry"
+            }
+        }
+    }
+    finally {
+        $inmisArchive.Dispose()
     }
     foreach ($jobsConfig in @(
         (Join-Path $stagePath 'config\jobsplus-common.yaml'),
