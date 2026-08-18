@@ -36,15 +36,15 @@ Record:
 
 ## v4.2.0-packwiz
 
-Digest `d324ed2f2302285d…`. **Not yet published** — this entry is written ahead of the push, so
-the commit column is filled in when it lands. 618 managed files, 244 mods.
+Digest `d324ed2f2302285d…`. Published as `3e32af4`.
+618 managed files, 244 mods.
 
 The first release since 4.1.3 to add gameplay content, and the version identity moves with it.
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 
 | Date | Commit | Digest | Files | Mods | Change |
 | --- | --- | --- | --- | --- | --- |
-| 2026-08-18 | *pending* | `d324ed2f2302285d` | 618 | 244 | **Released v4.2.0-packwiz.** Nullscape reshapes the End, installed before any End chunk had generated so no terrain is lost; YUNG's Better End Island keeps the central island and dragon fight, and the two share no files. Resting within 3 blocks of a lit campfire restores health. 58 modded slab families can be crafted back into blocks, including dirt slabs — Frostiful's cut-ice slabs are deliberately excluded because their stonecutter path would have allowed a 4× duplication. Auto HUD reveals while placing and breaking blocks and shows vehicle health only while changing, reissued once to existing instances. Fixes a chisel integrity false positive that was kicking players, restores the missing grey backing behind the ring accessory slots, and stops Immersive Aircraft and Machinery forcing a camera perspective when boarding. Adds a temporary diagnostic guard for the intermittent stuck-attack fault. Credits Nullscape, Incendium, Structory and Structory: Towers under the Stardust Labs licence, which the pack had been omitting. |
+| 2026-08-18 | `3e32af4` | `d324ed2f2302285d` | 618 | 244 | **Released v4.2.0-packwiz.** Nullscape reshapes the End, installed before any End chunk had generated so no terrain is lost; YUNG's Better End Island keeps the central island and dragon fight, and the two share no files. Resting within 3 blocks of a lit campfire restores health. 58 modded slab families can be crafted back into blocks, including dirt slabs — Frostiful's cut-ice slabs are deliberately excluded because their stonecutter path would have allowed a 4× duplication. Auto HUD reveals while placing and breaking blocks and shows vehicle health only while changing, reissued once to existing instances. Fixes a chisel integrity false positive that was kicking players, restores the missing grey backing behind the ring accessory slots, and stops Immersive Aircraft and Machinery forcing a camera perspective when boarding. Adds a temporary diagnostic guard for the intermittent stuck-attack fault. Credits Nullscape, Incendium, Structory and Structory: Towers under the Stardust Labs licence, which the pack had been omitting. |
 
 ### Server deployment
 
