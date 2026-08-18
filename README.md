@@ -1,10 +1,34 @@
 # nbidal18 v4.1.3-packwiz
 
-This public repository is the complete GitHub Pages update channel for the updater-enabled Prism edition of nbidal18 4.1.3-packwiz. Its Java pre-launch updater works through Prism's selected runtime on Windows, macOS, and Linux.
+This public repository publishes the files that the nbidal18 Prism instance downloads before Minecraft starts. Players normally use the player page or import ZIP; they do not need to clone this repository.
+
+The Java pre-launch updater uses Prism's selected Java runtime and works on Windows, macOS, and Linux.
 
 Player page: <https://nbidal18.github.io/nbidal18-packwiz/>
 
 Packwiz endpoint: <https://nbidal18.github.io/nbidal18-packwiz/pack.toml>
+
+## Repository map
+
+| Path | Purpose | Edit by hand? |
+| --- | --- | --- |
+| `client` | Source for the stable updater/supervisor JARs. | Yes, when changing updater code. |
+| `scripts` | Release builders and validation tests. | Yes, when changing the release process. |
+| `templates` | Small template inputs used by the builders. | Yes. |
+| `site` | Generated GitHub Pages download tree and Packwiz metadata. | No; rebuild it. |
+| `BUILD-UPDATE-SITE.bat` | Runs the complete local build in the correct order. | Run it; normally do not edit it. |
+| `UPDATE-URL.txt` | Published Packwiz endpoint. | Change only when moving the channel. |
+
+The organized master client, server, and first-party source are in the sibling folder `nbidal18 v4.1.3-packwiz`. Build scripts read from that folder and write generated output here. In these docs, **manifest** means the official managed-file list, and **digest** means the single hash that identifies that list.
+
+## How an update reaches a player
+
+1. A maintainer changes the organized master files in the sibling release folder.
+2. The build scripts compile first-party components and regenerate `site` plus the small Prism import ZIP.
+3. Local tests install into a temporary instance and verify updating, repair, migration, and offline behavior.
+4. The server accepts the new manifest digest during rollout.
+5. Pushing this repository publishes the new files through GitHub Pages.
+6. The player's next click on **Play** downloads the changes before Minecraft opens.
 
 ## Behaviour
 
@@ -14,7 +38,7 @@ Packwiz endpoint: <https://nbidal18.github.io/nbidal18-packwiz/pack.toml>
 - Prism starts a stable supervisor, not the replaceable update engine directly. If Packwiz downloads a newer staged engine or bootstrap, the supervisor activates it after the old process exits and reruns the update check. It returns success to Prism only when the newest engine confirms a complete release, so the Minecraft main menu cannot appear between updater phases.
 - Unknown files in those loadable roots are moved to the recoverable `.nbidal18-packwiz/removed-local-files` folder before Minecraft starts.
 - Fancy Crops 1.3 and Enhanced Grass V1.4 are installed and enabled by default. Enhanced Grass changes only short/tall grass models, so ores and other terrain remain untouched.
-- Colourful Containers OLED 26.1.2 replaces the retired Darkmode/Modded Containers packs. OptiGUI enables its conditional vanilla container designs; the first-party Inmis add-on supplies tier/dye-aware backpack panels, and standard modded player inventories safely fall back to the exact OLED inventory section.
+- Colourful Containers OLED, its first-party Inmis/vehicle container add-on, and the now-unused OptiGUI dependency are retired. Existing installations remove their archives and resource-pack option entries during the next update; vanilla and mod-provided container screens render normally.
 - Gameplay and compatibility configs remain managed before launch and hash-enforced during multiplayer. Auto HUD, personal Voice Chat state, Iris shader selection, mod keybinds, controller state, and narrowly identified support/cache files are the runtime exceptions. Sodium remains enforced because its config includes coordinate-display controls.
 - Only the supplied Complementary and MakeUp shader ZIPs are accepted (or shaders off). Their normal quality settings are preserved, while Complementary's `GLOWING_ORE_MASTER` field is selectively forced to `0` online and during offline fallback.
 - `options.txt`, `options.amecsapi.txt`, and `servers.dat` are supplied by the thin Prism ZIP and then remain player-owned. The updater has one narrow, idempotent `options.txt` migration that replaces retired nbidal18 resource-pack entries and enables their successors while preserving every unrelated player option and pack preference.
@@ -30,13 +54,18 @@ This is client-side tamper deterrence, not proof against a deliberately patched 
 
 ## Release workflow
 
-1. Update the organized release source and bump the Packwiz/BCC version together.
-2. Run `BUILD-UPDATE-SITE.bat`.
-3. Review and test the generated `site/`, Prism ZIP, server helper, and rolling manifest policy.
-4. Deploy the generated server helper and policy first, then fully restart the server. The policy accepts the previous and current reviewed manifest digests during rollout.
+Prerequisites: Java 21, PowerShell, Git, and the sibling organized release folder at the expected path. The server must be stopped for any helper JAR replacement.
+
+1. Update the organized release source. For a new release identity, bump Packwiz and Better Compatibility Checker together.
+2. Run `BUILD-UPDATE-SITE.bat` from this repository. Stop if any build step fails.
+3. Run `scripts\Test-LocalSync.ps1` and review the generated `site`, Prism ZIP, server helper, and manifest policy.
+4. Back up the server. Deploy the generated server helper and policy first, then fully restart if the helper JAR changed. During rollout, the policy accepts both the previous and current reviewed manifest digests.
 5. Commit and push `main` to publish the client update.
-6. Wait for the Pages workflow and verify the public endpoint.
-7. Keep `require-helper=true` and server BCC set to `v4.1.3-packwiz`; remove the previous manifest digest only after healthy clients have updated.
+6. Wait for the GitHub Pages workflow to succeed and verify both public links near the top of this README.
+7. Confirm a clean client updates and connects. Keep `require-helper=true` and server BCC set to `v4.1.3-packwiz`.
+8. Remove the previous accepted manifest digest only after healthy clients have updated.
+
+Do not hand-edit `site` to prepare a release. Do not publish a client manifest before the server policy accepts it; otherwise updated clients can be locked out.
 
 For a manifest-only false-positive hotfix after the reloading server helper is installed, copy the newly generated `nbidal18-integrity.properties` to the running server before publishing the client channel. The server reads it on the next login without a restart. Players only close and reopen the existing Prism instance; its pre-launch updater installs the fix automatically.
 

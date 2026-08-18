@@ -79,24 +79,24 @@ try {
     Assert-True ($instanceConfig.Contains("ExportName=nbidal18-client`n")) 'The Prism export name is not the stable client name.'
     Assert-True (-not $instanceConfig.Contains('name=nbidal18-client-4.1.3-packwiz')) 'The Prism display name still contains a release version.'
     Assert-True ((Invoke-Sync $minecraft) -eq 0) 'First online installation failed.'
-    Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 244) 'First install did not produce 244 mod JARs.'
+    Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 243) 'First install did not produce 243 mod JARs.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\better-compatability-checker-fabric-21.1.8.jar')) 'BCC was not installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')) 'The integrity helper was not installed.'
-    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.1+1.21.1.jar')) 'The upper-slot-highlight-free Inmis/Immersive Vehicles OLED transitions, dyed backpack rendering, corrected slots, grouped Trinkets offhand slots, and Jobs+ plaque-enabled client tweaks were not installed.'
+    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.2+1.21.1.jar')) 'The Inmis dye rendering, grouped Trinkets slots, Auto HUD, and Jobs+ plaque-enabled client tweaks were not installed.'
     $installedInmisConfig = [IO.File]::ReadAllText((Join-Path $minecraft 'config\inmis.json'), [Text.Encoding]::UTF8)
     Assert-True (-not $installedInmisConfig.EndsWith("`n")) 'Inmis config must use AutoConfig''s stable no-final-newline serialization.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar')) 'The Jobs+ compatibility helper was not installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\polytone-1.21-3.12.0-fabric.jar'))) 'Retired Nature X Polytone support was still installed.'
-    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\optigui-2.3.0-beta.9+1.21.jar')) 'Colourful Containers OLED OptiGUI support was not installed.'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\optigui-2.3.0-beta.9+1.21.jar'))) 'Retired OptiGUI support was still installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'resourcepacks\Fancy Crops v1.3.zip')) 'Fancy Crops was not installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'resourcepacks\Enhanced Grass V1_4.zip')) 'Enhanced Grass was not installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'resourcepacks\Nature X - 12.2 [1.21.1].zip'))) 'Retired Nature X was still installed.'
     $installedResourcePacks = @(Get-ChildItem -LiteralPath (Join-Path $minecraft 'resourcepacks') -File -Filter '*.zip')
-    Assert-True (@($installedResourcePacks | Where-Object { $_.Name -like '*OLED*Colourful Containers*.zip' }).Count -eq 1) 'Colourful Containers OLED was not installed exactly once.'
-    Assert-True (@($installedResourcePacks | Where-Object { $_.Name -like '*OLED*Inmis Backpacks Addon*.zip' }).Count -eq 1) 'The Inmis OLED add-on was not installed exactly once.'
+    Assert-True (@($installedResourcePacks | Where-Object { $_.Name -like '*OLED*Colourful Containers*.zip' }).Count -eq 0) 'Retired Colourful Containers OLED was still installed.'
+    Assert-True (@($installedResourcePacks | Where-Object { $_.Name -like '*OLED*Inmis Backpacks Addon*.zip' }).Count -eq 0) 'The retired Inmis OLED add-on was still installed.'
     Assert-True (@($installedResourcePacks | Where-Object { $_.Name -like '*Darkmode*Colourful Containers*.zip' }).Count -eq 0) 'The retired Colourful Containers Darkmode pack was still installed.'
     Assert-True (@($installedResourcePacks | Where-Object { $_.Name -like '*Modded*Containers*Dark*.zip' }).Count -eq 0) 'The retired Modded Containers Dark pack was still installed.'
-    Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $minecraft 'resourcepacks') -File -Filter '*.zip').Count -eq 19) 'First install did not produce 19 resource packs.'
+    Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $minecraft 'resourcepacks') -File -Filter '*.zip').Count -eq 17) 'First install did not produce 17 resource packs.'
     foreach ($managedUpdater in @(
         'nbidal18-packwiz-sync.next.jar',
         'nbidal18-packwiz-updater.next.jar',
@@ -124,9 +124,8 @@ try {
     Assert-True ($optionsText.Contains('file/Fancy Crops v1.3.zip')) 'Fancy Crops is not enabled in the default resource-pack list.'
     Assert-True (-not $optionsText.Contains('file/Nature X - 12.2 [1.21.1].zip')) 'Retired Nature X remains enabled in the default resource-pack list.'
     $section = [char]0x00A7
-    $oledIndex = $optionsText.IndexOf("file/${section}0${section}lOLED ${section}f${section}lColourful Containers${section}8.zip", [StringComparison]::Ordinal)
-    $inmisOledIndex = $optionsText.IndexOf("file/${section}0${section}lOLED ${section}f${section}lInmis Backpacks Addon${section}8.zip", [StringComparison]::Ordinal)
-    Assert-True ($oledIndex -ge 0 -and $inmisOledIndex -gt $oledIndex) 'The Inmis OLED add-on is not enabled above its Colourful Containers OLED base.'
+    Assert-True (-not $optionsText.Contains("file/${section}0${section}lOLED ${section}f${section}lColourful Containers${section}8.zip")) 'Retired Colourful Containers OLED remains enabled in the default resource-pack list.'
+    Assert-True (-not $optionsText.Contains("file/${section}0${section}lOLED ${section}f${section}lInmis Backpacks Addon${section}8.zip")) 'The retired Inmis OLED add-on remains enabled in the default resource-pack list.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-jobs-chat-suppressor-1.1.0+1.21.1.jar'))) 'The reset-enabled Jobs+ helper was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.0.0+1.21.1.jar'))) 'The retired client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.1.0+1.21.1.jar'))) 'The pre-Inmis-OLED client-tweaks artifact was still installed.'
@@ -233,14 +232,8 @@ try {
     $legacyOptions = [IO.File]::ReadAllText($optionsPath)
     $legacyOptions = $legacyOptions.Replace('file/Enhanced Grass V1_4.zip', 'file/Nature X - 12.2 [1.21.1].zip')
     $legacyOptions = $legacyOptions.Replace(
-        "file/${section}0${section}lOLED ${section}f${section}lColourful Containers${section}8.zip",
-        "file/${section}8${section}lDarkmode ${section}f${section}lColourful Containers${section}8.zip")
-    $legacyOptions = $legacyOptions.Replace(
-        "file/${section}0${section}lOLED ${section}f${section}lInmis Backpacks Addon${section}8.zip",
-        "file/${section}5${section}lModded ${section}f${section}lContainers ${section}8${section}lDark${section}8.zip")
-    $legacyOptions = $legacyOptions.Replace(
         'resourcePacks:["vanilla"',
-        'resourcePacks:["vanilla","file/Player Visual Choice.zip"')
+        "resourcePacks:[`"vanilla`",`"file/${section}0${section}lOLED ${section}f${section}lColourful Containers${section}8.zip`",`"file/${section}0${section}lOLED ${section}f${section}lInmis Backpacks Addon${section}8.zip`",`"file/${section}8${section}lDarkmode ${section}f${section}lColourful Containers${section}8.zip`",`"file/${section}5${section}lModded ${section}f${section}lContainers ${section}8${section}lDark${section}8.zip`",`"file/Player Visual Choice.zip`"")
     $legacyOptions = $legacyOptions.Replace(
         'incompatibleResourcePacks:[',
         "incompatibleResourcePacks:[`"file/${section}5${section}lModded ${section}f${section}lContainers ${section}8${section}lDark${section}8.zip`",")
@@ -267,9 +260,8 @@ try {
     $migratedOptions = [IO.File]::ReadAllText($optionsPath)
     Assert-True ($migratedOptions.Contains('file/Enhanced Grass V1_4.zip')) 'An existing instance did not migrate Nature X to Enhanced Grass.'
     Assert-True (-not $migratedOptions.Contains('file/Nature X - 12.2 [1.21.1].zip')) 'An existing instance retained the retired Nature X entry.'
-    $migratedOledIndex = $migratedOptions.IndexOf("file/${section}0${section}lOLED ${section}f${section}lColourful Containers${section}8.zip", [StringComparison]::Ordinal)
-    $migratedInmisIndex = $migratedOptions.IndexOf("file/${section}0${section}lOLED ${section}f${section}lInmis Backpacks Addon${section}8.zip", [StringComparison]::Ordinal)
-    Assert-True ($migratedOledIndex -ge 0 -and $migratedInmisIndex -gt $migratedOledIndex) 'An existing instance did not enable the OLED base and Inmis add-on in priority order.'
+    Assert-True (-not $migratedOptions.Contains("file/${section}0${section}lOLED ${section}f${section}lColourful Containers${section}8.zip")) 'An existing instance retained Colourful Containers OLED.'
+    Assert-True (-not $migratedOptions.Contains("file/${section}0${section}lOLED ${section}f${section}lInmis Backpacks Addon${section}8.zip")) 'An existing instance retained the Inmis OLED add-on.'
     Assert-True (-not $migratedOptions.Contains("file/${section}8${section}lDarkmode ${section}f${section}lColourful Containers${section}8.zip")) 'An existing instance retained the old Darkmode container pack entry.'
     Assert-True (-not $migratedOptions.Contains("file/${section}5${section}lModded ${section}f${section}lContainers ${section}8${section}lDark${section}8.zip")) 'An existing instance retained the old modded-container pack entry.'
     Assert-True ($migratedOptions.Contains('file/Player Visual Choice.zip')) 'The resource-pack migration removed an unrelated player pack preference.'

@@ -8,14 +8,6 @@ The byte-exact `(Bee's) Fancy Crops` 1.3 archive from Modrinth project/version `
 
 The byte-exact Enhanced Grass V1.4 archive from Modrinth project/version `alsKcwM3` / `y5tAorFa` is bundled and enabled. It changes only short/tall grass blockstates and models. Project: <https://modrinth.com/resourcepack/enhanced-grass>. The project declares All Rights Reserved.
 
-## Colourful Containers OLED and OptiGUI
-
-The byte-exact Colourful Containers OLED 26.1.2 archive from Modrinth project/version `77JGzwHJ` / `nziDeFWl` is bundled and enabled. Project: <https://modrinth.com/resourcepack/colourful-containers-oled-gui>. The project declares All Rights Reserved. The previous Darkmode Colourful Containers and Modded Containers Dark archives are not active.
-
-The byte-exact client-only `optigui-2.3.0-beta.9+1.21.jar` from Modrinth project/version `JuksLGBQ` / `npnKNaoI` enables the pack's conditional GUI resources. Project/source: <https://modrinth.com/mod/optigui> and <https://github.com/opekope2/OptiGUI>. The bundled artifact's `fabric.mod.json` and embedded license declare MIT; its license is retained at `licenses/OptiGUI-MIT.txt`.
-
-`§0§lOLED §f§lInmis Backpacks Addon§8.zip` is a separate first-party nbidal18 add-on. It contains original deterministic pixel assets and no Colourful Containers textures; the client integration references the enabled official OLED `generic_54.png` at runtime for its exact player-inventory lip and for safe standard-layout modded-container fallback.
-
 ## Deep Ocean Panorama
 
 The exact panorama image assets from Deep Ocean Panorama 1.0 (Modrinth project/version `5kprjmWo` / `jJgxY4Ke`) are incorporated into the already-enabled `No Atlas Player Markers.zip` nbidal18 override pack so existing updater installations receive and activate the new title-screen background without replacing player-owned `options.txt`. Project: <https://modrinth.com/resourcepack/deep-ocean-panorama>. The upstream project declares All Rights Reserved.

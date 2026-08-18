@@ -1,8 +1,6 @@
 Credits for the nbidal18 v4.1.3 Packwiz release:
 Fancy Crops by Bee: https://modrinth.com/resourcepack/fancy-crops
 Enhanced Grass by ICanGamez: https://modrinth.com/resourcepack/enhanced-grass
-Colourful Containers OLED by Kingybu and nolyoly_: https://modrinth.com/resourcepack/colourful-containers-oled-gui
-OptiGUI by opekope2: https://modrinth.com/mod/optigui
 Vanilla Tweaks: https://vanillatweaks.net/
 Complementary Shaders - Unbound: https://modrinth.com/shader/complementary-unbound
 MakeUp - Ultra Fast Shaders: https://modrinth.com/shader/makeup-ultra-fast-shaders

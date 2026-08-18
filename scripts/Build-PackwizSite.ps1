@@ -5,8 +5,6 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-Add-Type -AssemblyName System.IO.Compression.FileSystem
-
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 if ([string]::IsNullOrWhiteSpace($ReleaseRoot)) {
     $ReleaseRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot '..\nbidal18 v4.1.3-packwiz'))
@@ -318,8 +316,8 @@ hash-format = "sha256"
     }
 
     $clientMods = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter '*.jar')
-    if ($clientMods.Count -ne 244) {
-        throw "The Packwiz client must contain exactly 244 mod JARs; found $($clientMods.Count)."
+    if ($clientMods.Count -ne 243) {
+        throw "The Packwiz client must contain exactly 243 mod JARs; found $($clientMods.Count)."
     }
     $bccJar = Join-Path $stagePath 'mods\better-compatability-checker-fabric-21.1.8.jar'
     $bccConfig = Join-Path $stagePath 'config\bcc-common.toml'
@@ -332,8 +330,8 @@ hash-format = "sha256"
         throw 'The v4.1.3 integrity helper is missing from the Packwiz client.'
     }
     $clientTweaks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter 'nbidal18-client-tweaks-*.jar')
-    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.3.1+1.21.1.jar') {
-        throw 'The Inmis/Immersive Vehicles OLED and Jobs+ plaque-enabled client-tweaks artifact is missing or duplicated.'
+    if ($clientTweaks.Count -ne 1 -or $clientTweaks[0].Name -ne 'nbidal18-client-tweaks-1.3.2+1.21.1.jar') {
+        throw 'The Inmis dye, Trinkets grouping, and Jobs+ plaque-enabled client-tweaks artifact is missing or duplicated.'
     }
     $expectedDyeableBackpacks = @(
         'inmis:baby_backpack',
@@ -371,34 +369,14 @@ hash-format = "sha256"
     if (-not (Test-Path -LiteralPath $jobsSuppressor -PathType Leaf)) {
         throw 'The Jobs+ compatibility helper is missing from the Packwiz client.'
     }
-    $optiGuiJar = Join-Path $stagePath 'mods\optigui-2.3.0-beta.9+1.21.jar'
-    if (-not (Test-Path -LiteralPath $optiGuiJar -PathType Leaf)) {
-        throw 'Colourful Containers OLED requires the client-only OptiGUI dependency.'
-    }
     $resourcePacks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'resourcepacks') -File -Filter '*.zip')
     $oledBase = @($resourcePacks | Where-Object { $_.Name -like '*OLED*Colourful Containers*.zip' })
     $inmisOledAddon = @($resourcePacks | Where-Object { $_.Name -like '*OLED*Inmis Backpacks Addon*.zip' })
-    if ($resourcePacks.Count -ne 19 -or
+    if ($resourcePacks.Count -ne 17 -or
             -not (Test-Path -LiteralPath (Join-Path $stagePath 'resourcepacks\Fancy Crops v1.3.zip') -PathType Leaf) -or
             -not (Test-Path -LiteralPath (Join-Path $stagePath 'resourcepacks\Enhanced Grass V1_4.zip') -PathType Leaf) -or
-            $oledBase.Count -ne 1 -or $inmisOledAddon.Count -ne 1) {
-        throw 'The 19-pack resource-pack baseline is missing Fancy Crops, Enhanced Grass, Colourful Containers OLED, or its Inmis add-on.'
-    }
-    $inmisArchive = [System.IO.Compression.ZipFile]::OpenRead($inmisOledAddon[0].FullName)
-    try {
-        $inmisEntries = @($inmisArchive.Entries | ForEach-Object FullName)
-        foreach ($requiredEntry in @(
-            'assets/nbidal18_inmis_oled/textures/gui/vehicle_inventory_lip.png',
-            'assets/immersive_aircraft/textures/gui/container/inventory.png',
-            'assets/immersive_machinery/textures/gui/container/inventory.png'
-        )) {
-            if ($requiredEntry -notin $inmisEntries) {
-                throw "The OLED add-on is missing Immersive Aircraft/Machinery support: $requiredEntry"
-            }
-        }
-    }
-    finally {
-        $inmisArchive.Dispose()
+            $oledBase.Count -ne 0 -or $inmisOledAddon.Count -ne 0) {
+        throw 'The 17-pack resource-pack baseline must include Fancy Crops and Enhanced Grass and exclude the retired Colourful Containers packs.'
     }
     foreach ($jobsConfig in @(
         (Join-Path $stagePath 'config\jobsplus-common.yaml'),

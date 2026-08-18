@@ -475,15 +475,11 @@ public final class Nbidal18PackwizSync {
 
     private static List<String> migrateEnabledResourcePacks(List<String> original) {
         List<String> result = new ArrayList<>();
-        int containerIndex = -1;
         for (String value : original) {
             if (value.equals(OLD_DARK_CONTAINERS_PACK)
                     || value.equals(OLD_MODDED_CONTAINERS_PACK)
                     || value.equals(OLED_CONTAINERS_PACK)
                     || value.equals(INMIS_OLED_ADDON_PACK)) {
-                if (containerIndex < 0) {
-                    containerIndex = result.size();
-                }
                 continue;
             }
             String migrated = value.equals(NATURE_X_PACK) ? ENHANCED_GRASS_PACK : value;
@@ -496,13 +492,6 @@ public final class Nbidal18PackwizSync {
             int grassIndex = result.indexOf("file/Fancy Crops v1.3.zip");
             result.add(grassIndex >= 0 ? grassIndex : result.size(), ENHANCED_GRASS_PACK);
         }
-        if (containerIndex < 0) {
-            containerIndex = result.size();
-        } else {
-            containerIndex = Math.min(containerIndex, result.size());
-        }
-        result.add(containerIndex, OLED_CONTAINERS_PACK);
-        result.add(containerIndex + 1, INMIS_OLED_ADDON_PACK);
         return result;
     }
 

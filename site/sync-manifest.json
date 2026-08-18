@@ -1112,7 +1112,7 @@
     "files":  [
                   {
                       "path":  "THIRD-PARTY-NOTICES.md",
-                      "sha256":  "2892e4060a50e8156f3ed19525205aa483c6d529af1a648a0338cf228ad9c715"
+                      "sha256":  "b410d14f2515524562a5880323eb21dca289a41dfe949722563aec9fefd1872b"
                   },
                   {
                       "path":  "config/CoroUtil/General.toml",
@@ -2160,7 +2160,7 @@
                   },
                   {
                       "path":  "credits.txt",
-                      "sha256":  "4723b39ba8086c5c30626942b2aea7d3ca78dcc5f180c66419cc96196e8232a9"
+                      "sha256":  "56f1c70910424e93a102592f175d422639ee762848a2fc7f63ace3e667ee65c1"
                   },
                   {
                       "path":  "datapacks/custom_recipes_1.21/LICENSE.txt",
@@ -2441,10 +2441,6 @@
                   {
                       "path":  "licenses/MoreVillagers-Numismatic-Bridge-MIT.txt",
                       "sha256":  "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
-                  },
-                  {
-                      "path":  "licenses/OptiGUI-MIT.txt",
-                      "sha256":  "49f12e277c9321bedc8ff490c4cd570f708a49b2171592652d9db62cebf6a2bd"
                   },
                   {
                       "path":  "licenses/Player-Emotes-Apache-2.0.txt",
@@ -3127,8 +3123,8 @@
                       "sha256":  "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
                   },
                   {
-                      "path":  "mods/nbidal18-client-tweaks-1.3.1+1.21.1.jar",
-                      "sha256":  "9b13d60f13323eca96666e7678ea09cb533b0dc47f994f7424a88681bfce88e0"
+                      "path":  "mods/nbidal18-client-tweaks-1.3.2+1.21.1.jar",
+                      "sha256":  "1c97943d3072a73a8e52b1656f3ea6b7456e3076e8bdd93a5935cd2c9f2fbc41"
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
@@ -3177,10 +3173,6 @@
                   {
                       "path":  "mods/oceansdelight-fdrf-fabric-1.0.2-1.21.jar",
                       "sha256":  "9cc69ecc65c3628152d1a00b4adffa4e1b8dea9887c965629ae1adaa97d517d1"
-                  },
-                  {
-                      "path":  "mods/optigui-2.3.0-beta.9+1.21.jar",
-                      "sha256":  "5ba9a9349b038a3219e0b1fad48571e5f690633ed0e7c4c308b42317d7fef11f"
                   },
                   {
                       "path":  "mods/owo-lib-0.12.15.4+1.21.jar",
@@ -3448,7 +3440,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "5a6858489be1c12714a41702db6fa01d085dd54e02e1fd1125c89ec627d570c0"
+                      "sha256":  "ab549873167d8c675bf36817fb4f4126367c2330fce1bf4639475bbb141e392d"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",
@@ -3517,14 +3509,6 @@
                   {
                       "path":  "resourcepacks/VanillaTweaks_r695951_MC1.21.x.zip",
                       "sha256":  "ad15d2899b02e6a333647f00fd617c69de1491ba317eee8bd9b9abe93e380420"
-                  },
-                  {
-                      "path":  "resourcepacks/§0§lOLED §f§lColourful Containers§8.zip",
-                      "sha256":  "ef2eef14f30f81d915c69066d6a18caea62141a8b0778da972b26e0857e0ef4b"
-                  },
-                  {
-                      "path":  "resourcepacks/§0§lOLED §f§lInmis Backpacks Addon§8.zip",
-                      "sha256":  "8684bad2dc38c454e8b4fc5c0897c0cc8038e71c03369525495d9f54f4e83263"
                   },
                   {
                       "path":  "resourcepacks/§3Fresh §bFlower Pots Rotated.zip",
