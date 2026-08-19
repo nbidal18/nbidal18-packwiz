@@ -47,9 +47,9 @@ public final class Nbidal18PackwizSync {
     /**
      * Lowest pack version this updater will accept from the channel. Raising it with each release
      * stops a rolled-back or spoofed channel downgrading an instance: once a client runs this
-     * build, publishing anything below 4.3.1 would be refused rather than installed.
+     * build, publishing anything below 4.3.2 would be refused rather than installed.
      */
-    private static final int[] MINIMUM_PACK_VERSION = {4, 3, 1};
+    private static final int[] MINIMUM_PACK_VERSION = {4, 3, 2};
     private static final DateTimeFormatter MOVE_STAMP =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final Pattern FILE_ENTRY = Pattern.compile(
@@ -115,15 +115,24 @@ public final class Nbidal18PackwizSync {
     /**
      * The pack's declared player-file rows.
      *
-     * <p>v4.3.0 seeds two keybinds, and both are fixing a real collision rather than a preference.
-     * LevelZ's skill screen defaults to K, which is already Iris's shader toggle; Field Guide
-     * defaults to B, which is already Inmis's backpack. J and U are the letters this pack has left
-     * — J because Jobs+ released it in this very version.
+     * <p>Field Guide defaults to B, which is already Inmis's backpack, so it is seeded onto U — one
+     * of only two letters this pack has left. LevelZ's skill screen defaults to K, which is already
+     * Iris's shader toggle; it was seeded onto J in v4.3.0 and then cleared entirely in v4.3.2,
+     * because the inventory tab LibZ adds turned out to be how people actually open it.
      */
     private static final List<PlayerFileSeed> PLAYER_FILE_SEEDS = List.of(
             new PlayerFileSeed("options.txt", ':', "keybinds-v430", List.of(
-                    new SeedRow("key_key.levelz.openskillscreen", "key.keyboard.j"),
-                    new SeedRow("key_key.fieldguide.open", "key.keyboard.u"))));
+                    new SeedRow("key_key.fieldguide.open", "key.keyboard.u"))),
+            // The skill screen is reached from the inventory tab LibZ adds, so it does not need a
+            // key of its own. Cleared rather than left on J: an unused binding on a common letter
+            // is a key the next mod cannot have.
+            //
+            // A new token, because the marker for the one above already exists on every instance
+            // that took it and a marker is only ever applied once. The J row is also gone from that
+            // earlier declaration, so a fresh install never binds it in the first place rather than
+            // binding it and immediately clearing it.
+            new PlayerFileSeed("options.txt", ':', "levelz-key-cleared-v432", List.of(
+                    new SeedRow("key_key.levelz.openskillscreen", "key.keyboard.unknown"))));
 
     /**
      * Files a retired mod left behind, deleted once each.

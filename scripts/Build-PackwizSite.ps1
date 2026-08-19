@@ -643,7 +643,7 @@ hash-format = "sha256"
         $releaseBaselineDigest,
         # The release that is live at the time of writing, so an un-updated client can still log in
         # and be told to update. Bump this at publish time, every time.
-        'ebed5418e2d932d79aa395a9677b68b13ff9ce3e994b36b5b11fd20cdbf89f7c'
+        '1d2d9c3baff562edec05fe6e374663fea3b858718a9c4e97cfc76f7abbd50ef0'
     )
     $maxAcceptedDigests = 12
 

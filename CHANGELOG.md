@@ -34,9 +34,41 @@ Record:
 
 ---
 
+## v4.3.2
+
+Current release. Live digest `0d17cb69b1139f1a…`. 854 managed files, 252 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+**Have one free inventory slot on your next login** — anything in the removed ring slot is
+returned to your inventory, and dropped at your feet only if there is no room.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-19 | `PENDING` | `0d17cb69b1139f1a` | 854 | 252 | **Down to one ring slot.** The second one rendered without a slot background, and the cause turned out to be structural rather than cosmetic: Trinkets treats a slot built `alwaysVisible` as permanently active and falls back to “only while focused” for every other slot, and only `offhand/ring` is always visible. The pack's own backing painter skips any slot reporting inactive, so the second ring — which Trinkets' ordering places furthest left — was always going to be the one missing its frame. Rather than patch the painter the second slot is removed, keeping the one that always drew correctly. **Nothing is lost:** Trinkets puts items from a removed slot back into the player's inventory, dropping them at their feet only if it is full, so have a free slot on your next login. **The skill screen no longer has a keybind.** It is opened from the tab beside your inventory, so `J` is cleared rather than left occupying one of the two unclaimed letters this pack has left. **The `Lv. 0` readout in the inventory is gone** — it was kept as another route to the skill screen, and the tab does that job. **And the wiki finally has its pause-menu button**, a knowledge-book icon beside “Back to Game”. It was supposed to arrive in v4.3.1 and silently did not: it looked the button column up through Fabric's `Screens.getButtons`, which returns nothing useful for that screen, so the code found no row and took its give-up branch without an error. It is now a `PauseScreen` mixin reading `children()`, the same approach Field Guide uses for its own icon. Wiki 1.1.0 to 1.2.0. Maintainer-facing: the injection target was checked with `javap` against the Mojang-mapped jar, because the launch check only reaches the title screen and cannot open a pause menu. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version,
+`server.properties` is not hot-reloadable, and the trinket slot declaration is read at datapack
+load. A status ping refused the connection immediately before the writes.
+
+Five files, verified by hash in a second pass. Backups under `Z:\.nbidal18-deploy-backups\2026-08-19-v4.3.2\`.
+
+`betterdays-common.toml` shows as changed against the prepared copy and was deliberately left
+alone: Better Days rewrites it at startup with different line endings, and its values — sixty
+minutes of day and sixty of night — were read back and confirmed correct before skipping it.
+That is the difference between drift and a regression, and it is worth checking rather than
+assuming either way.
+
+The mount threw “A device attached to the system is not functioning” on two reads during
+verification, both of which succeeded on retry. Together with the stale reads recorded in v4.3.0
+and v4.3.1, the rule for this drive is simply: never believe a single read.
+
+---
+
 ## v4.3.1
 
-Current release. Live digest `1d2d9c3baff562ed…`. 854 managed files, 252 mods.
+Superseded by v4.3.2. Live digest `1d2d9c3baff562ed…`. 854 managed files, 252 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 **Skill levels were reset for everyone by this release** — see below. Jobs, job levels, money,

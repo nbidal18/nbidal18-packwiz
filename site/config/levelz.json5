@@ -98,7 +98,7 @@
 	// Highlight locked blocks in red., client only
 	"highlightLocked": false,
 	// client only
-	"inventorySkillLevel": true,
+	"inventorySkillLevel": false,
 	// client only
 	"inventorySkillLevelPosX": 0,
 	// client only

@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "packVersion":  "4.3.1",
+    "packVersion":  "4.3.2",
     "exactRoots":  [
                        "mods",
                        "config",
@@ -229,7 +229,7 @@
                                 },
                                 {
                                     "path":  "config/bcc-common.toml",
-                                    "sha256":  "f7d745df7d88be1aec9f81c2d8ba4218aaace52c074e3c226bffe76d5dcf649b"
+                                    "sha256":  "e1a98cc1ad02a2588756f83922a3918fcb27458fe89fccf2bdbc76095e45e523"
                                 },
                                 {
                                     "path":  "config/beautify.json",
@@ -833,7 +833,7 @@
                                 },
                                 {
                                     "path":  "config/levelz.json5",
-                                    "sha256":  "0c63e223162a431c64b80ce889b8b95c92b7abbd2d43ad6dbb0d4c5dac2a9819"
+                                    "sha256":  "c214ee5c436c8bc14ffe28c418972fec7322f5054f714a5340cb36e3d03a9d78"
                                 },
                                 {
                                     "path":  "config/libz.json5",
@@ -1307,7 +1307,7 @@
                   },
                   {
                       "path":  "config/bcc-common.toml",
-                      "sha256":  "f7d745df7d88be1aec9f81c2d8ba4218aaace52c074e3c226bffe76d5dcf649b"
+                      "sha256":  "e1a98cc1ad02a2588756f83922a3918fcb27458fe89fccf2bdbc76095e45e523"
                   },
                   {
                       "path":  "config/beautify.json",
@@ -1911,7 +1911,7 @@
                   },
                   {
                       "path":  "config/levelz.json5",
-                      "sha256":  "0c63e223162a431c64b80ce889b8b95c92b7abbd2d43ad6dbb0d4c5dac2a9819"
+                      "sha256":  "c214ee5c436c8bc14ffe28c418972fec7322f5054f714a5340cb36e3d03a9d78"
                   },
                   {
                       "path":  "config/libz.json5",
@@ -3455,7 +3455,7 @@
                   },
                   {
                       "path":  "datapacks/nbidal18_trinket_slots/data/trinkets/entities/nbidal18_rings.json",
-                      "sha256":  "0001fdda26bdd359ff5566a578de5a161131014f8df63d0db42f5a808e542f54"
+                      "sha256":  "d97e9334913cf0818239e1015d822f1fb05a3e98090e482b5c5c170446cce93b"
                   },
                   {
                       "path":  "datapacks/nbidal18_trinket_slots/pack.mcmeta",
@@ -4199,7 +4199,7 @@
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "d344704deb8429ff32820fb5fe0da4cfe02a61cf22b762c2eabbdedb2d70adf4"
+                      "sha256":  "ccbd380b2fed8c49758130b179a2cb1519d7543f892b8277e4a7bc683b34c54a"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",
@@ -4226,8 +4226,8 @@
                       "sha256":  "b22a7954776c3fbde10908b66513a393b8493f5903ee883f02e5775ac27a8b95"
                   },
                   {
-                      "path":  "mods/nbidal18-wiki-1.1.0+1.21.1.jar",
-                      "sha256":  "89e58e69dfaa63e9cfa30aa2c1cdffc62fb045a1c9d0167d73635e86738b27f1"
+                      "path":  "mods/nbidal18-wiki-1.2.0+1.21.1.jar",
+                      "sha256":  "a49797397082fd4674aad0f08fa24e90b19b57d568eb195bcce394ef472895c0"
                   },
                   {
                       "path":  "mods/niftycarts-21.1.1.jar",
@@ -4523,7 +4523,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "f7c0206f1654c07fa54781a1abd4fad4a05fc6fd27b05ab582f4fd6a628dc920"
+                      "sha256":  "0af1080922a86f2185cc31c77db2e1f9c7a950251cc63bb08b4c8e1f77b7edaf"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",

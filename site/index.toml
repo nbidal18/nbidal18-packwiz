@@ -75,7 +75,7 @@ hash = "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "f7d745df7d88be1aec9f81c2d8ba4218aaace52c074e3c226bffe76d5dcf649b"
+hash = "e1a98cc1ad02a2588756f83922a3918fcb27458fe89fccf2bdbc76095e45e523"
 
 [[files]]
 file = "config/beautify.json"
@@ -686,7 +686,7 @@ hash = "a120d448e40dbd9f63f660539b0cefb7ab3519a49a89c88e6be615fdaa363d36"
 
 [[files]]
 file = "config/levelz.json5"
-hash = "0c63e223162a431c64b80ce889b8b95c92b7abbd2d43ad6dbb0d4c5dac2a9819"
+hash = "c214ee5c436c8bc14ffe28c418972fec7322f5054f714a5340cb36e3d03a9d78"
 
 [[files]]
 file = "config/libz.json5"
@@ -2237,7 +2237,7 @@ hash = "39a25a9296dc1a3105c718cab89e77a7ef4f870bd95750c843c484752ac91479"
 
 [[files]]
 file = "datapacks/nbidal18_trinket_slots/data/trinkets/entities/nbidal18_rings.json"
-hash = "0001fdda26bdd359ff5566a578de5a161131014f8df63d0db42f5a808e542f54"
+hash = "d97e9334913cf0818239e1015d822f1fb05a3e98090e482b5c5c170446cce93b"
 
 [[files]]
 file = "datapacks/nbidal18_trinket_slots/pack.mcmeta"
@@ -2981,7 +2981,7 @@ hash = "08f8f5fca2ec886f25c0d0c3267d0cb5539831e330f2fd8f8e0e12c3d7156764"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "d344704deb8429ff32820fb5fe0da4cfe02a61cf22b762c2eabbdedb2d70adf4"
+hash = "ccbd380b2fed8c49758130b179a2cb1519d7543f892b8277e4a7bc683b34c54a"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -3008,8 +3008,8 @@ file = "mods/nbidal18-temperature-2.0.0+1.21.1.jar"
 hash = "b22a7954776c3fbde10908b66513a393b8493f5903ee883f02e5775ac27a8b95"
 
 [[files]]
-file = "mods/nbidal18-wiki-1.1.0+1.21.1.jar"
-hash = "89e58e69dfaa63e9cfa30aa2c1cdffc62fb045a1c9d0167d73635e86738b27f1"
+file = "mods/nbidal18-wiki-1.2.0+1.21.1.jar"
+hash = "a49797397082fd4674aad0f08fa24e90b19b57d568eb195bcce394ef472895c0"
 
 [[files]]
 file = "mods/niftycarts-21.1.1.jar"
@@ -3305,7 +3305,7 @@ hash = "4d6440f5ae0afd64c0c2d4d0aa6b1760e5c3c5d298704dd6a9eb279531f14d27"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "f7c0206f1654c07fa54781a1abd4fad4a05fc6fd27b05ab582f4fd6a628dc920"
+hash = "0af1080922a86f2185cc31c77db2e1f9c7a950251cc63bb08b4c8e1f77b7edaf"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"

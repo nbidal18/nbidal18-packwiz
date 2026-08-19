@@ -186,7 +186,9 @@ try {
     # The keybind seeding is the whole point of the player-file mechanism: it must land in
     # options.txt without disturbing anything else the player has set.
     $seededOptions = Get-Content -LiteralPath (Join-Path $minecraft 'options.txt') -Raw
-    Assert-True ($seededOptions -match '(?m)^key_key\.levelz\.openskillscreen:key\.keyboard\.j\s*$') 'The LevelZ skill-screen key was not seeded onto J.'
+    # Cleared rather than bound: the skill screen is opened from LibZ's inventory tab, and leaving
+    # an unused binding on J would deny that letter to the next mod that wants it.
+    Assert-True ($seededOptions -match '(?m)^key_key\.levelz\.openskillscreen:key\.keyboard\.unknown\s*$') 'The LevelZ skill-screen key was not cleared.'
     Assert-True ($seededOptions -match '(?m)^key_key\.fieldguide\.open:key\.keyboard\.u\s*$') 'The Field Guide key was not seeded onto U.'
     $jadePlugins = Get-Content -LiteralPath (Join-Path $minecraft 'config\jade\plugins.json') -Raw | ConvertFrom-Json
     Assert-True ($jadePlugins.minecraft.entity_health -eq $false) 'Jade entity health remains enabled in the client.'
