@@ -13,9 +13,9 @@
     "enableConfigUpdates": false
   },
   "environmentConfig": {
-    "maxTemperatureForColdC": 10.0,
-    "degreesCPerTemperatureDecrease": 10.0,
-    "environmentTemperatureMultiplier": 1.0,
+    "maxTemperatureForColdC": 5.0,
+    "degreesCPerTemperatureDecrease": 15.0,
+    "environmentTemperatureMultiplier": 0.25,
     "applyEnvironmentPenaltyWhenWet": true,
     "rainWetnessIncrease": 1,
     "touchingWaterWetnessIncrease": 5,

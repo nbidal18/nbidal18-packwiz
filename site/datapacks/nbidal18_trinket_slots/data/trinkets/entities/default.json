@@ -1,0 +1,36 @@
+{
+  "_comment": [
+    "Overrides Artifacts' own trinkets/entities/default.json to drop the hand/glove slot.",
+    "",
+    "Artifacts grants two glove slots, hand/glove and offhand/glove, and both accept exactly the",
+    "same items (#artifacts:slot/hands) - so the one that refused everything was not an item",
+    "eligibility problem. hand/glove is the slot whose visibility runs through the pack's own",
+    "TrinketsCombinedSlotVisibilityMixin, which is the same override that cost hand/ring its slot",
+    "backing in v4.3.2. Only offhand/glove is built alwaysVisible by Trinkets and so is reliably",
+    "active.",
+    "",
+    "Dropping hand/glove leaves the hand group empty, which retires that whole class of bug rather",
+    "than patching around it. If Artifacts ever changes its default slot list, this file wins and",
+    "will need updating with it."
+  ],
+  "entities": [
+    "player",
+    "husk",
+    "skeleton",
+    "zombie",
+    "drowned",
+    "stray",
+    "wither_skeleton",
+    "piglin",
+    "piglin_brute",
+    "zombified_piglin",
+    "ghast"
+  ],
+  "slots": [
+    "head/hat",
+    "chest/necklace",
+    "legs/belt",
+    "offhand/glove",
+    "feet/shoes"
+  ]
+}

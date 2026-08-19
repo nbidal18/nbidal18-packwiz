@@ -34,9 +34,44 @@ Record:
 
 ---
 
+## v4.3.3
+
+Current release. Live digest `b631b45dc5381586…`. 857 managed files, 253 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+**Two things worth knowing before you next play.** Anyone can now break a grave, explosions
+destroy them, and a broken grave's contents are gone rather than dropped — so recover a grave
+promptly and keep creepers away from it. And temperature is much slower in both directions, so
+if the desert stopped feeling dangerous, that is the change rather than a bug.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-19 | `PENDING` | `b631b45dc5381586` | 857 | 253 | **Heat and cold are far gentler.** The environment rate is now a quarter of what the mods ship, the comfortable band is 5-35 °C rather than 10-30, and severity ramps half again as slowly — so armour that works against you is a cost rather than a twenty-second death sentence. **Carrying a torch barely matters now.** It was worth 18 a tick against 12 for standing on magma and 50 for being on fire, which modelled a torch as a furnace; in the heat it is now a tenth of that, while a lantern in a blizzard is as useful as it ever was. **Fires you stand next to now heat you**, which nothing did before: Frostiful stops contributing the moment you are above neutral, so the only flame that could overheat you was one in your hand, which was backwards. A campfire, open fire or lava in the blocks around you now cuts both ways, and soul variants are weaker because they burn dimmer. **Graves are breakable by anyone, and explosions destroy them too** — and breaking one destroys what is inside rather than dropping it. Take your grave seriously: a creeper can now take it with everything in it. **Leaving while riding an aircraft no longer kills you.** Vanilla only saves your ride when you are the only player aboard, so with a friend in the same machine neither ride was saved and whoever left first came back midair and fell — which happened, and cost a full inventory. The vehicle is now remembered by id and you are put back aboard, or set down on solid ground if it is genuinely gone. **And flying no longer counts as idling:** no movement packet resets vanilla's idle timer and the aircraft's controls are a custom packet, so pilots and passengers alike were kicked mid-flight. A moving or airborne vehicle now counts as activity, and the idle timeout goes from five minutes to ten. **The skill screen's tabs no longer freeze after you spend a point** — an upstream LevelZ bug: it tells the tab strip to ignore clicks whenever anything has focus, and pressing a “+” sets focus permanently, so every later tab click was thrown away until you closed and reopened. Maintainer-facing: safe rejoin is a new first-party mod, mod count 252 to 253; grave-currency 1.2.0, temperature 2.1.0, client-tweaks 1.6.0, wiki 1.3.0. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version, three mods
+changed, `server.properties` is not hot-reloadable, and the trinket slot declaration is read at
+datapack load. A status ping refused the connection twice — once before preparing and again
+immediately before the first write.
+
+Thirteen files, each verified by hash on an independent second read. Backups under `Z:\.nbidal18-deploy-backups\2026-08-19-v4.3.3\`.
+
+Two licence files went with them. `Safe-Rejoin-MIT.txt` belongs to this release; 
+`Grave-Currency-MIT.txt` was a pre-existing gap — that mod has shipped on the server since
+v4.3.0 with its licence never copied across, in the prepared tree as well as live. One file, so
+it was fixed rather than logged.
+
+Roughly two dozen other configs differ from the prepared copy and were deliberately left alone:
+they are drift the mods wrote themselves while the server ran. `levelz.json5` and
+`jobsaddon.json5` were hash-checked and already matched.
+
+---
+
 ## v4.3.2
 
-Current release. Live digest `0d17cb69b1139f1a…`. 854 managed files, 252 mods.
+Superseded by v4.3.3. Live digest `0d17cb69b1139f1a…`. 854 managed files, 252 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 **Have one free inventory slot on your next login** — anything in the removed ring slot is

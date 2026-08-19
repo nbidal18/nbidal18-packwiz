@@ -419,8 +419,8 @@ hash-format = "sha256"
     }
 
     $clientMods = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter '*.jar')
-    if ($clientMods.Count -ne 252) {
-        throw "The Packwiz client must contain exactly 252 mod JARs; found $($clientMods.Count)."
+    if ($clientMods.Count -ne 253) {
+        throw "The Packwiz client must contain exactly 253 mod JARs; found $($clientMods.Count)."
     }
     $bccJar = Join-Path $stagePath 'mods\better-compatability-checker-fabric-21.1.8.jar'
     $bccConfig = Join-Path $stagePath 'config\bcc-common.toml'
@@ -643,7 +643,7 @@ hash-format = "sha256"
         $releaseBaselineDigest,
         # The release that is live at the time of writing, so an un-updated client can still log in
         # and be told to update. Bump this at publish time, every time.
-        '1d2d9c3baff562edec05fe6e374663fea3b858718a9c4e97cfc76f7abbd50ef0'
+        '0d17cb69b1139f1a36b85ba12e34936a63d00bae87151376be79f78ebaae26f1'
     )
     $maxAcceptedDigests = 12
 

@@ -81,7 +81,7 @@ try {
     Assert-True ($instanceConfig.Contains("ExportName=nbidal18-client`n")) 'The Prism export name is not the stable client name.'
     Assert-True (-not $instanceConfig.Contains("name=nbidal18-client-$packVersion")) 'The Prism display name still contains a release version.'
     Assert-True ((Invoke-Sync $minecraft) -eq 0) 'First online installation failed.'
-    Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 252) 'First install did not produce 252 mod JARs.'
+    Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 253) 'First install did not produce 253 mod JARs.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\better-compatability-checker-fabric-21.1.8.jar')) 'BCC was not installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')) 'The integrity helper was not installed.'
     # Version-derived, not hardcoded: this assertion used to fail on every client-tweaks bump.
@@ -97,7 +97,7 @@ try {
     # First-party artifact names are derived from each project rather than written out here. Pinning
     # them by hand meant a routine version bump failed this test for no reason, which teaches people
     # to edit the assertion instead of reading it.
-    foreach ($project in @('nbidal18-jobs-reset', 'nbidal18-temperature', 'nbidal18-wiki')) {
+    foreach ($project in @('nbidal18-jobs-reset', 'nbidal18-safe-rejoin', 'nbidal18-temperature', 'nbidal18-wiki')) {
         $properties = Join-Path $releaseRoot (Join-Path '5. modpack source\custom mods' (Join-Path $project 'gradle.properties'))
         Assert-True ([IO.File]::ReadAllText($properties, [Text.Encoding]::UTF8) -match '(?m)^mod_version=(.+?)\s*$') "Could not read mod_version for $project."
         $expectedMods += "$project-$($Matches[1]).jar"

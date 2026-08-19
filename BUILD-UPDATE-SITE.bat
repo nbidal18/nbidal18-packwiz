@@ -14,6 +14,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-Temp
 if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-JobsReset.ps1"
 if errorlevel 1 exit /b %errorlevel%
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-SafeRejoin.ps1"
+if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-Wiki.ps1"
 if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-JeiHiddenDefault.ps1"

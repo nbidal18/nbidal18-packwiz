@@ -18,5 +18,22 @@
     "hideOnPause": "Show",
     "unrecognizedScreenDefault": true
   },
-  "allowedKeysOverrides": {}
+  "allowedKeysOverrides": {
+    "key.immersive_aircraft.multi_control_forward": true,
+    "key.immersive_aircraft.multi_control_backward": true,
+    "key.immersive_aircraft.multi_control_left": true,
+    "key.immersive_aircraft.multi_control_right": true,
+    "key.immersive_aircraft.multi_control_up": true,
+    "key.immersive_aircraft.multi_control_down": true,
+    "key.immersive_aircraft.multi_control_push": true,
+    "key.immersive_aircraft.multi_control_pull": true,
+    "key.immersive_aircraft.fallback_control_forward": true,
+    "key.immersive_aircraft.fallback_control_backward": true,
+    "key.immersive_aircraft.fallback_control_left": true,
+    "key.immersive_aircraft.fallback_control_right": true,
+    "key.immersive_aircraft.fallback_control_up": true,
+    "key.immersive_aircraft.fallback_control_down": true,
+    "key.immersive_aircraft.fallback_control_push": true,
+    "key.immersive_aircraft.fallback_control_pull": true
+  }
 }

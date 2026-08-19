@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "packVersion":  "4.3.2",
+    "packVersion":  "4.3.3",
     "exactRoots":  [
                        "mods",
                        "config",
@@ -229,7 +229,7 @@
                                 },
                                 {
                                     "path":  "config/bcc-common.toml",
-                                    "sha256":  "e1a98cc1ad02a2588756f83922a3918fcb27458fe89fccf2bdbc76095e45e523"
+                                    "sha256":  "db5690523c8c2567a3ffb7db621a9abb9cc1a4f0546e6fc2ca342163378ae0bd"
                                 },
                                 {
                                     "path":  "config/beautify.json",
@@ -669,7 +669,7 @@
                                 },
                                 {
                                     "path":  "config/frostiful.json",
-                                    "sha256":  "91f3ccf23e7e550488ab408b179d63cc7927b1b0720997690b2ac2a4ce28b0fe"
+                                    "sha256":  "ba02177255603cf50f1f1ff783b72d4f58e3d3a8045cf973ee7045b04783f00e"
                                 },
                                 {
                                     "path":  "config/fzzy_config/keybinds.toml",
@@ -717,7 +717,7 @@
                                 },
                                 {
                                     "path":  "config/invmove.json",
-                                    "sha256":  "b4306cfc19619ad78fad885566aabd12e642956c1bd8a11b533b5f37cd451621"
+                                    "sha256":  "444f7f78f26cea480df227b7709a1b0763da0cf4b5d86ff6abbe9e69e4667095"
                                 },
                                 {
                                     "path":  "config/invmove/cloth-config.json",
@@ -937,7 +937,7 @@
                                 },
                                 {
                                     "path":  "config/scorchful.json",
-                                    "sha256":  "1c123c73ac01ad4e61c1c29b9b370ddda01cf36b3efb28e58051df9a56d5ae97"
+                                    "sha256":  "73e445313339ddfbbe02da1c8ea1fc30916e97e06e27ff756fe175cda9894f3c"
                                 },
                                 {
                                     "path":  "config/sereneseasons/fertility.toml",
@@ -1235,7 +1235,7 @@
     "files":  [
                   {
                       "path":  "THIRD-PARTY-NOTICES.md",
-                      "sha256":  "c818a78402529cd4ca794bab80dfa9a2a45a878c6fe8b1aa247c1d84b1a016c6"
+                      "sha256":  "d0bb4203ee58643f6a24be3c6156baa1b945c7f6a70da27c7608e89aba68d5d6"
                   },
                   {
                       "path":  "config/CoroUtil/General.toml",
@@ -1307,7 +1307,7 @@
                   },
                   {
                       "path":  "config/bcc-common.toml",
-                      "sha256":  "e1a98cc1ad02a2588756f83922a3918fcb27458fe89fccf2bdbc76095e45e523"
+                      "sha256":  "db5690523c8c2567a3ffb7db621a9abb9cc1a4f0546e6fc2ca342163378ae0bd"
                   },
                   {
                       "path":  "config/beautify.json",
@@ -1747,7 +1747,7 @@
                   },
                   {
                       "path":  "config/frostiful.json",
-                      "sha256":  "91f3ccf23e7e550488ab408b179d63cc7927b1b0720997690b2ac2a4ce28b0fe"
+                      "sha256":  "ba02177255603cf50f1f1ff783b72d4f58e3d3a8045cf973ee7045b04783f00e"
                   },
                   {
                       "path":  "config/fzzy_config/keybinds.toml",
@@ -1795,7 +1795,7 @@
                   },
                   {
                       "path":  "config/invmove.json",
-                      "sha256":  "b4306cfc19619ad78fad885566aabd12e642956c1bd8a11b533b5f37cd451621"
+                      "sha256":  "444f7f78f26cea480df227b7709a1b0763da0cf4b5d86ff6abbe9e69e4667095"
                   },
                   {
                       "path":  "config/invmove/cloth-config.json",
@@ -2015,7 +2015,7 @@
                   },
                   {
                       "path":  "config/scorchful.json",
-                      "sha256":  "1c123c73ac01ad4e61c1c29b9b370ddda01cf36b3efb28e58051df9a56d5ae97"
+                      "sha256":  "73e445313339ddfbbe02da1c8ea1fc30916e97e06e27ff756fe175cda9894f3c"
                   },
                   {
                       "path":  "config/sereneseasons/fertility.toml",
@@ -3454,6 +3454,10 @@
                       "sha256":  "39a25a9296dc1a3105c718cab89e77a7ef4f870bd95750c843c484752ac91479"
                   },
                   {
+                      "path":  "datapacks/nbidal18_trinket_slots/data/trinkets/entities/default.json",
+                      "sha256":  "cca45fbdac632afeaf1d5295cf902f1e5f2b94e88fbfc7d05c79f7ed7e400773"
+                  },
+                  {
                       "path":  "datapacks/nbidal18_trinket_slots/data/trinkets/entities/nbidal18_rings.json",
                       "sha256":  "d97e9334913cf0818239e1015d822f1fb05a3e98090e482b5c5c170446cce93b"
                   },
@@ -3492,6 +3496,10 @@
                   {
                       "path":  "licenses/Realistic-Death-Visuals-Apache-2.0.txt",
                       "sha256":  "7c1a198164da074761402ea707e49cc5862a97ebbc0e7548c247cfed470f9e59"
+                  },
+                  {
+                      "path":  "licenses/Safe-Rejoin-MIT.txt",
+                      "sha256":  "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
                   },
                   {
                       "path":  "licenses/Temperature-MIT.txt",
@@ -4190,16 +4198,16 @@
                       "sha256":  "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
                   },
                   {
-                      "path":  "mods/nbidal18-client-tweaks-1.4.0+1.21.1.jar",
-                      "sha256":  "506d904570c6527228640ac3cecdb0e1ad6ec5475fa0197625f53ffa439dcb46"
+                      "path":  "mods/nbidal18-client-tweaks-1.6.0+1.21.1.jar",
+                      "sha256":  "6f2a6273e2787c3ad3e41241df99f0bbb960409cfa5246ecbe753cc6562e888c"
                   },
                   {
-                      "path":  "mods/nbidal18-grave-currency-1.0.0+1.21.1.jar",
-                      "sha256":  "08f8f5fca2ec886f25c0d0c3267d0cb5539831e330f2fd8f8e0e12c3d7156764"
+                      "path":  "mods/nbidal18-grave-currency-1.2.0+1.21.1.jar",
+                      "sha256":  "2242e8383c1becaa02c7a5942338db1be9d9143796e9262e1a20ee9c180569a4"
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "ccbd380b2fed8c49758130b179a2cb1519d7543f892b8277e4a7bc683b34c54a"
+                      "sha256":  "3458a84f86556e7d5216e930dc0992e3b7eb1319cc08e9cd94bb344300d18041"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",
@@ -4222,12 +4230,16 @@
                       "sha256":  "8aad4ba4080f815723c2edc99d8073ed75552a8e65dce8ee5d36531897c0b048"
                   },
                   {
-                      "path":  "mods/nbidal18-temperature-2.0.0+1.21.1.jar",
-                      "sha256":  "b22a7954776c3fbde10908b66513a393b8493f5903ee883f02e5775ac27a8b95"
+                      "path":  "mods/nbidal18-safe-rejoin-1.0.0+1.21.1.jar",
+                      "sha256":  "89e2df8404e114ef8f8bb66d7d4e850de154cf8761db5069e40bd9e1f3fef1b0"
                   },
                   {
-                      "path":  "mods/nbidal18-wiki-1.2.0+1.21.1.jar",
-                      "sha256":  "a49797397082fd4674aad0f08fa24e90b19b57d568eb195bcce394ef472895c0"
+                      "path":  "mods/nbidal18-temperature-2.1.0+1.21.1.jar",
+                      "sha256":  "e9e7999347b05c53bb440cae7aed7d3a9e2a5b6f6b914824bd91deaa796e0c39"
+                  },
+                  {
+                      "path":  "mods/nbidal18-wiki-1.3.0+1.21.1.jar",
+                      "sha256":  "46acaee8467628735174b8c9017448a89047a50b79496482a57c979df4fcdf00"
                   },
                   {
                       "path":  "mods/niftycarts-21.1.1.jar",
@@ -4523,7 +4535,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "0af1080922a86f2185cc31c77db2e1f9c7a950251cc63bb08b4c8e1f77b7edaf"
+                      "sha256":  "4637ddd50025075946e13ec271c70210c20ad65a93ecad798e08e14aec4dad7a"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",
