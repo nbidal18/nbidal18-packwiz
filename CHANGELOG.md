@@ -34,9 +34,38 @@ Record:
 
 ---
 
+## v4.2.8-packwiz
+
+Current release. Live digest `1ee44d8a2e896b5d…`. 626 managed files, 246 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-19 | `PENDING` | `1ee44d8a2e896b5d` | 626 | 246 | **A torch or lantern in your hand now keeps you warm.** A placed one always did, but only by accident of how it works: Frostiful warms you from the *block light at your feet*, so standing beside a lantern is what warmed you, not carrying it. The pack's dynamic lighting is client-side and never changes the light the server reads, so carrying a light through a blizzard did nothing at all. A new first-party mod, `nbidal18-held-heat`, adds the missing half through Thermoo's temperature event. **It only ever relieves cold** — it does nothing in a warm biome and stops exactly at neutral, so carrying a light through the dark can never cook you. Strength comes from the item's own block light, so a lantern is worth more than a torch and a soul lantern half as much again, and it tops up only the difference over the light already around you: holding a lantern beside a bonfire is worth nothing extra. Torches, lanterns, jack o'lanterns and all forty-two of Macaw's lanterns and tiki torches count. Campfires deliberately do not — a campfire in your hand is not lit. **Atlas pins can have real names.** Antique Atlas never set a length on its label field, so it inherited the vanilla default of 32 characters and cut names off mid-word; it is now 128, and a long name wraps onto as many tooltip lines as it needs instead of running off the map. **Resting at a campfire is worth stopping for.** The healing effect lasted five seconds and was refreshed every second, so running past a fire was worth several free hearts. It heals at the same rate but now trails off after two seconds — the shortest that still heals at all, since Regeneration only heals on ticks where its remaining duration crosses a multiple of its interval, and a one-second effect would have refreshed forever and healed nothing. Client tweaks 1.3.12 to 1.3.13. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version, `server.properties` is
+not hot-reloadable, and a new mod is only loaded at startup. A status ping refused the connection
+immediately before the writes, which is the only proof accepted here — the pack runs Server Pause,
+so an idle server writes no log lines for hours and reading logs proves nothing. Deployed the
+integrity policy, the helper JAR, `bcc-common.toml`, the campfire datapack function, the new
+`mods\nbidal18-held-heat-1.0.0+1.21.1.jar`, and the MOTD line of `server.properties` — that one file
+was edited in place a line at a time rather than overwritten, so every provider setting, port and
+world name was left exactly as the host had it. Every copied file was verified by hash against the
+managed-host copy. Backups under `Z:\.nbidal18-deploy-backups\2026-08-19-v4.2.8-packwiz\`.
+
+Two things were found by testing rather than by reading, and both are the reason the mod behaves as
+it does. Applying warmth unconditionally drove the player up into Scorchful's heat, which made
+carrying a light impossible — hence the cold-only guard. And reading a block's *default* state for
+its light gives zero for Macaw's tiki torches, which carry an unlit variant and unlit pole segments,
+so a tiki torch would silently have done nothing while a lantern worked; it now reads the brightest
+state a block has, cached per block, and logs a warning if anything in the tag emits no light at all.
+
 ## v4.2.7-packwiz
 
-Current release. Live digest `aee580fc61386d5f…`. 624 managed files, 245 mods.
+Superseded by v4.2.8. Final digest `aee580fc61386d5f…`. 624 managed files, 245 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 

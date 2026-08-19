@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "5dae9921ba9bdaa36534034ac80a6659b604ec6d83e23d0a5d479a05be6190e1"
+hash = "7f521616d4d3e38711e76ee02d9f091a3745d8731dc63255022f3231d0e9238a"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -75,7 +75,7 @@ hash = "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "341c3cb0e8e0b103e4c0a86b2ef3bdc1c92a3fa4b3e0de4b0815eb127d51dfa2"
+hash = "06ddc3f30e6896a97ae7491188ef85640818b06e79b012ee0613f761a8c89910"
 
 [[files]]
 file = "config/beautify.json"
@@ -1137,7 +1137,7 @@ hash = "3b289cf3c4c21e9bbf59b02927718266ca107b6774579c0c4fcff6034116f7c8"
 
 [[files]]
 file = "datapacks/nbidal18_campfire_rest/data/nbidal18_campfire_rest/function/loop.mcfunction"
-hash = "861396d47739d3013269e5c4a3a048b0084a4e56025394bc91d6d19a6e16d81b"
+hash = "29670133321c1f1ec44ba30df65e20e05e145a02d206d228fbcbbca14090c962"
 
 [[files]]
 file = "datapacks/nbidal18_campfire_rest/pack.mcmeta"
@@ -1377,6 +1377,10 @@ hash = "9ebdd84016a781e37f60ba35863b98d55307829ef7f03980fbccd402799f8844"
 
 [[files]]
 file = "licenses/Grave-Currency-MIT.txt"
+hash = "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
+
+[[files]]
+file = "licenses/Held-Heat-MIT.txt"
 hash = "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
 
 [[files]]
@@ -2068,16 +2072,20 @@ file = "mods/naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar"
 hash = "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
 
 [[files]]
-file = "mods/nbidal18-client-tweaks-1.3.12+1.21.1.jar"
-hash = "8d5a0f7f2fef473ed8c4bcc2d876a5c97e06c6348ef119c2c6ee04a9bce0367b"
+file = "mods/nbidal18-client-tweaks-1.3.13+1.21.1.jar"
+hash = "fd6e0f43b545c89b41bbb4bbe83e53be095a0ac65668e38269736891f964210b"
 
 [[files]]
 file = "mods/nbidal18-grave-currency-1.0.0+1.21.1.jar"
 hash = "08f8f5fca2ec886f25c0d0c3267d0cb5539831e330f2fd8f8e0e12c3d7156764"
 
 [[files]]
+file = "mods/nbidal18-held-heat-1.0.0+1.21.1.jar"
+hash = "0952e0a2e156c7b3bfb1d1ec40642b36adb2f7c37f38e1e8acdd3524135bf1c7"
+
+[[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "bd3cbb63ed1b1adda488b47e9686df66d56a77d67acad0f933477dee1c70a4b3"
+hash = "47bee3b3ee76c898b4d10d3946f717df38ca86fc76485c2ce12df045abea12ae"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -2389,7 +2397,7 @@ hash = "3978c0dc75b138aaa0d8610467624ab49fecdadfaf160e2f66705870cadcb94d"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "a16f733ad7e1818ef2ee0875318fd3ce26d6c24650c34cab6c66d30027a21cbc"
+hash = "981a3b54a51478fcaa19dc7d5af527191c7ff7c35bd7761a2bbc6b180cfc14ac"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"

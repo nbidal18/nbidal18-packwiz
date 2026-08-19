@@ -30,6 +30,8 @@ The byte-exact `playeremotes-fabric-1.21.1-0.1.0.jar` from Modrinth project/vers
 
 `nbidal18-grave-currency-1.0.0+1.21.1.jar` is a source-retained nbidal18 compatibility component. It stores a player's Numismatic Overhaul purse in their gravestone on death and returns it when the grave is collected, so banked money and carried coins behave the same way; without it the purse is the only thing death leaves untouched. Its MIT license is retained at `licenses/Grave-Currency-MIT.txt`, and complete source is retained under `5. modpack source/custom mods/nbidal18-grave-currency` in the organized release folder.
 
+`nbidal18-held-heat-1.0.0+1.21.1.jar` is a source-retained nbidal18 compatibility component. Frostiful warms an entity from the block light at its feet, so a placed lantern warms whoever stands beside it while a carried one does nothing — the pack's dynamic lighting is client-side and never changes the light the server reads. This adds the missing half through Thermoo's temperature event, reading Frostiful's own configuration rather than restating its numbers. Its MIT license is retained at `licenses/Held-Heat-MIT.txt`, and complete source is retained under `5. modpack source/custom mods/nbidal18-held-heat` in the organized release folder.
+
 ## Vanilla Refresh
 
 The byte-exact `vanilla-refresh-1.4.26_1.21.jar` from Modrinth project/version `gWO6Zqey` / `kmDSUUKd` is bundled as a standalone dependency. Project: <https://modrinth.com/mod/vanilla-refresh>.
