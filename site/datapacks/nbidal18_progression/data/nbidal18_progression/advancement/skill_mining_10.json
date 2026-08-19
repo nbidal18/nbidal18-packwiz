@@ -1,0 +1,32 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:iron_pickaxe"
+                             },
+                    "title":  {
+                                  "text":  "Mining 10"
+                              },
+                    "description":  {
+                                        "text":  "Mining reached level 10"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "mining_10":  {
+                                       "trigger":  "levelz:skill",
+                                       "conditions":  {
+                                                          "skill_name":  "mining",
+                                                          "skill_level":  10
+                                                      }
+                                   }
+                 },
+    "requirements":  [
+                         [
+                             "mining_10"
+                         ]
+                     ]
+}

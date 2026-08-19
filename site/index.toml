@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "7f521616d4d3e38711e76ee02d9f091a3745d8731dc63255022f3231d0e9238a"
+hash = "c818a78402529cd4ca794bab80dfa9a2a45a878c6fe8b1aa247c1d84b1a016c6"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -75,7 +75,7 @@ hash = "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "06ddc3f30e6896a97ae7491188ef85640818b06e79b012ee0613f761a8c89910"
+hash = "1545398d4fe622963e9b34aeea419bce13494765a9b9f45d6c687f0615d04c6c"
 
 [[files]]
 file = "config/beautify.json"
@@ -95,7 +95,7 @@ hash = "364c3912217f27e20aaa0c087151f2ef23adc0537e874ca5ee02cac5e9a9b3d7"
 
 [[files]]
 file = "config/betterdays-common.toml"
-hash = "c6ebec2421f79dbbc2f77d721882669fdd97718e8c3d33db96656e1cf6ec26db"
+hash = "ecf8e4c6c24b651f0db5de1f46aa43de36d07820f2476e541d02b5b271ab9f1a"
 
 [[files]]
 file = "config/betterdeserttemples-fabric-1_21.toml"
@@ -495,6 +495,14 @@ file = "config/ferritecore.mixin.properties"
 hash = "a2091a291309db8920c8a80e913ed31c24c29687d8cd25ac18076ad85a90ddb8"
 
 [[files]]
+file = "config/fieldguide-client.json"
+hash = "c2fad00227c1365a6f994cdf4a3d0f960407664f8970f4586ac29a0e7aa4de50"
+
+[[files]]
+file = "config/fieldguide-server.json"
+hash = "9acc6a18777a760808830291ec4893275de59eccb4f16c56feeed1c4110baaab"
+
+[[files]]
 file = "config/firstperson.json"
 hash = "71a197d56c7e16a9dbff955f52c6adc22848c603ef75ac17d21f9825ddf13be3"
 
@@ -590,6 +598,10 @@ file = "config/item-restrictions-common.yaml"
 hash = "c0c191c7f3eeb2c19b0df753581deabb72744f5fd23a398da92c8268774cff88"
 
 [[files]]
+file = "config/item_descriptions.toml"
+hash = "e4decbbbfaf9968093791e17b7bd06b6e96b5f667c021788a20cb1c383b11fc6"
+
+[[files]]
 file = "config/jade/hide-blocks.json"
 hash = "309df4ae96864c19eae41b646d58497c85a73b1fc3c584e772ef4d5822794baa"
 
@@ -603,7 +615,7 @@ hash = "411eb42a58cb0a5e0de5f9b42d3e89609247fcd45947e962c818d954826790f8"
 
 [[files]]
 file = "config/jade/plugins.json"
-hash = "8f0b141195f5498b804178afbf41f7449914218834dceb1f30a0fba3a0eadf2e"
+hash = "e6d16cebcd3d46835cb54d199dd9d86525302a5846e1d98d524d7774e9e9a312"
 
 [[files]]
 file = "config/jade/sort-order.json"
@@ -657,8 +669,8 @@ file = "config/jewelry/villages.json"
 hash = "3a0ad1c6bf844e60952867bbb67ebac157ce720a9904362b4a26d6048096a5f8"
 
 [[files]]
-file = "config/jobsplus-common.yaml"
-hash = "a12db639c85072798d3cfd2f917b665052e41dbf007413e8857e7ce0a4722619"
+file = "config/jobsaddon.json5"
+hash = "71adcc549f99ff91b773f06dfb63a2555399936714bb7bfd8f87c825a6550c9b"
 
 [[files]]
 file = "config/jumpoverfences.toml"
@@ -671,6 +683,14 @@ hash = "e35e24e74f3c18c107be53dded8b77ec980bc7b17d1b052f2d59bbedce45aca6"
 [[files]]
 file = "config/leahs-immersive-thunder.toml"
 hash = "a120d448e40dbd9f63f660539b0cefb7ab3519a49a89c88e6be615fdaa363d36"
+
+[[files]]
+file = "config/levelz.json5"
+hash = "0c63e223162a431c64b80ce889b8b95c92b7abbd2d43ad6dbb0d4c5dac2a9819"
+
+[[files]]
+file = "config/libz.json5"
+hash = "ff49be40555a0fdb1d2dc0d27fbd3cf3701171f9a0074313619b681b37866783"
 
 [[files]]
 file = "config/lithium.properties"
@@ -936,6 +956,10 @@ file = "config/tide.toml"
 hash = "f482296350eb7bbe7cb5c54d7a8523c24d67d55ce83d9addbdcaa99586ab1ccc"
 
 [[files]]
+file = "config/tiered.json5"
+hash = "4e36f7668dfa65243db7055125d707dea04497936149d6f096ce4bf9f42b9826"
+
+[[files]]
 file = "config/timestamp_chat.toml"
 hash = "ede285f49fe4c954d9732336ec4446cd72aaf880ffbcff48839d666e0bac3ea5"
 
@@ -1069,7 +1093,7 @@ hash = "121b93764159be6fb7dab523b29a844e2bb78400ce8c48f52135a097e9b0006e"
 
 [[files]]
 file = "credits.txt"
-hash = "56f1c70910424e93a102592f175d422639ee762848a2fc7f63ace3e667ee65c1"
+hash = "4027338bad1aa8952a256e841135dfe5eb451719836a399566a7e5366094ee0d"
 
 [[files]]
 file = "datapacks/custom_recipes_1.21/LICENSE.txt"
@@ -1144,16 +1168,596 @@ file = "datapacks/nbidal18_campfire_rest/pack.mcmeta"
 hash = "431d5e1430ca11091850ad6f78e77e2a2aa4d1d75d84017e6d24462012ab5510"
 
 [[files]]
-file = "datapacks/nbidal18_guide/data/nbidal18/advancement/first_join.json"
-hash = "3eea1c63f0aea734431646594c1e4533397ce1d62215d7beaecb94359e861850"
+file = "datapacks/nbidal18_gear_tiers/data/c/tags/item/tools/shields.json"
+hash = "f136b9ea266baf8154aacecccd40465411260c9e5c4756d3cd0185a7a7dc6b57"
 
 [[files]]
-file = "datapacks/nbidal18_guide/data/nbidal18/function/give_guide.mcfunction"
-hash = "df6261e61fe4eea8d6456ab96191a5b314460fd7f1979de43004bbeb8946e0e3"
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/common_armor_1.json"
+hash = "1d61e961c799847241f5be6c8617e23b608dd5df7ef1dec5cfdecbc626a63162"
 
 [[files]]
-file = "datapacks/nbidal18_guide/pack.mcmeta"
-hash = "44bca74a072141ef3865520701ea358058159e9857d34bbe0a0a77c23913be5f"
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/common_armor_2.json"
+hash = "3f2a27815f056ada487f45574ce16c89c7883927c9c70dabf317ef94ae46c6ee"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/common_armor_3.json"
+hash = "ff421035c4cf895decf46838ff6d025a1eb4356caef55215d20b9b7bbe90655a"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/common_armor_4.json"
+hash = "cd018f28c589f97f8c8db50e03894f5c5d7afb5db54d4ce3c270c71e9a266271"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/epic_armor_1.json"
+hash = "16757cc1b6fc25225dc1726ef2c7d972ef094d06ca90d97ecd142ad388b79992"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/epic_armor_2.json"
+hash = "e52991272f800a90e03c6ba3a11e6db2693294510f9d3d88472b978982d25f22"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/epic_armor_3.json"
+hash = "2d101e3a41c67fa90968f5ab82491989f35507978f8455e8260e9acba1b5e49e"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/epic_armor_4.json"
+hash = "b84b59d795c27bbcd7fa0f6883778799aa391dcfd5e1690d670c4cd84e62bb76"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/legendary_armor_1.json"
+hash = "0b6badb8a3cf03931119e5d406a0dd26ac1037d1281ab5d95389bf8451133545"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/legendary_armor_2.json"
+hash = "e0d2a9f8b011f45487d8f0bb54b304b42c332e779b46eb8f83c0cba3a5f95fde"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/legendary_armor_3.json"
+hash = "aa480d79463d78b2cc725f96cb0b5dfcbf85b347fbf3c3dbf04d263ce7869930"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/legendary_armor_4.json"
+hash = "a2ce30ad3c597d4764fb3d62b3b5799c44062bf5b48e4e96307e3d4e6cd6f0f5"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/rare_armor_1.json"
+hash = "97c3d6c16a16eacf6ac06e683ccb8e3ea7bf97c066958f938e64d527643329a4"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/rare_armor_2.json"
+hash = "8172ba6d3c12413d0338224068c705f37823ddc1b4e58855fb6e2b089e0110d9"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/rare_armor_3.json"
+hash = "b0ca5e6bb44b74034534cbaa9939341febf554f7325a25e38a65546322fc3a89"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/rare_armor_4.json"
+hash = "98d78ef0c25eb6ae65997875422d185c29c0ed09d5e39ed409b3b043d6292d3b"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/uncommon_armor_1.json"
+hash = "bf1fb989fd3d45b27d9430aea41c3348a1d2aa76144ab181d30a90e7a137b199"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/uncommon_armor_2.json"
+hash = "bb70ad60a0eb5e9ae0991ee64ab73a02811c6a8e0b6571bbb64a59f2571ce64d"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/uncommon_armor_3.json"
+hash = "e9f690d476eda9999ae71d3adb1633a24ec3af722a57e19c5de3a46f10bf9d61"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/uncommon_armor_4.json"
+hash = "1aac72c128006d4105b22fb427c9fa1c95928c7c94426e7f948ecb16c9bf36cf"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/unique_armor_1.json"
+hash = "f3a138664d338e464482ddd36789ac113f562649055b4e56eb62f312ea75dce5"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/unique_armor_2.json"
+hash = "9d17e0198908176bb429ad1c583c1df854bfd3366e811a04ae8142785d7bb705"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/unique_armor_3.json"
+hash = "5691e12600ea7b70b7d6f5355697e5c0c2c710184996c707060df754e5bce93c"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_armor/unique_armor_4.json"
+hash = "29b9de84c26948cb60a7bcdb3b931e1d0dd8ecfec6ccfeee69505097eb8f6606"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/common_tool_1.json"
+hash = "c3e531461ddc96a04537f3968618f64351359ba80d9f98a8d1396500e291acb1"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/common_tool_2.json"
+hash = "a5ea858c0470c979d70a128e5f5966dea677f8d37cb1c119d70717896e0ed4ee"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/common_tool_3.json"
+hash = "0d32d89c9e45ddc2a4db18a50b1b522c9e5c34415792a4718b147a5747b00879"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/common_tool_4.json"
+hash = "d43c77725541c53a59eca3881fb1f4d8cdcdfe385428da6e7bf3593f8e3c8e47"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/epic_tool_1.json"
+hash = "6ba6368652c33114fbf45c9a6f91951ebe4db5dc268276f813c1fea42d3ff858"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/epic_tool_2.json"
+hash = "8f884fcf3a9193b2525253cd8abd878811e58850ebc7475869f017dfd1af863e"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/epic_tool_3.json"
+hash = "9c688e350b9c11f9a96981729ff249083a5a598cd45a0042afbabc2e4274f422"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/epic_tool_4.json"
+hash = "e1de69208ce2ba02ace90d747491b966c5e80576df313ac66e6802ca866dbcc3"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/legendary_tool_1.json"
+hash = "5da3b8e80d30e54574e7bebe73a04e1c2aff62588c1a2d101ceffca1ceb55656"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/legendary_tool_2.json"
+hash = "3b95d7cd33d3bffb4ef813c3d9696abf09869e6e0c4fe5783750bb8eab01479a"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/legendary_tool_3.json"
+hash = "d1ab263e797229c76d31bd2217e8306a38dc971461b71adea6deb3734070a33c"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/legendary_tool_4.json"
+hash = "13ba3cfb0a69cf1ad233f65f482ebea06b789bc6c6ab5bc5b28ab9f12272f504"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/rare_tool_1.json"
+hash = "da6b71d06e3912a297db4bd913c5204ddb02eb1dedd5a4bbed163be7c42cbfc1"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/rare_tool_2.json"
+hash = "b035d9cbec3be8da79076fff6e138c80df5feedccc164dc399b66270882ebae0"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/rare_tool_3.json"
+hash = "2073085877e9c38137fb44dcd8726823a3762cb33b978cb504e503177c2b8b47"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/rare_tool_4.json"
+hash = "39137a608cde313cdec3c129c1d37afe424a8c33d3e35680d7d168a51c634a4c"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/uncommon_tool_1.json"
+hash = "e9326e8b0720a3fcd0c51591074456361f8f041a189175790ca028f87f709226"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/uncommon_tool_2.json"
+hash = "85938e250daeb2d4eacbd24d251b2508ea3976d5dc8902336e3587459c426f3f"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/uncommon_tool_3.json"
+hash = "22e150a14dc489a1c8d24411cf21b1abd039f5b113e30453320fab0f23fc17e1"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/uncommon_tool_4.json"
+hash = "c597624ba41a35c5b073d87521c6c6207b0bcb9984dba835c880fc2e7ffd1577"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/unique_tool_1.json"
+hash = "6d68b7850fc7e0322425e60334172b0f458f32b891b35f358562fb26ba55f4d2"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/unique_tool_2.json"
+hash = "fff743ebb73cafefafa27c126851955b1b00b8895853080ec52328e095eef711"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/unique_tool_3.json"
+hash = "5904a917858acc686321aa63e41ec881df9f12f23c641d9a97151618ad0bf114"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/all_tools/unique_tool_4.json"
+hash = "2d96a26d9951472a9167e41a63897b9ed0e7070f5e355a74a99d1b737f89e1f4"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/common_elytra_1.json"
+hash = "cd758396da665606ed4d24948ee2c4f0eaec359787dde4e118f522300ce06f4e"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/common_elytra_2.json"
+hash = "c18e5fd15ca3e9abee438f75dd2e4e6052cb9be4e7b4e395b58fc4c2ea219d25"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/epic_elytra_1.json"
+hash = "fbb4182de95cf0680ca87a873ded971ad9249010c3b97fdf940442f74b170795"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/epic_elytra_2.json"
+hash = "9dd31f75237fddd0381af00d239b7556504b5a17c31b66f0c492b01aaf487fac"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/legendary_elytra_1.json"
+hash = "010b563f6770f52d77aeda3c63120629322a4428a065b19133ec304020e94ee4"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/legendary_elytra_2.json"
+hash = "9ab0a155341b8df3d26b3000b1b678bb0c54d087905a671bb4937aaadcbec10d"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/rare_elytra_1.json"
+hash = "6aa0ebcaa953c618a9992182b4c6601c163e79070e6c5abeb81b9f6df0647750"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/rare_elytra_2.json"
+hash = "82e933ec5d680caf9b582b71ca4c6ac9bb63832cba3684d81187eeadaddb4c2c"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/uncommon_elytra_1.json"
+hash = "f733fd363215e6c3a1525336c039761d780722aaa8a876b9b73805b92ed5213d"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/uncommon_elytra_2.json"
+hash = "6ccba5c38627f8bc09309ae82ac8d500c7fedb354583641d8bc007b03f8a3a64"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/unique_elytra_1.json"
+hash = "0b0b121d6c281a8f904f921f03712f9436fd152bff1e64b880be5d485e19896c"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/elytra/unique_elytra_2.json"
+hash = "65a50849b0cabb149bb931165a8f493c5111406a9e033dd9c1d89fe881813407"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/common_fishing_1.json"
+hash = "f39bbfd7ab6ae057bf2b73e69f96818959d156dcffaa9e37a5360eb8c3faeb97"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/common_fishing_2.json"
+hash = "9705dc1c02fffe7fbdbc1449503ae1afc489ff3342f555d8032bb08601b744f2"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/epic_fishing_1.json"
+hash = "92b9d4b1823a4d2bf8df9fa8a16edbd90a63fc4bea50b6a04a9ca38b4327454a"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/epic_fishing_2.json"
+hash = "81c141418b4153bfc7d55a80a6eb098fcfe0858bc11b5b3e0a3a6be2272eb69b"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/legendary_fishing_1.json"
+hash = "890b0d388f61b1d1e6a8920e35bf6883e4dde40b6d74f59aeca0bafb77a7094a"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/legendary_fishing_2.json"
+hash = "65cacb876510c34a27846215e19198c8549d17bed4bf16bc77b926ba9fea40ee"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/rare_fishing_1.json"
+hash = "92988cb95703b37d6349c4b169ff11a16d17d413ea851f87a12b3630195d9bc6"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/rare_fishing_2.json"
+hash = "30b280d446f89df386b9c59025778c832364b3a53cb3be31c5be589aa653fd23"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/uncommon_fishing_1.json"
+hash = "f3e2ae0b4d1590d6b23f28cf5ec54bc10af1fbbd08d5a262ce6c733a04902329"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/uncommon_fishing_2.json"
+hash = "00640467e352769896ebc4dd1df8a85dd05e3abe0daf42a495a4772ddcb34815"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/unique_fishing_1.json"
+hash = "8aa570a2ab7d3234dad1def6e594a3ef02dfea8492694f04e10774866283e171"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/fishing_rod/unique_fishing_2.json"
+hash = "5eedb6935d27fc85c9164262f029cf661a158914e2761817580ef15ebf56088c"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/common_melee_1.json"
+hash = "1037fd14624784c36418955b4e75edb1d7e27157397bf56b164fba978cb1cc24"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/common_melee_2.json"
+hash = "7df3e0107ee750d693d3001be4233f251d8fe584508e4c36fbb59642fc6c1242"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/common_melee_3.json"
+hash = "9e878d22beb6e3b4d7ab08776b7449f24a065ae5fb16f930cbf63b7fa524fb40"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/common_melee_4.json"
+hash = "c6f852acfcdf5ebc1dd22f8db49af9d4bf0c1eed67a4304c3716b69669c809eb"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/epic_melee_1.json"
+hash = "cb02c6bdfeda988c911ff53a89a911dee4ef0160f46e8e9d851b04166eb2cac2"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/epic_melee_2.json"
+hash = "335913513d29689222a40ece40ef5ec0b9b1b57d2be59510f0ef80603b0f0509"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/epic_melee_3.json"
+hash = "eb96b5566b9b4598fb51691abb019f0c7d79b16e6a8a39e14fc9278796a39c35"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/epic_melee_4.json"
+hash = "94be8e0c7ac58a0fa6375c483d62e97dd58b530ec524abfa2e27030d2018c273"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/legendary_melee_1.json"
+hash = "7f10f3011758c31fbae496ef678afd212150b2f12be06fe5e2c3aecd05c1d300"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/legendary_melee_2.json"
+hash = "bef9d113d3278d0851b2b9b64f5ba8c2cfae6cb9f95d08c27cb01461048a698f"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/legendary_melee_3.json"
+hash = "b70b8db51d99f6bf7c8c2139a536fa69c6286f4b3d12b8bc0f05f215607fc931"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/legendary_melee_4.json"
+hash = "5fc5ade456980dfa6625a17028240cf7b4854c0b890dd26231c3047e77ef0fd9"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/rare_melee_1.json"
+hash = "53ef44e7f66e320937dd0b5fb9cf74d905abc1f8f88c297eff933e963b6c1432"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/rare_melee_2.json"
+hash = "ffd31403b615150b1e85fe23be1934b16a1828856c7aed36a74502e4cd09251d"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/rare_melee_3.json"
+hash = "d1e10518d3baaea6ac3277bf061560c63ca2a46dcf2bc137204679b0302f7bf2"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/rare_melee_4.json"
+hash = "2c81664b9175bf801afb42150a3df435c31187a56ab303fb3c546ae9b4687937"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/uncommon_melee_1.json"
+hash = "a99020541b2853e6881089a65f6386c7be62a686108e429baacc8157862d1fa6"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/uncommon_melee_2.json"
+hash = "0fe8fc9e8efde6ccbfdef156cbcd66ca61844eb676a633472eea3d3c73882a35"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/uncommon_melee_3.json"
+hash = "f5a45b342d7ff10ac2c47991ea5dcde3ebc2b8fcc0997ea64ca3a46c379e32f4"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/uncommon_melee_4.json"
+hash = "b36f665b2afc3b73adb23c27fe3dce0e2e08093b4636d5bed4ae4435cc223c90"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/unique_melee_1.json"
+hash = "00e5ca9fad7a774d7067fc3fe50a66ff04e99a83b59c16e785a2861c48ef7737"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/unique_melee_2.json"
+hash = "7b2c7fc7d447d4c683a3de36c452e68f35bfa58019caf7b8b14d266fe6503380"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/unique_melee_3.json"
+hash = "34af1734d4e9d416f027d8a244ec3685319508b1b9b37d61dd233ee8d1b97f43"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/melee_weapons/unique_melee_4.json"
+hash = "c9d6c63389019b7277b262b6a4ec9bb6c09213b3712e2bd326e86f4baec9a028"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/common_ranged_1.json"
+hash = "0a3c1513c9c14aac625a6b40396d5928c47fc3a477a9703c6c90f73d330a3879"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/common_ranged_2.json"
+hash = "b0f6f81545e23a36af5b0de0c29def4377fa78a468f6c7567a00d02b34d12353"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/common_ranged_3.json"
+hash = "8b974bfe2f7368aa743b41e58019d2ea5d2f7595b48ca94861cd834d7be4cc97"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/common_ranged_4.json"
+hash = "e6fda2353f7af4f859599a4a6c24e5727130e12cbd58cf762cf3f95cd08794ae"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/epic_ranged_1.json"
+hash = "1f9fdd364f31b35793d9bcc7085fdad2d57c91744712d454e8eaa59371adfb59"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/epic_ranged_2.json"
+hash = "dc2ce70362baabe60dd629382f1524358074669de44653112538e87bc689f53f"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/epic_ranged_3.json"
+hash = "0d38e0a23391e6493a7fb53314360af2ae718556b007c3a79078038a699eb167"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/epic_ranged_4.json"
+hash = "c5eb2bd98eed84b93e9291964a5d983f445d394bed6de832b5d4254d526d422d"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/legendary_ranged_1.json"
+hash = "3514428367b35b89a01c03d752d600544369b19111fc8d5a4f01789e8931f08e"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/legendary_ranged_2.json"
+hash = "e769d275dc5e65027839f00f1aac78a20560d3c6ebfc24fcbff899b3d48b561d"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/legendary_ranged_3.json"
+hash = "6a3db019534998ec1c1db9fa7a41254c687975c8a74cb8ed6d1bc156e8ec160d"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/legendary_ranged_4.json"
+hash = "517cb0ee88bee7c74b78e6d5c8a836073423dd7333e05e83e5593f45df4165a6"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/rare_ranged_1.json"
+hash = "462a441bfc6764ef3b389f29992899c20fca375423996cf99a0246775fb5fc8e"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/rare_ranged_2.json"
+hash = "c37918954386a193d50991d15ad4df997b9fbfe7767af560aaa24a3833ec82c9"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/rare_ranged_3.json"
+hash = "846ca1507dad5315f7305ec434015f73ca4932acd5166a4998a0a89021f9d03c"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/rare_ranged_4.json"
+hash = "40b3c88a3907884867378bb18e24ebca19f62bf75faed49a5c185b41d9260d1f"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/uncommon_ranged_1.json"
+hash = "9a226bd738e52a1d378c8cd7a959a6318c81d4f6540e72a6ee7ba9a5c688d2ca"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/uncommon_ranged_2.json"
+hash = "37e90cb3c0c227d974054a46fc4068e1bd0f61a9813b0de9a9cba2d6f108bdd1"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/uncommon_ranged_3.json"
+hash = "87d315240d9af24ee320168ad9232f45ed29a6e022c5bb73ced774183600dddd"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/uncommon_ranged_4.json"
+hash = "b0e40c843700c39ecf575821e0164ee0c8cd151522cba5dc7725b9bd8e9a37fa"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/unique_ranged_1.json"
+hash = "f8d7de0c381cd1f6a80329687bfef7c04e20999f1fb2a6b1b8bb78d4bf228f70"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/unique_ranged_2.json"
+hash = "e1ed4689f6818fa0b84ea4657eee428eb474637f7f3f1fd6768d489da7c4e130"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/unique_ranged_3.json"
+hash = "232c891d66514bbec128794459a51af7d36ec47b1342a27d9bd3fc2352da1bfd"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/ranged_weapons/unique_ranged_4.json"
+hash = "262d766e17137b6f0aa39badd51874b79484896cb91974c051346893480cee92"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/common_shield_1.json"
+hash = "6d976a3d1a67fbe188a0d890e51cd8640dcd34416cb1737ca7a37f89302c6f14"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/common_shield_2.json"
+hash = "952512669cccb2cadd40d2023bca9fcf1beb3384de4b0fe904c429e5f76fa311"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/common_shield_3.json"
+hash = "6ea385d5da339e55d85709b08a0aa085d7a8024850b8b8e90a398e1489b7a999"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/common_shield_4.json"
+hash = "196851852f39e64d783c5912744fdd8f4e2021d9831d243e77dea365b8e31f5a"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/epic_shield_1.json"
+hash = "68b2c932f9379128a2e79bf44664581e1ba16d1df8e996f1950d08793692ef70"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/epic_shield_2.json"
+hash = "17dd80f50eb08eef09cc380c6bcd37263862f47ce6a66476c9afdac6cb35a0cd"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/epic_shield_3.json"
+hash = "6d0a0cd3bc26660e0ebf6bacc5a314c9bc0f13b1381c0ec7cbb05b2ff7ce293f"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/epic_shield_4.json"
+hash = "8ade90ca6c438df4fad56fd6dd3e15bff183f0ccf08883484ddfdcae9b63ce49"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/legendary_shield_1.json"
+hash = "2d71ae3ca0bd5b52754ae53f6a409f96019853cf4e4ee4bd6eb608603add16bf"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/legendary_shield_2.json"
+hash = "585c8ad41d00cd50f79c0e7bc94e66cf300e42728983a2085f390e56e4934ce4"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/legendary_shield_3.json"
+hash = "e770edc35aa872d9e51d139944f18cdc1d6f68c8527c5739d7f34a0a8e751298"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/legendary_shield_4.json"
+hash = "263af5fe1be6b1fae10386af5aef2ac7c92da3f6cbe1447aba905db3ecdb969a"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/rare_shield_1.json"
+hash = "7c9d7178a21e2e30aeb9899a10deeb8adbe838113b95ecb7b6047c8d601ac4d6"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/rare_shield_2.json"
+hash = "db286a45722b23f3f068760a0f5604c9b74dbd99f3ccb88b1c6cf43ba5e8b451"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/rare_shield_3.json"
+hash = "b929c70d7a3eca68940afa8a94ea6bef69a186e06f573bfdfddcfc8306eadff5"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/rare_shield_4.json"
+hash = "3bbc55ff219bf963597fe8676d011811431cb4b40c4b4db9960386212fdb2421"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/uncommon_shield_1.json"
+hash = "ab3658f1852925884ca34a89e085de3fc5d9340172369e83fba37fcd5875d9d5"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/uncommon_shield_2.json"
+hash = "d7f70d0b2184b8c0394232a19b40013a2945e31f9f880c71b04317c4cc99a008"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/uncommon_shield_3.json"
+hash = "fda5c7b47d1033c02671d9c91f2972bfafe795d894bc6e8257c76009231a6e1e"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/uncommon_shield_4.json"
+hash = "2faac72249c349cc7f6f18ebac072b0153eccaf3a27cc52b6d76445a68298f2a"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/unique_shield_1.json"
+hash = "631f36b24ec1689b2569679b1642043ad1b54f8d2376c592aeafa44e457db6ec"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/unique_shield_2.json"
+hash = "d532e7e8dd59ef76be532e581b144bdf9cf530b797111861a30bf70724c1d3a0"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/unique_shield_3.json"
+hash = "bdf66b50b638466bb277351cfd416472d33c69277149bd0853a7ad5e60d42b68"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/item_attributes/shields/unique_shield_4.json"
+hash = "46a94c616f18f5924f46859c46169a8187415c18a0fe64c4506742e0cc673edc"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/tags/item/reforge_addition.json"
+hash = "33975eff3c2c6cf9000bce7825e1256f756eb8a353be7e9b7011bb4298f97a65"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/data/tiered/tags/item/reforge_base_item.json"
+hash = "33975eff3c2c6cf9000bce7825e1256f756eb8a353be7e9b7011bb4298f97a65"
+
+[[files]]
+file = "datapacks/nbidal18_gear_tiers/pack.mcmeta"
+hash = "51043a4ddb83728b3113617e678fcb112eb13356c0932d96194a65e77b83b312"
 
 [[files]]
 file = "datapacks/nbidal18_jei_support/data/magistuarmory/recipe/furnace/steel_ingot_blasting.json"
@@ -1162,6 +1766,262 @@ hash = "a955216463ff04b208a147420d715c6b5517f6f58721b5ab15b13f7afa10c5b8"
 [[files]]
 file = "datapacks/nbidal18_jei_support/pack.mcmeta"
 hash = "b67a342183f89782401b0b091aa8761b6e907a99c02bc062bca83f14f3f2a5d1"
+
+[[files]]
+file = "datapacks/nbidal18_progression/README.md"
+hash = "b22f54402d3945d2e6135ba424efe3b86124f06c6f24e39dd4c3a174efe7a0d5"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/levelz/skill/nbidal18.json"
+hash = "19ce8e5b35de98257e196d4f4cf38ff2af2af4bbf5a81698d917f5ff8a14711d"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_brewer_100.json"
+hash = "489c60f6ca74370f6de936ee6b43c8a0c8327631b28c46b1e36ebd76bd1b3f46"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_brewer_25.json"
+hash = "89e688990b90eb4a7499a1950db017639ef79deae41b410508c74a86de515c76"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_brewer_50.json"
+hash = "d5666dc25620cfe4b80f0647937c5a353599a03186a82e5898d9d5853cfae9b5"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_brewer_75.json"
+hash = "9484f431b8071d5d70c32ea026820963e0013aa56e138c9376547f31c1407ed5"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_builder_100.json"
+hash = "6d08a059c736339a356aa93c220cb4c296a3ba3f67359736ae2bf75e01fbf10a"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_builder_25.json"
+hash = "565c89683990ae102708dad237ebdd119554a99f7338130ee2915c3d9edacb00"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_builder_50.json"
+hash = "c2d5ac671700cce6f3fe146751037b704e9ead61ceae5334081976e2f3595f29"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_builder_75.json"
+hash = "beac444d873041175c06452c07a00c1677cc8c7e1070f58a0d321c568d3d0313"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_farmer_100.json"
+hash = "5f261b3c7a614c18329f305482b8eefb5aedadece135a94e6f489175874f04a0"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_farmer_25.json"
+hash = "6e261784421c133e174c5a70d835d6008484c0b4c2a9604b6ceeb4cf25492b91"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_farmer_50.json"
+hash = "aef0a4265c25199f3c4f8f87bbcd1a4876526cb90e947ebc526d08c40ae10c81"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_farmer_75.json"
+hash = "1a83cb2f943eeb7c714562562b334017d7e0f5a72502253cfe3a93991d3660c4"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_fisher_100.json"
+hash = "57fdb461dd01a7b75e9a463afc24c6d7076ff967fbd3e76a906d368feaf2fb07"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_fisher_25.json"
+hash = "9f086728338a23b4f7ba7dde7b4232a0c4096be4e766d83ca2b97174aadd38db"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_fisher_50.json"
+hash = "b4ac73d91748c5366945da219144a7258fa415e460be8df3eb8cfc69717b9ad6"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_fisher_75.json"
+hash = "ec089ca8bab9efea073098ea64eb9e7a18e1a9f7a8ab52c1faa6d7ad07aca9d1"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_lumberjack_100.json"
+hash = "49a1d9a34d047d41b4e710678fcee81f539f26cb6e3cf263b43317638186cda3"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_lumberjack_25.json"
+hash = "47fe6d3b6deea843b9c49029fef322cd326f97b19cd49e72e67dd48b542dfa23"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_lumberjack_50.json"
+hash = "338bea3b2609e41828745373a5044fb67c5d90508c01da9146d968956ef66461"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_lumberjack_75.json"
+hash = "3bbcb1754c79f20c268ca205a44d310352abe0215d7098097306ae7291936411"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_miner_100.json"
+hash = "689a906ffe0c3e6436fd9c6b028b1b5821c4b7f5b456a46ba29f98de0b2886d5"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_miner_25.json"
+hash = "21d20f2697b6e0fd439b3ef2d6e5f94486500ca5616a5d48e3268fc55b36c706"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_miner_50.json"
+hash = "a0ed3c6c34a0281c871c2d240c519caefe4b5513e4ecca035ac3324d51d4ea31"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_miner_75.json"
+hash = "924faebaebbb17687324ca9ab0233811831106cc6be8a45a98cdf3d4d6f4d565"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_smith_100.json"
+hash = "d86b0298503c963fa1673ff4591a38e3967e3beb96ca48314ae029c0f89ca518"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_smith_25.json"
+hash = "b773134b6b4645a6f5a3e28a5feafa40e4da4d19b63706a3c7793cad0d9a8722"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_smith_50.json"
+hash = "b4ce0c526760a86122ed19d6a0a65f72e7ffd423527492c792479ba9a1c10a35"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_smith_75.json"
+hash = "510249a998d9f4742f41c4d081d5f5d7f8fb17ea628a7a94f0f4fd1ad0b0ebca"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_warrior_100.json"
+hash = "a8669d81ba9c9f52e25bd36f9238ede26d6a4efb0e92c6b59af5b5c8d632395a"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_warrior_25.json"
+hash = "5558209b5de03908dc9c36abb72364f59d4475b13027321823a8c28b3c0f4fe1"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_warrior_50.json"
+hash = "b49ea342c24d8a28e60dd6df62d35424e469ad8b51b1801fa28d46e72359d761"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_warrior_75.json"
+hash = "ae0692b89c5259bb081c675ddae452ed1ecdf3ce6e0da264084bcece09c1b27d"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/level_100.json"
+hash = "9d012237ce97b2625bf4697a966750cd7b3b08848291260ce77d8a0d8ca72b22"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/level_25.json"
+hash = "0cae10d938123115786038655932eb2b2786ccbfebe801b5c809c143a063c38c"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/level_50.json"
+hash = "d5089ec1a25ac3baf731ec8c85d6b005498917e87981164985eb68bd9ee8b3db"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/level_75.json"
+hash = "51e58352f39043d88491dad45dda54c168eb1ffd01a2a73d0506c0a2f6aab1aa"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/root.json"
+hash = "e94d2204bc3fbaf3de1a8e134d35ab4668b338fa34b82c54c4338a29cdc1af1d"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_agility_10.json"
+hash = "e027289c8be751e5fde545b4b8a2d90a931980a32e13911754b5b2c93b7b6d16"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_agility_20.json"
+hash = "d7da64f796384f5a973709cbaa0c9863c83934c2d0bf0b4233298be86dc6a39f"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_archery_10.json"
+hash = "a020c25c11e001fa6db9fec1ce1a2ef83c48506ed4af36948bf103eb60779705"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_archery_20.json"
+hash = "486b54bda16b177e6e7416e5188991abd495ee52a023063a3b2dcd415af631b3"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_bartering_10.json"
+hash = "978598daf01932f92778bd40ba264982527b04464719e4c640c06985b2f3c8dc"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_bartering_20.json"
+hash = "e9cc23bac1690f0cab019b384427aa16ed05fc6bd80814b10d865dab5ec72aa9"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_constitution_10.json"
+hash = "468f3f6bdcc72091a363b8bac768089b677c53e52ba933c10821d97db3fee42c"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_constitution_20.json"
+hash = "b8f6812a2e0db86688c298e1b6435ba869057da3d27cc1ed2bdb00347a5a316d"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_cooking_10.json"
+hash = "63ea27480e6e85710464bc276fc40cf41cb6bd745fd4ac881e46eacecc395db9"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_cooking_20.json"
+hash = "b9e62897161ff0fc6cf0f9ca8a23de37c1f98f204e9f2d6fcecd5e965d6429c5"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_defense_10.json"
+hash = "15e9f50ee4d8052eae7eb2f10a795c9be8658c3728233a1012d6d430eea4d380"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_defense_20.json"
+hash = "375146726327caee541650becac0bf8050a245add682bb6fd8929bd028faa372"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_farming_10.json"
+hash = "f7e112d2fb60a2b5e434331707c5740484818a7b8681b2751cff3238903f4c65"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_farming_20.json"
+hash = "8c3e0f8da921519998e5e05c7eef6039a76920a4cc3aa7f5f2e0a87ab779c585"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_luck_10.json"
+hash = "422220e20e511cecf98606acccf9fbf5120853044362b1c78ae3b5204a134a84"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_luck_20.json"
+hash = "0304054264e6d4e35eac7682f686f597d54eddbe3f1d126399097f8dbbdd896d"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_magic_10.json"
+hash = "89d12e11a12251b2fdeff60605d6270ba4bb4420f9641de15b96751606ba2d08"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_magic_20.json"
+hash = "3ad1b961144caa779630329a49d5fe66b61e4b621df0005d2891a842dbb7068c"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_melee_10.json"
+hash = "b1d87c4a017f366d11b3fe5e612481a3976f664c9150f257ec5af9ac3178ff4a"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_melee_20.json"
+hash = "2bab07814d4ca15990de88fcdd9a2f7bf97db28decf04dff176382599fa6c8b2"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_mining_10.json"
+hash = "7fa85ade75dba45f6f322ba6f2ef196ae6510eae66b11bdee6ab762f10080a70"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_mining_20.json"
+hash = "09eb8ea8e30fd0a414274c626756aa6e5cd666b69958be04fc56304a56c8b73c"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_smithing_10.json"
+hash = "ae492e185515544da80570308ee10e2fde0a1d2bee45e35363f95877e8371206"
+
+[[files]]
+file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_smithing_20.json"
+hash = "70fae338d586fdafa26f70b6758ceb40229cead6c08be83cd47a851128788c51"
+
+[[files]]
+file = "datapacks/nbidal18_progression/pack.mcmeta"
+hash = "608e7a3cd532bcb26970cca32b9062abe9c02d3d5b1435d127151dca81ba6684"
 
 [[files]]
 file = "datapacks/nbidal18_realistic_health_v3.6_optimized/data/global/advancement/root.json"
@@ -1332,6 +2192,30 @@ file = "datapacks/nbidal18_realistic_health_v3.6_optimized/pack.png"
 hash = "88f23f2e5803b95722c57b264e692e85d89d6f51779b96ba8bb783c0ca55dc16"
 
 [[files]]
+file = "datapacks/nbidal18_temperature/README.md"
+hash = "9f9c2b68ad2d02ea01fbdb755541a7d62630ea9995c76c49d71bff9ab43d1e11"
+
+[[files]]
+file = "datapacks/nbidal18_temperature/data/scorchful/tags/item/heat_resistance_modified.json"
+hash = "bef4d172fc1bfb34d342e79090726c4a0c272dd404783c3ea022b992e0e0415e"
+
+[[files]]
+file = "datapacks/nbidal18_temperature/data/scorchful/tags/item/is_sun_protecting_hat.json"
+hash = "6cf6b9c1697096602ed21716797362cc674043ca5ba6d6a03beb691274f57971"
+
+[[files]]
+file = "datapacks/nbidal18_temperature/data/thermoo/tags/item/consumable/cooling.json"
+hash = "8f007f5df3450492402e085f15927414760ab8c066618bbeca5714ec670f2366"
+
+[[files]]
+file = "datapacks/nbidal18_temperature/data/thermoo/tags/item/consumable/warming.json"
+hash = "62bd6162a1a2b084d0daa251f051e45b7c57e667cc6c9dc6e937ac8f7f434ffc"
+
+[[files]]
+file = "datapacks/nbidal18_temperature/pack.mcmeta"
+hash = "3cd2a0b6e0cdbc7f0c9a95d4178728e9368a2809d76bbe90d83cdfc131e1fffc"
+
+[[files]]
 file = "datapacks/nbidal18_terralith_structure_compat/data/joshie/worldgen/structure/village_ocean.json"
 hash = "aeaebb76eb72f2102d5a6b2d14197954b342192eac4e90791f0f619248f46aaf"
 
@@ -1380,8 +2264,8 @@ file = "licenses/Grave-Currency-MIT.txt"
 hash = "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
 
 [[files]]
-file = "licenses/Held-Heat-MIT.txt"
-hash = "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
+file = "licenses/Jobs-Reset-GPL-3.0.txt"
+hash = "925e224ca3659caffe5ecc8822cd5bf9c3a7d233df149eb4b293b3f38cbf09b4"
 
 [[files]]
 file = "licenses/MoreVillagers-Numismatic-Bridge-MIT.txt"
@@ -1400,8 +2284,16 @@ file = "licenses/Realistic-Death-Visuals-Apache-2.0.txt"
 hash = "7c1a198164da074761402ea707e49cc5862a97ebbc0e7548c247cfed470f9e59"
 
 [[files]]
+file = "licenses/Temperature-MIT.txt"
+hash = "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
+
+[[files]]
 file = "licenses/TreeChop-MIT.txt"
 hash = "d4b2f487f8836367e96992034447e7be460cbfb0f37c89dc01057811a3b5b783"
+
+[[files]]
+file = "licenses/Wiki-MIT.txt"
+hash = "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
 
 [[files]]
 file = "licenses/nbidal18-JEI-Coverage-Bridge-MIT.txt"
@@ -1868,6 +2760,10 @@ file = "mods/ferritecore-7.0.2-hotfix-fabric.jar"
 hash = "e3fae8e321474a35e94f9bb09eafd0440ce0fe98f4aebbc067e392889700a4fa"
 
 [[files]]
+file = "mods/fieldguide-fabric-1.21.1-1.15.2.jar"
+hash = "62f9c07f1e1055a59a317651d35a62c0bf2d4dda7817c4e2fe2618211f54ba61"
+
+[[files]]
 file = "mods/firstperson-fabric-2.6.1-mc1.21.1.jar"
 hash = "d494b94a51856f95eb856be20fa31311d018e5ac39a21b75ff4889b5ebf8ae01"
 
@@ -1944,6 +2840,10 @@ file = "mods/iris-fabric-1.8.8+mc1.21.1.jar"
 hash = "b5ad39a6cb113ca0a1765f06689f9f4b29ccd0c81247de90b06c42f5da1092f5"
 
 [[files]]
+file = "mods/item_descriptions-2.8.0+1.21.1-fabric.jar"
+hash = "47e41eb5d7f719629b430bc823e23233eea7e2bc9f6c4dd185ddcef8d143dec3"
+
+[[files]]
 file = "mods/itemrestrictions-9.0.0-fabric.jar"
 hash = "347aa8774f477a794d6dd2116bc29680cb429dc556c2be0cb626c87ba696f0ed"
 
@@ -1956,8 +2856,8 @@ file = "mods/jewelry-fabric-2.3.3+1.21.1.jar"
 hash = "2a62a3a27698117cd5b2275149caa3e338b90d0f8db0c285dd7e8bceec9ed769"
 
 [[files]]
-file = "mods/jobsplus-9.0.0-fabric.jar"
-hash = "f9b3a20120191ba4fa63b0f866ce7dd7cad1b3011f391d5f90618bcff0a0eb26"
+file = "mods/jobsaddon-1.2.5.jar"
+hash = "0b4afb1b6100baff2a106fec9c745e7aa4d0f26d2122834b1402fcf1f58741f4"
 
 [[files]]
 file = "mods/jumpoverfences-fabric-1.21.1-1.6.1.jar"
@@ -1978,6 +2878,14 @@ hash = "30ce0c25f703d1a53540359447f11d35b411f5c75481555b0dc45ffa8d62006b"
 [[files]]
 file = "mods/letsdo-wildernature-fabric-1.1.4.jar"
 hash = "e25d4b4e6a32dd3fcf888d3b61b73264354e0f34ab05cdafe2e5e50281997c91"
+
+[[files]]
+file = "mods/levelz-2.0.10.jar"
+hash = "b95849eff1b72e9fd1cd0710a71c46aabb1b9b415ec10805020d2ca17a85a79f"
+
+[[files]]
+file = "mods/libz-1.1.0.jar"
+hash = "2dd8b63f81c61df728aa2a534829df89c62d2fb4ed5a28689949c4694ec0e2c7"
 
 [[files]]
 file = "mods/lithium-fabric-0.15.1+mc1.21.1.jar"
@@ -2072,20 +2980,16 @@ file = "mods/naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar"
 hash = "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
 
 [[files]]
-file = "mods/nbidal18-client-tweaks-1.3.13+1.21.1.jar"
-hash = "fd6e0f43b545c89b41bbb4bbe83e53be095a0ac65668e38269736891f964210b"
+file = "mods/nbidal18-client-tweaks-1.4.0+1.21.1.jar"
+hash = "506d904570c6527228640ac3cecdb0e1ad6ec5475fa0197625f53ffa439dcb46"
 
 [[files]]
 file = "mods/nbidal18-grave-currency-1.0.0+1.21.1.jar"
 hash = "08f8f5fca2ec886f25c0d0c3267d0cb5539831e330f2fd8f8e0e12c3d7156764"
 
 [[files]]
-file = "mods/nbidal18-held-heat-1.0.0+1.21.1.jar"
-hash = "0952e0a2e156c7b3bfb1d1ec40642b36adb2f7c37f38e1e8acdd3524135bf1c7"
-
-[[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "47bee3b3ee76c898b4d10d3946f717df38ca86fc76485c2ce12df045abea12ae"
+hash = "896d24669ea4de11e26f02f80cd24d3c42f1f41081181930804bea9023e4bb89"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -2096,16 +3000,24 @@ file = "mods/nbidal18-jei-hidden-default-1.1.0+1.21.1.jar"
 hash = "a101345e9e113fd3991d88f8dfb1d7bae3829b7b8654c7f803daf4409af69817"
 
 [[files]]
-file = "mods/nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar"
-hash = "7baa275071aa0296ae363169dcfd35589c71a9f30f195505f5eecfc475973e44"
+file = "mods/nbidal18-jobs-reset-1.0.0+1.21.1.jar"
+hash = "82bae5cfd598f0fe5148b24a887d05f124a05a4264edc2ea6035b646d817ad20"
 
 [[files]]
 file = "mods/nbidal18-morevillagers-numismatic-bridge-1.0.0+1.21.1.jar"
 hash = "27bad58778d72c0784db854b8da6803a5a5465c89a38833cf88333f36800702c"
 
 [[files]]
-file = "mods/nbidal18-playeremotes-fa-bridge-1.2.1+1.21.1.jar"
-hash = "6963710ba2274d3180344afce2f56a30e607c26cae3ff35c28bca0c0ca739878"
+file = "mods/nbidal18-playeremotes-fa-bridge-1.3.0+1.21.1.jar"
+hash = "8aad4ba4080f815723c2edc99d8073ed75552a8e65dce8ee5d36531897c0b048"
+
+[[files]]
+file = "mods/nbidal18-temperature-2.0.0+1.21.1.jar"
+hash = "b22a7954776c3fbde10908b66513a393b8493f5903ee883f02e5775ac27a8b95"
+
+[[files]]
+file = "mods/nbidal18-wiki-1.0.0+1.21.1.jar"
+hash = "466f88082d37be8ee0b4060faa6493568afe76fb721d4e151e5e625321f482cf"
 
 [[files]]
 file = "mods/niftycarts-21.1.1.jar"
@@ -2324,6 +3236,10 @@ file = "mods/tide-fabric-1.21-1.6.3.jar"
 hash = "053708411c23ee3f26d0917e9e9c8d34a5e30755735bc0b822a25c8c84f1a892"
 
 [[files]]
+file = "mods/tiered-1.3.7.jar"
+hash = "139337e8051a185f1670b83db5495ef5a8bf21f5eadfed13cfdaf3d6b4437217"
+
+[[files]]
 file = "mods/timestamp-chat-fabric-2.4.0+1.19.1.jar"
 hash = "847bde82a5693da828d81fa2d45ff6a4fbe93d5b08c80413ff2ff033f481e6e7"
 
@@ -2393,11 +3309,11 @@ hash = "413d7710f4f2b08fc188e205c3dfe542785da577d949cae28b5c0fc37ae75336"
 
 [[files]]
 file = "nbidal18-packwiz-sync.next.jar"
-hash = "3978c0dc75b138aaa0d8610467624ab49fecdadfaf160e2f66705870cadcb94d"
+hash = "4d6440f5ae0afd64c0c2d4d0aa6b1760e5c3c5d298704dd6a9eb279531f14d27"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "981a3b54a51478fcaa19dc7d5af527191c7ff7c35bd7761a2bbc6b180cfc14ac"
+hash = "624c3f7f30a043c61b1e8752a56a8d8aa9487148b976d38cc2c93655ac875b57"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"
@@ -2466,6 +3382,10 @@ hash = "90bedda706041faca1ac7ca641105dbe9e8e691c4f77af61010b766a6e291636"
 [[files]]
 file = "resourcepacks/VanillaTweaks_r695951_MC1.21.x.zip"
 hash = "ad15d2899b02e6a333647f00fd617c69de1491ba317eee8bd9b9abe93e380420"
+
+[[files]]
+file = "resourcepacks/mod-descriptions-v12.0.zip"
+hash = "92f332b28a208b03c82625ee2d777b1fe76f319b83db6baa11f4a0336e3b12f5"
 
 [[files]]
 file = "resourcepacks/§3Fresh §bFlower Pots Rotated.zip"

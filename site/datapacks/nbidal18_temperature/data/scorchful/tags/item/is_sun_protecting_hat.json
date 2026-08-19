@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:turtle_helmet",
+    { "id": "#trinkets:head/hat", "required": false },
+    { "id": "#artifacts:slot/head", "required": false },
+    { "id": "#artifacts:slot/face", "required": false }
+  ]
+}

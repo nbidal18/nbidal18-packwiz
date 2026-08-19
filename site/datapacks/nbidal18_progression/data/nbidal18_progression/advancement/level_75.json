@@ -1,0 +1,31 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:experience_bottle"
+                             },
+                    "title":  {
+                                  "text":  "Level 75"
+                              },
+                    "description":  {
+                                        "text":  "Reached overall level 75"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "level_75":  {
+                                      "trigger":  "levelz:level",
+                                      "conditions":  {
+                                                         "level":  75
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "level_75"
+                         ]
+                     ]
+}

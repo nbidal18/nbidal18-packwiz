@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:mushroom_stew",
+    "minecraft:rabbit_stew",
+    "minecraft:beetroot_soup",
+    "minecraft:suspicious_stew",
+    { "id": "#frostiful:warm_foods", "required": false },
+    { "id": "farmersdelight:hot_cocoa", "required": false },
+    { "id": "farmersdelight:beef_stew", "required": false },
+    { "id": "farmersdelight:chicken_soup", "required": false },
+    { "id": "farmersdelight:vegetable_soup", "required": false },
+    { "id": "farmersdelight:fish_stew", "required": false },
+    { "id": "farmersdelight:baked_cod_stew", "required": false },
+    { "id": "farmersdelight:pumpkin_soup", "required": false },
+    { "id": "farmersdelight:noodle_soup", "required": false },
+    { "id": "farmersdelight:bone_broth", "required": false },
+    { "id": "farmersdelight:mushroom_rice", "required": false },
+    { "id": "farmersdelight:fried_rice", "required": false },
+    { "id": "farmersdelight:pasta_with_meatballs", "required": false },
+    { "id": "farmersdelight:pasta_with_mutton_chop", "required": false },
+    { "id": "farmersdelight:roast_chicken", "required": false },
+    { "id": "farmersdelight:stuffed_pumpkin_block", "required": false }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:ender_pearl"
+                             },
+                    "title":  {
+                                  "text":  "Magic 10"
+                              },
+                    "description":  {
+                                        "text":  "Magic reached level 10"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "magic_10":  {
+                                      "trigger":  "levelz:skill",
+                                      "conditions":  {
+                                                         "skill_name":  "magic",
+                                                         "skill_level":  10
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "magic_10"
+                         ]
+                     ]
+}

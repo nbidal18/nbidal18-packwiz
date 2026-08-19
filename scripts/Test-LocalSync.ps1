@@ -81,17 +81,24 @@ try {
     Assert-True ($instanceConfig.Contains("ExportName=nbidal18-client`n")) 'The Prism export name is not the stable client name.'
     Assert-True (-not $instanceConfig.Contains("name=nbidal18-client-$packVersion")) 'The Prism display name still contains a release version.'
     Assert-True ((Invoke-Sync $minecraft) -eq 0) 'First online installation failed.'
-    Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 246) 'First install did not produce 246 mod JARs.'
+    Assert-True ((Get-ChildItem -LiteralPath (Join-Path $minecraft 'mods') -File -Filter '*.jar').Count -eq 252) 'First install did not produce 252 mod JARs.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\better-compatability-checker-fabric-21.1.8.jar')) 'BCC was not installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-integrity-helper-1.0.0+1.21.1.jar')) 'The integrity helper was not installed.'
     # Version-derived, not hardcoded: this assertion used to fail on every client-tweaks bump.
     $tweaksProperties = Join-Path $releaseRoot '5. modpack source\custom mods\nbidal18-client-tweaks\gradle.properties'
     Assert-True ([IO.File]::ReadAllText($tweaksProperties, [Text.Encoding]::UTF8) -match '(?m)^mod_version=(.+?)\s*$') 'Could not read the client-tweaks mod version.'
     $expectedTweaksJar = "nbidal18-client-tweaks-$($Matches[1]).jar"
-    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft (Join-Path 'mods' $expectedTweaksJar))) "The Inmis dye rendering, grouped Trinkets slots, Auto HUD, and Jobs+ plaque-enabled client tweaks were not installed ($expectedTweaksJar)."
+    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft (Join-Path 'mods' $expectedTweaksJar))) "The Inmis dye rendering, grouped Trinkets slots and Auto HUD client tweaks were not installed ($expectedTweaksJar)."
     $installedInmisConfig = [IO.File]::ReadAllText((Join-Path $minecraft 'config\inmis.json'), [Text.Encoding]::UTF8)
     Assert-True (-not $installedInmisConfig.EndsWith("`n")) 'Inmis config must use AutoConfig''s stable no-final-newline serialization.'
-    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar')) 'The Jobs+ compatibility helper was not installed.'
+    # The skills-and-jobs set that replaced Jobs+, plus the first-party mod that makes death cost
+    # job levels. All four are on both sides; the wiki is client-only by design.
+    foreach ($expected in @('levelz-2.0.10.jar', 'jobsaddon-1.2.5.jar', 'libz-1.1.0.jar',
+                            'tiered-1.3.7.jar', 'nbidal18-jobs-reset-1.0.0+1.21.1.jar',
+                            'nbidal18-temperature-2.0.0+1.21.1.jar', 'nbidal18-wiki-1.0.0+1.21.1.jar',
+                            'fieldguide-fabric-1.21.1-1.15.2.jar')) {
+        Assert-True (Test-Path -LiteralPath (Join-Path $minecraft (Join-Path 'mods' $expected))) "$expected was not installed."
+    }
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\polytone-1.21-3.12.0-fabric.jar'))) 'Retired Nature X Polytone support was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\optigui-2.3.0-beta.9+1.21.jar'))) 'Retired OptiGUI support was still installed.'
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'resourcepacks\Fancy Crops v1.3.zip')) 'Fancy Crops was not installed.'
@@ -102,7 +109,7 @@ try {
     Assert-True (@($installedResourcePacks | Where-Object { $_.Name -like '*OLED*Inmis Backpacks Addon*.zip' }).Count -eq 0) 'The retired Inmis OLED add-on was still installed.'
     Assert-True (@($installedResourcePacks | Where-Object { $_.Name -like '*Darkmode*Colourful Containers*.zip' }).Count -eq 0) 'The retired Colourful Containers Darkmode pack was still installed.'
     Assert-True (@($installedResourcePacks | Where-Object { $_.Name -like '*Modded*Containers*Dark*.zip' }).Count -eq 0) 'The retired Modded Containers Dark pack was still installed.'
-    Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $minecraft 'resourcepacks') -File -Filter '*.zip').Count -eq 17) 'First install did not produce 17 resource packs.'
+    Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $minecraft 'resourcepacks') -File -Filter '*.zip').Count -eq 18) 'First install did not produce 18 resource packs.'
     foreach ($managedUpdater in @(
         'nbidal18-packwiz-sync.next.jar',
         'nbidal18-packwiz-updater.next.jar',
@@ -132,7 +139,15 @@ try {
     $section = [char]0x00A7
     Assert-True (-not $optionsText.Contains("file/${section}0${section}lOLED ${section}f${section}lColourful Containers${section}8.zip")) 'Retired Colourful Containers OLED remains enabled in the default resource-pack list.'
     Assert-True (-not $optionsText.Contains("file/${section}0${section}lOLED ${section}f${section}lInmis Backpacks Addon${section}8.zip")) 'The retired Inmis OLED add-on remains enabled in the default resource-pack list.'
-    Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-jobs-chat-suppressor-1.1.0+1.21.1.jar'))) 'The reset-enabled Jobs+ helper was still installed.'
+    # Jobs+ and everything that existed only for it must be gone, not merely superseded. A stale
+    # JAR here would load against a mod that is no longer in the pack.
+    foreach ($retired in @('jobsplus-9.0.0-fabric.jar',
+                           'nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar',
+                           'nbidal18-jobs-chat-suppressor-1.1.0+1.21.1.jar',
+                           'nbidal18-held-heat-1.0.0+1.21.1.jar')) {
+        Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft (Join-Path 'mods' $retired)))) "$retired was still installed."
+    }
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'config\jobsplus-common.yaml'))) 'The retired Jobs+ config was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.0.0+1.21.1.jar'))) 'The retired client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.1.0+1.21.1.jar'))) 'The pre-Inmis-OLED client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.2.0+1.21.1.jar'))) 'The detached-OLED-panel client-tweaks artifact was still installed.'
@@ -144,13 +159,29 @@ try {
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.6+1.21.1.jar'))) 'The pre-hotbar-group client-tweaks artifact was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.7+1.21.1.jar'))) 'The client-tweaks artifact without the block-placement reveal was still installed.'
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\nbidal18-client-tweaks-1.3.8+1.21.1.jar'))) 'The client-tweaks artifact with the old accessory-row order was still installed.'
-    $jobsConfigText = Get-Content -LiteralPath (Join-Path $minecraft 'config\jobsplus-common.yaml') -Raw
-    Assert-True ($jobsConfigText -match '(?m)^\s*show_xp_in_action_bar:\s*false\s*$') 'Jobs+ XP action-bar messages remain enabled.'
-    Assert-True ($jobsConfigText -match '(?m)^\s*broadcast_level_up_messages:\s*false\s*$') 'Jobs+ chat level-up broadcasts remain enabled.'
-    Assert-True ($jobsConfigText -match '(?m)^\s*amount_of_free_jobs:\s*1\s*$' -and
-            $jobsConfigText -match '(?m)^\s*max_jobs:\s*1\s*$') 'Jobs+ is not limited to one active job.'
-    Assert-True ($jobsConfigText -match '(?m)^\s*xp_multiplier:\s*0\.25\s*$' -and
-            $jobsConfigText -match '(?m)^\s*use_decimal_values_for_xp:\s*true\s*$') 'Jobs+ is not using quarter-speed fractional progression.'
+    $levelzText = Get-Content -LiteralPath (Join-Path $minecraft 'config\levelz.json5') -Raw
+    Assert-True ($levelzText -match '(?m)^\s*"disableMobFarms":\s*true\s*,?\s*$') 'LevelZ mob-farm limiting is off; a fixed farm would keep paying forever.'
+    Assert-True ($levelzText -match '(?m)^\s*"restrictions":\s*false\s*,?\s*$' -and
+            $levelzText -match '(?m)^\s*"defaultRestrictions":\s*false\s*,?\s*$') 'LevelZ content locking remains enabled.'
+    Assert-True ($levelzText -match '(?m)^\s*"defaultSkills":\s*false\s*,?\s*$') 'LevelZ is still loading its own skill table alongside the pack''s.'
+    Assert-True ($levelzText -match '(?m)^\s*"levelRetainPercentage":\s*0\.0\s*,?\s*$') 'LevelZ does not lose every skill level on death.'
+    Assert-True ($levelzText -match '(?m)^\s*"showLevel":\s*false\s*,?\s*$' -and
+            $levelzText -match '(?m)^\s*"showLevelList":\s*false\s*,?\s*$') 'LevelZ still draws its on-screen level display.'
+    $jobsAddonText = Get-Content -LiteralPath (Join-Path $minecraft 'config\jobsaddon.json5') -Raw
+    Assert-True ($jobsAddonText -match '(?m)^\s*"employedJobs":\s*2\s*,?\s*$') 'JobsAddon is not limited to two jobs at a time.'
+    Assert-True ($jobsAddonText -match '(?m)^\s*"jobChangeTime":\s*72000\s*,?\s*$') 'The JobsAddon one-hour job-change cooldown is wrong.'
+    $tieredText = Get-Content -LiteralPath (Join-Path $minecraft 'config\tiered.json5') -Raw
+    Assert-True ($tieredText -match '(?m)^\s*"showReforgingTab":\s*false\s*,?\s*$') 'The TieredZ reforging tab remains enabled.'
+    Assert-True ($tieredText -match '(?m)^\s*"tieredTooltip":\s*false\s*,?\s*$') 'The TieredZ rarity tooltip border remains enabled.'
+    # The pack's own skill table has to arrive, or LevelZ silently runs with no skills at all now
+    # that its default table is switched off.
+    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'datapacks\nbidal18_progression\data\levelz\skill\nbidal18.json')) 'The pack skill table was not installed.'
+    Assert-True (Test-Path -LiteralPath (Join-Path $minecraft 'datapacks\nbidal18_gear_tiers\data\tiered\tags\item\reforge_base_item.json')) 'The emptied TieredZ reforge tags were not installed.'
+    # The keybind seeding is the whole point of the player-file mechanism: it must land in
+    # options.txt without disturbing anything else the player has set.
+    $seededOptions = Get-Content -LiteralPath (Join-Path $minecraft 'options.txt') -Raw
+    Assert-True ($seededOptions -match '(?m)^key_key\.levelz\.openskillscreen:key\.keyboard\.j\s*$') 'The LevelZ skill-screen key was not seeded onto J.'
+    Assert-True ($seededOptions -match '(?m)^key_key\.fieldguide\.open:key\.keyboard\.u\s*$') 'The Field Guide key was not seeded onto U.'
     $jadePlugins = Get-Content -LiteralPath (Join-Path $minecraft 'config\jade\plugins.json') -Raw | ConvertFrom-Json
     Assert-True ($jadePlugins.minecraft.entity_health -eq $false) 'Jade entity health remains enabled in the client.'
 
@@ -316,7 +347,7 @@ try {
     Expand-Archive -LiteralPath $zipPath -DestinationPath $offlineRoot
     Assert-True ((Invoke-Sync (Join-Path $offlineRoot 'minecraft')) -ne 0) 'An incomplete first install incorrectly started offline.'
 
-    Write-Host "PASS: version-neutral Prism naming, pre-launch supervisor promotion and validation, updater/bootstrap staging, existing-instance resource-pack migration, v$packVersion install, Jobs+ balance, hidden Jade mob health, narrow runtime config exceptions, enforced helper and BCC policy, preserved personal configs and shader quality, glowing-ore field repair, exact-match cleanup, managed gameplay-config repair, complete offline fallback, and incomplete offline blocking."
+    Write-Host "PASS: version-neutral Prism naming, pre-launch supervisor promotion and validation, updater/bootstrap staging, existing-instance resource-pack migration, v$packVersion install, skills/jobs/tiers balance, seeded keybind rows, hidden Jade mob health, narrow runtime config exceptions, enforced helper and BCC policy, preserved personal configs and shader quality, glowing-ore field repair, exact-match cleanup, managed gameplay-config repair, complete offline fallback, and incomplete offline blocking."
     $testSucceeded = $true
     $global:LASTEXITCODE = 0
 }

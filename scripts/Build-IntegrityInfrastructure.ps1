@@ -63,20 +63,33 @@ foreach ($jar in @($supervisorJar, $updaterJar)) {
         Remove-Item -LiteralPath $jar -Force
     }
 }
-& $jarTool --create --file $supervisorJar --main-class Nbidal18PackwizSupervisor `
-    --date=1980-01-01T00:00:02Z -C $updaterBuild 'Nbidal18PackwizSupervisor.class' `
-    -C $updaterBuild 'Nbidal18PackwizSupervisor$Promotion.class'
-if ($LASTEXITCODE -ne 0) {
-    throw "The Packwiz supervisor JAR build failed with exit code $LASTEXITCODE"
+# Every class compiled from the source file goes in, rather than a list written out by hand.
+#
+# The hand-written list used to name each nested class, and adding one to the source without
+# remembering to add it here produced a JAR that compiled, built and shipped, then died at runtime
+# with NoClassDefFoundError on the player's machine - a failure that only Test-LocalSync would ever
+# have caught. Enumerating by prefix removes the whole class of mistake.
+#
+# Sorted so the archive is byte-stable: jar records entries in the order it is given them, and an
+# unsorted directory listing would move the digest for no reason.
+function New-ClassJar([string] $jarPath, [string] $mainClass) {
+    $classes = @(
+        Get-ChildItem -LiteralPath $updaterBuild -File -Filter "$mainClass*.class" |
+            Sort-Object Name |
+            ForEach-Object { @('-C', $updaterBuild, $_.Name) }
+    )
+    if ($classes.Count -eq 0) {
+        throw "No compiled classes were found for $mainClass in $updaterBuild"
+    }
+    & $jarTool --create --file $jarPath --main-class $mainClass --date=1980-01-01T00:00:02Z @classes
+    if ($LASTEXITCODE -ne 0) {
+        throw "The $mainClass JAR build failed with exit code $LASTEXITCODE"
+    }
+    Write-Host "Packaged $mainClass with $($classes.Count / 3) class files."
 }
-& $jarTool --create --file $updaterJar --main-class Nbidal18PackwizSync `
-    --date=1980-01-01T00:00:02Z -C $updaterBuild 'Nbidal18PackwizSync.class' `
-    -C $updaterBuild 'Nbidal18PackwizSync$FileEntry.class' `
-    -C $updaterBuild 'Nbidal18PackwizSync$PropertyRule.class' `
-    -C $updaterBuild 'Nbidal18PackwizSync$SyncManifest.class'
-if ($LASTEXITCODE -ne 0) {
-    throw "The Packwiz update-engine JAR build failed with exit code $LASTEXITCODE"
-}
+
+New-ClassJar $supervisorJar 'Nbidal18PackwizSupervisor'
+New-ClassJar $updaterJar 'Nbidal18PackwizSync'
 
 $helperRoot = Join-Path $ReleaseRoot '5. modpack source\custom mods\nbidal18-integrity-helper'
 $gradle = Join-Path $helperRoot 'gradlew.bat'

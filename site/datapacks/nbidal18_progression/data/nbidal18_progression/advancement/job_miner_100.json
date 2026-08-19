@@ -1,0 +1,32 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:iron_pickaxe"
+                             },
+                    "title":  {
+                                  "text":  "Miner 100"
+                              },
+                    "description":  {
+                                        "text":  "Miner reached job level 100"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "miner_100":  {
+                                       "trigger":  "jobsaddon:job_up",
+                                       "conditions":  {
+                                                          "job_name":  "miner",
+                                                          "job_level":  100
+                                                      }
+                                   }
+                 },
+    "requirements":  [
+                         [
+                             "miner_100"
+                         ]
+                     ]
+}

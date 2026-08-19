@@ -47,9 +47,9 @@ public final class Nbidal18PackwizSync {
     /**
      * Lowest pack version this updater will accept from the channel. Raising it with each release
      * stops a rolled-back or spoofed channel downgrading an instance: once a client runs this
-     * build, publishing anything below 4.2.8 would be refused rather than installed.
+     * build, publishing anything below 4.3.0 would be refused rather than installed.
      */
-    private static final int[] MINIMUM_PACK_VERSION = {4, 2, 8};
+    private static final int[] MINIMUM_PACK_VERSION = {4, 3, 0};
     private static final DateTimeFormatter MOVE_STAMP =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final Pattern FILE_ENTRY = Pattern.compile(
@@ -79,6 +79,71 @@ public final class Nbidal18PackwizSync {
      * token only when a future release genuinely needs to reissue the defaults again.
      */
     private static final String AUTOHUD_DEFAULT_TOKEN = "autohud-place-break-v1";
+
+    /**
+     * One row of a player-owned file that the pack wants to set once. A null {@code value} removes
+     * the row instead of replacing it.
+     */
+    private record SeedRow(String key, String value) {
+    }
+
+    /**
+     * A declared, one-time change to specific rows of a player-owned file.
+     *
+     * <p>Some files are loaded once as a sensible default and then belong to the player forever —
+     * {@code options.txt} above all. Until now that was all or nothing: a file was either published
+     * and enforced, or seeded once and never touched again, with no way to say "this one row
+     * changed, take the new value". That gap is why a new keybind had no home, and no keybind is
+     * ever hardcoded in a mod here, because a player must always be able to rebind anything.
+     *
+     * <p>So: declare the rows, stamp them with a token, and the updater writes only those rows and
+     * leaves every other line exactly as it found it. The token is the whole mechanism — once its
+     * marker exists the rows are never written again, so the player owns them from that moment on.
+     * <b>Bump the token only when a release genuinely needs to reissue those rows.</b>
+     *
+     * <p>Overwriting a row a player deliberately changed is accepted rather than detected. Shipping
+     * one of these is rare and intentional, and the alternative is per-player bookkeeping for a
+     * case that comes up about once a release.
+     *
+     * <p>If the file does not exist yet — a fresh install, before the game has ever run — it is
+     * created holding only these rows. Minecraft fills in everything else it knows about on first
+     * save, so a partial file is the correct way to seed one rather than a broken one.
+     */
+    private record PlayerFileSeed(String relativePath, char separator, String token, List<SeedRow> rows) {
+    }
+
+    /**
+     * The pack's declared player-file rows.
+     *
+     * <p>v4.3.0 seeds two keybinds, and both are fixing a real collision rather than a preference.
+     * LevelZ's skill screen defaults to K, which is already Iris's shader toggle; Field Guide
+     * defaults to B, which is already Inmis's backpack. J and U are the letters this pack has left
+     * — J because Jobs+ released it in this very version.
+     */
+    private static final List<PlayerFileSeed> PLAYER_FILE_SEEDS = List.of(
+            new PlayerFileSeed("options.txt", ':', "keybinds-v430", List.of(
+                    new SeedRow("key_key.levelz.openskillscreen", "key.keyboard.j"),
+                    new SeedRow("key_key.fieldguide.open", "key.keyboard.u"))));
+
+    /**
+     * Files a retired mod left behind, deleted once each.
+     *
+     * <p>{@code config} is deliberately a tolerant root — an unmanaged file there is ignored at
+     * login rather than treated as tampering, which is what stopped a mod's first-run config from
+     * locking players out. The cost is that removing a mod leaves its config sitting on every
+     * player's machine forever, because nothing is ever allowed to sweep that directory.
+     *
+     * <p>Nothing reads these files, so the harm is not functional: it is that our own config
+     * stability check reports them as unclassified on every future run, on every instance, for a
+     * mod that no longer exists. So they are removed explicitly, by name, once.
+     *
+     * <p>Only ever list a file the pack itself shipped and has now retired. This deletes from a
+     * player's instance, so a wrong entry here is a wrong deletion.
+     */
+    private static final List<String> RETIRED_LOCAL_FILES = List.of(
+            "config/jobsplus-common.yaml");
+
+    private static final String RETIRED_LOCAL_FILES_TOKEN = "retired-files-v430";
 
     private final Path minecraftRoot;
     private final Path stateRoot;
@@ -500,6 +565,153 @@ public final class Nbidal18PackwizSync {
             warning("Could not migrate the enabled resource-pack list; personal options were left unchanged: "
                     + messageOf(error));
         }
+        applyPlayerFileSeeds();
+        removeRetiredLocalFiles();
+    }
+
+    /**
+     * Deletes the files listed in {@link #RETIRED_LOCAL_FILES}, once per instance.
+     *
+     * <p>Guarded the same way as everything else that writes into a player's instance: the path is
+     * resolved against the instance root and rejected if it escapes it or turns out to be a
+     * symbolic link, so a declaration can only ever delete inside the pack's own folder.
+     */
+    private void removeRetiredLocalFiles() {
+        Path marker = stateRoot.resolve("applied-" + RETIRED_LOCAL_FILES_TOKEN);
+        try {
+            if (Files.exists(marker)) {
+                return;
+            }
+            int removed = 0;
+            for (String relative : RETIRED_LOCAL_FILES) {
+                Path target = minecraftRoot.resolve(relative).normalize();
+                if (!target.startsWith(minecraftRoot) || Files.isSymbolicLink(target)) {
+                    warning("Refusing to remove the retired file " + relative
+                            + ": it does not resolve inside this instance.");
+                    continue;
+                }
+                if (Files.deleteIfExists(target)) {
+                    removed++;
+                }
+            }
+            Files.createDirectories(stateRoot);
+            Files.writeString(marker, RETIRED_LOCAL_FILES_TOKEN + System.lineSeparator(),
+                    StandardCharsets.UTF_8);
+            if (removed != 0) {
+                status("Removed " + removed + " configuration file(s) left behind by a retired mod.");
+            }
+        } catch (Exception error) {
+            warning("Could not remove the configuration left behind by a retired mod: "
+                    + messageOf(error));
+        }
+    }
+
+    /**
+     * Applies every declared player-file seed that has not been applied on this instance yet.
+     *
+     * <p>Failures are warnings rather than errors on purpose: these are conveniences, and a player
+     * whose {@code options.txt} is unreadable should still get their update. The marker is only
+     * written when the rows actually landed, so a failure retries on the next launch.
+     */
+    private void applyPlayerFileSeeds() {
+        for (PlayerFileSeed seed : PLAYER_FILE_SEEDS) {
+            try {
+                if (applyPlayerFileSeed(seed)) {
+                    status("Applied this release's defaults to " + seed.relativePath()
+                            + "; every other personal setting was left alone.");
+                }
+            } catch (Exception error) {
+                warning("Could not apply this release's defaults to " + seed.relativePath()
+                        + "; it was left unchanged: " + messageOf(error));
+            }
+        }
+    }
+
+    private boolean applyPlayerFileSeed(PlayerFileSeed seed) throws IOException {
+        Path marker = stateRoot.resolve("applied-" + seed.token());
+        if (Files.exists(marker)) {
+            return false;
+        }
+
+        Path target = minecraftRoot.resolve(seed.relativePath()).normalize();
+        if (!target.startsWith(minecraftRoot)) {
+            throw new IOException("The declared path escapes the instance: " + seed.relativePath());
+        }
+        if (Files.isSymbolicLink(target)) {
+            throw new IOException(seed.relativePath() + " is a symbolic link");
+        }
+
+        List<String> lines = new ArrayList<>();
+        boolean existed = Files.isRegularFile(target, LinkOption.NOFOLLOW_LINKS);
+        if (existed) {
+            if (Files.size(target) > 16L * 1024L * 1024L) {
+                throw new IOException(seed.relativePath() + " is unexpectedly large");
+            }
+            lines.addAll(Files.readAllLines(target, StandardCharsets.UTF_8));
+        }
+
+        boolean changed = false;
+        for (SeedRow row : seed.rows()) {
+            // Both separators are accepted when matching, so a row declared for one style still
+            // finds a line written in the other. Only the declared one is used when writing.
+            Pattern rowPattern = Pattern.compile("^\\s*" + Pattern.quote(row.key()) + "\\s*[:=].*$");
+            String replacement = row.key() + seed.separator() + row.value();
+            boolean found = false;
+            for (int index = lines.size() - 1; index >= 0; index--) {
+                if (!rowPattern.matcher(lines.get(index)).matches()) {
+                    continue;
+                }
+                if (row.value() == null) {
+                    lines.remove(index);
+                    changed = true;
+                }
+                else if (found || !lines.get(index).equals(replacement)) {
+                    // Scanning backwards means the last occurrence wins, matching how Minecraft
+                    // reads a duplicated key; earlier duplicates are dropped rather than left to
+                    // shadow the value we just wrote.
+                    if (found) {
+                        lines.remove(index);
+                    }
+                    else {
+                        lines.set(index, replacement);
+                    }
+                    changed = true;
+                }
+                found = true;
+            }
+            if (!found && row.value() != null) {
+                lines.add(replacement);
+                changed = true;
+            }
+        }
+
+        if (!changed) {
+            // Still mark it: the rows already say what we wanted, and leaving the marker off would
+            // re-check them on every launch forever.
+            Files.createDirectories(stateRoot);
+            Files.writeString(marker, seed.token() + System.lineSeparator(), StandardCharsets.UTF_8);
+            return false;
+        }
+
+        Path temporary = target.resolveSibling(
+                target.getFileName() + ".nbidal18-" + UUID.randomUUID() + ".tmp");
+        try {
+            Files.createDirectories(target.getParent());
+            Files.writeString(temporary, String.join(System.lineSeparator(), lines)
+                    + System.lineSeparator(), StandardCharsets.UTF_8);
+            try {
+                Files.move(temporary, target, StandardCopyOption.ATOMIC_MOVE,
+                        StandardCopyOption.REPLACE_EXISTING);
+            } catch (AtomicMoveNotSupportedException ignored) {
+                Files.move(temporary, target, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } finally {
+            Files.deleteIfExists(temporary);
+        }
+
+        Files.createDirectories(stateRoot);
+        Files.writeString(marker, seed.token() + System.lineSeparator(), StandardCharsets.UTF_8);
+        return true;
     }
 
     private boolean migratePlayerOptions() throws IOException {

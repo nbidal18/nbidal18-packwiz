@@ -1,0 +1,19 @@
+nbidal18 Jobs Reset is licensed under the GNU General Public License, version 3 only.
+
+Copyright (c) 2026 nbidal18
+
+This mod compiles directly against JobsAddon, which is licensed GPL-3.0, so it carries the same
+licence rather than the MIT used by the pack's other first-party mods. Complete corresponding
+source is retained in the organized release folder under
+"5. modpack source/custom mods/nbidal18-jobs-reset", and is distributed with every copy of this
+modpack.
+
+This program is free software: you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
+
+The full text of the GNU General Public License version 3 is available at
+<https://www.gnu.org/licenses/gpl-3.0.txt>.

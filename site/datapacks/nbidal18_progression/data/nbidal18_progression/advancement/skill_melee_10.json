@@ -1,0 +1,32 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:iron_sword"
+                             },
+                    "title":  {
+                                  "text":  "Melee 10"
+                              },
+                    "description":  {
+                                        "text":  "Melee reached level 10"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "melee_10":  {
+                                      "trigger":  "levelz:skill",
+                                      "conditions":  {
+                                                         "skill_name":  "melee",
+                                                         "skill_level":  10
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "melee_10"
+                         ]
+                     ]
+}

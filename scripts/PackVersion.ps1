@@ -25,8 +25,11 @@ function Get-PackVersion([string] $repoRoot) {
         throw "The pack version declaration is missing: $path"
     }
     $version = ([IO.File]::ReadAllText($path, [Text.Encoding]::UTF8)).Trim()
-    if ($version -notmatch '^\d+\.\d+\.\d+-packwiz$') {
-        throw "PACK-VERSION.txt must hold a version like 4.2.1-packwiz, not '$version'"
+    # The -packwiz suffix is retired from v4.3.0 on: packwiz is a known part of the pack, so the
+    # number alone says everything. Both forms are still accepted because the older release folders
+    # carry the suffix and a rollback should not fail here on spelling.
+    if ($version -notmatch '^\d+\.\d+\.\d+(-packwiz)?$') {
+        throw "PACK-VERSION.txt must hold a three-part version such as 1.2.3, not '$version'"
     }
     return $version
 }
@@ -42,7 +45,7 @@ function Get-ReleaseRoot([string] $repoRoot) {
     if (-not (Test-Path -LiteralPath $releaseRoot -PathType Container)) {
         $siblings = @(
             Get-ChildItem -LiteralPath (Split-Path -Parent $releaseRoot) -Directory -ErrorAction SilentlyContinue |
-                Where-Object Name -like 'nbidal18 v*-packwiz' | ForEach-Object Name
+                Where-Object Name -like 'nbidal18 v*' | ForEach-Object Name
         )
         throw ("The release folder for $version does not exist: $releaseRoot. " +
                "Rename the working folder to match PACK-VERSION.txt. Found: $($siblings -join ', ')")

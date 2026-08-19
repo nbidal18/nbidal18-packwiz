@@ -83,5 +83,12 @@
     "lamp_jar.glowstone_dust": false,
     "trellis.pot_plant": false,
     "hanging_pot.pot_flower": false
+  },
+  "levelz": {
+    "mineable_info": false
+  },
+  "item_descriptions": {
+    "block_descriptions": false,
+    "entity_descriptions": false
   }
 }

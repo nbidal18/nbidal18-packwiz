@@ -419,8 +419,8 @@ hash-format = "sha256"
     }
 
     $clientMods = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter '*.jar')
-    if ($clientMods.Count -ne 246) {
-        throw "The Packwiz client must contain exactly 246 mod JARs; found $($clientMods.Count)."
+    if ($clientMods.Count -ne 252) {
+        throw "The Packwiz client must contain exactly 252 mod JARs; found $($clientMods.Count)."
     }
     $bccJar = Join-Path $stagePath 'mods\better-compatability-checker-fabric-21.1.8.jar'
     $bccConfig = Join-Path $stagePath 'config\bcc-common.toml'
@@ -500,32 +500,87 @@ hash-format = "sha256"
             throw "All eight Inmis backpack tiers must be dyeable in $inmisConfigPath"
         }
     }
-    $jobsSuppressor = Join-Path $stagePath 'mods\nbidal18-jobs-chat-suppressor-1.0.0+1.21.1.jar'
-    if (-not (Test-Path -LiteralPath $jobsSuppressor -PathType Leaf)) {
-        throw 'The Jobs+ compatibility helper is missing from the Packwiz client.'
+    # Jobs+, its first-party chat suppressor and the old held-heat mod were all retired in v4.3.0.
+    # Asserting their absence rather than deleting the check: a stale JAR left behind would load
+    # against a mod that is no longer there, and the first sign would be a crash on someone's client.
+    foreach ($retired in @('jobsplus-*.jar', 'nbidal18-jobs-chat-suppressor-*.jar', 'nbidal18-held-heat-*.jar')) {
+        $leftovers = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter $retired)
+        if ($leftovers.Count -ne 0) {
+            throw "A retired mod is still in the Packwiz client: $($leftovers.Name -join ', ')."
+        }
     }
     $resourcePacks = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'resourcepacks') -File -Filter '*.zip')
     $oledBase = @($resourcePacks | Where-Object { $_.Name -like '*OLED*Colourful Containers*.zip' })
     $inmisOledAddon = @($resourcePacks | Where-Object { $_.Name -like '*OLED*Inmis Backpacks Addon*.zip' })
-    if ($resourcePacks.Count -ne 17 -or
+    if ($resourcePacks.Count -ne 18 -or
             -not (Test-Path -LiteralPath (Join-Path $stagePath 'resourcepacks\Fancy Crops v1.3.zip') -PathType Leaf) -or
             -not (Test-Path -LiteralPath (Join-Path $stagePath 'resourcepacks\Enhanced Grass V1_4.zip') -PathType Leaf) -or
             $oledBase.Count -ne 0 -or $inmisOledAddon.Count -ne 0) {
-        throw 'The 17-pack resource-pack baseline must include Fancy Crops and Enhanced Grass and exclude the retired Colourful Containers packs.'
+        throw 'The 18-pack resource-pack baseline must include Fancy Crops and Enhanced Grass and exclude the retired Colourful Containers packs.'
     }
-    foreach ($jobsConfig in @(
-        (Join-Path $stagePath 'config\jobsplus-common.yaml'),
-        (Join-Path $ReleaseRoot '3. modpack\server\config\jobsplus-common.yaml'),
-        (Join-Path $ReleaseRoot '4. server\2. online-hosting\config\jobsplus-common.yaml')
+    # LevelZ, JobsAddon and TieredZ each carry settings whose defaults would change the game in a way
+    # nobody asked for, and all of them are easy to lose to a config regeneration. Checked in the
+    # staged client and in both server payloads, because the server is what actually enforces them.
+    foreach ($configDirectory in @(
+        (Join-Path $stagePath 'config'),
+        (Join-Path $ReleaseRoot '3. modpack\server\config'),
+        (Join-Path $ReleaseRoot '4. server\2. online-hosting\config')
     )) {
-        $jobsText = Get-Content -LiteralPath $jobsConfig -Raw
-        if ($jobsText -notmatch '(?m)^\s*show_xp_in_action_bar:\s*false\s*$' -or
-                $jobsText -notmatch '(?m)^\s*broadcast_level_up_messages:\s*false\s*$' -or
-                $jobsText -notmatch '(?m)^\s*amount_of_free_jobs:\s*1\s*$' -or
-                $jobsText -notmatch '(?m)^\s*max_jobs:\s*1\s*$' -or
-                $jobsText -notmatch '(?m)^\s*xp_multiplier:\s*0\.25\s*$' -or
-                $jobsText -notmatch '(?m)^\s*use_decimal_values_for_xp:\s*true\s*$') {
-            throw "Jobs+ notifications or progression balance are wrong in $jobsConfig"
+        $levelz = Get-Content -LiteralPath (Join-Path $configDirectory 'levelz.json5') -Raw
+        # Mob-farm limiting is ON by owner's decision: kill more than mobKillCount in the same chunk
+        # and further kills there stop dropping, so a fixed farm stops paying while ordinary combat,
+        # which moves between chunks, is untouched. Asserted because a config regeneration would
+        # silently hand the farms back.
+        if ($levelz -notmatch '(?m)^\s*"disableMobFarms":\s*true\s*,?\s*$') {
+            throw "LevelZ mob-farm limiting is not switched on in $configDirectory"
+        }
+        # The threshold is a tuning number rather than a switch, so this asserts a floor instead of
+        # an exact value: retune it freely, but a config regeneration must not drop it back to
+        # LevelZ's default of 6, which is low enough that a village raid or a spawner room would
+        # hit it during ordinary play.
+        if ($levelz -notmatch '(?m)^\s*"mobKillCount":\s*(\d+)\s*,?\s*$') {
+            throw "Could not read the LevelZ mob kill threshold in $configDirectory"
+        }
+        if ([int] $Matches[1] -lt 15) {
+            throw ("The LevelZ mob kill threshold is $($Matches[1]) in $configDirectory, low enough " +
+                   'to interrupt ordinary concentrated fighting. It should be at least 15.')
+        }
+        # Content locking off: players imported gear from an older world and would be unequipped.
+        if ($levelz -notmatch '(?m)^\s*"restrictions":\s*false\s*,?\s*$' -or
+                $levelz -notmatch '(?m)^\s*"defaultRestrictions":\s*false\s*,?\s*$') {
+            throw "LevelZ content restrictions are not switched off in $configDirectory"
+        }
+        # The pack ships its own skill table; leaving LevelZ's default loaded would stack both.
+        if ($levelz -notmatch '(?m)^\s*"defaultSkills":\s*false\s*,?\s*$') {
+            throw "LevelZ is still loading its own default skill table in $configDirectory"
+        }
+        # Death costs every level and every unspent point. 0 is LevelZ's own "hard mode".
+        if ($levelz -notmatch '(?m)^\s*"levelRetainPercentage":\s*0\.0\s*,?\s*$') {
+            throw "LevelZ is not set to lose every skill level on death in $configDirectory"
+        }
+        # No stray UI painted over gameplay.
+        if ($levelz -notmatch '(?m)^\s*"showLevel":\s*false\s*,?\s*$' -or
+                $levelz -notmatch '(?m)^\s*"showLevelList":\s*false\s*,?\s*$') {
+            throw "LevelZ is still drawing its on-screen level display in $configDirectory"
+        }
+
+        $jobs = Get-Content -LiteralPath (Join-Path $configDirectory 'jobsaddon.json5') -Raw
+        if ($jobs -notmatch '(?m)^\s*"employedJobs":\s*2\s*,?\s*$') {
+            throw "JobsAddon is not limited to two jobs at a time in $configDirectory"
+        }
+        # 72000 ticks at 20/s is one real hour.
+        if ($jobs -notmatch '(?m)^\s*"jobChangeTime":\s*72000\s*,?\s*$') {
+            throw "The JobsAddon one-hour job-change cooldown is wrong in $configDirectory"
+        }
+
+        $tiered = Get-Content -LiteralPath (Join-Path $configDirectory 'tiered.json5') -Raw
+        # Reforging is dead twice over: no anvil tab here, and empty reforge tags in the datapack.
+        if ($tiered -notmatch '(?m)^\s*"showReforgingTab":\s*false\s*,?\s*$') {
+            throw "The TieredZ reforging tab is still enabled in $configDirectory"
+        }
+        # No rarity colouring: the bordered tooltip off here, neutral styles in the datapack.
+        if ($tiered -notmatch '(?m)^\s*"tieredTooltip":\s*false\s*,?\s*$') {
+            throw "The TieredZ rarity tooltip border is still enabled in $configDirectory"
         }
     }
     $jadeClient = Get-Content -LiteralPath (Join-Path $stagePath 'config\jade\plugins.json') -Raw | ConvertFrom-Json
@@ -563,6 +618,42 @@ hash-format = "sha256"
 
     $manifestDigest = Get-Sha256 (Join-Path $stagePath 'sync-manifest.json')
     $releaseBaselineDigest = '9515a09d1ce3d751e69da097ff6f3aee9856de3662fa35a69b6422fb845f3b41'
+
+    <#
+        Digests that must keep working no matter how many times this build runs.
+
+        accepted-manifest-sha256 exists for one narrow case: a player whose client still holds the
+        previous release's manifest, so they can log in and be told to update. Once they relaunch
+        they are on the current release. Nothing older than the last published release can exist in
+        the wild, because updating happens automatically at launch.
+
+        Everything else in that line is churn. The demotion below adds the previous expected digest
+        every time the build runs, including the dozens of local builds that are never published, so
+        the list grew to sixty entries and finally overflowed the 4 KB cap the integrity helper puts
+        on the whole file - at which point the helper reported the policy "missing or unsafe" and
+        the dedicated server refused to enforce anything at all.
+
+        So: pinned digests are always kept and always first, the rolling tail is capped, and the
+        written file is measured against the helper's own limit rather than a number restated here.
+
+        UPDATE THIS AT PUBLISH TIME: it should name the digest that is currently live, which becomes
+        "the previous release" the moment the next one is pushed.
+    #>
+    $pinnedAcceptedDigests = @(
+        $releaseBaselineDigest,
+        # v4.2.8-packwiz, live at the time of writing.
+        '1ee44d8a2e896b5d42def78c57a6b71f498b17e48fef9f2882437343e771363f'
+    )
+    $maxAcceptedDigests = 12
+
+    # Read the helper's own size cap rather than restating it, so the two cannot drift apart again.
+    $serverPolicySource = Join-Path $ReleaseRoot ('5. modpack source\custom mods\' +
+        'nbidal18-integrity-helper\src\main\java\dev\nbidal18\integrity\ServerPolicy.java')
+    if ([IO.File]::ReadAllText($serverPolicySource, [Text.Encoding]::UTF8) -notmatch
+            '(?m)^\s*private static final long MAX_BYTES = (\d+);') {
+        throw "Could not read MAX_BYTES from $serverPolicySource"
+    }
+    $policyMaxBytes = [int] $Matches[1]
     $canonicalPolicy = Join-Path $ReleaseRoot '3. modpack\server\config\nbidal18-integrity.properties'
     $hostingPolicy = Join-Path $ReleaseRoot '4. server\2. online-hosting\config\nbidal18-integrity.properties'
     $overlayPolicy = Join-Path $ReleaseRoot '4. server\transition-overlay\config\nbidal18-integrity.properties'
@@ -579,7 +670,7 @@ hash-format = "sha256"
             $policyText,
             '(?m)^expected-manifest-sha256=([0-9a-f]{64})$'
         ).Groups[1].Value
-        $rollingDigests = @($releaseBaselineDigest, $existingExpected)
+        $rollingDigests = @($pinnedAcceptedDigests) + @($existingExpected)
         $existingAccepted = [regex]::Match(
             $policyText,
             '(?m)^accepted-manifest-sha256=([0-9a-f]{64}(?:,[0-9a-f]{64})*)$'
@@ -587,9 +678,11 @@ hash-format = "sha256"
         if ($existingAccepted.Success) {
             $rollingDigests += $existingAccepted.Groups[1].Value.Split(',')
         }
+        # Pinned entries are already at the front, so trimming the tail drops the oldest churn and
+        # never the digests that have to keep working.
         $rollingDigests = @($rollingDigests | Where-Object {
             $_ -ne $manifestDigest
-        } | Select-Object -Unique)
+        } | Select-Object -Unique | Select-Object -First $maxAcceptedDigests)
         $policyText = [regex]::Replace(
             $policyText,
             '(?m)^expected-manifest-sha256=[0-9a-f]{64}$',
@@ -607,6 +700,12 @@ hash-format = "sha256"
             $policyText = $policyText.TrimEnd("`r", "`n") + "`n$acceptedLine`n"
         }
         Write-Utf8 $policyPath $policyText
+        $policyBytes = (Get-Item -LiteralPath $policyPath).Length
+        if ($policyBytes -gt $policyMaxBytes) {
+            throw ("The server integrity policy is $policyBytes bytes, over the $policyMaxBytes " +
+                   "the helper will read: $policyPath. The helper treats an oversized policy as " +
+                   'missing and stops enforcing anything. Lower $maxAcceptedDigests.')
+        }
     }
     if ((Get-Content -LiteralPath $canonicalPolicy -Raw) -notmatch '(?m)^require-helper=true$' -or
             (Get-Content -LiteralPath $hostingPolicy -Raw) -notmatch '(?m)^require-helper=true$' -or

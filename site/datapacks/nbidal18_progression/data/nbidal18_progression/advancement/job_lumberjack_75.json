@@ -1,0 +1,32 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:iron_axe"
+                             },
+                    "title":  {
+                                  "text":  "Lumberjack 75"
+                              },
+                    "description":  {
+                                        "text":  "Lumberjack reached job level 75"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "lumberjack_75":  {
+                                           "trigger":  "jobsaddon:job_up",
+                                           "conditions":  {
+                                                              "job_name":  "lumberjack",
+                                                              "job_level":  75
+                                                          }
+                                       }
+                 },
+    "requirements":  [
+                         [
+                             "lumberjack_75"
+                         ]
+                     ]
+}

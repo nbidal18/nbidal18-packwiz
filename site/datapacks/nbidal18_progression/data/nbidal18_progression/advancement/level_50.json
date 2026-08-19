@@ -1,0 +1,31 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:experience_bottle"
+                             },
+                    "title":  {
+                                  "text":  "Level 50"
+                              },
+                    "description":  {
+                                        "text":  "Reached overall level 50"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "level_50":  {
+                                      "trigger":  "levelz:level",
+                                      "conditions":  {
+                                                         "level":  50
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "level_50"
+                         ]
+                     ]
+}

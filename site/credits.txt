@@ -1,4 +1,4 @@
-Credits for the nbidal18 v4.1.3 Packwiz release:
+Credits for the nbidal18 Packwiz release:
 Fancy Crops by Bee: https://modrinth.com/resourcepack/fancy-crops
 Enhanced Grass by ICanGamez: https://modrinth.com/resourcepack/enhanced-grass
 Vanilla Tweaks: https://vanillatweaks.net/
@@ -21,3 +21,10 @@ Iceberg: https://modrinth.com/mod/iceberg
 What Are They Up To: https://modrinth.com/mod/what-are-they-up-to
 Gacha Addiction original project: https://modrinth.com/mod/gachaaddiction
 Realistic Death Visuals by d3v_c: https://modrinth.com/mod/realistic-death-visuals
+LevelZ by Globox_Z: https://modrinth.com/mod/levelz
+JobsAddon by Globox_Z: https://modrinth.com/mod/jobsaddon
+LibZ by Globox_Z: https://modrinth.com/mod/libz
+TieredZ by Globox_Z, forked from Draylar's Tiered: https://modrinth.com/mod/tieredz
+Field Guide by evanbones and Kobber: https://modrinth.com/mod/field-guide
+Item Descriptions: https://modrinth.com/mod/item-descriptions
+Mod Descriptions: https://modrinth.com/resourcepack/mod-descriptions

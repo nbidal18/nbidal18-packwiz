@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:melon_slice",
+    "minecraft:sweet_berries",
+    "minecraft:glow_berries",
+    "minecraft:milk_bucket",
+    "minecraft:honey_bottle",
+    "minecraft:apple",
+    { "id": "#c:drinks/water", "required": false },
+    { "id": "#c:drinks/juice", "required": false },
+    { "id": "#c:drinks/cactus_juice", "required": false },
+    { "id": "farmersdelight:melon_juice", "required": false },
+    { "id": "farmersdelight:fruit_salad", "required": false },
+    { "id": "farmersdelight:mixed_salad", "required": false },
+    { "id": "farmersdelight:nether_salad", "required": false },
+    { "id": "farmersdelight:apple_cider", "required": false },
+    { "id": "farmersdelight:glow_berry_custard", "required": false }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:wheat"
+                             },
+                    "title":  {
+                                  "text":  "Farming 10"
+                              },
+                    "description":  {
+                                        "text":  "Farming reached level 10"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "farming_10":  {
+                                        "trigger":  "levelz:skill",
+                                        "conditions":  {
+                                                           "skill_name":  "farming",
+                                                           "skill_level":  10
+                                                       }
+                                    }
+                 },
+    "requirements":  [
+                         [
+                             "farming_10"
+                         ]
+                     ]
+}

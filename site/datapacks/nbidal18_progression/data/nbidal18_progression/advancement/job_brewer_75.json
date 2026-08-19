@@ -1,0 +1,32 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:brewing_stand"
+                             },
+                    "title":  {
+                                  "text":  "Brewer 75"
+                              },
+                    "description":  {
+                                        "text":  "Brewer reached job level 75"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "brewer_75":  {
+                                       "trigger":  "jobsaddon:job_up",
+                                       "conditions":  {
+                                                          "job_name":  "brewer",
+                                                          "job_level":  75
+                                                      }
+                                   }
+                 },
+    "requirements":  [
+                         [
+                             "brewer_75"
+                         ]
+                     ]
+}

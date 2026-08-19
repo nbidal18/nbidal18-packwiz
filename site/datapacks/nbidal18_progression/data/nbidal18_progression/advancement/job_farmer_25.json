@@ -1,0 +1,32 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:iron_hoe"
+                             },
+                    "title":  {
+                                  "text":  "Farmer 25"
+                              },
+                    "description":  {
+                                        "text":  "Farmer reached job level 25"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "farmer_25":  {
+                                       "trigger":  "jobsaddon:job_up",
+                                       "conditions":  {
+                                                          "job_name":  "farmer",
+                                                          "job_level":  25
+                                                      }
+                                   }
+                 },
+    "requirements":  [
+                         [
+                             "farmer_25"
+                         ]
+                     ]
+}

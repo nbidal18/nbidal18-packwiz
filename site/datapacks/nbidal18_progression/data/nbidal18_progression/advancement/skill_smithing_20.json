@@ -1,0 +1,32 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:anvil"
+                             },
+                    "title":  {
+                                  "text":  "Smithing 20"
+                              },
+                    "description":  {
+                                        "text":  "Smithing reached level 20"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "smithing_20":  {
+                                         "trigger":  "levelz:skill",
+                                         "conditions":  {
+                                                            "skill_name":  "smithing",
+                                                            "skill_level":  20
+                                                        }
+                                     }
+                 },
+    "requirements":  [
+                         [
+                             "smithing_20"
+                         ]
+                     ]
+}

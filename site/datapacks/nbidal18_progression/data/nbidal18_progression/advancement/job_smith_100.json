@@ -1,0 +1,32 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:smithing_table"
+                             },
+                    "title":  {
+                                  "text":  "Smith 100"
+                              },
+                    "description":  {
+                                        "text":  "Smith reached job level 100"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "smith_100":  {
+                                       "trigger":  "jobsaddon:job_up",
+                                       "conditions":  {
+                                                          "job_name":  "smith",
+                                                          "job_level":  100
+                                                      }
+                                   }
+                 },
+    "requirements":  [
+                         [
+                             "smith_100"
+                         ]
+                     ]
+}

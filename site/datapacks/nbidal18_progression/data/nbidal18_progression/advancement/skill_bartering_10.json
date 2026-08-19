@@ -1,0 +1,32 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:emerald"
+                             },
+                    "title":  {
+                                  "text":  "Bartering 10"
+                              },
+                    "description":  {
+                                        "text":  "Bartering reached level 10"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "bartering_10":  {
+                                          "trigger":  "levelz:skill",
+                                          "conditions":  {
+                                                             "skill_name":  "bartering",
+                                                             "skill_level":  10
+                                                         }
+                                      }
+                 },
+    "requirements":  [
+                         [
+                             "bartering_10"
+                         ]
+                     ]
+}

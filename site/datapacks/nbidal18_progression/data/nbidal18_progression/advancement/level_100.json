@@ -1,0 +1,31 @@
+{
+    "parent":  "nbidal18_progression:root",
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:experience_bottle"
+                             },
+                    "title":  {
+                                  "text":  "Level 100"
+                              },
+                    "description":  {
+                                        "text":  "Reached overall level 100"
+                                    },
+                    "frame":  "goal",
+                    "show_toast":  true,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "level_100":  {
+                                       "trigger":  "levelz:level",
+                                       "conditions":  {
+                                                          "level":  100
+                                                      }
+                                   }
+                 },
+    "requirements":  [
+                         [
+                             "level_100"
+                         ]
+                     ]
+}

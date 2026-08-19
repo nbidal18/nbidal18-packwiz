@@ -1,0 +1,28 @@
+{
+    "display":  {
+                    "icon":  {
+                                 "id":  "minecraft:experience_bottle"
+                             },
+                    "title":  {
+                                  "text":  "Progression"
+                              },
+                    "description":  {
+                                        "text":  "Skills, jobs and the levels behind them"
+                                    },
+                    "background":  "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+                    "frame":  "task",
+                    "show_toast":  false,
+                    "announce_to_chat":  false,
+                    "hidden":  false
+                },
+    "criteria":  {
+                     "joined":  {
+                                    "trigger":  "minecraft:tick"
+                                }
+                 },
+    "requirements":  [
+                         [
+                             "joined"
+                         ]
+                     ]
+}
