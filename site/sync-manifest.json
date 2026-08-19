@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "packVersion":  "4.2.6-packwiz",
+    "packVersion":  "4.2.7-packwiz",
     "exactRoots":  [
                        "mods",
                        "config",
@@ -226,7 +226,7 @@
                                 },
                                 {
                                     "path":  "config/bcc-common.toml",
-                                    "sha256":  "1f2acd3d06f7bba1651f13c2db131c4fd2a171643862b5e90f21fe502123999c"
+                                    "sha256":  "341c3cb0e8e0b103e4c0a86b2ef3bdc1c92a3fa4b3e0de4b0815eb127d51dfa2"
                                 },
                                 {
                                     "path":  "config/beautify.json",
@@ -750,7 +750,7 @@
                                 },
                                 {
                                     "path":  "config/jade/plugins.json",
-                                    "sha256":  "d04e5918ba93cd9d6a2f6335770b75f9fbaad950051d12c1718c5e403d916291"
+                                    "sha256":  "8f0b141195f5498b804178afbf41f7449914218834dceb1f30a0fba3a0eadf2e"
                                 },
                                 {
                                     "path":  "config/jade/sort-order.json",
@@ -1208,7 +1208,7 @@
     "files":  [
                   {
                       "path":  "THIRD-PARTY-NOTICES.md",
-                      "sha256":  "1643825e863a4988f4ba9a6aaf5d7c784291eb507c0a28a132bb2d5c4d993a91"
+                      "sha256":  "5dae9921ba9bdaa36534034ac80a6659b604ec6d83e23d0a5d479a05be6190e1"
                   },
                   {
                       "path":  "config/CoroUtil/General.toml",
@@ -1280,7 +1280,7 @@
                   },
                   {
                       "path":  "config/bcc-common.toml",
-                      "sha256":  "1f2acd3d06f7bba1651f13c2db131c4fd2a171643862b5e90f21fe502123999c"
+                      "sha256":  "341c3cb0e8e0b103e4c0a86b2ef3bdc1c92a3fa4b3e0de4b0815eb127d51dfa2"
                   },
                   {
                       "path":  "config/beautify.json",
@@ -1804,7 +1804,7 @@
                   },
                   {
                       "path":  "config/jade/plugins.json",
-                      "sha256":  "d04e5918ba93cd9d6a2f6335770b75f9fbaad950051d12c1718c5e403d916291"
+                      "sha256":  "8f0b141195f5498b804178afbf41f7449914218834dceb1f30a0fba3a0eadf2e"
                   },
                   {
                       "path":  "config/jade/sort-order.json",
@@ -2567,6 +2567,10 @@
                       "sha256":  "9ebdd84016a781e37f60ba35863b98d55307829ef7f03980fbccd402799f8844"
                   },
                   {
+                      "path":  "licenses/Grave-Currency-MIT.txt",
+                      "sha256":  "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
+                  },
+                  {
                       "path":  "licenses/MoreVillagers-Numismatic-Bridge-MIT.txt",
                       "sha256":  "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
                   },
@@ -3255,12 +3259,16 @@
                       "sha256":  "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
                   },
                   {
-                      "path":  "mods/nbidal18-client-tweaks-1.3.11+1.21.1.jar",
-                      "sha256":  "1e9c2f5d7e8a7f529747493208e0d276d166acbf7db27cc527a85037e0afa8c5"
+                      "path":  "mods/nbidal18-client-tweaks-1.3.12+1.21.1.jar",
+                      "sha256":  "8d5a0f7f2fef473ed8c4bcc2d876a5c97e06c6348ef119c2c6ee04a9bce0367b"
+                  },
+                  {
+                      "path":  "mods/nbidal18-grave-currency-1.0.0+1.21.1.jar",
+                      "sha256":  "08f8f5fca2ec886f25c0d0c3267d0cb5539831e330f2fd8f8e0e12c3d7156764"
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "699ab257f7f9e80982615fd710d4dc862a7ff8e341f03865a27eb75e114efe8f"
+                      "sha256":  "bd3cbb63ed1b1adda488b47e9686df66d56a77d67acad0f933477dee1c70a4b3"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",
@@ -3572,7 +3580,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "26c393536a30be88d71937c50729ec044603fd5781d44d1aea3c54a74f1a4c4b"
+                      "sha256":  "a16f733ad7e1818ef2ee0875318fd3ce26d6c24650c34cab6c66d30027a21cbc"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",

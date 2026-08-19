@@ -419,8 +419,8 @@ hash-format = "sha256"
     }
 
     $clientMods = @(Get-ChildItem -LiteralPath (Join-Path $stagePath 'mods') -File -Filter '*.jar')
-    if ($clientMods.Count -ne 244) {
-        throw "The Packwiz client must contain exactly 244 mod JARs; found $($clientMods.Count)."
+    if ($clientMods.Count -ne 245) {
+        throw "The Packwiz client must contain exactly 245 mod JARs; found $($clientMods.Count)."
     }
     $bccJar = Join-Path $stagePath 'mods\better-compatability-checker-fabric-21.1.8.jar'
     $bccConfig = Join-Path $stagePath 'config\bcc-common.toml'

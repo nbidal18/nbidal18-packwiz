@@ -34,9 +34,36 @@ Record:
 
 ---
 
+## v4.2.7-packwiz
+
+Current release. Live digest `aee580fc61386d5f…`. 624 managed files, 245 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-19 | `PENDING` | `aee580fc61386d5f` | 624 | 245 | **Your money now goes in your grave.** It never did: Numismatic registers the purse with Cardinal Components' `ALWAYS_COPY` respawn strategy, so the balance quietly followed you through death untouched while the coins in your pockets went into the grave with everything else. Banked money and carried money behaved differently. A new first-party mod, `nbidal18-grave-currency`, hooks the Gravestones data-type API — the same mechanism Gravestones uses for Trinkets and experience — and moves the whole balance into the grave, returning it to your purse when you collect it, or dropping it as properly denominated coin stacks if the grave is broken instead. **This makes money losable, which it was not before:** a grave you never recover takes your balance with it. Any player can open any grave, so it can also be taken by someone else — that access setting is unchanged and can be made owner-only if wanted. **Jade now shows only what you are looking at.** Crop growth, furnace and campfire progress, baby-animal growth, harvest tool, item storage, breeding, horse stats, potion effects, enchantment power and the rest are all off; the block or mob name and the mod it came from are what remain. **Graves are blank.** Gravestones offers no setting for this — only the *format* of the death date, not whether it is carved — so the text is suppressed at the renderer. The stone, its decay stage and the optional head still render, and the grave still knows its owner internally, so access and the recovery commands are unaffected. **And both ring slots now sit inside the accessory panel's border.** Trinkets centres that panel on the off-hand rather than growing it rightwards, so the width has to satisfy both edges at once; it was computed as though the panel were one-sided, which enclosed the near ring and stranded the far one outside. Client tweaks 1.3.11 to 1.3.12. Maintainer-facing: `THIRD-PARTY-NOTICES.md` still credited the Player Emotes bridge as 1.2.0 when 4.2.4 shipped 1.2.1. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version, `server.properties` is
+not hot-reloadable, and a new mod is only loaded at startup. The owner confirmed the shutdown and a
+status ping refused the connection before and after every write. Deployed the integrity policy, the
+helper JAR, `bcc-common.toml`, the MOTD line of `server.properties` — one line of sixty-four — and
+the new `mods\nbidal18-grave-currency-1.0.0+1.21.1.jar`, which is what actually moves the purse into
+the grave in multiplayer. The mod was new, so nothing was overwritten, and it was verified by hash
+against the managed-host copy. Ports, whitelist, world name and every provider setting were left
+untouched. Backups under `Z:\.nbidal18-deploy-backups\2026-08-19-v4.2.7-packwiz\`.
+
+The grave currency mod reaches Numismatic by reflection rather than compiling against it: Loom
+cannot remap Numismatic alongside Fabric API — it fails with "Unfixable conflicts" on
+`ShopBlockEntity.getItems` — which is the same wall the More Villagers bridge hit and solved the same
+way. It refuses to start rather than degrading if that reflection ever fails, because a currency
+store that silently does nothing would send a player's balance to a grave that never recorded it.
+
 ## v4.2.6-packwiz
 
-Current release. Live digest `d046b0fac40da0d8…`. 622 managed files, 244 mods.
+Superseded by v4.2.7. Final digest `d046b0fac40da0d8…`. 622 managed files, 244 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 
