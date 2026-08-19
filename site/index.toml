@@ -75,7 +75,7 @@ hash = "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "1545398d4fe622963e9b34aeea419bce13494765a9b9f45d6c687f0615d04c6c"
+hash = "f7d745df7d88be1aec9f81c2d8ba4218aaace52c074e3c226bffe76d5dcf649b"
 
 [[files]]
 file = "config/beautify.json"
@@ -1769,11 +1769,11 @@ hash = "b67a342183f89782401b0b091aa8761b6e907a99c02bc062bca83f14f3f2a5d1"
 
 [[files]]
 file = "datapacks/nbidal18_progression/README.md"
-hash = "b22f54402d3945d2e6135ba424efe3b86124f06c6f24e39dd4c3a174efe7a0d5"
+hash = "82ea6a80163fe28a97920c19418059688dc8a688638a730e6fdb6cb13f695791"
 
 [[files]]
 file = "datapacks/nbidal18_progression/data/levelz/skill/nbidal18.json"
-hash = "19ce8e5b35de98257e196d4f4cf38ff2af2af4bbf5a81698d917f5ff8a14711d"
+hash = "a7802f3da3592d6d4eaf9a7ad6ca11e31451d76aafce4ee54211a6e0ba38f897"
 
 [[files]]
 file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_brewer_100.json"
@@ -1946,14 +1946,6 @@ hash = "978598daf01932f92778bd40ba264982527b04464719e4c640c06985b2f3c8dc"
 [[files]]
 file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_bartering_20.json"
 hash = "e9cc23bac1690f0cab019b384427aa16ed05fc6bd80814b10d865dab5ec72aa9"
-
-[[files]]
-file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_constitution_10.json"
-hash = "468f3f6bdcc72091a363b8bac768089b677c53e52ba933c10821d97db3fee42c"
-
-[[files]]
-file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_constitution_20.json"
-hash = "b8f6812a2e0db86688c298e1b6435ba869057da3d27cc1ed2bdb00347a5a316d"
 
 [[files]]
 file = "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_cooking_10.json"
@@ -2989,7 +2981,7 @@ hash = "08f8f5fca2ec886f25c0d0c3267d0cb5539831e330f2fd8f8e0e12c3d7156764"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "896d24669ea4de11e26f02f80cd24d3c42f1f41081181930804bea9023e4bb89"
+hash = "d344704deb8429ff32820fb5fe0da4cfe02a61cf22b762c2eabbdedb2d70adf4"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -3016,8 +3008,8 @@ file = "mods/nbidal18-temperature-2.0.0+1.21.1.jar"
 hash = "b22a7954776c3fbde10908b66513a393b8493f5903ee883f02e5775ac27a8b95"
 
 [[files]]
-file = "mods/nbidal18-wiki-1.0.0+1.21.1.jar"
-hash = "466f88082d37be8ee0b4060faa6493568afe76fb721d4e151e5e625321f482cf"
+file = "mods/nbidal18-wiki-1.1.0+1.21.1.jar"
+hash = "89e58e69dfaa63e9cfa30aa2c1cdffc62fb045a1c9d0167d73635e86738b27f1"
 
 [[files]]
 file = "mods/niftycarts-21.1.1.jar"
@@ -3313,7 +3305,7 @@ hash = "4d6440f5ae0afd64c0c2d4d0aa6b1760e5c3c5d298704dd6a9eb279531f14d27"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "624c3f7f30a043c61b1e8752a56a8d8aa9487148b976d38cc2c93655ac875b57"
+hash = "f7c0206f1654c07fa54781a1abd4fad4a05fc6fd27b05ab582f4fd6a628dc920"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"

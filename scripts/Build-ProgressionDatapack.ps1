@@ -57,9 +57,12 @@ function Get-Sha256([string] $path) {
     finally { $stream.Dispose() }
 }
 
-# Skill key -> icon and the name shown on the plaque. Twelve skills, exactly as LevelZ ships them.
+# Skill key -> icon and the name shown on the plaque.
+#
+# Eleven, not LevelZ's twelve: Constitution is removed in v4.3.1 and hearts go back to vanilla. Its
+# id had to be closed up rather than left as a gap, because LevelZ's SkillLoader walks ids 0..n-1
+# and throws on a missing one. Keep this list in step with data/levelz/skill/nbidal18.json.
 $skills = [ordered]@{
-    constitution = @{ icon = 'minecraft:golden_apple';  name = 'Constitution' }
     melee        = @{ icon = 'minecraft:iron_sword';    name = 'Melee' }
     defense      = @{ icon = 'minecraft:shield';        name = 'Defense' }
     archery      = @{ icon = 'minecraft:bow';           name = 'Archery' }

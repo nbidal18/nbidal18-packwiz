@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "packVersion":  "4.3.0",
+    "packVersion":  "4.3.1",
     "exactRoots":  [
                        "mods",
                        "config",
@@ -229,7 +229,7 @@
                                 },
                                 {
                                     "path":  "config/bcc-common.toml",
-                                    "sha256":  "1545398d4fe622963e9b34aeea419bce13494765a9b9f45d6c687f0615d04c6c"
+                                    "sha256":  "f7d745df7d88be1aec9f81c2d8ba4218aaace52c074e3c226bffe76d5dcf649b"
                                 },
                                 {
                                     "path":  "config/beautify.json",
@@ -1307,7 +1307,7 @@
                   },
                   {
                       "path":  "config/bcc-common.toml",
-                      "sha256":  "1545398d4fe622963e9b34aeea419bce13494765a9b9f45d6c687f0615d04c6c"
+                      "sha256":  "f7d745df7d88be1aec9f81c2d8ba4218aaace52c074e3c226bffe76d5dcf649b"
                   },
                   {
                       "path":  "config/beautify.json",
@@ -2987,11 +2987,11 @@
                   },
                   {
                       "path":  "datapacks/nbidal18_progression/README.md",
-                      "sha256":  "b22f54402d3945d2e6135ba424efe3b86124f06c6f24e39dd4c3a174efe7a0d5"
+                      "sha256":  "82ea6a80163fe28a97920c19418059688dc8a688638a730e6fdb6cb13f695791"
                   },
                   {
                       "path":  "datapacks/nbidal18_progression/data/levelz/skill/nbidal18.json",
-                      "sha256":  "19ce8e5b35de98257e196d4f4cf38ff2af2af4bbf5a81698d917f5ff8a14711d"
+                      "sha256":  "a7802f3da3592d6d4eaf9a7ad6ca11e31451d76aafce4ee54211a6e0ba38f897"
                   },
                   {
                       "path":  "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/job_brewer_100.json",
@@ -3164,14 +3164,6 @@
                   {
                       "path":  "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_bartering_20.json",
                       "sha256":  "e9cc23bac1690f0cab019b384427aa16ed05fc6bd80814b10d865dab5ec72aa9"
-                  },
-                  {
-                      "path":  "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_constitution_10.json",
-                      "sha256":  "468f3f6bdcc72091a363b8bac768089b677c53e52ba933c10821d97db3fee42c"
-                  },
-                  {
-                      "path":  "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_constitution_20.json",
-                      "sha256":  "b8f6812a2e0db86688c298e1b6435ba869057da3d27cc1ed2bdb00347a5a316d"
                   },
                   {
                       "path":  "datapacks/nbidal18_progression/data/nbidal18_progression/advancement/skill_cooking_10.json",
@@ -4207,7 +4199,7 @@
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "896d24669ea4de11e26f02f80cd24d3c42f1f41081181930804bea9023e4bb89"
+                      "sha256":  "d344704deb8429ff32820fb5fe0da4cfe02a61cf22b762c2eabbdedb2d70adf4"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",
@@ -4234,8 +4226,8 @@
                       "sha256":  "b22a7954776c3fbde10908b66513a393b8493f5903ee883f02e5775ac27a8b95"
                   },
                   {
-                      "path":  "mods/nbidal18-wiki-1.0.0+1.21.1.jar",
-                      "sha256":  "466f88082d37be8ee0b4060faa6493568afe76fb721d4e151e5e625321f482cf"
+                      "path":  "mods/nbidal18-wiki-1.1.0+1.21.1.jar",
+                      "sha256":  "89e58e69dfaa63e9cfa30aa2c1cdffc62fb045a1c9d0167d73635e86738b27f1"
                   },
                   {
                       "path":  "mods/niftycarts-21.1.1.jar",
@@ -4531,7 +4523,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "624c3f7f30a043c61b1e8752a56a8d8aa9487148b976d38cc2c93655ac875b57"
+                      "sha256":  "f7c0206f1654c07fa54781a1abd4fad4a05fc6fd27b05ab582f4fd6a628dc920"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",

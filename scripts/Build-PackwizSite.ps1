@@ -641,8 +641,9 @@ hash-format = "sha256"
     #>
     $pinnedAcceptedDigests = @(
         $releaseBaselineDigest,
-        # v4.2.8-packwiz, live at the time of writing.
-        '1ee44d8a2e896b5d42def78c57a6b71f498b17e48fef9f2882437343e771363f'
+        # The release that is live at the time of writing, so an un-updated client can still log in
+        # and be told to update. Bump this at publish time, every time.
+        'ebed5418e2d932d79aa395a9677b68b13ff9ce3e994b36b5b11fd20cdbf89f7c'
     )
     $maxAcceptedDigests = 12
 

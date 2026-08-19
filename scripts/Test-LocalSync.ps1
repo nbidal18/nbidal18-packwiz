@@ -91,12 +91,18 @@ try {
     Assert-True (Test-Path -LiteralPath (Join-Path $minecraft (Join-Path 'mods' $expectedTweaksJar))) "The Inmis dye rendering, grouped Trinkets slots and Auto HUD client tweaks were not installed ($expectedTweaksJar)."
     $installedInmisConfig = [IO.File]::ReadAllText((Join-Path $minecraft 'config\inmis.json'), [Text.Encoding]::UTF8)
     Assert-True (-not $installedInmisConfig.EndsWith("`n")) 'Inmis config must use AutoConfig''s stable no-final-newline serialization.'
-    # The skills-and-jobs set that replaced Jobs+, plus the first-party mod that makes death cost
-    # job levels. All four are on both sides; the wiki is client-only by design.
-    foreach ($expected in @('levelz-2.0.10.jar', 'jobsaddon-1.2.5.jar', 'libz-1.1.0.jar',
-                            'tiered-1.3.7.jar', 'nbidal18-jobs-reset-1.0.0+1.21.1.jar',
-                            'nbidal18-temperature-2.0.0+1.21.1.jar', 'nbidal18-wiki-1.0.0+1.21.1.jar',
-                            'fieldguide-fabric-1.21.1-1.15.2.jar')) {
+    # The skills-and-jobs set that replaced Jobs+, plus the first-party mods that go with it.
+    $expectedMods = @('levelz-2.0.10.jar', 'jobsaddon-1.2.5.jar', 'libz-1.1.0.jar',
+                      'tiered-1.3.7.jar', 'fieldguide-fabric-1.21.1-1.15.2.jar')
+    # First-party artifact names are derived from each project rather than written out here. Pinning
+    # them by hand meant a routine version bump failed this test for no reason, which teaches people
+    # to edit the assertion instead of reading it.
+    foreach ($project in @('nbidal18-jobs-reset', 'nbidal18-temperature', 'nbidal18-wiki')) {
+        $properties = Join-Path $releaseRoot (Join-Path '5. modpack source\custom mods' (Join-Path $project 'gradle.properties'))
+        Assert-True ([IO.File]::ReadAllText($properties, [Text.Encoding]::UTF8) -match '(?m)^mod_version=(.+?)\s*$') "Could not read mod_version for $project."
+        $expectedMods += "$project-$($Matches[1]).jar"
+    }
+    foreach ($expected in $expectedMods) {
         Assert-True (Test-Path -LiteralPath (Join-Path $minecraft (Join-Path 'mods' $expected))) "$expected was not installed."
     }
     Assert-True (-not (Test-Path -LiteralPath (Join-Path $minecraft 'mods\polytone-1.21-3.12.0-fabric.jar'))) 'Retired Nature X Polytone support was still installed.'

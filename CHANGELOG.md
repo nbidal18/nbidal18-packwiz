@@ -34,9 +34,39 @@ Record:
 
 ---
 
+## v4.3.1
+
+Current release. Live digest `1d2d9c3baff562ed…`. 854 managed files, 252 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+**Skill levels were reset for everyone by this release** — see below. Jobs, job levels, money,
+gear and inventories are untouched.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-19 | `PENDING` | `1d2d9c3baff562ed` | 854 | 252 | **Hearts are vanilla again, and the Constitution skill is gone.** v4.3.0 started everyone at three hearts and had Constitution return the missing seven over twenty levels. It read well and played badly: because death wipes every skill, it took maximum health with it, so dying meant respawning at three hearts and walking back. Nothing in the skill table touches maximum health now — note that LevelZ lowers it to four hearts on its own, so removing the skill is what restores the full ten rather than merely undoing a pack value. **Everyone's skills were reset as part of this update, deliberately.** LevelZ requires skill ids to run 0..n-1 with no gaps and stores each player's levels against those ids, so removing Constitution renumbered the other eleven and any save written before the change would have read its levels against the wrong skills. A reset was the honest option; spent points were refunded. Skills are now Melee, Defense, Archery, Agility, Magic, Mining, Smithing, Farming, Cooking, Bartering and Luck. **The wiki button moved onto the pause-menu column.** It was floating in the bottom-left corner; it is now a knowledge-book icon beside the top row, in the same column where Field Guide's icon sits beside the bottom one. It anchors to vanilla's own button column rather than to the screen edge, so it lands correctly at any GUI scale, and it uses a rendered item rather than a shipped texture so there is no new asset to keep in step with a resource pack. Wiki 1.0.0 to 1.1.0. Maintainer-facing: `Test-LocalSync` derived first-party artifact names from each project's `gradle.properties` instead of listing them, after a routine version bump failed the suite for no reason. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version, `server.properties`
+is not hot-reloadable, and the skill table is read at datapack load. A status ping refused the
+connection immediately before the writes, which is the only proof accepted here.
+
+Five files deployed and two retired advancements removed, verified by hash in a second pass. The
+live server had drifted in roughly two dozen other configs while it ran — mods rewriting their
+own settings — and none of it was touched. Backups under `Z:\.nbidal18-deploy-backups\2026-08-19-v4.3.1\`.
+
+The stale-read problem recorded in v4.3.0 recurred and is now understood. It is not the live file
+going stale: the mount served back a cached copy of what *this tooling* had written during the
+previous deploy, while Minecraft had since rewritten `server.properties` on shutdown. The backup
+hash check caught it both times. Read the file, verify the backup by hash, and redo it if it
+disagrees — never assume a copy off this mount is current.
+
+---
+
 ## v4.3.0
 
-Current release. Live digest `ebed5418e2d932d7…`. 856 managed files, 252 mods.
+Superseded by v4.3.1. Live digest `ebed5418e2d932d7…`. 856 managed files, 252 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing. **Two things
 will surprise people and both are intended:** everyone starts at three hearts and climbs back, and

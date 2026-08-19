@@ -1,6 +1,7 @@
 # nbidal18 progression
 
 Two things live here, both added in v4.3.0 when Jobs+ was replaced by LevelZ and JobsAddon.
+The skill table was revised in v4.3.1, which removed Constitution and restored vanilla hearts.
 
 ## `data/levelz/skill/nbidal18.json` — the pack's skill table
 
@@ -11,15 +12,26 @@ table is ours rather than a set of overrides layered on someone else's.
 It is LevelZ's table with four deliberate departures. Everything else — every bonus, every
 other attribute, every level cap — is exactly as LevelZ ships it.
 
-**1. Three hearts, and twenty levels give back exactly one row.**
-`generic.max_health` has `base: 6` and `value: 0.7`, so a new player has three hearts and a
-player with Constitution 20 has 6 + 14 = 20 health, one full row and never more. The row is a
-ceiling by construction rather than by tuning. Gear is deliberately exempt: rings, TieredZ
-modifiers and Epic Knights may push past it, because those are earned and equipped.
+**1. Constitution is removed, and hearts are vanilla.** No skill in this table touches
+`generic.max_health`, so every player has the ordinary ten hearts and nothing takes them away or
+sells them back.
 
-Worth knowing: **LevelZ already lowers this base to 8 on its own.** A pack that installs LevelZ
-untouched starts its players at four hearts, not ten. The three-heart base is a change of two
-points, not a change from vanilla.
+This reverses v4.3.0, which set `base: 6` and had Constitution return the missing fourteen over
+twenty levels. It read well and played badly: a death took your maximum health with your skills,
+so respawning meant three hearts and a long walk. Gear is unaffected either way — rings, TieredZ
+modifiers and Epic Knights still push past ten.
+
+Worth knowing while reading LevelZ's own table: **LevelZ lowers this base to 8 on its own**, so a
+pack that installs it untouched starts its players at four hearts. Removing the skill removes that
+too, which is the whole point.
+
+**Removing a skill means renumbering, and that is not cosmetic.** LevelZ's `SkillLoader` walks skill
+ids `0..n-1` and throws `MissingResourceException` on a gap, and player levels are persisted against
+those ids. Constitution was id 0, so every other skill moved down one and the attribute ids closed up
+with them. **Any save written before that renumber will read its skill levels against the wrong
+skills.** v4.3.1 handled this by resetting every player's skills on the same restart; a future
+removal has to do the same or leave the id in place.
+
 
 **2. LevelZ's lowered baselines are kept — deliberately.** LevelZ's table does not only add
 bonuses; it also drops several vanilla starting values and sells them back through levels:
@@ -61,7 +73,7 @@ These are **milestones, not every level**. One advancement per level would be ro
 files for 12 skills, 8 jobs and 100 overall levels, which would nearly triple the pack's managed
 file count for a popup. The rule instead is:
 
-- every **10** skill levels (10, 20) for all twelve skills
+- every **10** skill levels (10, 20) for all eleven skills
 - every **25** job levels (25, 50, 75, 100) for all eight jobs
 - every **25** overall LevelZ levels (25, 50, 75, 100)
 
