@@ -9,10 +9,19 @@
     "backing in v4.3.2. Only offhand/glove is built alwaysVisible by Trinkets and so is reliably",
     "active.",
     "",
-    "Dropping hand/glove leaves the hand group empty, which retires that whole class of bug rather",
-    "than patching around it. If Artifacts ever changes its default slot list, this file wins and",
-    "will need updating with it."
+    "The replace flag is what makes the removal actually happen, and v4.3.3 shipped without it.",
+    "Trinkets reads these through ResourceManager.listResourceStacks, so it sees every pack's copy",
+    "of this path and unions them all. Overriding the file therefore added our list alongside the",
+    "Artifacts one rather than replacing it, and hand/glove survived into the game. replace clears",
+    "everything accumulated for these entities before adding the list below.",
+    "",
+    "That clear is only safe because of ordering. Entity files are processed alphabetically, so the",
+    "single file ahead of default.json is crittersandcompanions.json, and it grants chest/necklace,",
+    "which is listed below anyway. Everything else sorts after and re-adds itself: frostiful and",
+    "wildernature capes, the inmis backpack, nbidal18_rings, the scorchful hat. A new file named to",
+    "sort before crittersandcompanions would be wiped without warning, so do not add one."
   ],
+  "replace": true,
   "entities": [
     "player",
     "husk",

@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "d0bb4203ee58643f6a24be3c6156baa1b945c7f6a70da27c7608e89aba68d5d6"
+hash = "ad8abd3b1387de387386e0f4c065fc3af14ebe8225afaaa556baca6ad459296d"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -75,7 +75,7 @@ hash = "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "db5690523c8c2567a3ffb7db621a9abb9cc1a4f0546e6fc2ca342163378ae0bd"
+hash = "c713a3ba65d5c881e90cc45dba769348d2ae885630b25cd5ab37945c2506315f"
 
 [[files]]
 file = "config/beautify.json"
@@ -2237,7 +2237,7 @@ hash = "39a25a9296dc1a3105c718cab89e77a7ef4f870bd95750c843c484752ac91479"
 
 [[files]]
 file = "datapacks/nbidal18_trinket_slots/data/trinkets/entities/default.json"
-hash = "cca45fbdac632afeaf1d5295cf902f1e5f2b94e88fbfc7d05c79f7ed7e400773"
+hash = "f95ba7d1a70ec2faf58e2fe13af5be7fd14b6d331eb39dfd9ea4272ea0c60b70"
 
 [[files]]
 file = "datapacks/nbidal18_trinket_slots/data/trinkets/entities/nbidal18_rings.json"
@@ -2980,8 +2980,8 @@ file = "mods/naturescompass-minimal-nbidal18-1.21.1-2.6.0-fabric+nbidal18.1.jar"
 hash = "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
 
 [[files]]
-file = "mods/nbidal18-client-tweaks-1.6.0+1.21.1.jar"
-hash = "6f2a6273e2787c3ad3e41241df99f0bbb960409cfa5246ecbe753cc6562e888c"
+file = "mods/nbidal18-client-tweaks-1.7.0+1.21.1.jar"
+hash = "01ab2624d829063a90c93e9d7ef5c72acb70567518731dbcb1386241e5e29b13"
 
 [[files]]
 file = "mods/nbidal18-grave-currency-1.2.0+1.21.1.jar"
@@ -2989,7 +2989,7 @@ hash = "2242e8383c1becaa02c7a5942338db1be9d9143796e9262e1a20ee9c180569a4"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "3458a84f86556e7d5216e930dc0992e3b7eb1319cc08e9cd94bb344300d18041"
+hash = "b891e07206e781804156cd2d205f2bf4f4920f657b5dd272107f7cd4bba531c8"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -3017,11 +3017,11 @@ hash = "89e2df8404e114ef8f8bb66d7d4e850de154cf8761db5069e40bd9e1f3fef1b0"
 
 [[files]]
 file = "mods/nbidal18-temperature-2.1.0+1.21.1.jar"
-hash = "e9e7999347b05c53bb440cae7aed7d3a9e2a5b6f6b914824bd91deaa796e0c39"
+hash = "d76b4d3e2f2159ce833a07e3535d01a8be89513dfa2727f0c2d9abe5a60f7bcc"
 
 [[files]]
-file = "mods/nbidal18-wiki-1.3.0+1.21.1.jar"
-hash = "46acaee8467628735174b8c9017448a89047a50b79496482a57c979df4fcdf00"
+file = "mods/nbidal18-wiki-1.4.0+1.21.1.jar"
+hash = "24b692aff820c6aa0c83d2c01948d9ffa66b7a01a1000d9cbc9b46a499a6dbf9"
 
 [[files]]
 file = "mods/niftycarts-21.1.1.jar"
@@ -3317,7 +3317,7 @@ hash = "4d6440f5ae0afd64c0c2d4d0aa6b1760e5c3c5d298704dd6a9eb279531f14d27"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "4637ddd50025075946e13ec271c70210c20ad65a93ecad798e08e14aec4dad7a"
+hash = "8091286e871f2e433b32d56b1052085e0880334cc1e61893713fc1f79c971096"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"
