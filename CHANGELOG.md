@@ -12,9 +12,10 @@ not a release.
 - **Digest** — the manifest digest, shown as the first 16 characters. This is the SHA-256 of
   `site/sync-manifest.json` and it identifies exactly which set of files a client received.
   The live server only lets a client connect if its digest is the server's `expected-`
-  digest or one of the `accepted-` ones, so this column is what you match against
-  `config/nbidal18-integrity.properties` when diagnosing a rejected login. The full 64
-  characters live in that file.
+  digest, so this column is what you match against `config/nbidal18-integrity.properties`
+  when diagnosing a rejected login. The full 64 characters live in that file. **Only the
+  current release may join** — as of v4.4.1 there is no `accepted-` list, so a client one
+  release behind is refused and told to close and reopen its game.
 - **Files / Mods** — managed file count and mod JAR count in the published index.
 - Rows sharing a digest published changed *tooling* (updater, scripts, workflow) without
   changing any managed file, so no client had to re-download anything.
