@@ -29,7 +29,7 @@
   "detailsUnlockedSilhouetteAlpha": 1.0,
   "useRealWorldDate": false,
   "showUnlockDate": true,
-  "showToasts": true,
+  "showToasts": false,
   "showSeasonIcons": true,
   "exposureAddPhotographButton": true,
   "exposureShowPhotographsInGrid": true

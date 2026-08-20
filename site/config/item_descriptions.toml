@@ -3,13 +3,13 @@
 item_descriptions = true
 # Always show Item Descriptions while hovering over an item in your inventory.
 # default: false
-display_always = false
+display_always = true
 # Prioritize the Entity Description of the spawn egg over the generic spawn egg description.
 # default: true
 spawn_eggs_show_entity = true
 # When Item Descriptions are being displayed, also display the mod name.
 # default: false
-show_mod_name = true
+show_mod_name = false
 # Add Item Descriptions Info Recipes to Enchanted Books when using Reliable Recipe Viewer
 # default: false
 addToRecipeViewers = false

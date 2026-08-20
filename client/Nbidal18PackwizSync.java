@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -49,7 +51,7 @@ public final class Nbidal18PackwizSync {
      * stops a rolled-back or spoofed channel downgrading an instance: once a client runs this
      * build, publishing anything below 4.3.3 would be refused rather than installed.
      */
-    private static final int[] MINIMUM_PACK_VERSION = {4, 3, 4};
+    private static final int[] MINIMUM_PACK_VERSION = {4, 4, 0};
     private static final DateTimeFormatter MOVE_STAMP =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final Pattern FILE_ENTRY = Pattern.compile(
@@ -164,8 +166,14 @@ public final class Nbidal18PackwizSync {
     private final Path installerPath;
     private final String packUrl;
     private final String manifestUrl;
+    /** Packwiz prints "(848/857) Downloaded x" for every file it touches. */
+    private static final Pattern INSTALLER_PROGRESS =
+            Pattern.compile("\\((\\d+)\\s*/\\s*(\\d+)\\)");
+
     private JFrame updaterWindow;
     private JLabel updaterLabel;
+    private JProgressBar updaterProgress;
+    private int lastProgressPercent = -1;
 
     private Nbidal18PackwizSync() {
         String prismMinecraft = System.getenv("INST_MC_DIR");
@@ -218,6 +226,7 @@ public final class Nbidal18PackwizSync {
             if (updateSucceeded) {
                 SyncManifest current = readSyncManifest(downloadedManifest);
                 repairPropertyRules(current);
+                status("Verifying installed files...");
                 List<String> repairProblems = findSyncProblems(current, true, true);
                 boolean needsRepair = repairProblems.stream()
                         .anyMatch(problem -> !problem.startsWith("extra:"));
@@ -228,6 +237,9 @@ public final class Nbidal18PackwizSync {
                     }
                 }
 
+                if (needsRepair) {
+                    status("Confirming the instance is complete...");
+                }
                 List<String> remaining = findSyncProblems(current, true, false);
                 if (!remaining.isEmpty()) {
                     throw new IOException("The instance could not be synchronized: "
@@ -315,9 +327,47 @@ public final class Nbidal18PackwizSync {
         command.add(packUrl);
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.directory(minecraftRoot.toFile());
-        processBuilder.inheritIO();
+        // Read the installer's output instead of inheriting it, so the window can show real
+        // progress. Packwiz already counts every file it handles - "(848/857) Downloaded x" - and
+        // that counter is the only honest source of a percentage the updater has.
+        //
+        // Every line is echoed to stdout unchanged. Prism's log and this pack's own test harness
+        // both read that output, so swallowing it here would break them silently.
+        processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
-        return process.waitFor();
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                applyInstallerProgress(line);
+            }
+        }
+        int exitCode = process.waitFor();
+        progressIndeterminate();
+        return exitCode;
+    }
+
+    /**
+     * Drives the progress bar from Packwiz's own "(current/total)" counter.
+     *
+     * <p>Deliberately forgiving: an unrecognised line simply leaves the bar alone. The installer's
+     * output format is not a contract, and a cosmetic bar is never worth failing an update over.
+     */
+    private void applyInstallerProgress(String line) {
+        Matcher matcher = INSTALLER_PROGRESS.matcher(line);
+        if (!matcher.find()) {
+            return;
+        }
+        try {
+            int current = Integer.parseInt(matcher.group(1));
+            int total = Integer.parseInt(matcher.group(2));
+            if (total > 0 && current >= 0 && current <= total) {
+                progressTo(current, total);
+            }
+        } catch (NumberFormatException ignored) {
+            // A counter too large to parse is not worth reacting to.
+        }
     }
 
     private void downloadCurrentManifest(Path destination)
@@ -443,7 +493,13 @@ public final class Nbidal18PackwizSync {
     private List<String> findSyncProblems(
             SyncManifest manifest, boolean cleanExtras, boolean prepareRepair) throws Exception {
         List<String> problems = new ArrayList<>();
+        // Hashing every managed file is the second long stretch of an update, and on a slow disk
+        // it is the one that looks most like a hang. It has an exact total, so it gets a real
+        // percentage too rather than sitting on whatever the installer left behind.
+        int checked = 0;
+        int toCheck = manifest.files.size();
         for (FileEntry entry : manifest.files.values()) {
+            progressTo(checked++, toCheck);
             if (manifest.localAllowed.contains(pathKey(entry.path))) {
                 continue;
             }
@@ -460,6 +516,9 @@ public final class Nbidal18PackwizSync {
                 }
             }
         }
+
+        // Nothing below counts anything, and it is quick. Back to a moving bar.
+        progressIndeterminate();
 
         for (PropertyRule rule : manifest.propertyRules) {
             Path target = resolveRelative(rule.path);
@@ -1056,11 +1115,15 @@ public final class Nbidal18PackwizSync {
                 JPanel content = new JPanel(new BorderLayout(0, 12));
                 content.setBorder(BorderFactory.createEmptyBorder(18, 18, 18, 18));
                 updaterLabel = new JLabel("Preparing the modpack update...", SwingConstants.CENTER);
-                JProgressBar progress = new JProgressBar();
-                progress.setIndeterminate(true);
-                progress.setPreferredSize(new Dimension(424, 22));
+                updaterProgress = new JProgressBar(0, 100);
+                updaterProgress.setIndeterminate(true);
+                // The percentage is painted on the bar itself rather than added as another label,
+                // so the window does not change size when progress starts or stops being known.
+                updaterProgress.setStringPainted(true);
+                updaterProgress.setString("");
+                updaterProgress.setPreferredSize(new Dimension(424, 22));
                 content.add(updaterLabel, BorderLayout.CENTER);
-                content.add(progress, BorderLayout.SOUTH);
+                content.add(updaterProgress, BorderLayout.SOUTH);
                 updaterWindow.setContentPane(content);
                 updaterWindow.pack();
                 updaterWindow.setLocationRelativeTo(null);
@@ -1069,7 +1132,46 @@ public final class Nbidal18PackwizSync {
         } catch (Exception error) {
             updaterWindow = null;
             updaterLabel = null;
+            updaterProgress = null;
         }
+    }
+
+    /**
+     * Shows a real percentage. Called from the installer's output thread, so it hops to Swing.
+     */
+    private void progressTo(int current, int total) {
+        JProgressBar bar = updaterProgress;
+        if (bar == null) {
+            return;
+        }
+        int percent = (int) Math.round((current * 100.0) / total);
+        // Only when the number actually changes. Verifying 857 files would otherwise queue 857
+        // repaints to draw about a hundred distinct states.
+        if (percent == lastProgressPercent) {
+            return;
+        }
+        lastProgressPercent = percent;
+        SwingUtilities.invokeLater(() -> {
+            bar.setIndeterminate(false);
+            bar.setValue(percent);
+            bar.setString(percent + "%");
+        });
+    }
+
+    /**
+     * Back to a moving bar with no number, for the stretches where nothing counts anything —
+     * contacting GitHub, verifying the manifest, staging the next updater.
+     */
+    private void progressIndeterminate() {
+        JProgressBar bar = updaterProgress;
+        if (bar == null) {
+            return;
+        }
+        lastProgressPercent = -1;
+        SwingUtilities.invokeLater(() -> {
+            bar.setIndeterminate(true);
+            bar.setString("");
+        });
     }
 
     private void closeUpdaterWindow() {

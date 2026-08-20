@@ -34,9 +34,39 @@ Record:
 
 ---
 
+## v4.4.0
+
+Current release. Live digest `a02d4d60cb6d45ad…`. 862 managed files, 254 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+**You will finally be able to tell that the updater is doing something.** The bar shows a
+real percentage now, so a long update looks like a long update rather than a frozen window.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-20 | `PENDING` | `a02d4d60cb6d45ad` | 862 | 254 | **A real progress bar while the pack updates.** The updater's bar was a stripe that slid back and forth and told you nothing, which on a big update looked exactly like a hang. It now counts 0 to 100%: the installer had been printing a file counter for every one of the 863 files all along, and the updater simply was not reading it. The second slow stretch — checking every installed file against the manifest — is counted the same way. **Discoveries are plaques now.** Finding something in the Field Guide used to pop a small toast in the top-right corner while every other notification in this pack — skill levels, job ranks, milestones — appeared on a plaque in the middle of the screen. Discoveries now join them, carrying the entry's own name and picture. **Caught fish go in the Field Guide.** Tide adds 67 fish and only 15 of them exist as creatures you can point a spyglass at; the other 52 could never be recorded at all. Catching one now counts as having studied it, and they all live under Animals with everything else. **The wiki is rewritten.** New voice — a travelling adventurer's notes rather than a specification — and it no longer quotes exact numbers, key letters or menu positions at you. Key letters were wrong to print anyway, since every binding in this pack is rebindable. It also reads sharp now: the book was being drawn before the background blur rather than after, so the cover and the text were quietly out of focus while the tabs on top of them were not. The tabs sit properly inside the cover with a margin, and carry hand-drawn icons in the book's own ink instead of floating item pictures. **Temperature effects say what they do.** Items this pack made warming or cooling now explain themselves in the tooltip, without holding a key. Maintainer-facing: discovery-plaques 1.0.0 (new), wiki 1.5.0, temperature 2.2.0, nbidal18_tide_fish datapack (new). |
+
+### Server deployment
+
+Required a stopped server: two mods changed, the integrity helper carries the pack version,
+and a new datapack is read at datapack load. A status ping refused the connection immediately
+before the writes.
+
+Seven files written and one superseded JAR removed, out of 301 the pack owns server-side —
+the other 294 already matched and were left untouched. Backups under `Z:\.nbidal18-deploy-backups\2026-08-20-v4.4.0\`,
+each verified by hash on an independent second read.
+
+**The server was restarted as soon as the overlay verified**, rather than being held down
+through the changelog, commit, push and Pages deployment. Only the file overlay needs the
+server stopped; everything after it is local or on GitHub, and the previous digest stays
+accepted throughout, so nobody is locked out during the gap.
+
+---
+
 ## v4.3.4
 
-Current release. Live digest `0393a4a97b9993a2…`. 857 managed files, 253 mods.
+Superseded by v4.4.0. Live digest `0393a4a97b9993a2…`. 857 managed files, 253 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 

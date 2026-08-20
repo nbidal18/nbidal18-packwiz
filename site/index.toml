@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "ad8abd3b1387de387386e0f4c065fc3af14ebe8225afaaa556baca6ad459296d"
+hash = "1319de22dccdfdfb75a88f8902f6ce8c1ce8e2d3c8495c392e3778181043602d"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -75,7 +75,7 @@ hash = "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "c713a3ba65d5c881e90cc45dba769348d2ae885630b25cd5ab37945c2506315f"
+hash = "1a2b876d79d288c3e62da788eabe9dcca48f750671b73f37c5c189de790ff84f"
 
 [[files]]
 file = "config/beautify.json"
@@ -496,7 +496,7 @@ hash = "a2091a291309db8920c8a80e913ed31c24c29687d8cd25ac18076ad85a90ddb8"
 
 [[files]]
 file = "config/fieldguide-client.json"
-hash = "c2fad00227c1365a6f994cdf4a3d0f960407664f8970f4586ac29a0e7aa4de50"
+hash = "956509f4d4df4d72238eb08e61376a1e752291805fc33651b4e224f1728d88fc"
 
 [[files]]
 file = "config/fieldguide-server.json"
@@ -599,7 +599,7 @@ hash = "c0c191c7f3eeb2c19b0df753581deabb72744f5fd23a398da92c8268774cff88"
 
 [[files]]
 file = "config/item_descriptions.toml"
-hash = "e4decbbbfaf9968093791e17b7bd06b6e96b5f667c021788a20cb1c383b11fc6"
+hash = "4ef18cd17b46b9095cd58d36039c284c2aaaccaebf3675f6999e195c7ce83cd9"
 
 [[files]]
 file = "config/jade/hide-blocks.json"
@@ -2236,6 +2236,18 @@ file = "datapacks/nbidal18_terralith_structure_compat/pack.mcmeta"
 hash = "39a25a9296dc1a3105c718cab89e77a7ef4f870bd95750c843c484752ac91479"
 
 [[files]]
+file = "datapacks/nbidal18_tide_fish/data/nbidal18/fieldguide/categories/tide_fish.json"
+hash = "b20b31bc7d3f1bd30563e679b8092f070bd8b4b74834e43e8341d1b5c1ad1af1"
+
+[[files]]
+file = "datapacks/nbidal18_tide_fish/data/nbidal18/tags/item/tide_item_only_fish.json"
+hash = "983eca0b2a96c9edc311d109dfd530782d9664cf8e14365a7d9e97553d27720e"
+
+[[files]]
+file = "datapacks/nbidal18_tide_fish/pack.mcmeta"
+hash = "c7d361689077256a821fb2e413ca86e018626f85c6093f629126f3bb4241efc1"
+
+[[files]]
 file = "datapacks/nbidal18_trinket_slots/data/trinkets/entities/default.json"
 hash = "f95ba7d1a70ec2faf58e2fe13af5be7fd14b6d331eb39dfd9ea4272ea0c60b70"
 
@@ -2250,6 +2262,10 @@ hash = "4c9135f10739b1331dde9af6b08923ec875c3b912f5848379436537a5d784d5a"
 [[files]]
 file = "licenses/BandagePlus-Xanthian-MIT.txt"
 hash = "845979ebc5e5d7f08a9133cf94ec97a2fc15464594283860ecc37d50432e169a"
+
+[[files]]
+file = "licenses/Discovery-Plaques-MIT.txt"
+hash = "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
 
 [[files]]
 file = "licenses/GachaAddiction-LGPL-3.0.txt"
@@ -2984,12 +3000,16 @@ file = "mods/nbidal18-client-tweaks-1.7.0+1.21.1.jar"
 hash = "01ab2624d829063a90c93e9d7ef5c72acb70567518731dbcb1386241e5e29b13"
 
 [[files]]
+file = "mods/nbidal18-discovery-plaques-1.0.0+1.21.1.jar"
+hash = "63fdc625208d568c7ce5507f563051287861ce924e1f1677f747461aeb421e01"
+
+[[files]]
 file = "mods/nbidal18-grave-currency-1.2.0+1.21.1.jar"
 hash = "2242e8383c1becaa02c7a5942338db1be9d9143796e9262e1a20ee9c180569a4"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "b891e07206e781804156cd2d205f2bf4f4920f657b5dd272107f7cd4bba531c8"
+hash = "a07e8f17de59eb5a2de2ed958e2293029f1c98713a4ebac0478263040488a450"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -3016,12 +3036,12 @@ file = "mods/nbidal18-safe-rejoin-1.0.0+1.21.1.jar"
 hash = "89e2df8404e114ef8f8bb66d7d4e850de154cf8761db5069e40bd9e1f3fef1b0"
 
 [[files]]
-file = "mods/nbidal18-temperature-2.1.0+1.21.1.jar"
-hash = "d76b4d3e2f2159ce833a07e3535d01a8be89513dfa2727f0c2d9abe5a60f7bcc"
+file = "mods/nbidal18-temperature-2.2.0+1.21.1.jar"
+hash = "d81315fd18ae23e54e0fca0ab6a2f1c19f295a7fef50863789cc8498fb3393c3"
 
 [[files]]
-file = "mods/nbidal18-wiki-1.4.0+1.21.1.jar"
-hash = "24b692aff820c6aa0c83d2c01948d9ffa66b7a01a1000d9cbc9b46a499a6dbf9"
+file = "mods/nbidal18-wiki-1.5.0+1.21.1.jar"
+hash = "93248f55e9f7982cd88d8d64eda031ee101fd3ba35af620bb6754ca26a4cf0a0"
 
 [[files]]
 file = "mods/niftycarts-21.1.1.jar"
@@ -3317,7 +3337,7 @@ hash = "4d6440f5ae0afd64c0c2d4d0aa6b1760e5c3c5d298704dd6a9eb279531f14d27"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "8091286e871f2e433b32d56b1052085e0880334cc1e61893713fc1f79c971096"
+hash = "d55f85a256233af4cc3162edf84ed618fe7f7514a1302e1fb3f60e3b1d852c96"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"

@@ -1,0 +1,165 @@
+{
+  "target_category": "fieldguide:animals",
+  "contents": [
+    {
+      "type": "auto_populate",
+      "strategy": "tag:nbidal18:tide_item_only_fish",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:angelfish",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:barracuda",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:bass",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:bluegill",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:catfish",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:clayfish",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:guppy",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:mackerel",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:mint_carp",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:ocean_perch",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:pike",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:sailfish",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:trout",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:tuna",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    },
+    {
+      "type": "entry",
+      "id": "tide:yellow_perch",
+      "unlock": {
+        "triggers": [
+          "obtain",
+          "scan"
+        ]
+      }
+    }
+  ]
+}
