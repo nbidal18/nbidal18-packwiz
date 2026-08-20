@@ -34,9 +34,37 @@ Record:
 
 ---
 
+## v4.4.2
+
+Current release. Live digest `9bae6ccdce3e2317…`. 862 managed files, 254 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+A maintenance release. Nothing changes in game — two small files are re-downloaded, and the
+tooling that publishes releases got safer and faster.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-20 | `PENDING` | `9bae6ccdce3e2317` | 862 | 254 | **Release tooling, and nothing a player will notice.** Deploying a release to the live server and checking that the download channel actually caught up were both done with scripts written fresh each time. Six near-identical copies of the deploy script existed, none of them kept, and the channel check was once typed during a release — where a bug in it added about ten minutes to the outage while it retried a broken test over and over. Both are now proper tools that live with the pack: the deploy script works out the version, the release folder and the expected fingerprint by itself instead of being told, refuses to write anything while the server is still answering, can be run in a preview mode to show exactly what a release would change before anyone is asked to stop the server, and knows when a change does not need a restart at all. The practical effect is shorter, more predictable downtime on every future release. Maintainer-facing: scripts/Deploy-LiveServer.ps1 and scripts/Verify-PublishedChannel.ps1. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper JAR carries the pack version, so it is a
+JAR swap rather than a config edit. A status ping refused the connection immediately before
+the writes.
+
+**Published under the new order**: pushed to the channel first, confirmed GitHub Pages was
+serving the new manifest, and only then stopped the server. With no accepted-digest list
+there is no order that avoids a lockout window entirely; this one keeps it inside the
+restart rather than stacking it on top.
+
+Backups under `Z:\.nbidal18-deploy-backups\2026-08-20-v4.4.2\`, each verified by hash on an independent second read.
+
+---
+
 ## v4.4.1
 
-Current release. Live digest `ae4056dd367ba5b3…`. 862 managed files, 254 mods.
+Superseded by v4.4.2. Live digest `ae4056dd367ba5b3…`. 862 managed files, 254 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 

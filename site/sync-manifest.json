@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "packVersion":  "4.4.1",
+    "packVersion":  "4.4.2",
     "exactRoots":  [
                        "mods",
                        "config",
@@ -229,7 +229,7 @@
                                 },
                                 {
                                     "path":  "config/bcc-common.toml",
-                                    "sha256":  "533f81b4ff25a0ab58766ea0ce9e77d174a379b679a7c2a0d006fe350c76377a"
+                                    "sha256":  "99fd94661627eaa145713d821e60e71826e94b45eda4ad90fe71048fb739c625"
                                 },
                                 {
                                     "path":  "config/beautify.json",
@@ -1307,7 +1307,7 @@
                   },
                   {
                       "path":  "config/bcc-common.toml",
-                      "sha256":  "533f81b4ff25a0ab58766ea0ce9e77d174a379b679a7c2a0d006fe350c76377a"
+                      "sha256":  "99fd94661627eaa145713d821e60e71826e94b45eda4ad90fe71048fb739c625"
                   },
                   {
                       "path":  "config/beautify.json",
@@ -4227,7 +4227,7 @@
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "61f304d1f76447853a1bc1e8cafb8d198e58b5fb10b5cf9e2a48992b045131aa"
+                      "sha256":  "18f0a685cde513651f58bcb46e5cff5a39f073ae7cbc480edeea4ec2c9134cfd"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",
@@ -4555,7 +4555,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "c7f3af79cf167ef9ed8312566e5b852fd3ff85433a131b0db390844017e50c1a"
+                      "sha256":  "aa3dfbd0bf705afca321e84b354223da4dd65d2f79fedd92102961d94d02bef5"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",

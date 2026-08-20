@@ -49,9 +49,9 @@ public final class Nbidal18PackwizSync {
     /**
      * Lowest pack version this updater will accept from the channel. Raising it with each release
      * stops a rolled-back or spoofed channel downgrading an instance: once a client runs this
-     * build, publishing anything below 4.4.1 would be refused rather than installed.
+     * build, publishing anything below 4.4.2 would be refused rather than installed.
      */
-    private static final int[] MINIMUM_PACK_VERSION = {4, 4, 1};
+    private static final int[] MINIMUM_PACK_VERSION = {4, 4, 2};
     private static final DateTimeFormatter MOVE_STAMP =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final Pattern FILE_ENTRY = Pattern.compile(
