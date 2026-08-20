@@ -265,7 +265,9 @@ try {
         $policy = Get-Content -LiteralPath $policyPath -Raw
         Assert-True ($policy -match '(?m)^require-helper=true$') "The helper requirement is not enabled in $policyPath"
         Assert-True ($policy -match "(?m)^expected-manifest-sha256=$manifestDigest$") "Manifest digest mismatch in $policyPath"
-        Assert-True ($policy -match '(?m)^accepted-manifest-sha256=.*9515a09d1ce3d751e69da097ff6f3aee9856de3662fa35a69b6422fb845f3b41') "The previous release digest is not accepted during rollout in $policyPath"
+        # Only the current release may join: the build no longer writes an accepted list, and a
+        # stale client is refused at login and told to close and reopen the game.
+        Assert-True ($policy -notmatch '(?m)^accepted-manifest-sha256=\S') "An accepted-digest list is present in $policyPath; only the current release may join."
     }
     foreach ($bccPath in @(
         (Join-Path $releaseRoot '3. modpack\server\config\bcc-common.toml'),

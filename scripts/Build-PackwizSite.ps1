@@ -617,37 +617,29 @@ hash-format = "sha256"
     Write-Utf8 (Join-Path $stagePath 'sync-manifest.json') (($manifest | ConvertTo-Json -Depth 6) + "`n")
 
     $manifestDigest = Get-Sha256 (Join-Path $stagePath 'sync-manifest.json')
-    $releaseBaselineDigest = '9515a09d1ce3d751e69da097ff6f3aee9856de3662fa35a69b6422fb845f3b41'
 
     <#
-        Digests that must keep working no matter how many times this build runs.
+        accepted-manifest-sha256 is deliberately not written any more.
 
-        accepted-manifest-sha256 exists for one narrow case: a player whose client still holds the
-        previous release's manifest, so they can log in and be told to update. Once they relaunch
-        they are on the current release. Nothing older than the last published release can exist in
-        the wild, because updating happens automatically at launch.
+        Only the current release may join. The line used to carry the previous release's digest
+        so a client one version behind could log in during the publish window, and it was not
+        worth what it cost. It grew on every local build rather than every publish, so it filled
+        with digests no player ever received. It once reached sixty entries and overflowed the
+        4 KB cap the helper puts on this file, at which point the helper reported the policy
+        missing and the server stopped enforcing anything at all. And carrying a digest is a
+        claim that the older client is compatible with this server - a per-release judgement the
+        build cannot make, and which is wrong the moment a release adds a mod that registers
+        anything.
 
-        Everything else in that line is churn. The demotion below adds the previous expected digest
-        every time the build runs, including the dozens of local builds that are never published, so
-        the list grew to sixty entries and finally overflowed the 4 KB cap the integrity helper puts
-        on the whole file - at which point the helper reported the policy "missing or unsafe" and
-        the dedicated server refused to enforce anything at all.
+        A stale client is now refused at login and told to close and reopen the game, which is
+        exactly what runs the updater. The cost is a window between deploying the server and the
+        channel going live where a launching client cannot join; the answer to that is a fast
+        deployment, not a wider allow-list.
 
-        So: pinned digests are always kept and always first, the rolling tail is capped, and the
-        written file is measured against the helper's own limit rather than a number restated here.
-
-        UPDATE THIS AT PUBLISH TIME: it should name the digest that is currently live, which becomes
-        "the previous release" the moment the next one is pushed.
+        ServerPolicy always accepts expected-manifest-sha256 itself and treats the accepted key
+        as optional, so removing the line leaves a valid two-key policy.
     #>
-    $pinnedAcceptedDigests = @(
-        $releaseBaselineDigest,
-        # The release that is live at the time of writing, so an un-updated client can still log in
-        # and be told to update. Bump this at publish time, every time.
-        '0d17cb69b1139f1a36b85ba12e34936a63d00bae87151376be79f78ebaae26f1'
-    )
-    $maxAcceptedDigests = 12
 
-    # Read the helper's own size cap rather than restating it, so the two cannot drift apart again.
     $serverPolicySource = Join-Path $ReleaseRoot ('5. modpack source\custom mods\' +
         'nbidal18-integrity-helper\src\main\java\dev\nbidal18\integrity\ServerPolicy.java')
     if ([IO.File]::ReadAllText($serverPolicySource, [Text.Encoding]::UTF8) -notmatch
@@ -667,45 +659,19 @@ hash-format = "sha256"
                 $policyText -notmatch '(?m)^expected-manifest-sha256=[0-9a-f]{64}$') {
             throw "The server integrity transition policy is malformed: $policyPath"
         }
-        $existingExpected = [regex]::Match(
-            $policyText,
-            '(?m)^expected-manifest-sha256=([0-9a-f]{64})$'
-        ).Groups[1].Value
-        $rollingDigests = @($pinnedAcceptedDigests) + @($existingExpected)
-        $existingAccepted = [regex]::Match(
-            $policyText,
-            '(?m)^accepted-manifest-sha256=([0-9a-f]{64}(?:,[0-9a-f]{64})*)$'
-        )
-        if ($existingAccepted.Success) {
-            $rollingDigests += $existingAccepted.Groups[1].Value.Split(',')
-        }
-        # Pinned entries are already at the front, so trimming the tail drops the oldest churn and
-        # never the digests that have to keep working.
-        $rollingDigests = @($rollingDigests | Where-Object {
-            $_ -ne $manifestDigest
-        } | Select-Object -Unique | Select-Object -First $maxAcceptedDigests)
         $policyText = [regex]::Replace(
             $policyText,
             '(?m)^expected-manifest-sha256=[0-9a-f]{64}$',
             "expected-manifest-sha256=$manifestDigest"
         )
-        $acceptedLine = 'accepted-manifest-sha256=' + ($rollingDigests -join ',')
-        if ($policyText -match '(?m)^accepted-manifest-sha256=') {
-            $policyText = [regex]::Replace(
-                $policyText,
-                '(?m)^accepted-manifest-sha256=.*$',
-                $acceptedLine
-            )
-        }
-        else {
-            $policyText = $policyText.TrimEnd("`r", "`n") + "`n$acceptedLine`n"
-        }
+        # Drop the line if an earlier build left one behind.
+        $policyText = [regex]::Replace($policyText, '(?m)^accepted-manifest-sha256=.*\r?\n?', '')
         Write-Utf8 $policyPath $policyText
         $policyBytes = (Get-Item -LiteralPath $policyPath).Length
         if ($policyBytes -gt $policyMaxBytes) {
             throw ("The server integrity policy is $policyBytes bytes, over the $policyMaxBytes " +
                    "the helper will read: $policyPath. The helper treats an oversized policy as " +
-                   'missing and stops enforcing anything. Lower $maxAcceptedDigests.')
+                   'missing and stops enforcing anything.')
         }
     }
     if ((Get-Content -LiteralPath $canonicalPolicy -Raw) -notmatch '(?m)^require-helper=true$' -or

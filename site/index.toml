@@ -75,7 +75,7 @@ hash = "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "1a2b876d79d288c3e62da788eabe9dcca48f750671b73f37c5c189de790ff84f"
+hash = "533f81b4ff25a0ab58766ea0ce9e77d174a379b679a7c2a0d006fe350c76377a"
 
 [[files]]
 file = "config/beautify.json"
@@ -3009,7 +3009,7 @@ hash = "2242e8383c1becaa02c7a5942338db1be9d9143796e9262e1a20ee9c180569a4"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "a07e8f17de59eb5a2de2ed958e2293029f1c98713a4ebac0478263040488a450"
+hash = "61f304d1f76447853a1bc1e8cafb8d198e58b5fb10b5cf9e2a48992b045131aa"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -3337,7 +3337,7 @@ hash = "4d6440f5ae0afd64c0c2d4d0aa6b1760e5c3c5d298704dd6a9eb279531f14d27"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "d55f85a256233af4cc3162edf84ed618fe7f7514a1302e1fb3f60e3b1d852c96"
+hash = "c7f3af79cf167ef9ed8312566e5b852fd3ff85433a131b0db390844017e50c1a"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"
