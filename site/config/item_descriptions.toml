@@ -68,7 +68,7 @@ addToRecipeViewers = false
 [block_descriptions]
 	# This will show Block Descriptions in compatible mods. This can also be disabled in Jade/WTHIT's settings.
 	# default: true
-	enable = true
+	enable = false
 	# Always show Block Descriptions, not just when a key is held.
 	# default: false
 	show_always = false
@@ -76,7 +76,7 @@ addToRecipeViewers = false
 [entity_descriptions]
 	# This will show Entity Descriptions in compatible mods. This can also be disabled in Jade/WTHIT's settings.
 	# default: true
-	enable = true
+	enable = false
 	# Always show Entity Descriptions, not just when a key is held.
 	# default: false
 	show_always = false
@@ -87,7 +87,7 @@ addToRecipeViewers = false
 	enable = true
 	# Always show Enchantment Descriptions, not just when a key is held.
 	# default: false
-	display_always = false
+	display_always = true
 	# By default, descriptions are shown on all enchanted items. Disable if this should only apply to books.
 	# default: false
 	only_show_on_books = false
@@ -113,7 +113,7 @@ addToRecipeViewers = false
 	enable = true
 	# Always show Effect Descriptions, not just when a key is held.
 	# default: false
-	display_always = false
+	display_always = true
 	# This setting changes what colour code is used for effect tooltips.
 	# default: 5592405
 	colour = 5592405

@@ -35,9 +35,46 @@ Record:
 
 ---
 
+## v4.4.3
+
+Current release. Live digest `d265677da49cda26…`. 872 managed files, 254 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+**The weather is real now.** Until this release the world outside barely touched you — the part of
+the game that decides how hot or cold a place is was being rounded away to nothing before it ever
+reached you, so a snowfield, a desert and a meadow all felt much the same. It works now — and on top
+of that, the season changes what the whole map asks of you, climbing a mountain genuinely gets
+colder, and going underground is the way out of bad weather rather than another kind of it.
+
+**Aircraft fly properly with a screen open**, which is the other thing you will notice immediately.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-21 | `PENDING` | `d265677da49cda26` | 872 | 254 | **Temperature actually works, and it was broken in a way nobody could see.** The setting that scales the world's temperature was being rounded down to a whole number before use, and at its old value that rounding turned every outdoor climate into exactly zero — not a weak effect, none at all, everywhere, in every biome, at every hour. Two more faults were hiding behind it and only became visible once it was fixed: **a full set of gold did nothing in the Nether** despite that being the whole point of gold, because the protection was attached to the wrong kind of heat; and **hundreds of the pack's biomes had no climate at all** — Terralith supplies most of the overworld here and only two of its eighty-four biomes were covered, which is the real reason nothing ever felt cold. All eighty-two uncovered biomes are now classified by their own temperature value rather than by name. **Seasons matter.** Summer lifts the whole world — warm country becomes dangerous and frozen country becomes almost kind — and winter drops it the same way, so the same ground in the same place asks something different of you six months later. **Height is cold.** Every ten blocks you climb costs about a degree, so a tall peak is a genuinely different climate from the valley under it, and going up is no longer an escape from a cold place. **Underground is shelter.** Out of the sky and under a real thickness of rock the weather stops reaching you: the earth holds one steady temperature whatever the hour and whatever the season — cool beneath the sands, mild beneath the snow — and it gets warmer the deeper you go. A roof and a few blocks overhead takes the edge off a storm; only real depth ends it. **The Nether is hot everywhere**, not just over the lava seas — it used to cool off sharply above its own sea level, so the ground you actually walk on produced no heat at all. **Aircraft controls work with a screen open.** This was attempted once before and shipped without working: aircraft ask the keyboard directly rather than going through the movement system everything else uses, so the earlier fix was never capable of helping. **Coins no longer scatter when you die** for new worlds too — the live world was fixed by hand at the time, and now the setting ships with the pack. **Items, enchantments and status effects all explain themselves** in the tooltip without holding a key; previously only items did. **The experience number no longer hangs on screen** after the rest of the interface fades out, and the pack's wiki gained sections on seasons, height and shelter. Two small annoyances gone: a duplicate piston recipe in the recipe viewer, and the wiki's search box being the wrong size. Maintainer-facing: temperature 2.5.0 with two new first-party environment providers, wiki 1.5.2, client-tweaks 1.8.1, `preferred-gamerules` defaults, and the player-file seeder generalised. |
+
+### Server deployment
+
+Required a stopped server: the integrity helper and the temperature mod are both JAR swaps,
+and the temperature datapack gained two new files that are only read at datapack load. A
+status ping refused the connection immediately before the writes.
+
+Seventeen files written, one retired mod JAR removed, and the MOTD moved to v4.4.3. World,
+playerdata, whitelist, ops, ports, logs and provider files were outside the candidate list
+entirely.
+
+**Published under the standing order**: pushed to the channel first, confirmed GitHub Pages was
+serving the new manifest, and only then stopped the server. With no accepted-digest list there
+is no order that avoids a lockout window entirely; this one keeps it inside the restart rather
+than stacking it on top.
+
+Backups under `Z:\.nbidal18-deploy-backups\2026-08-21-v4.4.3\`, each verified by hash on an independent second read.
+
+---
+
 ## v4.4.2
 
-Current release. Live digest `9bae6ccdce3e2317…`. 862 managed files, 254 mods.
+Superseded by v4.4.3. Live digest `9bae6ccdce3e2317…`. 862 managed files, 254 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 

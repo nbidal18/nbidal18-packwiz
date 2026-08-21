@@ -15,7 +15,7 @@
   "environmentConfig": {
     "maxTemperatureForColdC": 5.0,
     "degreesCPerTemperatureDecrease": 15.0,
-    "environmentTemperatureMultiplier": 0.25,
+    "environmentTemperatureMultiplier": 3.0,
     "applyEnvironmentPenaltyWhenWet": true,
     "rainWetnessIncrease": 1,
     "touchingWaterWetnessIncrease": 5,
@@ -52,7 +52,7 @@
     "windDestroysTorches": true,
     "doSnowPacking": true,
     "applyEnvironmentPenaltyWhenWet": true,
-    "passiveFreezingTickInterval": 1,
+    "passiveFreezingTickInterval": 4,
     "windSpawnCapPerSecond": 15,
     "windSpawnRarity": 750,
     "windSpawnRarityThunder": 500,

@@ -293,8 +293,30 @@ try {
     [IO.File]::WriteAllText($extraMod, 'not an official mod')
     $extraResourcePack = Join-Path $minecraft 'resourcepacks\xray-test.zip'
     [IO.File]::WriteAllText($extraResourcePack, 'not an official resource pack')
+    # Shaped like the real file, because this one is both preserved *and* seeded: the two values
+    # below are corrected in place while everything else the player chose has to survive. A flat
+    # placeholder string could not tell those two behaviours apart.
     $preservedConfig = Join-Path $minecraft 'config\autohud.json5'
-    [IO.File]::WriteAllText($preservedConfig, 'player customized Auto HUD')
+    $playerAutoHud = @(
+        '{',
+        '	"ticksRevealed": 999,',
+        '	"revealExperienceTextOnTargetingEnchantingBlock": true,',
+        '	"experience": {',
+        '		"active": true,',
+        '		"onChange": true',
+        '	},',
+        '	"hotbar": {',
+        '		"onSlotChange": false,',
+        '		"onChange": true',
+        '	}',
+        '}'
+    ) -join "`n"
+    [IO.File]::WriteAllText($preservedConfig, $playerAutoHud + "`n", (New-Object Text.UTF8Encoding($false)))
+    # A seed is applied once per instance and the fresh install above already marked this one. An
+    # instance that predates the release has the file but not the marker, so clear it to get the
+    # case that actually matters: seeding into a file the player has already been living with.
+    $autoHudSeedMarker = Join-Path $minecraft '.nbidal18-packwiz\applied-autohud-xp-level-v443'
+    if (Test-Path -LiteralPath $autoHudSeedMarker) { Remove-Item -LiteralPath $autoHudSeedMarker -Force }
     $controllerConfig = Join-Path $minecraft 'config\controlify.json'
     [IO.File]::WriteAllText($controllerConfig, '{"player":"controller preferences"}')
     $sodiumOptions = Join-Path $minecraft 'config\sodium-options.json'
@@ -328,7 +350,18 @@ try {
     Assert-True (-not (Test-Path -LiteralPath $extraResourcePack)) 'The extra resource pack remained loadable.'
     Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $minecraft '.nbidal18-packwiz\removed-local-files') -Recurse -File | Where-Object Name -eq 'player-added-extra-mod.jar').Count -eq 1) 'The extra mod was not recoverably moved.'
     Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $minecraft '.nbidal18-packwiz\removed-local-files') -Recurse -File | Where-Object Name -eq 'xray-test.zip').Count -eq 1) 'The extra resource pack was not recoverably moved.'
-    Assert-True ([IO.File]::ReadAllText($preservedConfig) -eq 'player customized Auto HUD') 'The player Auto HUD config was overwritten.'
+    # The player-file seeder has to reach one value inside a nested object without disturbing the
+    # rest of the file. Both halves are asserted: the two declared values changed, and every other
+    # line the player owned is exactly as it was - including the sibling "onChange" under "hotbar",
+    # which shares its key name with the seeded one and is the thing a key-only matcher would ruin.
+    $seededAutoHud = [IO.File]::ReadAllText($preservedConfig)
+    Assert-True ($seededAutoHud -match '(?m)^\s*"revealExperienceTextOnTargetingEnchantingBlock":\s*false,\s*$') 'The Auto HUD anvil reveal was not seeded off.'
+    Assert-True ($seededAutoHud -match '(?m)^\s*"experience":\s*\{\s*$') 'The Auto HUD experience block was not preserved.'
+    Assert-True ($seededAutoHud -match '(?ms)"experience":\s*\{.*?"onChange":\s*false.*?\}') 'The nested experience.onChange was not seeded off.'
+    Assert-True ($seededAutoHud -match '(?ms)"hotbar":\s*\{.*?"onChange":\s*true.*?\}') 'The sibling hotbar.onChange was wrongly changed by the seeder.'
+    Assert-True ($seededAutoHud -match '(?m)^\s*"ticksRevealed":\s*999,\s*$') 'A personal Auto HUD setting was overwritten.'
+    Assert-True ($seededAutoHud -match '(?m)^\s*"onSlotChange":\s*false,\s*$') 'A personal Auto HUD setting was overwritten.'
+    Assert-True ($seededAutoHud.Contains("`t`"ticksRevealed`": 999,")) 'The seeder reformatted the file instead of editing values in place.'
     Assert-True (Test-Path -LiteralPath $controllerConfig -PathType Leaf) 'The generated controller config was removed.'
     Assert-True ([IO.File]::ReadAllText($sodiumOptions) -eq $playerSodiumOptions) 'The player Sodium preferences were overwritten.'
     Assert-True ([IO.File]::ReadAllText($sodiumFingerprint) -eq $playerSodiumFingerprint) 'The machine-generated Sodium fingerprint was removed or overwritten.'

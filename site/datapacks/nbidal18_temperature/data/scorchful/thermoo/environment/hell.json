@@ -1,0 +1,32 @@
+{
+  "__comment": [
+    "Overrides Scorchful's own Nether environment to make the Nether hot everywhere.",
+    "",
+    "Scorchful grades the Nether by altitude: scorchful:sea_level_altitude_temperature, 50 C at the",
+    "Nether's sea level of y 32, falling 1.5 C per block for the first 20 blocks above it. That puts",
+    "y 42 exactly on the 35 C heat threshold and anything at or above y 52 at 20 C - so standing on",
+    "the Nether's surface, where players actually walk, produced no heat at all. Only the lava seas",
+    "were hot.",
+    "",
+    "This pack's design says the Nether is hot, full stop. So the base becomes a flat 50 C at every",
+    "height. Scorchful's own nether_modifiers tag is kept, which is what still adds +10 C in bright",
+    "block light, so standing in front of lava is hotter than standing in a dark tunnel.",
+    "",
+    "Humidity is deliberately not set here. Scorchful handles that separately in",
+    "thermoo/environment/humidity/hell.json, and setting it in this file would silently replace it.",
+    "",
+    "To restore Scorchful's graded behaviour, delete this file."
+  ],
+  "biomes": "#scorchful:is_climate/hell",
+  "exclude_biomes": "#scorchful:is_not_climate/hell",
+  "provider": {
+    "type": "thermoo:modify",
+    "modifiers": "#scorchful:nether_modifiers",
+    "base": {
+      "type": "thermoo:constant",
+      "components": {
+        "thermoo:temperature": 50.0
+      }
+    }
+  }
+}

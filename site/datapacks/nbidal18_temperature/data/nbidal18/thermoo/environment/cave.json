@@ -1,0 +1,36 @@
+{
+  "__comment": [
+    "Shelter settles the temperature at the land's own annual mean, and depth warms it back up.",
+    "",
+    "Priority 90, below the altitude definition's 100, so this runs last of everything. That is what",
+    "lets a deep cave under a mountain blend the mountain's cold away: rock does not care how high it",
+    "is.",
+    "",
+    "The settled temperature is mean_temperature + degrees_per_biome_temperature x the biome's own",
+    "vanilla temperature, so it is derived rather than judged by name - the same source the pack's",
+    "climate bands were derived from. Snowy plains (0.0) settle at 8 C, plains (0.8) at 12.8, jungle",
+    "(0.95) at 13.7, desert (2.0) at 20. Every one of those is inside the comfort band, which is the",
+    "point: a cave is a refuge from both ends.",
+    "",
+    "Depth adds 0.08 C per block below sea level, capped at 12 C, so the bottom of the world sits",
+    "around 20-32 C depending on what is above it. Warm, and still short of the 35 C heat threshold.",
+    "",
+    "full_shelter_depth is the field that stops this becoming central heating. Sky light alone would",
+    "make any hut a climate-controlled room; requiring 16 blocks of world overhead as well means a",
+    "house takes the edge off a blizzard without ending it. See CaveShelter.java.",
+    "",
+    "To remove the shelter term, delete this file."
+  ],
+  "biomes": "#minecraft:is_overworld",
+  "priority": 90,
+  "provider": {
+    "type": "nbidal18:cave_shelter",
+    "sky_light_threshold": 15,
+    "full_shelter_depth": 16,
+    "reference_height": 63,
+    "mean_temperature": 8.0,
+    "degrees_per_biome_temperature": 6.0,
+    "degrees_per_block_below": 0.08,
+    "max_depth_warming": 12.0
+  }
+}

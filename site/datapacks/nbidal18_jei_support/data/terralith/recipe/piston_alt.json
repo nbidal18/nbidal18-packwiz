@@ -1,0 +1,49 @@
+{
+  "__comment": [
+    "Removes Terralith's duplicate piston recipe.",
+    "",
+    "Terralith ships terralith:piston_alt unconditionally, and it is character-for-character the",
+    "same shaped recipe as minecraft:piston - three planks, an iron ingot, redstone and stone",
+    "crafting materials, for one piston. It exists as a fallback for Terralith's optional",
+    "recipe_changes overlay, which this pack does not enable, so all it does here is make JEI show",
+    "the same piston recipe twice.",
+    "",
+    "The condition below names a mod id that does not exist, so the recipe is never loaded at all",
+    "rather than loaded and hidden. The original body is kept verbatim underneath so a future",
+    "reader can see exactly what was removed without going into the Terralith jar."
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "nbidal18_this_mod_does_not_exist"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "TTT",
+    "#X#",
+    "#R#"
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:stone_crafting_materials"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "T": {
+      "tag": "minecraft:planks"
+    },
+    "X": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "minecraft:piston",
+    "id": "minecraft:piston",
+    "count": 1
+  }
+}

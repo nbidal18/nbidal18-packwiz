@@ -1,0 +1,33 @@
+{
+  "__comment": [
+    "Height cools you, everywhere in the overworld, on top of whatever the biome and the season",
+    "already said.",
+    "",
+    "Priority. Thermoo applies every matching environment in priority order, highest first, onto one",
+    "shared component builder, and a climate's provider SETS the temperature rather than adding to",
+    "it. So a shift has to run after all of them or it is simply overwritten. The default priority is",
+    "1000; this is 100, and the cave definition is 90, which is the only thing making the order",
+    "altitude-then-shelter.",
+    "",
+    "Overworld only. #minecraft:is_overworld carries every vanilla biome and, through Terralith's own",
+    "addition of #terralith:all_terralith_biomes, all 84 of its biomes as well - which is the whole",
+    "modded overworld in this pack. Height means nothing in the Nether, where the roof is at 128 and",
+    "all of it is indoors, and the End has no ground to measure from.",
+    "",
+    "The rate is 1 C per 10 blocks, not the atmosphere's 6.5 C per kilometre. See Altitude.java for",
+    "why the real number is unusable against a 30 C comfort band.",
+    "",
+    "max_shift caps the cooling at 25 C, which is reached at y 313 and so is a guard rather than a",
+    "limit anyone will meet by climbing.",
+    "",
+    "To remove the altitude term, delete this file."
+  ],
+  "biomes": "#minecraft:is_overworld",
+  "priority": 100,
+  "provider": {
+    "type": "nbidal18:altitude",
+    "reference_height": 63,
+    "degrees_per_block": -0.1,
+    "max_shift": -25.0
+  }
+}

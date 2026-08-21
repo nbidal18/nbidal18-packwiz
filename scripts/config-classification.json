@@ -69,7 +69,7 @@
     { "match": "config/arc-common.yaml", "class": "support", "reason": "arc library: caches and debug flags." },
     { "match": "config/libz.json5", "class": "support", "reason": "LibZ library: the inventory tab that opens the skill and job screens." },
     { "match": "config/fieldguide-client.json", "class": "support", "reason": "Field Guide UI: button placement, colours and toasts." },
-    { "match": "config/item_descriptions.toml", "class": "support", "reason": "Tooltip presentation. display_always is on from v4.4.0, so descriptions are part of the tooltip rather than hidden behind Ctrl." },
+    { "match": "config/item_descriptions.toml", "class": "support", "reason": "Tooltip presentation. Item descriptions became always-visible in v4.4.0; enchantment and status-effect descriptions followed in v4.4.3, so none of the three is hidden behind Ctrl. Jade's block and creature descriptions stay gated on purpose - the wiki says Jade gives the name and nothing more." },
     { "match": "config/cardinal-components-api.properties", "class": "support", "reason": "Component library." },
     { "match": "config/collective.json5", "class": "support", "reason": "Collective library." },
     { "match": "config/creativecore.json", "class": "support", "reason": "CreativeCore library." },

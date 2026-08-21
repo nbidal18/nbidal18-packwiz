@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "packVersion":  "4.4.2",
+    "packVersion":  "4.4.3",
     "exactRoots":  [
                        "mods",
                        "config",
@@ -221,15 +221,15 @@
                                 },
                                 {
                                     "path":  "config/autohud.json5",
-                                    "sha256":  "33d5bcfd741b107d5019323f17bed16a5b0b04f50c03b86ca4dc5922f8015c23"
+                                    "sha256":  "88327a26502b72c3dc7b60a2f977d270555d8442ee5ba792a1e611d54801b7a0"
                                 },
                                 {
                                     "path":  "config/bandagesplus.json",
-                                    "sha256":  "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
+                                    "sha256":  "8d74497ba588ee627688f48befe43f58d3d9d5762155b4b1f815c65ffeec7881"
                                 },
                                 {
                                     "path":  "config/bcc-common.toml",
-                                    "sha256":  "99fd94661627eaa145713d821e60e71826e94b45eda4ad90fe71048fb739c625"
+                                    "sha256":  "fd3cd00545b43cd25c95901221b4ca68c172f4f8d7e79cb00c5bd828977db30d"
                                 },
                                 {
                                     "path":  "config/beautify.json",
@@ -669,7 +669,7 @@
                                 },
                                 {
                                     "path":  "config/frostiful.json",
-                                    "sha256":  "ba02177255603cf50f1f1ff783b72d4f58e3d3a8045cf973ee7045b04783f00e"
+                                    "sha256":  "a1ffb320d7d8a803e777bfbcde5ac16ce48e40c9a5e492666e5904903ce6f569"
                                 },
                                 {
                                     "path":  "config/fzzy_config/keybinds.toml",
@@ -749,7 +749,7 @@
                                 },
                                 {
                                     "path":  "config/item_descriptions.toml",
-                                    "sha256":  "8401dbd563315a2d79443dd0d63294053fbaf0ef5eeec3ab700044fbd9831f03"
+                                    "sha256":  "9082295d85e7ca323b74a2ae208a564dcc77ab7b90aead01fe36f021172ca070"
                                 },
                                 {
                                     "path":  "config/jade/hide-blocks.json",
@@ -921,7 +921,7 @@
                                 },
                                 {
                                     "path":  "config/preferred-gamerules.properties",
-                                    "sha256":  "93255b62cb1f46d32648ce87889940fc1dacaa11d3950e2092061576a6a114cc"
+                                    "sha256":  "8afba65db235f87c9c692d9bd38895c06f1dbc3cd399e010d6ccb8cbc2087dd8"
                                 },
                                 {
                                     "path":  "config/presencefootsteps/updater.json",
@@ -937,7 +937,7 @@
                                 },
                                 {
                                     "path":  "config/scorchful.json",
-                                    "sha256":  "73e445313339ddfbbe02da1c8ea1fc30916e97e06e27ff756fe175cda9894f3c"
+                                    "sha256":  "fdec8d626edf0ddc0aab61f000a4776ef70a5fe3cf84f8a0eb9877ffcfeaaed0"
                                 },
                                 {
                                     "path":  "config/sereneseasons/fertility.toml",
@@ -1299,15 +1299,15 @@
                   },
                   {
                       "path":  "config/autohud.json5",
-                      "sha256":  "33d5bcfd741b107d5019323f17bed16a5b0b04f50c03b86ca4dc5922f8015c23"
+                      "sha256":  "88327a26502b72c3dc7b60a2f977d270555d8442ee5ba792a1e611d54801b7a0"
                   },
                   {
                       "path":  "config/bandagesplus.json",
-                      "sha256":  "834b869d718897f7a8816329c2b84daa88e454d28ab24193b28c5ff87c974b09"
+                      "sha256":  "8d74497ba588ee627688f48befe43f58d3d9d5762155b4b1f815c65ffeec7881"
                   },
                   {
                       "path":  "config/bcc-common.toml",
-                      "sha256":  "99fd94661627eaa145713d821e60e71826e94b45eda4ad90fe71048fb739c625"
+                      "sha256":  "fd3cd00545b43cd25c95901221b4ca68c172f4f8d7e79cb00c5bd828977db30d"
                   },
                   {
                       "path":  "config/beautify.json",
@@ -1747,7 +1747,7 @@
                   },
                   {
                       "path":  "config/frostiful.json",
-                      "sha256":  "ba02177255603cf50f1f1ff783b72d4f58e3d3a8045cf973ee7045b04783f00e"
+                      "sha256":  "a1ffb320d7d8a803e777bfbcde5ac16ce48e40c9a5e492666e5904903ce6f569"
                   },
                   {
                       "path":  "config/fzzy_config/keybinds.toml",
@@ -1827,7 +1827,7 @@
                   },
                   {
                       "path":  "config/item_descriptions.toml",
-                      "sha256":  "4ef18cd17b46b9095cd58d36039c284c2aaaccaebf3675f6999e195c7ce83cd9"
+                      "sha256":  "ddd12000ec87ecc502e3aa5ebb08afdb403b2b7cfc0e78ee03268ea74e12c681"
                   },
                   {
                       "path":  "config/jade/hide-blocks.json",
@@ -1999,7 +1999,7 @@
                   },
                   {
                       "path":  "config/preferred-gamerules.properties",
-                      "sha256":  "93255b62cb1f46d32648ce87889940fc1dacaa11d3950e2092061576a6a114cc"
+                      "sha256":  "8afba65db235f87c9c692d9bd38895c06f1dbc3cd399e010d6ccb8cbc2087dd8"
                   },
                   {
                       "path":  "config/presencefootsteps/updater.json",
@@ -2015,7 +2015,7 @@
                   },
                   {
                       "path":  "config/scorchful.json",
-                      "sha256":  "73e445313339ddfbbe02da1c8ea1fc30916e97e06e27ff756fe175cda9894f3c"
+                      "sha256":  "fdec8d626edf0ddc0aab61f000a4776ef70a5fe3cf84f8a0eb9877ffcfeaaed0"
                   },
                   {
                       "path":  "config/sereneseasons/fertility.toml",
@@ -2982,6 +2982,10 @@
                       "sha256":  "a955216463ff04b208a147420d715c6b5517f6f58721b5ab15b13f7afa10c5b8"
                   },
                   {
+                      "path":  "datapacks/nbidal18_jei_support/data/terralith/recipe/piston_alt.json",
+                      "sha256":  "e8e1379fa86172b4537ad17c5edbb90e6709180708ae2cfb429d4ab3368e96f8"
+                  },
+                  {
                       "path":  "datapacks/nbidal18_jei_support/pack.mcmeta",
                       "sha256":  "b67a342183f89782401b0b091aa8761b6e907a99c02bc062bca83f14f3f2a5d1"
                   },
@@ -3403,7 +3407,31 @@
                   },
                   {
                       "path":  "datapacks/nbidal18_temperature/README.md",
-                      "sha256":  "9f9c2b68ad2d02ea01fbdb755541a7d62630ea9995c76c49d71bff9ab43d1e11"
+                      "sha256":  "78a142776834db9e0fc728389d6401bdb1e3d2895c27f48bfb319cb73ea61cb0"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/c/tags/worldgen/biome/is_temperate/overworld.json",
+                      "sha256":  "3d8aa3d43e17f16834abcc118e39793f8387a32a93a4e8915ada0ed5e8b1354c"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/frostiful/tags/worldgen/biome/cold_biomes.json",
+                      "sha256":  "630e75c909584692135c5481e436bdad647587c20a4ac7a2b29f2520f9d14506"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/frostiful/tags/worldgen/biome/cool_biomes.json",
+                      "sha256":  "718349d2df7c50570d950d6e84482acb8f47bad3dec8326b60c0a85585684bc3"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/frostiful/tags/worldgen/biome/freezing_biomes.json",
+                      "sha256":  "ec39c0a46b40105495ef204614504ea0bf8d31b1f60e52f81bf1e08485efa202"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/thermoo/environment/altitude.json",
+                      "sha256":  "3cac102e4d5394d74dd99d75bbf8df78dd44b0ffb37a154ac561309404f98106"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/thermoo/environment/cave.json",
+                      "sha256":  "26e91c490ee6c5929afbbe5c311d751aa2ad958b222609817fb792ed4a0fc21d"
                   },
                   {
                       "path":  "datapacks/nbidal18_temperature/data/scorchful/tags/item/heat_resistance_modified.json",
@@ -3412,6 +3440,18 @@
                   {
                       "path":  "datapacks/nbidal18_temperature/data/scorchful/tags/item/is_sun_protecting_hat.json",
                       "sha256":  "6cf6b9c1697096602ed21716797362cc674043ca5ba6d6a03beb691274f57971"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/scorchful/tags/worldgen/biome/scorching_biomes.json",
+                      "sha256":  "cd36acf215ec1c95a8f2c62e51a6894ff369c53700583101060b07888ebc664e"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/scorchful/tags/worldgen/biome/warm_biomes.json",
+                      "sha256":  "5e23023f194e4df4659c95b0eda0ff9166d28b678ac569be9d9a4c945fb359e9"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/scorchful/thermoo/environment/hell.json",
+                      "sha256":  "94b215d3d5da2a1d48594dee2f93a46cdb3a6c07ed9357c4fe2cb9d08d92b248"
                   },
                   {
                       "path":  "datapacks/nbidal18_temperature/data/thermoo/tags/item/consumable/cooling.json",
@@ -4214,8 +4254,8 @@
                       "sha256":  "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
                   },
                   {
-                      "path":  "mods/nbidal18-client-tweaks-1.7.0+1.21.1.jar",
-                      "sha256":  "01ab2624d829063a90c93e9d7ef5c72acb70567518731dbcb1386241e5e29b13"
+                      "path":  "mods/nbidal18-client-tweaks-1.8.1+1.21.1.jar",
+                      "sha256":  "0c79d2a07f06a30e475d5850e38c107639724e0e2152f75ed3736d5787d9afa1"
                   },
                   {
                       "path":  "mods/nbidal18-discovery-plaques-1.0.0+1.21.1.jar",
@@ -4227,7 +4267,7 @@
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "18f0a685cde513651f58bcb46e5cff5a39f073ae7cbc480edeea4ec2c9134cfd"
+                      "sha256":  "a9cde2f6c1b42d379f96c7a4c2054b84290f282fd585decfc7af6569f2e90495"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",
@@ -4254,12 +4294,12 @@
                       "sha256":  "89e2df8404e114ef8f8bb66d7d4e850de154cf8761db5069e40bd9e1f3fef1b0"
                   },
                   {
-                      "path":  "mods/nbidal18-temperature-2.2.0+1.21.1.jar",
-                      "sha256":  "d81315fd18ae23e54e0fca0ab6a2f1c19f295a7fef50863789cc8498fb3393c3"
+                      "path":  "mods/nbidal18-temperature-2.5.0+1.21.1.jar",
+                      "sha256":  "bd72701891f8a7283d1919893b1a234f54d683f440e98ac7491f321126210411"
                   },
                   {
-                      "path":  "mods/nbidal18-wiki-1.5.0+1.21.1.jar",
-                      "sha256":  "93248f55e9f7982cd88d8d64eda031ee101fd3ba35af620bb6754ca26a4cf0a0"
+                      "path":  "mods/nbidal18-wiki-1.5.2+1.21.1.jar",
+                      "sha256":  "c34c904d5c4663f15f789ef0d3af4885bb5b29e9568da607493e569f4f23483f"
                   },
                   {
                       "path":  "mods/niftycarts-21.1.1.jar",
@@ -4555,7 +4595,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "aa3dfbd0bf705afca321e84b354223da4dd65d2f79fedd92102961d94d02bef5"
+                      "sha256":  "c7f02c8d29a669427f14e739a454d9f35a96a26c561fd848418aff970b1e2b39"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",

@@ -106,7 +106,22 @@ foreach ($directory in @('mods', 'config', 'datapacks', 'resourcepacks', 'shader
     if (Test-Path -LiteralPath $target) { Remove-Item -LiteralPath $target -Recurse -Force }
     Copy-Item -LiteralPath $source -Destination $target -Recurse -Force
 }
-foreach ($pattern in @('nbidal18-integrity-helper-*.jar', 'CrashAssistant-*.jar')) {
+# LevelZ, and the two mods that depend on it, are dropped so a world can be created at all.
+#
+# LevelZ hard-crashes the create-world screen with "Missing skill with id 12" unless the pack's
+# skill table is in the loaded datapacks. On the live server it always is, because a server sends
+# its datapacks to the client. In singleplayer nothing reads the instance's own datapacks/ folder -
+# the pack ships no global datapack loader - so the table never arrives and the screen throws before
+# it can draw. That is a real fault in its own right and is recorded in NEXT-VERSION-PLAN.md; it is
+# not something this harness can fix.
+#
+# Dropping them is safe for what this harness is for. Skills and jobs are unrelated to the client
+# behaviour a play-test looks at here - aircraft controls, temperature, HUD and screens - and the
+# client-tweaks mixins that target LevelZ simply do not apply when the classes are absent.
+# jobsaddon depends on levelz and nbidal18-jobs-reset depends on jobsaddon, so Fabric refuses to
+# start unless all three go together.
+foreach ($pattern in @('nbidal18-integrity-helper-*.jar', 'CrashAssistant-*.jar',
+                       'levelz-*.jar', 'jobsaddon-*.jar', 'nbidal18-jobs-reset-*.jar')) {
     foreach ($drop in Get-ChildItem -LiteralPath (Join-Path $testRoot 'mods') -File -Filter $pattern) {
         Remove-Item -LiteralPath $drop.FullName -Force
     }

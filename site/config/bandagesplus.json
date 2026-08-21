@@ -1,7 +1,7 @@
 {
   "unitsNote": "Durations are seconds. Effect levels are the in-game levels: 0 disables an effect, 1 means level I, 2 means level II, and so on.",
   "luckNote": "Luck is preserved from the original behavior and applies when one player bandages another player.",
-  "forceDisableNaturalRegeneration": true,
+  "forceDisableNaturalRegeneration": false,
   "allowBandagingOtherPlayers": true,
   "basicBandage": {
     "regenerationDurationSeconds": 15.0,

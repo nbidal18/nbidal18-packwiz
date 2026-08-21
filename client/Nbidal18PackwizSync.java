@@ -49,9 +49,9 @@ public final class Nbidal18PackwizSync {
     /**
      * Lowest pack version this updater will accept from the channel. Raising it with each release
      * stops a rolled-back or spoofed channel downgrading an instance: once a client runs this
-     * build, publishing anything below 4.4.2 would be refused rather than installed.
+     * build, publishing anything below 4.4.3 would be refused rather than installed.
      */
-    private static final int[] MINIMUM_PACK_VERSION = {4, 4, 2};
+    private static final int[] MINIMUM_PACK_VERSION = {4, 4, 3};
     private static final DateTimeFormatter MOVE_STAMP =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final Pattern FILE_ENTRY = Pattern.compile(
@@ -83,10 +83,26 @@ public final class Nbidal18PackwizSync {
     private static final String AUTOHUD_DEFAULT_TOKEN = "autohud-place-break-v1";
 
     /**
-     * One row of a player-owned file that the pack wants to set once. A null {@code value} removes
-     * the row instead of replacing it.
+     * One value inside a player-owned file that the pack wants to set once. A null {@code value}
+     * removes the row instead of replacing it, which is only allowed at the top level.
+     *
+     * <p>{@code parents} is the chain of enclosing objects or sections the key sits in, outermost
+     * first, and is empty for a flat {@code key=value} file. It is a list rather than a dotted
+     * string on purpose: {@code options.txt} keys contain dots themselves
+     * ({@code key_key.fieldguide.open}), so a dotted path could not be split back into segments
+     * unambiguously.
      */
-    private record SeedRow(String key, String value) {
+    private record SeedRow(List<String> parents, String key, String value) {
+
+        /** A key in a flat file, or at the top level of a nested one. */
+        static SeedRow of(String key, String value) {
+            return new SeedRow(List.of(), key, value);
+        }
+
+        /** A key inside one enclosing object or section, e.g. {@code experience.onChange}. */
+        static SeedRow in(String parent, String key, String value) {
+            return new SeedRow(List.of(parent), key, value);
+        }
     }
 
     /**
@@ -109,7 +125,15 @@ public final class Nbidal18PackwizSync {
      *
      * <p>If the file does not exist yet — a fresh install, before the game has ever run — it is
      * created holding only these rows. Minecraft fills in everything else it knows about on first
-     * save, so a partial file is the correct way to seed one rather than a broken one.
+     * save, so a partial file is the correct way to seed one rather than a broken one. That is only
+     * safe for a flat file: a partial JSON file would be invalid, so a seed with nested rows is
+     * skipped rather than created when the file is missing.
+     *
+     * <p>Nested files are edited a value at a time, never reformatted. The line keeps its
+     * indentation, its separator spacing, its trailing comma and any trailing comment; only the
+     * value between them is replaced. Nothing here parses JSON, and deliberately so — several of
+     * these files are JSON5 with comments the player can read, and a parse-and-rewrite would
+     * silently discard them.
      */
     private record PlayerFileSeed(String relativePath, char separator, String token, List<SeedRow> rows) {
     }
@@ -124,7 +148,7 @@ public final class Nbidal18PackwizSync {
      */
     private static final List<PlayerFileSeed> PLAYER_FILE_SEEDS = List.of(
             new PlayerFileSeed("options.txt", ':', "keybinds-v430", List.of(
-                    new SeedRow("key_key.fieldguide.open", "key.keyboard.u"))),
+                    SeedRow.of("key_key.fieldguide.open", "key.keyboard.u"))),
             // The skill screen is reached from the inventory tab LibZ adds, so it does not need a
             // key of its own. Cleared rather than left on J: an unused binding on a common letter
             // is a key the next mod cannot have.
@@ -134,7 +158,18 @@ public final class Nbidal18PackwizSync {
             // earlier declaration, so a fresh install never binds it in the first place rather than
             // binding it and immediately clearing it.
             new PlayerFileSeed("options.txt", ':', "levelz-key-cleared-v432", List.of(
-                    new SeedRow("key_key.levelz.openskillscreen", "key.keyboard.unknown"))));
+                    SeedRow.of("key_key.levelz.openskillscreen", "key.keyboard.unknown"))),
+            // The experience level was appearing on its own after the rest of the HUD had hidden:
+            // Auto HUD reveals it by itself whenever the crosshair is on an anvil or an enchanting
+            // table, and again whenever XP changes. Both are switched off so it can only appear as
+            // part of the hotbar group, which revealExperienceTextWithHotbar already handles.
+            //
+            // Seeded rather than republished. config/autohud.json5 is a player preference file, and
+            // the older whole-file reissue would have reset every other HUD choice the player had
+            // made to change these two values.
+            new PlayerFileSeed("config/autohud.json5", ':', "autohud-xp-level-v443", List.of(
+                    SeedRow.of("revealExperienceTextOnTargetingEnchantingBlock", "false"),
+                    SeedRow.in("experience", "onChange", "false"))));
 
     /**
      * Files a retired mod left behind, deleted once each.
@@ -599,7 +634,12 @@ public final class Nbidal18PackwizSync {
             }
             Files.copy(autoHudConfigPath, autoHudRestorePath, StandardCopyOption.REPLACE_EXISTING);
             Files.delete(autoHudConfigPath);
-            status("Reissuing the Auto HUD defaults once; other personal settings are untouched.");
+            // Say plainly that this file is going back to the shipped defaults. The older wording,
+            // "other personal settings are untouched", read as though the rest of this file
+            // survived; only other files do. The seeding mechanism is the one that changes named
+            // values and leaves the rest of a file alone, and it should not be confused with this.
+            status("Resetting the Auto HUD settings to this release's defaults once;"
+                    + " any personal changes in that file are replaced, and no other file is touched.");
             return true;
         } catch (IOException error) {
             warning("Could not reissue the Auto HUD defaults; the existing settings were kept: "
@@ -718,39 +758,21 @@ public final class Nbidal18PackwizSync {
             lines.addAll(Files.readAllLines(target, StandardCharsets.UTF_8));
         }
 
+        boolean nested = seed.rows().stream().anyMatch(row -> !row.parents().isEmpty());
+        if (!existed && nested) {
+            // Creating a flat file from scratch is fine; creating a structured one is not. Writing
+            // two keys and no enclosing braces would leave a file the mod cannot read.
+            throw new IOException(seed.relativePath()
+                    + " does not exist yet, and a seed with nested rows cannot create one");
+        }
+
+        boolean structured = isStructured(lines);
+
         boolean changed = false;
         for (SeedRow row : seed.rows()) {
-            // Both separators are accepted when matching, so a row declared for one style still
-            // finds a line written in the other. Only the declared one is used when writing.
-            Pattern rowPattern = Pattern.compile("^\\s*" + Pattern.quote(row.key()) + "\\s*[:=].*$");
-            String replacement = row.key() + seed.separator() + row.value();
-            boolean found = false;
-            for (int index = lines.size() - 1; index >= 0; index--) {
-                if (!rowPattern.matcher(lines.get(index)).matches()) {
-                    continue;
-                }
-                if (row.value() == null) {
-                    lines.remove(index);
-                    changed = true;
-                }
-                else if (found || !lines.get(index).equals(replacement)) {
-                    // Scanning backwards means the last occurrence wins, matching how Minecraft
-                    // reads a duplicated key; earlier duplicates are dropped rather than left to
-                    // shadow the value we just wrote.
-                    if (found) {
-                        lines.remove(index);
-                    }
-                    else {
-                        lines.set(index, replacement);
-                    }
-                    changed = true;
-                }
-                found = true;
-            }
-            if (!found && row.value() != null) {
-                lines.add(replacement);
-                changed = true;
-            }
+            // Recomputed per row: a flat file can gain or lose a line, and stale contexts would no
+            // longer line up with it.
+            changed |= applySeedRow(lines, lineContexts(lines), structured, seed, row);
         }
 
         if (!changed) {
@@ -780,6 +802,263 @@ public final class Nbidal18PackwizSync {
         Files.createDirectories(stateRoot);
         Files.writeString(marker, seed.token() + System.lineSeparator(), StandardCharsets.UTF_8);
         return true;
+    }
+
+    /**
+     * Sets one declared row, matching on its full path rather than its key alone.
+     *
+     * <p>A flat file behaves exactly as it did before paths existed: the last occurrence of a key
+     * wins, earlier duplicates are dropped, and a key that is not there is appended.
+     *
+     * <p>A structured file is never appended to and never has a line removed. Appending would put
+     * the key outside the braces it belongs in, and removing a line can leave the comma on the line
+     * above dangling. Both are refused rather than attempted, so a declaration that does not match
+     * reality fails loudly at the warning level and leaves the file exactly as it was.
+     */
+    private static boolean applySeedRow(List<String> lines, List<List<String>> contexts,
+            boolean structured, PlayerFileSeed seed, SeedRow row) throws IOException {
+        List<Integer> matches = new ArrayList<>();
+        for (int index = 0; index < lines.size(); index++) {
+            List<String> context = contexts.get(index);
+            if (context == null || !context.equals(row.parents())) {
+                continue;
+            }
+            if (row.key().equals(keyOf(lines.get(index)))) {
+                matches.add(index);
+            }
+        }
+
+        if (row.value() == null) {
+            if (structured) {
+                throw new IOException("Removing " + describe(row) + " from " + seed.relativePath()
+                        + " is not supported in a structured file");
+            }
+            boolean removed = false;
+            for (int index = matches.size() - 1; index >= 0; index--) {
+                lines.remove((int) matches.get(index));
+                removed = true;
+            }
+            return removed;
+        }
+
+        if (matches.isEmpty()) {
+            // Appending is only ever right for a bare key in a flat file. A row that declares
+            // parents describes a place inside a structure, and appending it at the end would put
+            // the key somewhere it does not belong while looking like it worked.
+            if (structured || !row.parents().isEmpty()) {
+                throw new IOException(describe(row) + " was not found in " + seed.relativePath());
+            }
+            lines.add(row.key() + seed.separator() + row.value());
+            return true;
+        }
+
+        boolean changed = false;
+        // The last occurrence is the one the game reads, so that is the one to set.
+        int last = matches.get(matches.size() - 1);
+        String updated = replaceValue(lines.get(last), row.value());
+        if (!updated.equals(lines.get(last))) {
+            lines.set(last, updated);
+            changed = true;
+        }
+        if (!structured) {
+            for (int index = matches.size() - 2; index >= 0; index--) {
+                lines.remove((int) matches.get(index));
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    /**
+     * Whether this file has structure worth protecting — braces, arrays or section headers.
+     *
+     * <p>A flat file may be appended to and may have lines removed. A structured one may not: a key
+     * appended after the closing brace is outside the document, and a removed line can leave the
+     * comma above it dangling. The opening brace is checked directly as well as the nesting,
+     * because a JSON file that happens to hold no nested object would otherwise look flat.
+     */
+    private static boolean isStructured(List<String> lines) {
+        for (String line : lines) {
+            String trimmed = line.strip();
+            if (trimmed.isEmpty()) {
+                continue;
+            }
+            if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+                return true;
+            }
+            break;
+        }
+        return lineContexts(lines).stream()
+                .anyMatch(context -> context == null || !context.isEmpty());
+    }
+
+    private static String describe(SeedRow row) {
+        return String.join(".", row.parents()) + (row.parents().isEmpty() ? "" : ".") + row.key();
+    }
+
+    /**
+     * The chain of named objects or sections each line sits inside, one entry per line, or
+     * {@code null} for a line inside an array.
+     *
+     * <p>A flat {@code key=value} file never nests, so every entry is empty and matching a row with
+     * no declared parents behaves exactly as a bare key match did. The unnamed object a JSON file
+     * opens with does not count as a level, so a top-level JSON key is also reached with no
+     * parents.
+     *
+     * <p>Lines inside an array are deliberately unreachable. Array elements have no stable name to
+     * address them by, and a seed that matched one would be matching a position rather than a key.
+     */
+    private static List<List<String>> lineContexts(List<String> lines) {
+        List<List<String>> contexts = new ArrayList<>(lines.size());
+        List<String> stack = new ArrayList<>();
+        List<String> section = new ArrayList<>();
+        int arrayDepth = 0;
+
+        for (String line : lines) {
+            String trimmed = line.strip();
+            // A TOML or INI header replaces the section context rather than nesting inside it.
+            if (arrayDepth == 0 && stack.isEmpty() && trimmed.length() > 2
+                    && trimmed.startsWith("[") && trimmed.endsWith("]")
+                    && separatorIndex(trimmed) < 0) {
+                section = new ArrayList<>();
+                for (String part : trimmed.substring(1, trimmed.length() - 1).split("\\.")) {
+                    section.add(unquote(part.strip()));
+                }
+                contexts.add(null);
+                continue;
+            }
+
+            if (arrayDepth > 0) {
+                contexts.add(null);
+            } else {
+                List<String> here = new ArrayList<>(section);
+                for (String enclosing : stack) {
+                    if (enclosing != null) {
+                        here.add(enclosing);
+                    }
+                }
+                contexts.add(List.copyOf(here));
+            }
+
+            // Advance the structure only after recording it, so the key written on a line that
+            // opens an object is judged by the context it was written in, not the one it opens.
+            String opening = keyOf(line);
+            for (int index = 0; index < line.length(); index++) {
+                char character = line.charAt(index);
+                if (character == '"') {
+                    index = endOfString(line, index);
+                } else if (character == '[') {
+                    arrayDepth++;
+                } else if (character == ']') {
+                    arrayDepth = Math.max(0, arrayDepth - 1);
+                } else if (character == '{' && arrayDepth == 0) {
+                    // A null entry keeps the stack balanced for the closing brace without adding a
+                    // level, which is how the unnamed outermost brace of a JSON document is
+                    // skipped: a top-level key is reached with no declared parents, exactly as in
+                    // a flat file.
+                    stack.add(opening);
+                    opening = null;
+                } else if (character == '}' && arrayDepth == 0 && !stack.isEmpty()) {
+                    stack.remove(stack.size() - 1);
+                }
+            }
+        }
+        return contexts;
+    }
+
+    /**
+     * The key a line declares, unquoted, or null if it declares none. The comparison against a
+     * declared row is made on the unquoted form so a seed reads the same whether the file quotes
+     * its keys or not.
+     */
+    private static String keyOf(String line) {
+        int separator = separatorIndex(line);
+        if (separator < 0) {
+            return null;
+        }
+        String key = line.substring(0, separator).strip();
+        return key.isEmpty() ? null : unquote(key);
+    }
+
+    /** The first {@code :} or {@code =} outside a quoted string, or -1. */
+    private static int separatorIndex(String line) {
+        for (int index = 0; index < line.length(); index++) {
+            char character = line.charAt(index);
+            if (character == '"') {
+                index = endOfString(line, index);
+            } else if (character == ':' || character == '=') {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    /** The index of the closing quote of the string starting at {@code start}, escapes honoured. */
+    private static int endOfString(String line, int start) {
+        for (int index = start + 1; index < line.length(); index++) {
+            char character = line.charAt(index);
+            if (character == '\\') {
+                index++;
+            } else if (character == '"') {
+                return index;
+            }
+        }
+        return line.length();
+    }
+
+    private static String unquote(String text) {
+        return text.length() >= 2 && text.startsWith("\"") && text.endsWith("\"")
+                ? text.substring(1, text.length() - 1)
+                : text;
+    }
+
+    /**
+     * Replaces only the value on a {@code key: value} line.
+     *
+     * <p>Indentation, the separator and the spacing around it, any trailing comma and any trailing
+     * comment all survive untouched. That is what makes this safe on a JSON file: the line is the
+     * same line afterwards, with one token different.
+     */
+    private static String replaceValue(String line, String value) {
+        int separator = separatorIndex(line);
+        String head = line.substring(0, separator + 1);
+        String tail = line.substring(separator + 1);
+
+        // A trailing comment is part of the line, not part of the value, and several of these files
+        // are JSON5 whose comments are the only explanation a player has of what a setting does.
+        int comment = commentIndex(tail);
+        String trailingComment = comment < 0 ? "" : tail.substring(comment);
+        String body = comment < 0 ? tail : tail.substring(0, comment);
+
+        int start = 0;
+        while (start < body.length() && (body.charAt(start) == ' ' || body.charAt(start) == '\t')) {
+            start++;
+        }
+        String spacing = body.substring(0, start);
+        String rest = body.substring(start);
+
+        int end = rest.length();
+        while (end > 0 && Character.isWhitespace(rest.charAt(end - 1))) {
+            end--;
+        }
+        if (end > 0 && rest.charAt(end - 1) == ',') {
+            end--;
+        }
+        return head + spacing + value + rest.substring(end) + trailingComment;
+    }
+
+    /** Where a trailing {@code //} or {@code #} comment starts, outside strings, or -1. */
+    private static int commentIndex(String text) {
+        for (int index = 0; index < text.length(); index++) {
+            char character = text.charAt(index);
+            if (character == '"') {
+                index = endOfString(text, index);
+            } else if (character == '#'
+                    || (character == '/' && index + 1 < text.length() && text.charAt(index + 1) == '/')) {
+                return index;
+            }
+        }
+        return -1;
     }
 
     private boolean migratePlayerOptions() throws IOException {

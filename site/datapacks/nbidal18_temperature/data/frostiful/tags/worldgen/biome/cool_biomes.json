@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "terralith:birch_taiga",
+    "terralith:cloud_forest",
+    "terralith:cold_shrubland",
+    "terralith:gravel_desert",
+    "terralith:haze_mountain",
+    "terralith:ice_marsh",
+    "terralith:rocky_shrubland",
+    "terralith:scarlet_mountains",
+    "terralith:siberian_grove",
+    "terralith:siberian_taiga",
+    "terralith:skylands_winter",
+    "terralith:snowy_cherry_grove",
+    "terralith:snowy_maple_forest",
+    "terralith:snowy_shield",
+    "terralith:windswept_spires",
+    "terralith:yellowstone",
+    "terralith:yosemite_lowlands"
+  ]
+}
