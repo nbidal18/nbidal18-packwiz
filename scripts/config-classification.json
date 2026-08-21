@@ -59,6 +59,7 @@
     { "match": "config/fzzy_config/keybinds.toml", "class": "player", "reason": "Keybinds." },
     { "match": "config/iris.properties", "class": "player", "reason": "Selected shader pack and shader toggles." },
     { "match": "config/sodium-options.json", "class": "player", "reason": "Video settings, tuned per machine." },
+    { "match": "config/voxy-config.json", "class": "player", "reason": "Distant-terrain render distance, fog and worker threads. Same reasoning as sodium-options: Voxy writes these from its own settings screen and the right values depend on the GPU. The pack's tuning ships once as the starting point and the player owns it after that." },
     { "match": "config/voicechat/voicechat-client.properties", "class": "player", "reason": "Microphone, speaker and push-to-talk." },
     { "match": "config/voicechat/category-volumes.properties", "class": "player", "reason": "Per-category volume." },
     { "match": "config/voicechat/player-volumes.properties", "class": "player", "reason": "Per-player volume." },
@@ -100,6 +101,8 @@
     { "match": "config/sodium-extra.properties", "class": "support", "reason": "Rendering extras." },
     { "match": "config/sodium-fingerprint.json", "class": "support", "reason": "Detected GPU fingerprint." },
     { "match": "config/sodium-mixins.properties", "class": "support", "reason": "Renderer mixin toggles." },
+    { "match": "config/voxy-server-client.json", "class": "support", "reason": "Voxy-Server's client half: debug overlay toggles and distant-entity render style. Diagnostics, and the pack wants its defaults back after an update." },
+    { "match": "config/voxy-server.json", "class": "support", "reason": "Voxy-Server's own settings, including the TPS-19 generation throttle. Inert on a client, which only carries it because the mod is environment '*'; the values are the pack's, so the updater restores them." },
 
     { "match": "config/MouseTweaks.cfg", "class": "support", "reason": "Inventory mouse handling." },
     { "match": "config/advancementplaques.toml", "class": "support", "reason": "Advancement toast styling." },
@@ -196,7 +199,7 @@
 
     { "match": "config/SittingPlusConfig.json", "class": "gameplay", "reason": "What can be sat on." },
     { "match": "config/amendments-common.json", "class": "gameplay", "modWritesAtRuntime": true, "reason": "Block and item behaviour." },
-    { "match": "config/anvilrepairing.json", "class": "gameplay", "reason": "Anvil repair cost." },
+    { "match": "config/anvilrepairing.json", "class": "gameplay", "modWritesAtRuntime": true, "reason": "Anvil repair cost. Flagged 2026-08-21 after Test-ConfigStability caught the mod rewriting it during startup on a played instance - it had never shown up before because a fresh install has not yet had the chance. It stays enforced: the rewrite is byte-identical, so the shipped copy is already the form the mod writes back, and the flag records that it must stay that way." },
     { "match": "config/armoroftheages.json", "class": "gameplay", "reason": "Armour statistics." },
     { "match": "config/bandagesplus.json", "class": "gameplay", "modWritesAtRuntime": true, "reason": "Healing values." },
     { "match": "config/beautify.json", "class": "gameplay", "modWritesAtRuntime": true, "reason": "Block behaviour." },

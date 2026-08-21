@@ -1,0 +1,21 @@
+{
+  "lodStreamRadius": 128,
+  "maxSectionsPerTickPerPlayer": 25,
+  "sectionsPerPacket": 12,
+  "generateOnChunkLoad": true,
+  "generateMissingChunks": false,
+  "workerThreads": 2,
+  "maxInFlightChunks": 1,
+  "dirtyScanInterval": 20,
+  "maxDirtyChunksPerScan": 32,
+  "debugLogging": false,
+  "targetTps": 19,
+  "enableEntitySync": false,
+  "entitySyncIntervalTicks": 20,
+  "maxLODEntitiesPerPlayer": 64,
+  "entitySyncMode": "players_only",
+  "compatSableAutoTrackingRange": false,
+  "l0HashCacheCapBytes": 67108864,
+  "merkleHeartbeatTicks": 200,
+  "merkleSlideTeleportThreshold": 32
+}

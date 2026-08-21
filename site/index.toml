@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "THIRD-PARTY-NOTICES.md"
-hash = "1319de22dccdfdfb75a88f8902f6ce8c1ce8e2d3c8495c392e3778181043602d"
+hash = "0cbb28373ef8e55d7e6f7f0c9cfaa4dc127f266980a96e3211298456e69b0142"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -75,7 +75,7 @@ hash = "8d74497ba588ee627688f48befe43f58d3d9d5762155b4b1f815c65ffeec7881"
 
 [[files]]
 file = "config/bcc-common.toml"
-hash = "fd3cd00545b43cd25c95901221b4ca68c172f4f8d7e79cb00c5bd828977db30d"
+hash = "4d8d11165f7c54c14920609ad2e6e42628e4fdc44e8141e9dde7d4332d907a64"
 
 [[files]]
 file = "config/beautify.json"
@@ -1050,6 +1050,19 @@ preserve = true
 [[files]]
 file = "config/voicechat/voicechat-server.properties"
 hash = "5d8df2d054480d39208ecb66a3cb7fa67fb27604446bbc6aecb0ec55d7fb34de"
+
+[[files]]
+file = "config/voxy-config.json"
+hash = "e19efb761c070f8bcc83474a9955e95484f712a9ac40e79da2facd2fac347419"
+preserve = true
+
+[[files]]
+file = "config/voxy-server-client.json"
+hash = "71337b9914c8b32f4837753b086bfdb059e63287436831b96baf20c678275821"
+
+[[files]]
+file = "config/voxy-server.json"
+hash = "7ae18bf8cbe6b72cbb73a69e9a8b6801b50736f0fcc26c2ff13281a6b495656e"
 
 [[files]]
 file = "config/walk-jog-run-client.json"
@@ -2348,6 +2361,14 @@ file = "licenses/TreeChop-MIT.txt"
 hash = "d4b2f487f8836367e96992034447e7be460cbfb0f37c89dc01057811a3b5b783"
 
 [[files]]
+file = "licenses/Voxy-PRIVATE-NO-REDISTRIBUTION.md"
+hash = "fda481485d4e8429041bd7acf8a8ca54b51c46e63e46d619a559d99d31eca5b3"
+
+[[files]]
+file = "licenses/Voxy-Server-MIT.txt"
+hash = "bc5e65efe4f9c307545b5f356e7db82b94055459f72b029e431e94d1caeec82b"
+
+[[files]]
 file = "licenses/Wiki-MIT.txt"
 hash = "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
 
@@ -3049,7 +3070,7 @@ hash = "2242e8383c1becaa02c7a5942338db1be9d9143796e9262e1a20ee9c180569a4"
 
 [[files]]
 file = "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar"
-hash = "a9cde2f6c1b42d379f96c7a4c2054b84290f282fd585decfc7af6569f2e90495"
+hash = "4eaebc3bcd1ef41aca76412fe4ecb723f229dc0698eb18cf13fe0a70a4e1634f"
 
 [[files]]
 file = "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar"
@@ -3356,6 +3377,14 @@ file = "mods/voicechat-fabric-1.21.1-2.6.11.jar"
 hash = "6d32a535005edccd61c7cabe2d983b28213297333321d76e82aac293a281b84f"
 
 [[files]]
+file = "mods/voxy-0.2.14-alpha-f308c254fafc23bdcc250ba3f1e5c6a7585f08d0.jar"
+hash = "30b941e123510e185caa12c15b36bfbcdff61c793848530d9ca1a98832de1247"
+
+[[files]]
+file = "mods/voxy-server-1.21.1-0.1.0.jar"
+hash = "ecafccc271765e1ab6f4993c444749201a404de1f9f8141f9c1164b6d0f13b7c"
+
+[[files]]
 file = "mods/walk-jog-run-1.1.1+1.21.jar"
 hash = "dbe8fd43233da3f0cd53a7b031f7536526d564816246735bee453ab5323f1c10"
 
@@ -3377,7 +3406,7 @@ hash = "4d6440f5ae0afd64c0c2d4d0aa6b1760e5c3c5d298704dd6a9eb279531f14d27"
 
 [[files]]
 file = "nbidal18-packwiz-updater.next.jar"
-hash = "c7f02c8d29a669427f14e739a454d9f35a96a26c561fd848418aff970b1e2b39"
+hash = "7c18a72389994ecf5d0a3332d7b330163d16406ebc5470c6754c984e16c040b9"
 
 [[files]]
 file = "packwiz-installer-bootstrap.next.jar"

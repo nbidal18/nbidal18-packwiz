@@ -35,9 +35,43 @@ Record:
 
 ---
 
+## v4.4.4
+
+Current release. Live digest `481ad53a5fc8f456…`. 879 managed files, 256 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+**You can see to the horizon again.** Voxy is back, with its server half, so distant terrain is
+drawn far beyond your render distance instead of ending in fog.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-21 | `PENDING` | `481ad53a5fc8f456` | 879 | 256 | **Voxy returns, including the server side.** Distant terrain is drawn as low-detail geometry well past the normal render distance, and because the server generates and streams that data rather than each client building it alone, terrain appears even where you personally have never walked. It was in the pack through the v3 releases and was set aside in v4.1.1 while a chunk-generation problem was investigated; the owner's call is to bring it back as it was rather than keep waiting on that. **The known limitation is unchanged and worth stating plainly**: when you explore quickly into new territory the distant terrain can lag behind and leave gaps beside the corridor you actually travelled, because generating those chunks takes time and the server throttles that work when it is busy. Nothing else in the pack changes. Maintainer-facing: `voxy 0.2.14-alpha` (1.21.1 backport) and `voxy-server 0.1.0` on both sides, Sodium added to the server payload to satisfy Voxy's hard dependency where it loads and does nothing, and three new configs classified - `voxy-config.json` as player-owned video settings, `voxy-server.json` and `voxy-server-client.json` as support. |
+
+### Server deployment
+
+Required a stopped server: three mod JARs were added to the server payload and the integrity
+helper carries the pack version. A status ping refused the connection immediately before the
+writes.
+
+**Published under the standing order**: pushed to the channel first, confirmed GitHub Pages was
+serving the new manifest, and only then stopped the server.
+
+Backups under `Z:\.nbidal18-deploy-backups\2026-08-21-v4.4.4\`, each verified by hash on an independent second read.
+
+### Licensing note
+
+The Voxy JAR is a private 1.21.1 backport by MCRcortex and its license reads *"All rights
+reserved. Do not redistribute."* It is nonetheless distributed through this public channel, as it
+was in the v3 releases, on the pack owner's explicit instruction. The license text is retained at
+`licenses/Voxy-PRIVATE-NO-REDISTRIBUTION.md`. Voxy-Server is MIT and its source is kept in the
+release folder.
+
+---
+
 ## v4.4.3
 
-Current release. Live digest `d265677da49cda26…`. 872 managed files, 254 mods.
+Superseded by v4.4.4. Live digest `d265677da49cda26…`. 872 managed files, 254 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 

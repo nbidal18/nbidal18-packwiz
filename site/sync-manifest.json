@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "packVersion":  "4.4.3",
+    "packVersion":  "4.4.4",
     "exactRoots":  [
                        "mods",
                        "config",
@@ -18,6 +18,7 @@
                                 "config/fzzy_config/keybinds.toml",
                                 "config/iris.properties",
                                 "config/sodium-options.json",
+                                "config/voxy-config.json",
                                 "config/voicechat/voicechat-client.properties",
                                 "config/voicechat/category-volumes.properties",
                                 "config/voicechat/player-volumes.properties",
@@ -59,6 +60,8 @@
                                 "config/sodium-extra.properties",
                                 "config/sodium-fingerprint.json",
                                 "config/sodium-mixins.properties",
+                                "config/voxy-server-client.json",
+                                "config/voxy-server.json",
                                 "config/MouseTweaks.cfg",
                                 "config/advancementplaques.toml",
                                 "config/amendments-client.json",
@@ -131,6 +134,7 @@
                          "config/fzzy_config/keybinds.toml",
                          "config/iris.properties",
                          "config/sodium-options.json",
+                         "config/voxy-config.json",
                          "config/voicechat/voicechat-client.properties",
                          "config/voicechat/category-volumes.properties",
                          "config/voicechat/player-volumes.properties",
@@ -229,7 +233,7 @@
                                 },
                                 {
                                     "path":  "config/bcc-common.toml",
-                                    "sha256":  "fd3cd00545b43cd25c95901221b4ca68c172f4f8d7e79cb00c5bd828977db30d"
+                                    "sha256":  "4d8d11165f7c54c14920609ad2e6e42628e4fdc44e8141e9dde7d4332d907a64"
                                 },
                                 {
                                     "path":  "config/beautify.json",
@@ -1192,6 +1196,18 @@
                                     "sha256":  "661792577e11cb998728037fb24471d8211888a7a4c4f2ac1af457a2dfb99afd"
                                 },
                                 {
+                                    "path":  "config/voxy-config.json",
+                                    "sha256":  "e19efb761c070f8bcc83474a9955e95484f712a9ac40e79da2facd2fac347419"
+                                },
+                                {
+                                    "path":  "config/voxy-server-client.json",
+                                    "sha256":  "71337b9914c8b32f4837753b086bfdb059e63287436831b96baf20c678275821"
+                                },
+                                {
+                                    "path":  "config/voxy-server.json",
+                                    "sha256":  "7ae18bf8cbe6b72cbb73a69e9a8b6801b50736f0fcc26c2ff13281a6b495656e"
+                                },
+                                {
                                     "path":  "config/walk-jog-run-client.json",
                                     "sha256":  "fe1b0780c3b8a855a6ab46570ee0bc35e988e30a130d9e2481be3a1c31d61ee6"
                                 },
@@ -1235,7 +1251,7 @@
     "files":  [
                   {
                       "path":  "THIRD-PARTY-NOTICES.md",
-                      "sha256":  "1319de22dccdfdfb75a88f8902f6ce8c1ce8e2d3c8495c392e3778181043602d"
+                      "sha256":  "0cbb28373ef8e55d7e6f7f0c9cfaa4dc127f266980a96e3211298456e69b0142"
                   },
                   {
                       "path":  "config/CoroUtil/General.toml",
@@ -1307,7 +1323,7 @@
                   },
                   {
                       "path":  "config/bcc-common.toml",
-                      "sha256":  "fd3cd00545b43cd25c95901221b4ca68c172f4f8d7e79cb00c5bd828977db30d"
+                      "sha256":  "4d8d11165f7c54c14920609ad2e6e42628e4fdc44e8141e9dde7d4332d907a64"
                   },
                   {
                       "path":  "config/beautify.json",
@@ -2268,6 +2284,18 @@
                   {
                       "path":  "config/voicechat/voicechat-server.properties",
                       "sha256":  "5d8df2d054480d39208ecb66a3cb7fa67fb27604446bbc6aecb0ec55d7fb34de"
+                  },
+                  {
+                      "path":  "config/voxy-config.json",
+                      "sha256":  "e19efb761c070f8bcc83474a9955e95484f712a9ac40e79da2facd2fac347419"
+                  },
+                  {
+                      "path":  "config/voxy-server-client.json",
+                      "sha256":  "71337b9914c8b32f4837753b086bfdb059e63287436831b96baf20c678275821"
+                  },
+                  {
+                      "path":  "config/voxy-server.json",
+                      "sha256":  "7ae18bf8cbe6b72cbb73a69e9a8b6801b50736f0fcc26c2ff13281a6b495656e"
                   },
                   {
                       "path":  "config/walk-jog-run-client.json",
@@ -3566,6 +3594,14 @@
                       "sha256":  "d4b2f487f8836367e96992034447e7be460cbfb0f37c89dc01057811a3b5b783"
                   },
                   {
+                      "path":  "licenses/Voxy-PRIVATE-NO-REDISTRIBUTION.md",
+                      "sha256":  "fda481485d4e8429041bd7acf8a8ca54b51c46e63e46d619a559d99d31eca5b3"
+                  },
+                  {
+                      "path":  "licenses/Voxy-Server-MIT.txt",
+                      "sha256":  "bc5e65efe4f9c307545b5f356e7db82b94055459f72b029e431e94d1caeec82b"
+                  },
+                  {
                       "path":  "licenses/Wiki-MIT.txt",
                       "sha256":  "72783d6fa95dc481e7e44a90f274dbd1200f0b510fc0f0f6c9828307ba7ac393"
                   },
@@ -4267,7 +4303,7 @@
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "a9cde2f6c1b42d379f96c7a4c2054b84290f282fd585decfc7af6569f2e90495"
+                      "sha256":  "4eaebc3bcd1ef41aca76412fe4ecb723f229dc0698eb18cf13fe0a70a4e1634f"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",
@@ -4574,6 +4610,14 @@
                       "sha256":  "6d32a535005edccd61c7cabe2d983b28213297333321d76e82aac293a281b84f"
                   },
                   {
+                      "path":  "mods/voxy-0.2.14-alpha-f308c254fafc23bdcc250ba3f1e5c6a7585f08d0.jar",
+                      "sha256":  "30b941e123510e185caa12c15b36bfbcdff61c793848530d9ca1a98832de1247"
+                  },
+                  {
+                      "path":  "mods/voxy-server-1.21.1-0.1.0.jar",
+                      "sha256":  "ecafccc271765e1ab6f4993c444749201a404de1f9f8141f9c1164b6d0f13b7c"
+                  },
+                  {
                       "path":  "mods/walk-jog-run-1.1.1+1.21.jar",
                       "sha256":  "dbe8fd43233da3f0cd53a7b031f7536526d564816246735bee453ab5323f1c10"
                   },
@@ -4595,7 +4639,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "c7f02c8d29a669427f14e739a454d9f35a96a26c561fd848418aff970b1e2b39"
+                      "sha256":  "7c18a72389994ecf5d0a3332d7b330163d16406ebc5470c6754c984e16c040b9"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",
