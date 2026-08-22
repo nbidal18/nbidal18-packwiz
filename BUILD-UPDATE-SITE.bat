@@ -10,6 +10,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-More
 if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-GraveCurrency.ps1"
 if errorlevel 1 exit /b %errorlevel%
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-ClimateTags.ps1"
+if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-Temperature.ps1"
 if errorlevel 1 exit /b %errorlevel%
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Build-JobsReset.ps1"

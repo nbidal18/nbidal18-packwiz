@@ -35,9 +35,48 @@ Record:
 
 ---
 
+## v4.4.5
+
+Current release. Live digest `63ff88eda531d71b…`. 897 managed files, 254 mods.
+
+Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
+
+**Vertical slabs stop going see-through.** **Paths stop being permanent.** **Structures are
+properly spread out.** And the temperature system now classifies every biome the pack adds, rather
+than guessing at some of them.
+
+| Date | Commit | Digest | Files | Mods | Change |
+| --- | --- | --- | --- | --- | --- |
+| 2026-08-22 | `PENDING` | `63ff88eda531d71b` | 897 | 254 | **Vertical slabs no longer go see-through next to stairs.** The mod's author fixed this ten months ago and the pack had simply never picked the version up. **Paths heal again.** Walking wears the ground down five times more slowly, and the wear now fades in a couple of hours instead of the fifty it needed before — the recovery timer counts in-game days, and this pack's days are six times longer than normal, so every recovery number was silently six times too long. **Structures are much further apart.** Not uniformly: what you stumble across while travelling is now genuinely rare, while what you go looking for is not. Villages and roadside ruins are the sparsest, strongholds are untouched because they are the only route to the End, and dungeons, mineshafts, Nether fortresses and End cities are barely changed because spreading those makes caving and progression tedious rather than exciting. Only newly generated terrain is affected — anywhere you have already explored keeps what it has. **Only a real bed heals you now.** Sleeping through to a new day still mends you, but a sleeping bag or a hammock will not: a bed moves your spawn point, so healing on the road costs you your home, and that trade is the balance. **Wash the dye out of dyed things** by crafting them with a water bucket — leather armour, wool, carpets, banners, beds, candles and shulker boxes all come back white. **Voxy is out again** after its trial run. **The anvil's Reforge tab is gone**; reforging was switched off long ago and the tab was a dead button. Maintainer-facing: biome climate classification is now generated and owned by the pack rather than hand-written, with its own environments at a priority that wins over both temperature mods; the sleep loop costs a quarter of what it did; DoubleSlabs 0.4.2; client-tweaks 1.9.0; wiki 1.5.3. |
+
+### Server deployment
+
+Required a stopped server: three mod JARs were removed from the server payload and the integrity
+helper carries the pack version. A status ping refused the connection immediately before the
+writes.
+
+**The Voxy removal needed a manual overlay step.** `Deploy-LiveServer.ps1` only owns
+`mods\nbidal18-*.jar`, so it can neither add nor remove a third-party mod — the same gap found
+while publishing v4.4.4, in reverse. Voxy, Voxy-Server and Sodium were removed from `Z:` by hand,
+with the same backup-then-verify discipline.
+
+**Published under the standing order**: pushed to the channel first, confirmed GitHub Pages was
+serving the new manifest, and only then stopped the server.
+
+Backups under `Z:\.nbidal18-deploy-backups\2026-08-22-v4.4.5\`, each verified by hash on an independent second read.
+
+### Note on the config stability check
+
+`Test-ConfigStability.ps1` reported three unclassified files at release time — Voxy's configs, left
+on the maintainer's own instance by the v4.4.4 release that has just been reversed. The release
+itself is unaffected: the updater's retired-file sweep removes all three on the next launch, for
+every player who ran v4.4.4. The check clears itself once an instance has updated.
+
+---
+
 ## v4.4.4
 
-Current release. Live digest `481ad53a5fc8f456…`. 879 managed files, 256 mods.
+Superseded by v4.4.5. Live digest `481ad53a5fc8f456…`. 879 managed files, 256 mods.
 
 Players update by closing Minecraft and clicking **Play**; nothing needs re-importing.
 

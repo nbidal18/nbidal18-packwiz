@@ -22,12 +22,6 @@ The byte-exact `playeremotes-fabric-1.21.1-0.1.0.jar` from Modrinth project/vers
 
 `playeremotes-with-fixes-0.1.0+patch-1.3.0+1.21.1.jar` is a separate nbidal18 compatibility component and contains no Player Emotes JAR.
 
-## Voxy and Voxy-Server
-
-`voxy-0.2.14-alpha-f308c254fafc23bdcc250ba3f1e5c6a7585f08d0.jar` is a 1.21.1 backport of Voxy by MCRcortex, obtained privately. **Its license is `Copyright 2025 MCRcortex. All rights reserved. Do not redistribute.`**, retained verbatim at `licenses/Voxy-PRIVATE-NO-REDISTRIBUTION.md`. It is bundled on the client for distant-terrain rendering and on the server to satisfy the Voxy-Server dependency below. It declares a hard dependency on Sodium, which is why `sodium-fabric-0.6.13+mc1.21.1.jar` is also present in the server payload, where it loads and does nothing.
-
-`voxy-server-1.21.1-0.1.0.jar` is a separate MIT-licensed component that voxelizes chunks server-side and streams level-of-detail data to clients over a Merkle-tree delta sync, so distant terrain appears without every player having walked it. Its license is retained at `licenses/Voxy-Server-MIT.txt`, and complete source is retained under `5. modpack source/work-in-progress/voxy-server` in the organized release folder. The shipped JAR carries an nbidal18 fix over the upstream 0.1.0 build; the unpatched original is kept beside the source as a `.pre-fix` backup.
-
 ## More Villagers / Numismatic compatibility
 
 `nbidal18-morevillagers-numismatic-bridge-1.0.0+1.21.1.jar` is a source-retained nbidal18 compatibility component. It converts More Villagers' late-registered emerald offers to Numismatic Overhaul currency at 125 coin value per emerald. Its MIT license is retained at `licenses/MoreVillagers-Numismatic-Bridge-MIT.txt`, and complete source is retained under `5. modpack source/custom mods/nbidal18-morevillagers-numismatic-bridge` in the organized release folder.

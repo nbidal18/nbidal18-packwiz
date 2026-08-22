@@ -49,9 +49,9 @@ public final class Nbidal18PackwizSync {
     /**
      * Lowest pack version this updater will accept from the channel. Raising it with each release
      * stops a rolled-back or spoofed channel downgrading an instance: once a client runs this
-     * build, publishing anything below 4.4.4 would be refused rather than installed.
+     * build, publishing anything below 4.4.5 would be refused rather than installed.
      */
-    private static final int[] MINIMUM_PACK_VERSION = {4, 4, 4};
+    private static final int[] MINIMUM_PACK_VERSION = {4, 4, 5};
     private static final DateTimeFormatter MOVE_STAMP =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private static final Pattern FILE_ENTRY = Pattern.compile(
@@ -187,9 +187,20 @@ public final class Nbidal18PackwizSync {
      * player's instance, so a wrong entry here is a wrong deletion.
      */
     private static final List<String> RETIRED_LOCAL_FILES = List.of(
-            "config/jobsplus-common.yaml");
+            "config/jobsplus-common.yaml",
+            // Voxy went out in v4.4.4 and came back out in v4.4.5. Its three configs are the exact
+            // case this list was written for: nothing reads them once the mod is gone, but they sit
+            // in every instance that ran v4.4.4 and report as unclassified forever.
+            "config/voxy-config.json",
+            "config/voxy-server.json",
+            "config/voxy-server-client.json");
 
-    private static final String RETIRED_LOCAL_FILES_TOKEN = "retired-files-v430";
+    /**
+     * Bumped whenever an entry is added above, because the marker below records that the sweep has
+     * already run. Without a new token, an instance that applied the previous list would skip the
+     * new entries permanently.
+     */
+    private static final String RETIRED_LOCAL_FILES_TOKEN = "retired-files-v445";
 
     private final Path minecraftRoot;
     private final Path stateRoot;

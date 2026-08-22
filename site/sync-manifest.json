@@ -1,6 +1,6 @@
 {
     "schema":  1,
-    "packVersion":  "4.4.4",
+    "packVersion":  "4.4.5",
     "exactRoots":  [
                        "mods",
                        "config",
@@ -18,7 +18,6 @@
                                 "config/fzzy_config/keybinds.toml",
                                 "config/iris.properties",
                                 "config/sodium-options.json",
-                                "config/voxy-config.json",
                                 "config/voicechat/voicechat-client.properties",
                                 "config/voicechat/category-volumes.properties",
                                 "config/voicechat/player-volumes.properties",
@@ -60,8 +59,6 @@
                                 "config/sodium-extra.properties",
                                 "config/sodium-fingerprint.json",
                                 "config/sodium-mixins.properties",
-                                "config/voxy-server-client.json",
-                                "config/voxy-server.json",
                                 "config/MouseTweaks.cfg",
                                 "config/advancementplaques.toml",
                                 "config/amendments-client.json",
@@ -134,7 +131,6 @@
                          "config/fzzy_config/keybinds.toml",
                          "config/iris.properties",
                          "config/sodium-options.json",
-                         "config/voxy-config.json",
                          "config/voicechat/voicechat-client.properties",
                          "config/voicechat/category-volumes.properties",
                          "config/voicechat/player-volumes.properties",
@@ -233,7 +229,7 @@
                                 },
                                 {
                                     "path":  "config/bcc-common.toml",
-                                    "sha256":  "4d8d11165f7c54c14920609ad2e6e42628e4fdc44e8141e9dde7d4332d907a64"
+                                    "sha256":  "3f6663ef902d5dccc37abe169a0ebbc429af6173a5a7a3b22fed4eb7cf7dabb7"
                                 },
                                 {
                                     "path":  "config/beautify.json",
@@ -1033,7 +1029,7 @@
                                 },
                                 {
                                     "path":  "config/sparsestructures.json5",
-                                    "sha256":  "04a15e7726128381b517e8856f2e56a5ebbc478256bd4d399e10b76359095ae5"
+                                    "sha256":  "6923fcb3d21ceee7bdda9e09f95889153aea60bb32567bb43f4ef0fd73c8eac6"
                                 },
                                 {
                                     "path":  "config/spawncontrol.json",
@@ -1141,7 +1137,7 @@
                                 },
                                 {
                                     "path":  "config/trmt.json",
-                                    "sha256":  "dc616de5844f627b0196f517f4ba92a9a4866a9c2d84a9ca97f4291aa90ac731"
+                                    "sha256":  "5ffcf432c0590965859652399a8ee25d5a1321d4144ecc9543276198f10690fe"
                                 },
                                 {
                                     "path":  "config/universalbonemeal-server.toml",
@@ -1196,18 +1192,6 @@
                                     "sha256":  "661792577e11cb998728037fb24471d8211888a7a4c4f2ac1af457a2dfb99afd"
                                 },
                                 {
-                                    "path":  "config/voxy-config.json",
-                                    "sha256":  "e19efb761c070f8bcc83474a9955e95484f712a9ac40e79da2facd2fac347419"
-                                },
-                                {
-                                    "path":  "config/voxy-server-client.json",
-                                    "sha256":  "71337b9914c8b32f4837753b086bfdb059e63287436831b96baf20c678275821"
-                                },
-                                {
-                                    "path":  "config/voxy-server.json",
-                                    "sha256":  "7ae18bf8cbe6b72cbb73a69e9a8b6801b50736f0fcc26c2ff13281a6b495656e"
-                                },
-                                {
                                     "path":  "config/walk-jog-run-client.json",
                                     "sha256":  "fe1b0780c3b8a855a6ab46570ee0bc35e988e30a130d9e2481be3a1c31d61ee6"
                                 },
@@ -1251,7 +1235,7 @@
     "files":  [
                   {
                       "path":  "THIRD-PARTY-NOTICES.md",
-                      "sha256":  "0cbb28373ef8e55d7e6f7f0c9cfaa4dc127f266980a96e3211298456e69b0142"
+                      "sha256":  "1319de22dccdfdfb75a88f8902f6ce8c1ce8e2d3c8495c392e3778181043602d"
                   },
                   {
                       "path":  "config/CoroUtil/General.toml",
@@ -1323,7 +1307,7 @@
                   },
                   {
                       "path":  "config/bcc-common.toml",
-                      "sha256":  "4d8d11165f7c54c14920609ad2e6e42628e4fdc44e8141e9dde7d4332d907a64"
+                      "sha256":  "3f6663ef902d5dccc37abe169a0ebbc429af6173a5a7a3b22fed4eb7cf7dabb7"
                   },
                   {
                       "path":  "config/beautify.json",
@@ -2123,7 +2107,7 @@
                   },
                   {
                       "path":  "config/sparsestructures.json5",
-                      "sha256":  "04a15e7726128381b517e8856f2e56a5ebbc478256bd4d399e10b76359095ae5"
+                      "sha256":  "6923fcb3d21ceee7bdda9e09f95889153aea60bb32567bb43f4ef0fd73c8eac6"
                   },
                   {
                       "path":  "config/spawncontrol.json",
@@ -2231,7 +2215,7 @@
                   },
                   {
                       "path":  "config/trmt.json",
-                      "sha256":  "dc616de5844f627b0196f517f4ba92a9a4866a9c2d84a9ca97f4291aa90ac731"
+                      "sha256":  "5ffcf432c0590965859652399a8ee25d5a1321d4144ecc9543276198f10690fe"
                   },
                   {
                       "path":  "config/universalbonemeal-server.toml",
@@ -2284,18 +2268,6 @@
                   {
                       "path":  "config/voicechat/voicechat-server.properties",
                       "sha256":  "5d8df2d054480d39208ecb66a3cb7fa67fb27604446bbc6aecb0ec55d7fb34de"
-                  },
-                  {
-                      "path":  "config/voxy-config.json",
-                      "sha256":  "e19efb761c070f8bcc83474a9955e95484f712a9ac40e79da2facd2fac347419"
-                  },
-                  {
-                      "path":  "config/voxy-server-client.json",
-                      "sha256":  "71337b9914c8b32f4837753b086bfdb059e63287436831b96baf20c678275821"
-                  },
-                  {
-                      "path":  "config/voxy-server.json",
-                      "sha256":  "7ae18bf8cbe6b72cbb73a69e9a8b6801b50736f0fcc26c2ff13281a6b495656e"
                   },
                   {
                       "path":  "config/walk-jog-run-client.json",
@@ -3327,7 +3299,7 @@
                   },
                   {
                       "path":  "datapacks/nbidal18_realistic_health_v3.6_optimized/data/nbidal18_realistic_health_tuning/function/sleeploop.mcfunction",
-                      "sha256":  "8d59bf707f54698460a30f4f6cb9394ac41171bbd40d9d3fdeb50687117c4a05"
+                      "sha256":  "ac271f1d0ab1d5a387a24a4679e440b9b74ca6d6d8475d7a4cf5b85d34318d08"
                   },
                   {
                       "path":  "datapacks/nbidal18_realistic_health_v3.6_optimized/data/rhealth/advancement/rhealth.json",
@@ -3435,23 +3407,31 @@
                   },
                   {
                       "path":  "datapacks/nbidal18_temperature/README.md",
-                      "sha256":  "78a142776834db9e0fc728389d6401bdb1e3d2895c27f48bfb319cb73ea61cb0"
+                      "sha256":  "9cc8ebfe5eb601d20917e205ce7c252bb5a3feb126c417e90ad2bdd56d76daf2"
                   },
                   {
-                      "path":  "datapacks/nbidal18_temperature/data/c/tags/worldgen/biome/is_temperate/overworld.json",
-                      "sha256":  "3d8aa3d43e17f16834abcc118e39793f8387a32a93a4e8915ada0ed5e8b1354c"
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/tags/worldgen/biome/climate/cold.json",
+                      "sha256":  "42bd1f30089c37c123f7b61ba15ee3f938b9041e960d1b1a21a9e5e393a5ce2d"
                   },
                   {
-                      "path":  "datapacks/nbidal18_temperature/data/frostiful/tags/worldgen/biome/cold_biomes.json",
-                      "sha256":  "630e75c909584692135c5481e436bdad647587c20a4ac7a2b29f2520f9d14506"
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/tags/worldgen/biome/climate/cool.json",
+                      "sha256":  "fd45e6f92ef7d501b87c098f296f7d5cd1f077c50ec57ccf408b5fd6d677b733"
                   },
                   {
-                      "path":  "datapacks/nbidal18_temperature/data/frostiful/tags/worldgen/biome/cool_biomes.json",
-                      "sha256":  "718349d2df7c50570d950d6e84482acb8f47bad3dec8326b60c0a85585684bc3"
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/tags/worldgen/biome/climate/freezing.json",
+                      "sha256":  "5f97f2a0d3060229791112da19d612bd03b16cdf01cb278b071f2011c783b80b"
                   },
                   {
-                      "path":  "datapacks/nbidal18_temperature/data/frostiful/tags/worldgen/biome/freezing_biomes.json",
-                      "sha256":  "ec39c0a46b40105495ef204614504ea0bf8d31b1f60e52f81bf1e08485efa202"
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/tags/worldgen/biome/climate/scorching.json",
+                      "sha256":  "9f519a5510db4ffd319eab0f5f7cc05fd25286267701f93cc0ac7ac39ddde4d3"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/tags/worldgen/biome/climate/temperate.json",
+                      "sha256":  "2927e5eda699ec76966c41520b979d22e8cfa83b696bb14787ed8861d2764b08"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/tags/worldgen/biome/climate/warm.json",
+                      "sha256":  "bd173f3314fb293d8897add29b889ea0fc8b07b0cbbf1c750b57041e290a43cf"
                   },
                   {
                       "path":  "datapacks/nbidal18_temperature/data/nbidal18/thermoo/environment/altitude.json",
@@ -3462,20 +3442,36 @@
                       "sha256":  "26e91c490ee6c5929afbbe5c311d751aa2ad958b222609817fb792ed4a0fc21d"
                   },
                   {
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/thermoo/environment/climate/cold.json",
+                      "sha256":  "a9b159ebd140f4406dd2af9c4b4b054edb8c95449864a4ee339a537720509937"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/thermoo/environment/climate/cool.json",
+                      "sha256":  "fea70204a557bc6f500b5024d2c2cfaa84250d90b98551df076f77ae2f33c11c"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/thermoo/environment/climate/freezing.json",
+                      "sha256":  "c6b632bc5d03986766e4d2c4bf1cdfff59eeb01b3ddf7965066917ea70a6138d"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/thermoo/environment/climate/scorching.json",
+                      "sha256":  "9ac9ecd46f30e2229772c470d2e9319fe7a4cc9edf587d1182a4c323ced5b7fb"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/thermoo/environment/climate/temperate.json",
+                      "sha256":  "c2a7442dcdd52513a0e8f9e18a0985186b1e136122e584c8522786d544e87647"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_temperature/data/nbidal18/thermoo/environment/climate/warm.json",
+                      "sha256":  "6b311196d1ce433e207a2fad9427f86365f30425d156ac99f47a17ec178716c0"
+                  },
+                  {
                       "path":  "datapacks/nbidal18_temperature/data/scorchful/tags/item/heat_resistance_modified.json",
                       "sha256":  "bef4d172fc1bfb34d342e79090726c4a0c272dd404783c3ea022b992e0e0415e"
                   },
                   {
                       "path":  "datapacks/nbidal18_temperature/data/scorchful/tags/item/is_sun_protecting_hat.json",
                       "sha256":  "6cf6b9c1697096602ed21716797362cc674043ca5ba6d6a03beb691274f57971"
-                  },
-                  {
-                      "path":  "datapacks/nbidal18_temperature/data/scorchful/tags/worldgen/biome/scorching_biomes.json",
-                      "sha256":  "cd36acf215ec1c95a8f2c62e51a6894ff369c53700583101060b07888ebc664e"
-                  },
-                  {
-                      "path":  "datapacks/nbidal18_temperature/data/scorchful/tags/worldgen/biome/warm_biomes.json",
-                      "sha256":  "5e23023f194e4df4659c95b0eda0ff9166d28b678ac569be9d9a4c945fb359e9"
                   },
                   {
                       "path":  "datapacks/nbidal18_temperature/data/scorchful/thermoo/environment/hell.json",
@@ -3546,6 +3542,82 @@
                       "sha256":  "4c9135f10739b1331dde9af6b08923ec875c3b912f5848379436537a5d784d5a"
                   },
                   {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/LICENSE-WashDyedItems-MIT.txt",
+                      "sha256":  "0f42b9c7413d5ca00e3b0a31b1abebe3fc2bcba453186d6cd84663da294572e8"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/README.md",
+                      "sha256":  "0ce6ca5edfc58561bbede0af1ec100acb2c9ead75570e2700e6da44881a7702d"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/recipe/candle.json",
+                      "sha256":  "0030c2a333113a74355e22ce0166c9aa85db143e46e51b4ae75985f9e93aed7f"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/recipe/leather_boots.json",
+                      "sha256":  "91d884654b9aa2fbb2b2402f4cb5c37a0f36fc621c0cf0e03d5a1a405ce92d57"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/recipe/leather_chestplate.json",
+                      "sha256":  "dd87fc1d03908141c20afd5faf862f21e68308b97fedf6629d27063586bc922c"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/recipe/leather_helmet.json",
+                      "sha256":  "dc2f4a1f42cd93d868b84f9fb325d56f880088f50a398d2b86a785cebe59482a"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/recipe/leather_leggings.json",
+                      "sha256":  "f34f389002675a970766205aaf3109b513741b3960bb394c6e1b9feee78463ee"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/recipe/shulker_box.json",
+                      "sha256":  "cc14f614c4d7e190809b2a03bae36054b9607d96306ed44628bfddd3aab97697"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/recipe/white_banner.json",
+                      "sha256":  "5fd5809068d9a81ce368af24bf075b5346b8bc852ea41c0a47b9b6d400e44b66"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/recipe/white_bed.json",
+                      "sha256":  "092ee50edc50d3aeb03dad99f202393ad1fd35c01901c1be3e7f866f23c849b1"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/recipe/white_carpet.json",
+                      "sha256":  "0e3bc776a3bcd5f13e62d4ff98c3262c05cde26e8072009cb12753402a6934a1"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/recipe/white_wool.json",
+                      "sha256":  "2b02700743c4a94b60da399daf56da4768b1060abc5a749f5e48aaace1fab062"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/tags/item/banners.json",
+                      "sha256":  "335878bee95159efac7ef3e1d139ff84ca4b4cc7acbdd6c32949bfde03ea8794"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/tags/item/beds.json",
+                      "sha256":  "211158a307cbd93f5215afd20431be040ee786c81c75ed96c5cf8652b05b915f"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/tags/item/candles.json",
+                      "sha256":  "f3db46c57f4c8e039535c7666528fddc0d0d5464ccb2389c8d6f0decb53c5b9c"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/tags/item/carpets.json",
+                      "sha256":  "8ddeabde3ce9f4f03a7c95cd9d5c3f5d097534fd80002b15d250b7684ec0fb14"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/tags/item/shulkers.json",
+                      "sha256":  "5058937da6f77342d5451892e9fa4fef2e2d20fa36712f1e31c772472a013f36"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/data/washdyeditems/tags/item/wools.json",
+                      "sha256":  "97dbb3be4699c4379b3625480b969e9c63e48efb88fe62bf3d4b14f7f6496b39"
+                  },
+                  {
+                      "path":  "datapacks/nbidal18_wash_dyed_items/pack.mcmeta",
+                      "sha256":  "7ed000a8a0f3c9c1b8f9c1196b1dbf08676bf71b0efadcf2e42bec853e8b4f2d"
+                  },
+                  {
                       "path":  "licenses/BandagePlus-Xanthian-MIT.txt",
                       "sha256":  "845979ebc5e5d7f08a9133cf94ec97a2fc15464594283860ecc37d50432e169a"
                   },
@@ -3592,14 +3664,6 @@
                   {
                       "path":  "licenses/TreeChop-MIT.txt",
                       "sha256":  "d4b2f487f8836367e96992034447e7be460cbfb0f37c89dc01057811a3b5b783"
-                  },
-                  {
-                      "path":  "licenses/Voxy-PRIVATE-NO-REDISTRIBUTION.md",
-                      "sha256":  "fda481485d4e8429041bd7acf8a8ca54b51c46e63e46d619a559d99d31eca5b3"
-                  },
-                  {
-                      "path":  "licenses/Voxy-Server-MIT.txt",
-                      "sha256":  "bc5e65efe4f9c307545b5f356e7db82b94055459f72b029e431e94d1caeec82b"
                   },
                   {
                       "path":  "licenses/Wiki-MIT.txt",
@@ -4014,8 +4078,8 @@
                       "sha256":  "7ce5edc72238b936df96cd16aade4297efbf40232172a31214bd281269f77b36"
                   },
                   {
-                      "path":  "mods/doubleslabs-fabric-1.21.1-0.3.0.jar",
-                      "sha256":  "24f0d560169c51a07c81028299bd56d462b86d90f6e7167d55963d4a88930b29"
+                      "path":  "mods/doubleslabs-fabric-1.21.1-0.4.2.jar",
+                      "sha256":  "4156b4bd701e3eccb2e84f74e8ea36da4051c5bda73a0a20da1ec01c5d7aee7f"
                   },
                   {
                       "path":  "mods/easywhitelist-1.1.0.jar",
@@ -4290,8 +4354,8 @@
                       "sha256":  "3c2301e09681ed6a59c12d4b3e991c5edbeb93c10f127b96cd0cb8a5e6ad71e9"
                   },
                   {
-                      "path":  "mods/nbidal18-client-tweaks-1.8.1+1.21.1.jar",
-                      "sha256":  "0c79d2a07f06a30e475d5850e38c107639724e0e2152f75ed3736d5787d9afa1"
+                      "path":  "mods/nbidal18-client-tweaks-1.9.0+1.21.1.jar",
+                      "sha256":  "26c60fcd25dc8bda829a211227ee769308248f9e2081b0f0a417894d5f9be4f6"
                   },
                   {
                       "path":  "mods/nbidal18-discovery-plaques-1.0.0+1.21.1.jar",
@@ -4303,7 +4367,7 @@
                   },
                   {
                       "path":  "mods/nbidal18-integrity-helper-1.0.0+1.21.1.jar",
-                      "sha256":  "4eaebc3bcd1ef41aca76412fe4ecb723f229dc0698eb18cf13fe0a70a4e1634f"
+                      "sha256":  "d5c4093509849ab6a39d22de99d08e6d117c03395616e1928b64cac5a5ad66cb"
                   },
                   {
                       "path":  "mods/nbidal18-jei-coverage-bridge-1.2.0+1.21.1.jar",
@@ -4334,8 +4398,8 @@
                       "sha256":  "bd72701891f8a7283d1919893b1a234f54d683f440e98ac7491f321126210411"
                   },
                   {
-                      "path":  "mods/nbidal18-wiki-1.5.2+1.21.1.jar",
-                      "sha256":  "c34c904d5c4663f15f789ef0d3af4885bb5b29e9568da607493e569f4f23483f"
+                      "path":  "mods/nbidal18-wiki-1.5.3+1.21.1.jar",
+                      "sha256":  "7d02385a81a896b233cd5a26e5f5c1e1edca3af762534bfcbd53a5384f6d1175"
                   },
                   {
                       "path":  "mods/niftycarts-21.1.1.jar",
@@ -4610,14 +4674,6 @@
                       "sha256":  "6d32a535005edccd61c7cabe2d983b28213297333321d76e82aac293a281b84f"
                   },
                   {
-                      "path":  "mods/voxy-0.2.14-alpha-f308c254fafc23bdcc250ba3f1e5c6a7585f08d0.jar",
-                      "sha256":  "30b941e123510e185caa12c15b36bfbcdff61c793848530d9ca1a98832de1247"
-                  },
-                  {
-                      "path":  "mods/voxy-server-1.21.1-0.1.0.jar",
-                      "sha256":  "ecafccc271765e1ab6f4993c444749201a404de1f9f8141f9c1164b6d0f13b7c"
-                  },
-                  {
                       "path":  "mods/walk-jog-run-1.1.1+1.21.jar",
                       "sha256":  "dbe8fd43233da3f0cd53a7b031f7536526d564816246735bee453ab5323f1c10"
                   },
@@ -4639,7 +4695,7 @@
                   },
                   {
                       "path":  "nbidal18-packwiz-updater.next.jar",
-                      "sha256":  "7c18a72389994ecf5d0a3332d7b330163d16406ebc5470c6754c984e16c040b9"
+                      "sha256":  "748581c9f7013187f3037719903fdef967e2a9219832bd9a42f3a7f2a3553a12"
                   },
                   {
                       "path":  "packwiz-installer-bootstrap.next.jar",

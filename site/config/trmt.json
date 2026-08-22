@@ -12,7 +12,7 @@
     "sandEnabled": true
   },
   "erosionMultipliers": {
-    "player": 0.5,
+    "player": 0.1,
     "mounted": 2.0,
     "leash": 1.5
   },
@@ -66,22 +66,22 @@
   ],
   "deErosionTimeoutDays": {
     "grass": {
-      "stage1": 5.0,
-      "stage2": 5.0,
-      "stage3": 5.0,
-      "stage4": 5.0,
-      "stage5": 5.0
+      "stage1": 0.85,
+      "stage2": 0.85,
+      "stage3": 0.85,
+      "stage4": 0.85,
+      "stage5": 0.85
     },
     "dirt": {
-      "erodedDirt": 8.0,
-      "erodedCoarseDirt": 13.0
+      "erodedDirt": 1.35,
+      "erodedCoarseDirt": 2.15
     },
     "sand": {
-      "stage1": 3.0,
-      "stage2": 5.0,
-      "stage3": 8.0,
-      "stage4": 13.0,
-      "stage5": 13.0
+      "stage1": 0.5,
+      "stage2": 0.85,
+      "stage3": 1.35,
+      "stage4": 2.15,
+      "stage5": 2.15
     }
   }
 }
