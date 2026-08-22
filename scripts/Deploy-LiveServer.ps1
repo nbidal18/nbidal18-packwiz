@@ -99,25 +99,33 @@ Write-Host "  release  : $releaseRoot"
 Write-Host "  digest   : $expectedDigest"
 Write-Host "  target   : $LiveRoot"
 
-# Everything this pack owns server-side. Anything not here is the player's, the provider's, or drift.
+<#
+    Everything this pack owns server-side, derived from the release payload rather than described.
+
+    This used to be a hand-written list: mods\nbidal18-*.jar, licenses\*.txt, seven named configs and
+    the nbidal18_ datapacks. It was written when every server-side change this pack made was a
+    first-party artefact, and it silently could not see anything else. That cost three releases in a
+    row, each differently: v4.4.4 added Voxy, Voxy-Server and Sodium and the dry run reported four
+    files while three new mods sat undeployed; v4.4.5 removed those same three and swapped
+    DoubleSlabs, and none of it was visible either. Every time, the fix was a human noticing the file
+    count looked wrong.
+
+    So the rule is now the obvious one: **the release payload is the list.** Whatever
+    3. modpack\server holds is what the live server should hold, for these roots, and a mod's author
+    has nothing to do with it. Adding or removing anything from the payload is picked up with no
+    change here.
+
+    The roots are deliberately enumerated rather than sweeping the payload whole, because the live
+    server also holds things this pack must never touch: world, playerdata, whitelist, ops,
+    server.properties beyond its MOTD line, provider files, logs and backups.
+#>
+$ownedRoots = @('mods', 'config', 'licenses', 'datapacks')
+
 $candidates = @()
-foreach ($file in Get-ChildItem -LiteralPath (Join-Path $src 'mods') -File -Filter 'nbidal18-*.jar') {
-    $candidates += "mods\$($file.Name)"
-}
-foreach ($file in Get-ChildItem -LiteralPath (Join-Path $src 'licenses') -File -Filter '*.txt') {
-    $candidates += "licenses\$($file.Name)"
-}
-$candidates += @(
-    'config\bcc-common.toml'
-    'config\nbidal18-integrity.properties'
-    'config\scorchful.json'
-    'config\frostiful.json'
-    'config\levelz.json5'
-    'config\jobsaddon.json5'
-    'config\tiered.json5'
-)
-foreach ($pack in Get-ChildItem -LiteralPath (Join-Path $src 'datapacks') -Directory -Filter 'nbidal18_*') {
-    foreach ($file in Get-ChildItem -LiteralPath $pack.FullName -File -Recurse) {
+foreach ($root in $ownedRoots) {
+    $rootPath = Join-Path $src $root
+    if (-not (Test-Path -LiteralPath $rootPath -PathType Container)) { continue }
+    foreach ($file in Get-ChildItem -LiteralPath $rootPath -File -Recurse) {
         $candidates += $file.FullName.Substring($src.Length + 1)
     }
 }
@@ -133,12 +141,30 @@ foreach ($relative in $candidates) {
 }
 Write-Host "  $($changed.Count) differ and will be written; $($candidates.Count - $changed.Count) already match."
 
-# Superseded first-party jars. Two versions of one mod is a broken server, so this is not optional.
-$wanted = @(Get-ChildItem -LiteralPath (Join-Path $src 'mods') -File -Filter 'nbidal18-*.jar' |
-        ForEach-Object { $_.Name })
+<#
+    Anything under an owned root that the payload no longer contains. Two versions of one mod is a
+    broken server, and a retired datapack still applies its content, so this is not optional.
+
+    It used to sweep only mods\nbidal18-*.jar, which meant a third-party mod could be removed from
+    the payload and stay on the server forever - and that is precisely what happened to Voxy,
+    Voxy-Server, Sodium and DoubleSlabs 0.3.0, all of which had to be deleted by hand.
+
+    **config is deliberately excluded.** Mods write their own files there during startup, exactly as
+    they do on a client, so sweeping it would delete files the server recreates seconds later. That
+    is the same reasoning that makes config a tolerant root in the client's integrity policy.
+#>
+$sweptRoots = @('mods', 'datapacks', 'licenses')
+$wanted = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+foreach ($relative in $candidates) { [void] $wanted.Add($relative) }
+
 $stale = @()
-foreach ($file in Get-ChildItem -LiteralPath (Join-Path $LiveRoot 'mods') -File -Filter 'nbidal18-*.jar') {
-    if ($wanted -notcontains $file.Name) { $stale += $file.Name }
+foreach ($root in $sweptRoots) {
+    $rootPath = Join-Path $LiveRoot $root
+    if (-not (Test-Path -LiteralPath $rootPath -PathType Container)) { continue }
+    foreach ($file in Get-ChildItem -LiteralPath $rootPath -File -Recurse) {
+        $relative = $file.FullName.Substring($LiveRoot.Length).TrimStart('\')
+        if (-not $wanted.Contains($relative)) { $stale += $relative }
+    }
 }
 
 $propsPath = Join-Path $LiveRoot 'server.properties'
@@ -148,7 +174,7 @@ $oldMotd = [regex]::Match($propsText, '(?m)^motd=(.*)$').Groups[1].Value.TrimEnd
 $motdNeedsWrite = $oldMotd -ne $motd
 
 foreach ($relative in $changed) { Write-Host "    write   $relative" }
-foreach ($name in $stale) { Write-Host "    remove  mods\$name" -ForegroundColor Yellow }
+foreach ($name in $stale) { Write-Host "    remove  $name" -ForegroundColor Yellow }
 if ($motdNeedsWrite) { Write-Host "    motd    '$oldMotd' -> '$motd'" }
 
 # Only the policy is hot-reloadable; the helper re-reads it per login. Anything else is a JAR or a
@@ -208,15 +234,45 @@ foreach ($relative in $changed) {
 }
 
 foreach ($name in $stale) {
-    $path = Join-Path $LiveRoot "mods\$name"
-    $target = Join-Path $backup "mods\$name"
+    $path = Join-Path $LiveRoot $name
+    $target = Join-Path $backup $name
     New-Item -ItemType Directory -Force -Path (Split-Path -Parent $target) | Out-Null
+    # Back up BEFORE deleting, and verify the backup, because a delete cannot be undone. Doing this
+    # by hand on 2026-08-22 removed five files whose backup step had been skipped by an earlier
+    # failure - recoverable from elsewhere, but not backed up, which is not the same thing.
     [IO.File]::WriteAllBytes($target, [IO.File]::ReadAllBytes($path))
+    Start-Sleep -Milliseconds 200
+    if ((Get-Sha $path) -ne (Get-Sha $target)) {
+        throw "Backup of $name did not verify; refusing to remove it."
+    }
     # Remove-Item fails on this mount with "Incorrect function".
     [IO.File]::Delete($path)
     Start-Sleep -Milliseconds 200
     if (Test-Path -LiteralPath $path -PathType Leaf) { throw "Could not remove superseded $name" }
-    Write-Host "  removed  mods\$name"
+    Write-Host "  removed  $name"
+}
+
+<#
+    Sweeping files leaves the directories that held them. An empty datapack subdirectory contributes
+    nothing, but it makes the live tree stop matching the payload and it makes the next person wonder
+    whether something was missed. Deepest-first so a nested chain collapses in one pass.
+#>
+foreach ($root in $sweptRoots) {
+    $rootPath = Join-Path $LiveRoot $root
+    if (-not (Test-Path -LiteralPath $rootPath -PathType Container)) { continue }
+    $dirs = @(Get-ChildItem -LiteralPath $rootPath -Directory -Recurse |
+            Sort-Object { $_.FullName.Length } -Descending)
+    foreach ($dir in $dirs) {
+        if (@(Get-ChildItem -LiteralPath $dir.FullName -Recurse -File).Count -ne 0) { continue }
+        try {
+            [IO.Directory]::Delete($dir.FullName)
+            Write-Host ("  pruned   {0}" -f $dir.FullName.Substring($LiveRoot.Length).TrimStart('\'))
+        }
+        catch {
+            # Not worth failing a deploy over: an empty directory changes nothing the game reads.
+            Write-Host ("  could not prune {0}" -f $dir.FullName) -ForegroundColor DarkYellow
+        }
+    }
 }
 
 if ($motdNeedsWrite) {
